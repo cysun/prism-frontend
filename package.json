@@ -1,11 +1,11 @@
 {
-  "name": "prs-frontend",
+  "name": "prism-frontend",
   "version": "0.0.1",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/amclees/prs-frontend/issues"
+    "url": "https://github.com/amclees/prism-frontend/issues"
   },
-  "homepage": "https://github.com/amclees/prs-frontend#readme",
+  "homepage": "https://github.com/amclees/prism-frontend#readme",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/amclees/prs-frontend.git"
+    "url": "git+https://github.com/amclees/prism-frontend.git"
   },
   "contributors": [
     "Leanne David",

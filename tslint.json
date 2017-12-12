@@ -105,13 +105,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "prs",
+      "prism",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "prs",
+      "prism",
       "kebab-case"
     ],
     "use-input-property-decorator": true,
