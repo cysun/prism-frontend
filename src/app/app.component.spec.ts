@@ -23,7 +23,7 @@ describe('AppComponent', () => {
        expect(app).toBeTruthy();
      }));
 
-  it(`should have as title 'prs works!'`, async(() => {
+  it(`should have as title 'prism works!'`, async(() => {
        const fixture = TestBed.createComponent(AppComponent);
        const app = fixture.debugElement.componentInstance;
        expect(app.title).toEqual('prs works!');
@@ -33,6 +33,6 @@ describe('AppComponent', () => {
        const fixture = TestBed.createComponent(AppComponent);
        fixture.detectChanges();
        const compiled = fixture.debugElement.nativeElement;
-       expect(compiled.querySelector('h1').textContent).toContain('prs works!');
+       expect(compiled.querySelector('h1').textContent).toContain('prism works!');
      }));
 });
