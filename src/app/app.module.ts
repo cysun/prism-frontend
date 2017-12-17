@@ -16,6 +16,10 @@ import { ButtonModule } from 'primeng/components/button/button';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SettingsComponent } from './settings/settings.component';
+import { CalendarComponent } from './calendar/calendar.component';
+import { MinutesComponent } from './minutes/minutes.component';
+import { ResourcesComponent } from './resources/resources.component';
+import { CommitteeComponent } from './committee/committee.component';
 
 // import { PanelModule } from 'primeng/components/panel/panel';
 // import { RadioButtonModule } from 'primeng/components/radioButton/radioButton';
@@ -26,7 +30,11 @@ import { SettingsComponent } from './settings/settings.component';
     CollegesComponent,
     DashboardComponent,
     PageNotFoundComponent,
-    SettingsComponent
+    SettingsComponent,
+    CalendarComponent,
+    MinutesComponent,
+    ResourcesComponent,
+    CommitteeComponent
   ],
   imports: [
     BrowserModule,
