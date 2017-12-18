@@ -12,7 +12,7 @@ export class AppComponent {
   actionMenu: MenuItem[];
 
   ngOnInit() {
-    this.items = [ { label: 'PRISM', icon: 'fa-2x fa-diamond '}];
+    this.items = [ { label: 'PRISM', icon: 'fa-2x fa-cubes'}];
 
     this.actionMenu = [{
             label: 'Actions',
