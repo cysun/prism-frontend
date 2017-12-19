@@ -11,6 +11,7 @@ import {CollegesComponent} from './colleges/colleges.component';
 import {AccordionModule} from 'primeng/primeng';
 import {ButtonModule} from 'primeng/components/button/button';
 import {MenubarModule, MenuModule, MenuItem} from 'primeng/primeng';
+import {MessagesModule, MessageModule} from 'primeng/primeng';
 import {TabViewModule} from 'primeng/primeng';
 import {ToolbarModule} from 'primeng/primeng';
 
@@ -47,6 +48,8 @@ import {CommitteeComponent} from './committee/committee.component';
     ButtonModule,
     MenuModule,
     MenubarModule,
+    MessageModule,
+    MessagesModule,
     TabViewModule
   ],
   providers: [],

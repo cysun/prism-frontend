@@ -20,6 +20,7 @@ export class AppComponent {
                 { label: 'Dashboard', icon: 'fa-home', routerLink: '/dashboard' },
                 { label: 'Calendar', icon: 'fa-calendar', routerLink: '/calendar'},
                 { label: 'Minutes', icon: 'fa-clock-o', routerLink: '/minutes'},
+                { label: 'College Hierarchy', icon: 'fa-graduation-cap', routerLink: '/colleges'},
                 { label: 'Resources', icon: 'fa-folder-open-o', routerLink: '/resources'},
                 { label: 'Committee', icon: 'fa-users', routerLink: '/committee' }
             ]
