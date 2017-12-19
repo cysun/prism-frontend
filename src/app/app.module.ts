@@ -22,6 +22,9 @@ import {CalendarComponent} from './calendar/calendar.component';
 import {MinutesComponent} from './minutes/minutes.component';
 import {ResourcesComponent} from './resources/resources.component';
 import {CommitteeComponent} from './committee/committee.component';
+import {GroupManagerComponent} from './group-manager/group-manager.component';
+
+import {GroupManagerService} from './group-manager/group-manager.service';
 
 // import { PanelModule } from 'primeng/components/panel/panel';
 // import { RadioButtonModule } from 'primeng/components/radioButton/radioButton';
@@ -36,7 +39,8 @@ import {CommitteeComponent} from './committee/committee.component';
     CalendarComponent,
     MinutesComponent,
     ResourcesComponent,
-    CommitteeComponent
+    CommitteeComponent,
+    GroupManagerComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +56,7 @@ import {CommitteeComponent} from './committee/committee.component';
     MessagesModule,
     TabViewModule
   ],
-  providers: [],
+  providers: [GroupManagerService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
