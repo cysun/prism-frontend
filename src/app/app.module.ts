@@ -1,20 +1,13 @@
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
+import {HttpClientModule, HttpClient} from '@angular/common/http';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {CollegesComponent} from './colleges/colleges.component';
-
-import {AccordionModule} from 'primeng/primeng';
-import {ButtonModule} from 'primeng/components/button/button';
-import {MenubarModule, MenuModule, MenuItem} from 'primeng/primeng';
-import {MessagesModule, MessageModule} from 'primeng/primeng';
-import {TabViewModule} from 'primeng/primeng';
-import {ToolbarModule} from 'primeng/primeng';
-
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {SettingsComponent} from './settings/settings.component';
@@ -23,6 +16,13 @@ import {MinutesComponent} from './minutes/minutes.component';
 import {ResourcesComponent} from './resources/resources.component';
 import {CommitteeComponent} from './committee/committee.component';
 import {GroupManagerComponent} from './group-manager/group-manager.component';
+
+import {AccordionModule} from 'primeng/primeng';
+import {ButtonModule} from 'primeng/components/button/button';
+import {MenubarModule, MenuModule, MenuItem} from 'primeng/primeng';
+import {MessagesModule, MessageModule} from 'primeng/primeng';
+import {TabViewModule} from 'primeng/primeng';
+import {ToolbarModule} from 'primeng/primeng';
 
 import {GroupManagerService} from './group-manager/group-manager.service';
 
@@ -46,6 +46,7 @@ import {GroupManagerService} from './group-manager/group-manager.service';
     BrowserModule,
     FormsModule,
     HttpModule,
+    HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     AccordionModule,
@@ -56,7 +57,7 @@ import {GroupManagerService} from './group-manager/group-manager.service';
     MessagesModule,
     TabViewModule
   ],
-  providers: [GroupManagerService],
+  providers: [HttpClientModule, GroupManagerService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
