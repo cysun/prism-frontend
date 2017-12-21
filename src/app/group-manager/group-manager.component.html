@@ -1,12 +1,18 @@
-<table class="table">
-   <thead>
-     <tr>
-       <th>Group</th>
-     </tr>
-   </thead>
-   <tbody>
-     <tr *ngFor="let group of groups">
-       <td>{{ group.name }}</td>
-     </tr>
-   </tbody>
- </table>
+<div *ngIf="groups.length > 0; else emptyGroup">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Group</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let group of groups">
+        <td>{{ group.name }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #emptyGroup>
+  <p-message class="info-message" severity="info" text="There are currently no groups."></p-message>
+</ng-template>
