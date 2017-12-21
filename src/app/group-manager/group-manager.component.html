@@ -1,16 +1,9 @@
 <div *ngIf="groups.length > 0; else emptyGroup">
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Group</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let group of groups">
-        <td>{{ group.name }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <p-dataGrid [style]="{'padding-bottom' : '50px'}" [value]="groups" [paginator]="true" [rows]="10" *ngFor="let group of groups">
+    <p-header>
+      {{group.name}}
+    </p-header>
+  </p-dataGrid>
 </div>
 
 <ng-template #emptyGroup>
