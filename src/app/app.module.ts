@@ -20,15 +20,14 @@ import {GroupManagerComponent} from './group-manager/group-manager.component';
 import {AccordionModule} from 'primeng/primeng';
 import {ButtonModule} from 'primeng/components/button/button';
 import {DataGridModule} from 'primeng/primeng';
+import {DialogModule} from 'primeng/primeng';
+import {InputTextModule} from 'primeng/primeng';
 import {MenubarModule, MenuModule, MenuItem} from 'primeng/primeng';
 import {MessagesModule, MessageModule} from 'primeng/primeng';
 import {TabViewModule} from 'primeng/primeng';
 import {ToolbarModule} from 'primeng/primeng';
 
 import {GroupManagerService} from './group-manager/group-manager.service';
-
-// import { PanelModule } from 'primeng/components/panel/panel';
-// import { RadioButtonModule } from 'primeng/components/radioButton/radioButton';
 
 @NgModule({
   declarations: [
@@ -53,11 +52,14 @@ import {GroupManagerService} from './group-manager/group-manager.service';
     AccordionModule,
     ButtonModule,
     DataGridModule,
+    DialogModule,
+    InputTextModule,
     MenuModule,
     MenubarModule,
     MessageModule,
     MessagesModule,
-    TabViewModule
+    TabViewModule,
+    ToolbarModule
   ],
   providers: [HttpClientModule, GroupManagerService],
   bootstrap: [AppComponent]

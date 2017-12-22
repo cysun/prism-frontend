@@ -1,6 +1,6 @@
 import { User } from './user.model';
 
-export interface Group {
+export class Group {
   name: string;
   members: [User];
 }
