@@ -33,7 +33,6 @@
   </div>
 </p-dialog>
 
-
 <div *ngIf="groups.length > 0; else emptyGroup">
   <p-dataGrid [style]="{'padding-top': '50px'}" [value]="groups" [paginator]="true" [rows]="10" *ngFor="let group of groups">
     <p-header>

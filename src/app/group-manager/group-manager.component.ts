@@ -31,7 +31,7 @@ export class GroupManagerComponent implements OnInit {
 
   submitGroup() {
     this.groupManagerService.addGroup(this.group).subscribe(
-      () => this.router.navigate(['/committee']),
+      data => this.groups.push(data),
       err => console.log(err)
     );
     this.displayAdd = false;
@@ -39,7 +39,7 @@ export class GroupManagerComponent implements OnInit {
 
   deleteGroup(id) {
     this.groupManagerService.deleteGroup(id).subscribe(
-      () => this.router.navigate(['/committee']),
+      data => this.groups.splice(this.groups.indexOf(data), 1),
       err => console.log(err)
     );
     this.displayDelete = false;
