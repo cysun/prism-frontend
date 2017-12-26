@@ -21,6 +21,7 @@ import {AccordionModule} from 'primeng/primeng';
 import {ButtonModule} from 'primeng/components/button/button';
 import {DataGridModule} from 'primeng/primeng';
 import {DialogModule} from 'primeng/primeng';
+import {DropdownModule} from 'primeng/primeng';
 import {InputTextModule} from 'primeng/primeng';
 import {MenubarModule, MenuModule, MenuItem} from 'primeng/primeng';
 import {MessagesModule, MessageModule} from 'primeng/primeng';
@@ -53,6 +54,7 @@ import {GroupManagerService} from './group-manager/group-manager.service';
     ButtonModule,
     DataGridModule,
     DialogModule,
+    DropdownModule,
     InputTextModule,
     MenuModule,
     MenubarModule,

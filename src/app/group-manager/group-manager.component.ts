@@ -4,13 +4,16 @@ import { Router } from '@angular/router';
 import { GroupManagerService } from './group-manager.service';
 import { Group } from '../models/group.model';
 
-
 @Component({
   selector: 'prism-group-manager',
   templateUrl: './group-manager.component.html',
   styleUrls: ['./group-manager.component.css']
 })
+
 export class GroupManagerComponent implements OnInit {
+  displayAdd: Boolean = false;
+  displayDelete: Boolean = false;
+  group: Group = new Group();
   groups: Group[] = [];
 
   constructor(private groupManagerService: GroupManagerService, private router: Router) { }
@@ -22,5 +25,23 @@ export class GroupManagerComponent implements OnInit {
     });
   }
 
+  addGroupDialog() { this.displayAdd = true; }
 
+  deleteGroupDialog() { this.displayDelete = true; }
+
+  submitGroup() {
+    this.groupManagerService.addGroup(this.group).subscribe(
+      () => this.router.navigate(['/committee']),
+      err => console.log(err)
+    );
+    this.displayAdd = false;
+  }
+
+  deleteGroup(id) {
+    this.groupManagerService.deleteGroup(id).subscribe(
+      () => this.router.navigate(['/committee']),
+      err => console.log(err)
+    );
+    this.displayDelete = false;
+  }
 }

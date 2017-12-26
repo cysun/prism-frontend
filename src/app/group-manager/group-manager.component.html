@@ -1,5 +1,41 @@
+<p-toolbar [style]="{'background-color': 'white'}">
+  <div class="ui-toolbar-group-left">
+    <button pButton type="button" label="Add Group" icon="fa-plus" class="ui-button-success" (click)=addGroupDialog()></button>
+    <button pButton type="button" label="Delete Group" icon="fa-minus" class="ui-button-danger" (click)=deleteGroupDialog()></button>
+  </div>
+</p-toolbar>
+
+<p-dialog class="dialog-module" header="Add New Group" [(visible)]="displayAdd" modal="modal" width="600" [responsive]="true">
+  <form #f="ngForm" (ngSubmit)="submitGroup()">
+    <div class="ui-inputgroup">
+      <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
+      <input type="text" size="70" [(ngModel)]="group.name" pInputText name="group-name" placeholder="Enter New Group Title">
+    </div>
+    <p-footer class="footer-buttons">
+      <button type="submit" pButton icon="fa-check" label="Add"></button>
+      <button type="button" pButton icon="fa-close" (click)="displayAdd=false" label="Cancel"></button>
+    </p-footer>
+  </form>
+</p-dialog>
+
+<p-dialog class="dialog-module" header="Delete Group" [(visible)]="displayDelete" modal="modal" height="150" width="600" [responsive]="true">
+  <div class="ui-grid ui-grid-responsive ui-fluid">
+    <div class="ui-grid-col-12">
+      <p-dropdown appendTo="body" [options]="groups" [(ngModel)]="group" [autoWidth]="false" placeholder="Select a Group" name="group-names" optionLabel="name"></p-dropdown>
+    </div>
+  </div>
+
+  <div class="ui-grid ui-grid-col-12">
+    <div class="footer-buttons">
+      <button type="button" pButton icon="fa-check" (click)="deleteGroup(group._id)" label="Delete"></button>
+      <button type="button" pButton icon="fa-close" (click)="displayDelete=false" label="Cancel"></button>
+    </div>
+  </div>
+</p-dialog>
+
+
 <div *ngIf="groups.length > 0; else emptyGroup">
-  <p-dataGrid [style]="{'padding-bottom' : '50px'}" [value]="groups" [paginator]="true" [rows]="10" *ngFor="let group of groups">
+  <p-dataGrid [style]="{'padding-top': '50px'}" [value]="groups" [paginator]="true" [rows]="10" *ngFor="let group of groups">
     <p-header>
       {{group.name}}
     </p-header>
