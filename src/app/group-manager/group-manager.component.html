@@ -37,7 +37,15 @@
 <div *ngIf="groups.length > 0; else emptyGroup">
   <p-dataGrid [style]="{'padding-top': '50px'}" [value]="groups" [paginator]="true" [rows]="10" *ngFor="let group of groups">
     <p-header>
-      {{group.name}}
+      <div class="header-container">
+        <div class="header-panel">
+          {{group.name}}
+          <div class="panel-buttons">
+            <button type="button" pButton icon="fa-plus"></button>
+            <button type="button" pButton icon="fa-minus"></button>
+          </div>
+        </div>
+      </div>
     </p-header>
   </p-dataGrid>
 </div>

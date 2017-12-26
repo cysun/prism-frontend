@@ -43,5 +43,6 @@ export class GroupManagerComponent implements OnInit {
       err => console.log(err)
     );
     this.displayDelete = false;
+    this.group = new Group();
   }
 }
