@@ -6,6 +6,8 @@
 </p-toolbar>
 
 <p-dialog class="dialog-module" header="Add New Group" [(visible)]="displayAdd" modal="modal" width="600" [responsive]="true">
+  <p-messages [(value)]="msgs"></p-messages>
+
   <form #f="ngForm" (ngSubmit)="submitGroup()">
     <div class="ui-inputgroup">
       <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
@@ -27,7 +29,7 @@
 
   <div class="ui-grid ui-grid-col-12">
     <div class="footer-buttons">
-      <button type="button" pButton icon="fa-check" (click)="deleteGroup(group._id)" label="Delete"></button>
+      <button type="button" pButton icon="fa-check" (click)="deleteGroup(group.name, group._id)" label="Delete"></button>
       <button type="button" pButton icon="fa-close" (click)="displayDelete=false" label="Cancel"></button>
     </div>
   </div>

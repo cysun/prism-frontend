@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { GroupManagerService } from './group-manager.service';
 import { Group } from '../models/group.model';
 
+import { Message } from 'primeng/components/common/api';
+
 @Component({
   selector: 'prism-group-manager',
   templateUrl: './group-manager.component.html',
@@ -15,6 +17,7 @@ export class GroupManagerComponent implements OnInit {
   displayDelete: Boolean = false;
   group: Group = new Group();
   groups: Group[] = [];
+  msgs: Message[] = [];
 
   constructor(private groupManagerService: GroupManagerService, private router: Router) { }
 
@@ -25,7 +28,10 @@ export class GroupManagerComponent implements OnInit {
     });
   }
 
-  addGroupDialog() { this.displayAdd = true; }
+  addGroupDialog() {
+    this.msgs = [];
+    this.displayAdd = true;
+  }
 
   deleteGroupDialog() { this.displayDelete = true; }
 
@@ -34,14 +40,22 @@ export class GroupManagerComponent implements OnInit {
       data => this.groups.push(data),
       err => console.log(err)
     );
-    this.displayAdd = false;
+
+    if (typeof(this.group.name) !== 'undefined') {
+      this.displayAdd = false;
+      this.group = new Group();
+    } else {
+      this.msgs = [];
+      this.msgs.push({severity: 'error', summary: 'Empty Group Name:', detail: 'Please input a group name.'});
+    }
   }
 
-  deleteGroup(id) {
+  deleteGroup(name, id) {
     this.groupManagerService.deleteGroup(id).subscribe(
-      data => this.groups.splice(this.groups.indexOf(data), 1),
+      data => this.groups.splice(this.groups.indexOf(id), 1),
       err => console.log(err)
     );
+
     this.displayDelete = false;
     this.group = new Group();
   }

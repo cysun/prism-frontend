@@ -21,6 +21,7 @@
 .header-panel {
   position: relative;
   text-align: center;
+  text-transform: uppercase;
 }
 
 .info-message {
