@@ -15,6 +15,7 @@ import { Message } from 'primeng/components/common/api';
 export class GroupManagerComponent implements OnInit {
   displayAdd: Boolean = false;
   displayDelete: Boolean = false;
+  displayGroupManager: Boolean = false;
   group: Group = new Group();
   groups: Group[] = [];
   msgs: Message[] = [];
@@ -30,10 +31,18 @@ export class GroupManagerComponent implements OnInit {
 
   addGroupDialog() {
     this.msgs = [];
+    this.group = new Group();
     this.displayAdd = true;
   }
 
   deleteGroupDialog() { this.displayDelete = true; }
+
+  groupManagerDialog(group) {
+    this.msgs = [];
+    this.displayGroupManager = true;
+    this.group = group;
+  }
+
 
   submitGroup() {
     this.groupManagerService.addGroup(this.group).subscribe(
@@ -54,8 +63,9 @@ export class GroupManagerComponent implements OnInit {
     this.groupManagerService.deleteGroup(id).subscribe( () => {
       for (let i = 0; i < this.groups.length; i++) {
         if (this.groups[i]._id === id) {
-          this.groups.splice(i, 1)}
+          this.groups.splice(i, 1)
         }
+      }
     });
 
     this.displayDelete = false;

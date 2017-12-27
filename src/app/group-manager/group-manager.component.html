@@ -1,3 +1,4 @@
+<!-- Toolbar to add or delete a group-->
 <p-toolbar>
   <div class="ui-toolbar-group-left">
     <button pButton type="button" label="Add Group" icon="fa-plus" class="ui-button-success" (click)=addGroupDialog()></button>
@@ -5,6 +6,7 @@
   </div>
 </p-toolbar>
 
+<!-- Dialog module for adding a new group -->
 <p-dialog class="dialog-module" header="Add New Group" [(visible)]="displayAdd" modal="modal" width="600" [responsive]="true">
   <p-messages [(value)]="msgs"></p-messages>
 
@@ -20,6 +22,7 @@
   </form>
 </p-dialog>
 
+<!-- Dialog module for deleting a group -->
 <p-dialog class="dialog-module" header="Delete Group" [(visible)]="displayDelete" modal="modal" height="150" width="600" [responsive]="true">
   <div class="ui-grid ui-grid-responsive ui-fluid">
     <div class="ui-grid-col-12">
@@ -35,6 +38,26 @@
   </div>
 </p-dialog>
 
+<!-- Dialog module for group manager -->
+<p-dialog class="dialog-module" header="Edit Group Manager" [(visible)]="displayGroupManager" modal="modal" width="800" [responsive]="true">
+  <div class="ui-grid ui-grid-responsive ui-fluid">
+    <div class="ui-grid-col-12">
+      <div class="ui-inputgroup" [(ngModel)]="group" ngDefaultControl>
+            <span class="group-label ui-grid-col-2">Group Name</span>
+            <span class="ui-grid-col-10"><input type="text" pInputText placeholder="Enter a new group name" value="{{group.name}}"/></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui-grid ui-grid-col-12">
+    <div class="group-manager-buttons">
+      <button type="button" pButton icon="fa-save" label="Save"></button>
+      <button type="button" pButton icon="fa-close" (click)="displayGroupManager=false" label="Cancel"></button>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- Displays the current groups and their members -->
 <div *ngIf="groups.length > 0; else emptyGroup">
   <p-dataGrid [style]="{'padding-top': '50px'}" [value]="groups" [paginator]="true" [rows]="10" *ngFor="let group of groups">
     <p-header>
@@ -43,7 +66,7 @@
           {{group.name}}
           <div class="panel-buttons">
             <button type="button" pButton icon="fa-plus"></button>
-            <button type="button" pButton icon="fa-minus"></button>
+            <button type="button" pButton icon="fa-gear" (click)=groupManagerDialog(group)></button>
           </div>
         </div>
       </div>
@@ -51,6 +74,7 @@
   </p-dataGrid>
 </div>
 
+<!-- Info message when there are no groups -->
 <ng-template #emptyGroup>
   <p-message class="info-message" severity="info" text="There are currently no groups."></p-message>
 </ng-template>

@@ -24,6 +24,18 @@
   text-transform: uppercase;
 }
 
+.group-label{
+  padding: 5px;
+}
+
+.group-manager-buttons {
+  display: table-cell;
+  height: 50px;
+  text-align: center;
+  vertical-align: bottom;
+  width: 800px;
+}
+
 .info-message {
   display: grid;
   font-size: 25px;
