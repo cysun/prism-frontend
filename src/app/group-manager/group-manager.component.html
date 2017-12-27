@@ -1,4 +1,4 @@
-<p-toolbar [style]="{'background-color': 'white'}">
+<p-toolbar>
   <div class="ui-toolbar-group-left">
     <button pButton type="button" label="Add Group" icon="fa-plus" class="ui-button-success" (click)=addGroupDialog()></button>
     <button pButton type="button" label="Delete Group" icon="fa-minus" class="ui-button-danger" (click)=deleteGroupDialog()></button>
@@ -29,7 +29,7 @@
 
   <div class="ui-grid ui-grid-col-12">
     <div class="footer-buttons">
-      <button type="button" pButton icon="fa-check" (click)="deleteGroup(group.name, group._id)" label="Delete"></button>
+      <button type="button" pButton icon="fa-check" (click)="deleteGroup(group._id)" label="Delete"></button>
       <button type="button" pButton icon="fa-close" (click)="displayDelete=false" label="Cancel"></button>
     </div>
   </div>
