@@ -13,8 +13,12 @@ export class GroupManagerService {
     return this.http.get<Group[]>('/api/groups');
   }
 
+  getGroup(id): Observable<Group> {
+    return this.http.get<Group>('/api/group/' + id);
+  }
+
   addGroup(group: Group): Observable<Group> {
-    const body = JSON.stringify({'name': group.name, 'members': group.members});
+    const body = JSON.stringify({'_id': group._id, 'name': group.name, 'members': group.members});
     const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
 
     return this.http.post<Group>('/api/group', body, header);
