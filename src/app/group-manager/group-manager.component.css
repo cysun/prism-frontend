@@ -27,6 +27,7 @@
 .info-message {
   display: grid;
   font-size: 25px;
+  margin-top: 20px;
 }
 
 .panel-buttons {
