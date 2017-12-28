@@ -1,3 +1,5 @@
+.ui-modal { position: fixed; }
+
 .dialog-module {
   text-align: center;
 }
