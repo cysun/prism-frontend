@@ -64,7 +64,8 @@ export class GroupManagerComponent implements OnInit {
     this.groupManagerService.deleteGroup(id).subscribe( () => {
       for (let i = 0; i < this.groups.length; i++) {
         if (this.groups[i]._id === id) {
-          this.groups.splice(i, 1)
+          this.groups.splice(i, 1);
+          break;
         }
       }
     });

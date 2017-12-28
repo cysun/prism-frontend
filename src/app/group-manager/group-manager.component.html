@@ -2,7 +2,7 @@
 <p-toolbar [style]="{'margin-left' : '15px', 'margin-right' : '15px'}">
   <div class="ui-toolbar-group-left">
     <button pButton type="button" label="Add Group" icon="fa-plus" class="ui-button-success" (click)=addGroupDialog()></button>
-    <button pButton type="button" label="Delete Group" icon="fa-minus" class="ui-button-danger" (click)=deleteGroupDialog()></button>
+    <button pButton type="button" label="Delete Group" icon="fa-minus" class="ui-button-danger" [disabled]="groups.length == 0" (click)=deleteGroupDialog()></button>
   </div>
 </p-toolbar>
 
