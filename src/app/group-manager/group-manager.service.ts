@@ -24,6 +24,13 @@ export class GroupManagerService {
     return this.http.post<Group>('/api/group', body, header);
   }
 
+  updateGroup(group: Group): Observable<Group> {
+    const body = JSON.stringify({'name': group.name});
+    const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
+
+    return this.http.patch<Group>('/api/group/' + group._id, body, header);
+  }
+
   deleteGroup(id): Observable<Group> {
     const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
     return this.http.delete<Group>('/api/group/' + id, header);

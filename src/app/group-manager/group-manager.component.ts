@@ -37,12 +37,13 @@ export class GroupManagerComponent implements OnInit {
 
   deleteGroupDialog() { this.displayDelete = true; }
 
-  groupManagerDialog(group) {
+  groupManagerDialog(id) {
     this.msgs = [];
     this.displayGroupManager = true;
-    this.group = group;
+    this.groupManagerService.getGroup(id).subscribe(
+      data => this.group = data
+    );
   }
-
 
   submitGroup() {
     this.groupManagerService.addGroup(this.group).subscribe(
@@ -67,8 +68,15 @@ export class GroupManagerComponent implements OnInit {
         }
       }
     });
-
     this.displayDelete = false;
     this.group = new Group();
+  }
+
+  updateGroup(group) {
+    this.groupManagerService.updateGroup(this.group).subscribe( updatedGroup => {
+      const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
+      this.groups[index] = updatedGroup;
+    });
+    this.displayGroupManager = false;
   }
 }
