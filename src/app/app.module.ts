@@ -28,6 +28,10 @@ import {MessagesModule, MessageModule} from 'primeng/primeng';
 import {TabViewModule} from 'primeng/primeng';
 import {ToolbarModule} from 'primeng/primeng';
 
+import { LoginComponent } from './login/login.component';
+import { PublicComponent } from './layout/public/public.component';
+import { PrivateComponent } from './layout/private/private.component';
+
 import {GroupManagerService} from './group-manager/group-manager.service';
 
 @NgModule({
@@ -41,7 +45,10 @@ import {GroupManagerService} from './group-manager/group-manager.service';
     MinutesComponent,
     ResourcesComponent,
     CommitteeComponent,
-    GroupManagerComponent
+    GroupManagerComponent,
+    LoginComponent,
+    PublicComponent,
+    PrivateComponent
   ],
   imports: [
     BrowserModule,
