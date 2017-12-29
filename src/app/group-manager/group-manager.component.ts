@@ -35,7 +35,10 @@ export class GroupManagerComponent implements OnInit {
     this.displayAdd = true;
   }
 
-  deleteGroupDialog() { this.displayDelete = true; }
+  deleteGroupDialog() {
+    this.displayDelete = true;
+    this.group = new Group();
+  }
 
   groupManagerDialog(id) {
     this.msgs = [];
@@ -71,8 +74,8 @@ export class GroupManagerComponent implements OnInit {
           break;
         }
       }
-
     });
+
     this.displayDelete = false;
     this.group = new Group();
   }
@@ -82,6 +85,8 @@ export class GroupManagerComponent implements OnInit {
       const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
       this.groups[index] = updatedGroup;
     });
+
     this.displayGroupManager = false;
+    this.group = new Group();
   }
 }
