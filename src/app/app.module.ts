@@ -10,6 +10,8 @@ import {CollegesComponent} from './colleges/colleges.component';
 
 import {AccordionModule} from 'primeng/primeng';
 import {ButtonModule} from 'primeng/components/button/button';
+import {FieldsetModule} from 'primeng/primeng';
+import {InputTextModule} from 'primeng/primeng';
 import {MenubarModule, MenuModule, MenuItem} from 'primeng/primeng';
 import {MessagesModule, MessageModule} from 'primeng/primeng';
 import {TabViewModule} from 'primeng/primeng';
@@ -25,9 +27,6 @@ import {CommitteeComponent} from './committee/committee.component';
 import { LoginComponent } from './login/login.component';
 import { PublicComponent } from './layout/public/public.component';
 import { PrivateComponent } from './layout/private/private.component';
-
-// import { PanelModule } from 'primeng/components/panel/panel';
-// import { RadioButtonModule } from 'primeng/components/radioButton/radioButton';
 
 @NgModule({
   declarations: [
@@ -52,6 +51,8 @@ import { PrivateComponent } from './layout/private/private.component';
     BrowserAnimationsModule,
     AccordionModule,
     ButtonModule,
+    FieldsetModule,
+    InputTextModule,
     MenuModule,
     MenubarModule,
     MessageModule,

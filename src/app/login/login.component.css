@@ -1,0 +1,19 @@
+.footer-buttons {
+  display: block;
+  margin: auto;
+}
+
+.login-comp {
+  margin: auto;
+  padding-bottom: 50px;
+  padding-top: 50px;
+  text-align: center;
+}
+
+.tab-grid{
+  margin: auto;
+}
+
+.ui-inputgroup {
+  padding: 15px;
+}

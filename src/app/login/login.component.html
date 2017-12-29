@@ -1,5 +1,23 @@
-<p>
-  login works!
-</p>
+<div class="tab-grid ui-md-6">
+  <p-fieldset legend="Login">
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-12 ui-md-10 login-comp">
+        Please enter your CalStateLA credentials to log into PRISM.
 
-<button pButton type="button" label="Dashboard" routerLink="/dashboard"></button>
+        <div class="ui-inputgroup">
+          <span class="ui-inputgroup-addon"><i class="fa fa-id-badge"></i></span>
+          <input type="text" pInputText placeholder="Username">
+        </div>
+
+        <div class="ui-inputgroup">
+          <span class="ui-inputgroup-addon"><i class="fa fa-key"></i></span>
+          <input type="text" pInputText placeholder="Password">
+        </div>
+
+        <div class="ui-md-12 footer-buttons">
+          <button pButton type="button" label="Sign In" routerLink="/dashboard"></button>
+        </div>
+      </div>
+    </div>
+  </p-fieldset>
+</div>
