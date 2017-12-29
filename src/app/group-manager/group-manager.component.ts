@@ -47,8 +47,10 @@ export class GroupManagerComponent implements OnInit {
 
   submitGroup() {
     this.groupManagerService.addGroup(this.group).subscribe(
-      data => this.groups.push(data),
-      err => console.log(err)
+      data => {
+        this.groups.push(data);
+        this.groups = this.groups.slice(0);
+      }
     );
 
     if (typeof(this.group.name) !== 'undefined') {
@@ -65,9 +67,11 @@ export class GroupManagerComponent implements OnInit {
       for (let i = 0; i < this.groups.length; i++) {
         if (this.groups[i]._id === id) {
           this.groups.splice(i, 1);
+          this.groups = this.groups.slice(0);
           break;
         }
       }
+
     });
     this.displayDelete = false;
     this.group = new Group();
