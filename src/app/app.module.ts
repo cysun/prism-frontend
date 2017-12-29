@@ -22,6 +22,7 @@ import {CalendarComponent} from './calendar/calendar.component';
 import {MinutesComponent} from './minutes/minutes.component';
 import {ResourcesComponent} from './resources/resources.component';
 import {CommitteeComponent} from './committee/committee.component';
+import { LoginComponent } from './login/login.component';
 
 // import { PanelModule } from 'primeng/components/panel/panel';
 // import { RadioButtonModule } from 'primeng/components/radioButton/radioButton';
@@ -36,7 +37,8 @@ import {CommitteeComponent} from './committee/committee.component';
     CalendarComponent,
     MinutesComponent,
     ResourcesComponent,
-    CommitteeComponent
+    CommitteeComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
