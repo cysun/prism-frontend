@@ -12,21 +12,34 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ResourcesComponent } from './resources/resources.component';
 import { SettingsComponent } from './settings/settings.component';
 
+import { PublicComponent } from './layout/public/public.component';
+import { PrivateComponent } from './layout/private/private.component';
+
 const routes: Routes = [
-  //{ path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: '', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'calendar', component: CalendarComponent },
-  { path: 'colleges', component: CollegesComponent },
-  { path: 'committee', component: CommitteeComponent },
-  { path: 'minutes', component: MinutesComponent},
-  { path: 'resources', component: ResourcesComponent},
-  { path: 'settings', component: SettingsComponent },
-  { path: '**', component: PageNotFoundComponent }
+  { path: '', redirectTo: '/login', pathMatch: 'full'},
+  { path: '',
+    component: PublicComponent,
+    children: [
+      { path: 'login', component: LoginComponent },
+    ]
+  },
+  { path: '',
+    component: PrivateComponent,
+    children: [
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'calendar', component: CalendarComponent },
+      { path: 'colleges', component: CollegesComponent },
+      { path: 'committee', component: CommitteeComponent },
+      { path: 'minutes', component: MinutesComponent},
+      { path: 'resources', component: ResourcesComponent},
+      { path: 'settings', component: SettingsComponent },
+      { path: '**', component: PageNotFoundComponent }
+    ]
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [ RouterModule.forRoot(routes) ],
+  exports: [ RouterModule ]
 })
 export class AppRoutingModule {}

@@ -23,6 +23,8 @@ import {MinutesComponent} from './minutes/minutes.component';
 import {ResourcesComponent} from './resources/resources.component';
 import {CommitteeComponent} from './committee/committee.component';
 import { LoginComponent } from './login/login.component';
+import { PublicComponent } from './layout/public/public.component';
+import { PrivateComponent } from './layout/private/private.component';
 
 // import { PanelModule } from 'primeng/components/panel/panel';
 // import { RadioButtonModule } from 'primeng/components/radioButton/radioButton';
@@ -38,7 +40,9 @@ import { LoginComponent } from './login/login.component';
     MinutesComponent,
     ResourcesComponent,
     CommitteeComponent,
-    LoginComponent
+    LoginComponent,
+    PublicComponent,
+    PrivateComponent
   ],
   imports: [
     BrowserModule,
