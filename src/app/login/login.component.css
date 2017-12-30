@@ -1,13 +1,13 @@
-.footer-buttons {
-  display: block;
-  margin: auto;
-}
-
-.login-comp {
+.login-module {
   margin: auto;
   padding-bottom: 50px;
   padding-top: 50px;
   text-align: center;
+}
+
+.logo-symbol {
+  margin-top: -25px;
+  padding: 10px;
 }
 
 .tab-grid{
