@@ -14,6 +14,7 @@ import {FieldsetModule} from 'primeng/primeng';
 import {InputTextModule} from 'primeng/primeng';
 import {MenubarModule, MenuModule, MenuItem} from 'primeng/primeng';
 import {MessagesModule, MessageModule} from 'primeng/primeng';
+import {SplitButtonModule} from 'primeng/primeng';
 import {TabViewModule} from 'primeng/primeng';
 import {ToolbarModule} from 'primeng/primeng';
 
@@ -57,6 +58,7 @@ import { PrivateComponent } from './layout/private/private.component';
     MenubarModule,
     MessageModule,
     MessagesModule,
+    SplitButtonModule,
     TabViewModule
   ],
   providers: [],

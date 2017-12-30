@@ -8,11 +8,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./private.component.css']
 })
 export class PrivateComponent implements OnInit {
-  items: MenuItem[];
   actionMenu: MenuItem[];
+  menuItems: MenuItem[];
+  userMenuItems: MenuItem[];
 
   ngOnInit() {
-    this.items = [ { label: 'PRISM', icon: 'fa-2x fa-cubes'}];
+    this.menuItems = [ { label: 'PRISM', icon: 'fa-2x fa-cubes'}];
 
     this.actionMenu = [{
       label: 'Actions',
@@ -25,5 +26,10 @@ export class PrivateComponent implements OnInit {
         { label: 'Committee', icon: 'fa-users', routerLink: '/committee' }
       ]
     }];
+
+    this.userMenuItems = [
+      { label: 'Settings', icon: 'fa-gear'},
+      { label: 'Logout', icon: 'fa-sign-out' },
+    ];
   }
 }

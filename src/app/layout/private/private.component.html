@@ -1,9 +1,10 @@
-<p-menubar [model]="items">
-  <button pButton label="User" icon="fa-user-o"></button>
+<p-menubar [model]="menuItems">
+  <div class="ui-g ui-sm-2">
+    <p-splitButton class="user-button" label="User" icon="fa-user-o" [model]="userMenuItems"></p-splitButton>
+  </div>
 </p-menubar>
 
-<br/><br/>
-
+<div class="dashboard-module">
 <div class="ui-g">
   <div class="menu-grid ui-g-12 ui-md-2">
     <p-menu class="action-menu" [model]="actionMenu"></p-menu>
@@ -12,4 +13,5 @@
   <div class="tab-grid ui-g-12 ui-md-10">
     <router-outlet></router-outlet>
   </div>
+</div>
 </div>
