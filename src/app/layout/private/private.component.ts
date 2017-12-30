@@ -29,7 +29,7 @@ export class PrivateComponent implements OnInit {
 
     this.userMenuItems = [
       { label: 'Settings', icon: 'fa-gear'},
-      { label: 'Logout', icon: 'fa-sign-out' },
+      { label: 'Logout', icon: 'fa-sign-out', url: '/login' },
     ];
   }
 }
