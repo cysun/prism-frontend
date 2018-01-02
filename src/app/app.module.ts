@@ -28,6 +28,7 @@ import {CommitteeComponent} from './committee/committee.component';
 import { LoginComponent } from './login/login.component';
 import { PublicComponent } from './layout/public/public.component';
 import { PrivateComponent } from './layout/private/private.component';
+import { DocumentComponent } from './document/document.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { PrivateComponent } from './layout/private/private.component';
     CommitteeComponent,
     LoginComponent,
     PublicComponent,
-    PrivateComponent
+    PrivateComponent,
+    DocumentComponent
   ],
   imports: [
     BrowserModule,
