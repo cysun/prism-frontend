@@ -41,8 +41,8 @@ export class GroupManagerService {
     return this.http.put<Group>('/api/group/' + groupId + '/member/' + userId, header);
   }
 
-
-
-
-
+  deleteMember(groupId, memberId): Observable<Group> {
+      const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
+      return this.http.delete<Group>('/api/group/' + groupId + '/member/' + memberId, header);
+  }
 }
