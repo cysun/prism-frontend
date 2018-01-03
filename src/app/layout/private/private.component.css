@@ -1,3 +1,7 @@
+.action-menu {
+  position: fixed; 
+}
+
 .dashboard-module {
   padding-top: 50px;
 }
