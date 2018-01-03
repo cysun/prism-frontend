@@ -59,7 +59,7 @@
 
 <!-- Displays the current groups and their members -->
 <div *ngIf="groups.length > 0; else emptyGroup">
-  <p-dataGrid [style]="{'margin' : '15px','padding-top': '10px'}" [value]="groups" [paginator]="true" [rows]="10" *ngFor="let group of groups">
+  <p-dataGrid [style]="{'margin' : '15px','padding-top': '50px'}" [value]="groups" [paginator]="true" [rows]="10" *ngFor="let group of groups">
     <p-header>
       <div class="header-container">
         <div class="header-panel">
@@ -71,6 +71,15 @@
         </div>
       </div>
     </p-header>
+
+    <ng-template let-group pTemplate="item">
+      <div style="padding:5px" class="ui-g-12 ui-md-4">
+        <p-panel [header]="group.name" [style]="{'text-align':'center'}">
+          Name: John Doe <br/>
+          E-mail: johndoe@gmail.com <br/>
+        </p-panel>
+      </div>
+    </ng-template>
   </p-dataGrid>
 </div>
 

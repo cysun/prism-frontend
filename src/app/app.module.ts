@@ -26,6 +26,7 @@ import {FieldsetModule} from 'primeng/primeng';
 import {InputTextModule} from 'primeng/primeng';
 import {MenubarModule, MenuModule, MenuItem} from 'primeng/primeng';
 import {MessagesModule, MessageModule} from 'primeng/primeng';
+import {PanelModule} from 'primeng/primeng';
 import {SplitButtonModule} from 'primeng/primeng';
 import {TabViewModule} from 'primeng/primeng';
 import {ToolbarModule} from 'primeng/primeng';
@@ -70,6 +71,7 @@ import {GroupManagerService} from './group-manager/group-manager.service';
     MenubarModule,
     MessageModule,
     MessagesModule,
+    PanelModule,
     SplitButtonModule,
     TabViewModule,
     ToolbarModule
