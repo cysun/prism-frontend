@@ -40,12 +40,26 @@
 
 <!-- Dialog module for updating a specific group -->
 <p-dialog class="dialog-module" header="Edit Group Manager" [(visible)]="displayGroupManager" modal="modal" width="800" [responsive]="true">
-  <div class="ui-grid ui-grid-responsive ui-fluid">
+  <div class="update-module ui-grid ui-grid-responsive ui-fluid">
     <div class="ui-grid-col-12">
       <div class="ui-inputgroup" >
             <span class="group-label ui-grid-col-2">Group Name</span>
-            <span class="ui-grid-col-10"><input type="text" pInputText placeholder="Enter a new group name" [(ngModel)]="group.name" ngDefaultControl/></span>
+            <span class="ui-grid-col-9"><input type="text" pInputText placeholder="Enter a new group name" [(ngModel)]="group.name" ngDefaultControl/></span>
       </div>
+    </div>
+
+    <div class ="ui-grid-col-12 grid-space">
+      <span class="group-label ui-grid-col-2">Members</span>
+      <span class="ui-grid-col-9">
+        <p-autoComplete [(ngModel)]="groups"
+                        [suggestions]="placeholder"
+                        (completeMethod)="placeholder($event)"
+                        [minLength]="1" placeholder="Type in a username"
+                        field="name" [multiple]="true" [style]="{'text-align':'left'}">
+        </p-autoComplete>
+
+        <div class="text-hints">Type in a username to get a list of possible users to add in the group.</div>
+      </span>
     </div>
   </div>
 

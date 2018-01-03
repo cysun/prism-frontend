@@ -18,6 +18,7 @@ import {CommitteeComponent} from './committee/committee.component';
 import {GroupManagerComponent} from './group-manager/group-manager.component';
 
 import {AccordionModule} from 'primeng/primeng';
+import {AutoCompleteModule} from 'primeng/primeng';
 import {ButtonModule} from 'primeng/components/button/button';
 import {DataGridModule} from 'primeng/primeng';
 import {DialogModule} from 'primeng/primeng';
@@ -61,6 +62,7 @@ import {GroupManagerService} from './group-manager/group-manager.service';
     AppRoutingModule,
     BrowserAnimationsModule,
     AccordionModule,
+    AutoCompleteModule,
     ButtonModule,
     DataGridModule,
     DialogModule,

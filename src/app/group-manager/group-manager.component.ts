@@ -18,6 +18,7 @@ export class GroupManagerComponent implements OnInit {
   displayGroupManager: Boolean = false;
   group: Group = new Group();
   groups: Group[] = [];
+  filteredMembers: Group[] = [];
   msgs: Message[] = [];
 
   constructor(private groupManagerService: GroupManagerService, private router: Router) { }
