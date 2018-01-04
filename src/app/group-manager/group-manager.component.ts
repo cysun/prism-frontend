@@ -30,6 +30,11 @@ export class GroupManagerComponent implements OnInit {
     });
   }
 
+  invalidErrorMessage() {
+    this.msgs = [];
+    this.msgs.push({severity: 'error', summary: 'Empty Group Name:', detail: 'Please input a group name.'});
+  }
+
   addGroupDialog() {
     this.msgs = [];
     this.group = new Group();
@@ -50,19 +55,18 @@ export class GroupManagerComponent implements OnInit {
   }
 
   submitGroup() {
-    this.groupManagerService.addGroup(this.group).subscribe(
-      data => {
-        this.groups.push(data);
-        this.groups = this.groups.slice(0);
-      }
-    );
-
     if (typeof(this.group.name) !== 'undefined') {
+      this.groupManagerService.addGroup(this.group).subscribe(
+        data => {
+          this.groups.push(data);
+          this.groups = this.groups.slice(0);
+        }
+      );
+
       this.displayAdd = false;
       this.group = new Group();
     } else {
-      this.msgs = [];
-      this.msgs.push({severity: 'error', summary: 'Empty Group Name:', detail: 'Please input a group name.'});
+      this.invalidErrorMessage();
     }
   }
 
@@ -81,13 +85,17 @@ export class GroupManagerComponent implements OnInit {
     this.group = new Group();
   }
 
-  updateGroup(group) {
-    this.groupManagerService.updateGroup(this.group).subscribe( updatedGroup => {
-      const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
-      this.groups[index] = updatedGroup;
-    });
+  updateGroup() {
+    if (this.group.name.trim().length > 0) {
+      this.groupManagerService.updateGroup(this.group).subscribe( updatedGroup => {
+        const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
+        this.groups[index] = updatedGroup;
+      });
 
-    this.displayGroupManager = false;
-    this.group = new Group();
+      this.displayGroupManager = false;
+      this.group = new Group();
+    } else {
+      this.invalidErrorMessage();
+    }
   }
 }

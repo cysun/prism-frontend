@@ -10,11 +10,12 @@
 <p-dialog class="dialog-module" header="Add New Group" [(visible)]="displayAdd" modal="modal" width="600" [responsive]="true">
   <p-messages [(value)]="msgs"></p-messages>
 
-  <form #f="ngForm" (ngSubmit)="submitGroup()">
+  <form class="new-group" #f="ngForm" (ngSubmit)="submitGroup()">
     <div class="ui-inputgroup">
       <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
       <input type="text" size="70" [(ngModel)]="group.name" pInputText name="group-name" placeholder="Enter New Group Title">
     </div>
+    <div class="text-hints">Enter a name for the new group.</div>
     <p-footer class="footer-buttons">
       <button type="submit" pButton icon="fa-plus" label="Add"></button>
       <button type="button" pButton icon="fa-close" (click)="displayAdd=false" label="Cancel"></button>
@@ -40,6 +41,8 @@
 
 <!-- Dialog module for updating a specific group -->
 <p-dialog class="dialog-module" header="Edit Group Manager" [(visible)]="displayGroupManager" modal="modal" width="800" [responsive]="true">
+  <p-messages [(value)]="msgs"></p-messages>
+
   <div class="update-module ui-grid ui-grid-responsive ui-fluid">
     <div class="ui-grid-col-12">
       <span class="group-label ui-grid-col-2">Group Name</span>
@@ -69,7 +72,7 @@
 
   <div class="ui-grid ui-grid-col-12">
     <div class="group-manager-buttons">
-      <button type="button" pButton icon="fa-save" (click)="updateGroup(group._id)" label="Save"></button>
+      <button type="button" pButton icon="fa-save" (click)="updateGroup(group.name)" label="Save"></button>
       <button type="button" pButton icon="fa-close" (click)="displayGroupManager=false" label="Cancel"></button>
     </div>
   </div>
