@@ -1,10 +1,19 @@
 .action-menu {
-  position: fixed; 
+  position: fixed;
 }
 
 .dashboard-module {
   padding-top: 50px;
 }
+
+.menu-grid{
+  background-color: #aec6cf;
+}
+
+.tab-grid{
+  background-color: #BEF9E9;
+}
+
 .user-button {
   padding: 4px;
 }
