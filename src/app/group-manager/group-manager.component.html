@@ -11,15 +11,23 @@
   <p-messages [(value)]="msgs"></p-messages>
 
   <form class="dialog-box" #f="ngForm" (ngSubmit)="submitGroup()">
-    <div class="ui-inputgroup">
-      <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-      <input type="text" size="70" [(ngModel)]="group.name" pInputText name="group-name" placeholder="Enter New Group Title">
+    <div class="dialog-box ui-grid ui-grid-responsive ui-fluid">
+      <div class="ui-grid-col-12">
+        <div class="ui-inputgroup">
+          <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
+          <input type="text" [(ngModel)]="group.name" pInputText name="group-name" placeholder="Enter New Group Title">
+        </div>
+      </div>
     </div>
+
     <div class="text-hints">Enter a name for the new group.</div>
-    <p-footer class="footer-buttons">
-      <button type="submit" pButton icon="fa-plus" label="Add"></button>
-      <button type="button" pButton icon="fa-close" (click)="displayAdd=false" label="Cancel"></button>
-    </p-footer>
+
+    <div class="ui-grid ui-grid-col-12">
+      <div class="footer-buttons">
+        <button type="submit" pButton icon="fa-plus" label="Add"></button>
+        <button type="button" pButton icon="fa-close" (click)="displayAdd=false" label="Cancel"></button>
+      </div>
+    </div>
   </form>
 </p-dialog>
 
@@ -83,7 +91,7 @@
 
 <!-- Displays the current groups and their members -->
 <div *ngIf="groups.length > 0; else emptyGroup">
-  <p-dataGrid [style]="{'margin' : '15px','padding-top': '50px'}" [value]="groups" [paginator]="true" [rows]="10" *ngFor="let group of groups">
+  <p-dataGrid [style]="{'margin' : '15px','padding-top': '50px'}" [value]="groups" [paginator]="true" [rows]="12" *ngFor="let group of groups">
     <p-header>
       <div class="header-container">
         <div class="header-panel">
