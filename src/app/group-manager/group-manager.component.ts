@@ -56,15 +56,19 @@ export class GroupManagerComponent implements OnInit {
 
   submitGroup() {
     if (typeof(this.group.name) !== 'undefined') {
-      this.groupManagerService.addGroup(this.group).subscribe(
-        data => {
-          this.groups.push(data);
-          this.groups = this.groups.slice(0);
-        }
-      );
+      if (this.group.name.trim().length > 0) {
+        this.groupManagerService.addGroup(this.group).subscribe(
+          data => {
+            this.groups.push(data);
+            this.groups = this.groups.slice(0);
+          }
+        );
 
-      this.displayAdd = false;
-      this.group = new Group();
+        this.displayAdd = false;
+        this.group = new Group();
+      } else {
+        this.invalidErrorMessage();
+      }
     } else {
       this.invalidErrorMessage();
     }
