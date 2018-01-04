@@ -10,7 +10,7 @@
 <p-dialog class="dialog-module" header="Add New Group" [(visible)]="displayAdd" modal="modal" width="600" [responsive]="true">
   <p-messages [(value)]="msgs"></p-messages>
 
-  <form class="new-group" #f="ngForm" (ngSubmit)="submitGroup()">
+  <form class="dialog-box" #f="ngForm" (ngSubmit)="submitGroup()">
     <div class="ui-inputgroup">
       <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
       <input type="text" size="70" [(ngModel)]="group.name" pInputText name="group-name" placeholder="Enter New Group Title">
@@ -24,10 +24,13 @@
 </p-dialog>
 
 <!-- Dialog module for deleting a group -->
-<p-dialog class="dialog-module" header="Delete Group" [(visible)]="displayDelete" modal="modal" height="150" width="600" [responsive]="true">
-  <div class="ui-grid ui-grid-responsive ui-fluid">
+<p-dialog class="dialog-module" header="Delete Group" [(visible)]="displayDelete" modal="modal" width="600" [responsive]="true">
+  <p-messages [(value)]="msgs"></p-messages>
+
+  <div class="dialog-box ui-grid ui-grid-responsive ui-fluid">
     <div class="ui-grid-col-12">
       <p-dropdown appendTo="body" [options]="groups" [(ngModel)]="group" [autoWidth]="false" placeholder="Select a Group" name="group-names" optionLabel="name"></p-dropdown>
+      <div class="text-hints"><b><u>NOTE:</u></b> Deleting a group will permanently remove the access given to its members.</div>
     </div>
   </div>
 

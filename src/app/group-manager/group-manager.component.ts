@@ -30,9 +30,19 @@ export class GroupManagerComponent implements OnInit {
     });
   }
 
-  invalidErrorMessage() {
+  invalidErrorMessage(message) {
     this.msgs = [];
-    this.msgs.push({severity: 'error', summary: 'Empty Group Name:', detail: 'Please input a group name.'});
+    let detailMsg = '';
+
+    switch (message) {
+      case 'empty group':
+        detailMsg = 'Please input a group name.';
+        break;
+      case 'invalid delete':
+        detailMsg = 'Please select a valid group to delete.';
+        break;
+    }
+    this.msgs.push({severity: 'error', summary: 'Invalid Group:', detail: detailMsg });
   }
 
   addGroupDialog() {
@@ -42,6 +52,7 @@ export class GroupManagerComponent implements OnInit {
   }
 
   deleteGroupDialog() {
+    this.msgs = [];
     this.displayDelete = true;
     this.group = new Group();
   }
@@ -67,26 +78,30 @@ export class GroupManagerComponent implements OnInit {
         this.displayAdd = false;
         this.group = new Group();
       } else {
-        this.invalidErrorMessage();
+        this.invalidErrorMessage('empty group');
       }
     } else {
-      this.invalidErrorMessage();
+      this.invalidErrorMessage('empty group');
     }
   }
 
   deleteGroup(id) {
-    this.groupManagerService.deleteGroup(id).subscribe( () => {
-      for (let i = 0; i < this.groups.length; i++) {
-        if (this.groups[i]._id === id) {
-          this.groups.splice(i, 1);
-          this.groups = this.groups.slice(0);
-          break;
+    if (typeof(id) !== 'undefined') {
+      this.groupManagerService.deleteGroup(id).subscribe( () => {
+        for (let i = 0; i < this.groups.length; i++) {
+          if (this.groups[i]._id === id) {
+            this.groups.splice(i, 1);
+            this.groups = this.groups.slice(0);
+            break;
+          }
         }
-      }
-    });
+      });
 
-    this.displayDelete = false;
-    this.group = new Group();
+      this.displayDelete = false;
+      this.group = new Group();
+    } else {
+      this.invalidErrorMessage('invalid delete');
+    }
   }
 
   updateGroup() {
@@ -99,7 +114,7 @@ export class GroupManagerComponent implements OnInit {
       this.displayGroupManager = false;
       this.group = new Group();
     } else {
-      this.invalidErrorMessage();
+      this.invalidErrorMessage('empty group');
     }
   }
 }

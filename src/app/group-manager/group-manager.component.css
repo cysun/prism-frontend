@@ -1,3 +1,7 @@
+.dialog-box {
+  margin-top: 20px;
+}
+
 .dialog-module {
   text-align: center;
 }
@@ -45,10 +49,6 @@
 .info-message {
   display: grid;
   font-size: 25px;
-  margin-top: 20px;
-}
-
-.new-group {
   margin-top: 20px;
 }
 
