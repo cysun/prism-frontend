@@ -1,10 +1,22 @@
 .action-menu {
-  position: fixed; 
+  position: fixed;
+  width: inherit;
 }
 
 .dashboard-module {
   padding-top: 50px;
 }
+
+/* .menu-grid{
+  background-color: #aec6cf;
+} */
+
+.tab-grid{
+  /* background-color: #BEF9E9; */
+  padding-left: 30px;
+  padding-right: 20px;
+}
+
 .user-button {
   padding: 4px;
 }
