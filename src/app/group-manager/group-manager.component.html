@@ -1,5 +1,5 @@
 <!-- Toolbar to add or delete a group-->
-<p-toolbar [style]="{'margin-left' : '15px', 'margin-right' : '15px'}">
+<p-toolbar>
   <div class="ui-toolbar-group-left">
     <button pButton type="button" label="Add Group" icon="fa-plus" class="ui-button-success" (click)=addGroupDialog()></button>
     <button pButton type="button" label="Delete Group" icon="fa-minus" class="ui-button-danger" [disabled]="groups.length == 0" (click)=deleteGroupDialog()></button>
@@ -91,7 +91,7 @@
 
 <!-- Displays the current groups and their members -->
 <div *ngIf="groups.length > 0; else emptyGroup">
-  <p-dataGrid [style]="{'margin' : '15px','padding-top': '50px'}" [value]="groups" [paginator]="true" [rows]="12" *ngFor="let group of groups">
+  <p-dataGrid [style]="{'padding-top': '50px'}" [value]="groups" [paginator]="true" [rows]="12" *ngFor="let group of groups">
     <p-header>
       <div class="header-container">
         <div class="header-panel">
