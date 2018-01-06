@@ -19,7 +19,7 @@
     "url": "git+https://github.com/amclees/prism-frontend.git"
   },
   "contributors": [
-    "Leanne David",
+    "Leanne David <leanne.skit@gmail.com>",
     "Andrew McLees <andrewmclees5@gmail.com>",
     "Justin Sarenas",
     "Ben Solis",
@@ -28,6 +28,7 @@
   "private": true,
   "dependencies": {
     "@angular-devkit/schematics": "0.0.41",
+    "@angular/animations": "^5.1.1",
     "@angular/common": "^5.1.0",
     "@angular/compiler": "^5.1.0",
     "@angular/core": "^5.1.0",
@@ -37,6 +38,8 @@
     "@angular/platform-browser-dynamic": "^5.1.0",
     "@angular/router": "^5.1.0",
     "core-js": "^2.5.3",
+    "font-awesome": "^4.7.0",
+    "primeng": "^5.0.2",
     "rxjs": "^5.5.5",
     "todomvc-app-css": "^2.1.0",
     "zone.js": "^0.8.18"
