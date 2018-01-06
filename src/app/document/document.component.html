@@ -5,9 +5,22 @@
         revert to any of the previous revisions without overwriting the current file.
 
         <div class="header-container">
-          <p>MAIN CURRENT FILE</p>
+          <p>MAIN CURRENT VERSION</p>
           <div class="header-divider"></div>
         </div>
+
+        <p-growl [(value)]="msgs"></p-growl>
+
+        <p-fileUpload name="demo[]" (onSelect)="onFileSelect()"
+                      customUpload="true"
+                      (uploadHandler)="onUploadHandler($event)">
+
+          <ng-template pTemplate="content">
+            <ul *ngIf="uploadedFiles.length">
+              <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+            </ul>
+          </ng-template>
+        </p-fileUpload>
 
         <div class="header-container">
           <p>DEADLINE DATE</p>

@@ -11,6 +11,8 @@ import {CollegesComponent} from './colleges/colleges.component';
 import {AccordionModule} from 'primeng/primeng';
 import {ButtonModule} from 'primeng/components/button/button';
 import {FieldsetModule} from 'primeng/primeng';
+import {FileUploadModule} from 'primeng/primeng';
+import {GrowlModule} from 'primeng/primeng';
 import {InputTextModule} from 'primeng/primeng';
 import {MenubarModule, MenuModule, MenuItem} from 'primeng/primeng';
 import {MessagesModule, MessageModule} from 'primeng/primeng';
@@ -55,6 +57,8 @@ import { DocumentComponent } from './document/document.component';
     AccordionModule,
     ButtonModule,
     FieldsetModule,
+    FileUploadModule,
+    GrowlModule,
     InputTextModule,
     MenuModule,
     MenubarModule,
