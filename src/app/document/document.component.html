@@ -1,11 +1,10 @@
 <p-tabView>
-    <p-tabPanel header="Current Version" leftIcon="fa-file-text-o">
+    <p-tabPanel header="Main Version" leftIcon="fa-file-text-o">
         This tab holds the current version of the document. Revisions of the
-        same document can be found in the revisions tab. It is possible to
-        revert to any of the previous revisions without overwriting the current file.
+        same document can be found in the revisions tab.
 
         <div class="header-container">
-          <p>MAIN CURRENT VERSION</p>
+          <p>Current Version</p>
           <div class="header-divider"></div>
         </div>
 
@@ -23,13 +22,19 @@
         </p-fileUpload>
 
         <div class="header-container">
-          <p>DEADLINE DATE</p>
+          <p>Deadline Date</p>
           <div class="header-divider"></div>
         </div>
     </p-tabPanel>
 
     <p-tabPanel header="Revisions" leftIcon="fa-list">
-        revisions tab
+        This tab holds previous revisions of the document for archiving purposes. Only the
+        administrator can revert to any previous revision without losing the current one.
+
+        <div class="header-container">
+          <p>Previous Revisions</p>
+          <div class="header-divider"></div>
+        </div>
     </p-tabPanel>
 
     <p-tabPanel header="Comments" leftIcon="fa-comments-o">
