@@ -13,4 +13,11 @@ export class AuthService {
     return this.http.post<User>('/api/login', { email, password })
   }
 
+  isAuthenticated(): boolean {
+    if (localStorage.getItem('currentUser')) {
+      return true;
+    }
+    return false;
+  }
+
 }
