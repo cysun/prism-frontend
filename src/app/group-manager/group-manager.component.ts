@@ -41,6 +41,9 @@ export class GroupManagerComponent implements OnInit {
       case 'invalid delete':
         detailMsg = 'Please select a valid group to delete.';
         break;
+      case 'existing group':
+        detailMsg = 'Name of group already exists.'
+        break;
     }
     this.msgs.push({severity: 'error', summary: 'Invalid Group:', detail: detailMsg });
   }
@@ -68,15 +71,21 @@ export class GroupManagerComponent implements OnInit {
   submitGroup() {
     if (typeof(this.group.name) !== 'undefined') {
       if (this.group.name.trim().length > 0) {
-        this.groupManagerService.addGroup(this.group).subscribe(
-          data => {
-            this.groups.push(data);
-            this.groups = this.groups.slice(0);
-          }
-        );
+        const groupExists = this.groups.some(checkGroup => checkGroup.name === this.group.name);
 
-        this.displayAdd = false;
-        this.group = new Group();
+        if (!groupExists) {
+          this.groupManagerService.addGroup(this.group).subscribe(
+            data => {
+              this.groups.push(data);
+              this.groups = this.groups.slice(0);
+            }
+          );
+
+          this.displayAdd = false;
+          this.group = new Group();
+        } else {
+          this.invalidErrorMessage('existing group');
+        }
       } else {
         this.invalidErrorMessage('empty group');
       }
