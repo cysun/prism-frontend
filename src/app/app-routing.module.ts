@@ -33,7 +33,7 @@ const routes: Routes = [
       { path: 'calendar', component: CalendarComponent },
       { path: 'colleges', component: CollegesComponent },
       { path: 'committee', component: CommitteeComponent },
-      { path: 'minutes', component: MinutesComponent},
+      { path: 'minutes', component: MinutesComponent },
       { path: 'resources', component: ResourcesComponent},
       { path: 'settings', component: SettingsComponent },
       { path: '**', component: PageNotFoundComponent }

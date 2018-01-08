@@ -6,6 +6,7 @@ import { User } from '../models/user.model';
 
 @Injectable()
 export class AuthService {
+  private TOKEN = 'jwt_token';
 
   constructor(private http: HttpClient) { }
 
@@ -14,10 +15,14 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    if (localStorage.getItem('currentUser')) {
+    if (localStorage.getItem(this.TOKEN)) {
       return true;
     }
     return false;
+  }
+
+  logout() {
+    localStorage.removeItem(this.TOKEN);
   }
 
 }
