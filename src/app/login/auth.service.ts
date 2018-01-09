@@ -18,25 +18,21 @@ export class AuthService {
 
   login(username: string, password: string): Observable<UserResponse> {
     const credentials = JSON.stringify({'username': username, 'password': password });
-    console.log('my credentials are: ' + credentials);
-
     return this.http.post<UserResponse>('/api/login', credentials, this.HEADERS);
-
-    // return this.http.post('/api/login', credentials, this.HEADERS).subscribe(
-    //   // res => { console.log('Token: ' + JSON.stringify(res)); },
-    //   err => { console.log('Error has occurred.'); }
-    // )
   }
 
   isAuthenticated(): boolean {
     if (localStorage.getItem(this.TOKEN)) {
+      console.log('Is authenticated and here is the token: ' + localStorage.getItem(this.TOKEN));
       return true;
     }
+    console.log('Is not authenticated');
     return false;
   }
 
   logout() {
     localStorage.removeItem(this.TOKEN);
+    localStorage.removeItem('currentUser');
   }
 
 }
