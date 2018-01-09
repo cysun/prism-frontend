@@ -13,7 +13,6 @@ import { SettingsComponent } from './settings/settings.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { MinutesComponent } from './minutes/minutes.component';
 import { ResourcesComponent } from './resources/resources.component';
-import { CommitteeComponent } from './committee/committee.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
 
 import { AccordionModule } from 'primeng/primeng';
@@ -49,7 +48,6 @@ import {GroupManagerService} from './group-manager/group-manager.service';
     CalendarComponent,
     MinutesComponent,
     ResourcesComponent,
-    CommitteeComponent,
     GroupManagerComponent,
     LoginComponent,
     PublicComponent,
