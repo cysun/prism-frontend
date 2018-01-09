@@ -28,6 +28,8 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('jwt_token', data.token);
       localStorage.setItem('currentUser', jwtDecode(data.token));
 
+      console.log('Some info about User: ' + JSON.stringify(data.groups));
+
       console.log('the token is: ' + data.token);
       console.log('here is the token decoded: ' + JSON.stringify(jwtDecode(data.token)));
 

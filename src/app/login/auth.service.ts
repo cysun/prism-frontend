@@ -3,10 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 
 import { User } from '../models/user.model';
-
-interface UserResponse {
-  token: string;
-}
+import { UserResponse } from '../models/user-response.model';
 
 @Injectable()
 export class AuthService {
