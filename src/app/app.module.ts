@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -29,6 +29,7 @@ import { LoginComponent } from './login/login.component';
 import { PublicComponent } from './layout/public/public.component';
 import { PrivateComponent } from './layout/private/private.component';
 
+import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
 import { AuthService } from './login/auth.service';
 
@@ -67,7 +68,12 @@ import { AuthService } from './login/auth.service';
   providers: [
     AuthGuard,
     AuthService,
-    HttpClientModule
+    HttpClientModule,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
