@@ -16,6 +16,8 @@ import { SettingsComponent } from './settings/settings.component';
 import { PublicComponent } from './layout/public/public.component';
 import { PrivateComponent } from './layout/private/private.component';
 
+import { AuthGuard } from './login/auth.guard';
+
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full'},
   { path: '',
@@ -26,12 +28,13 @@ const routes: Routes = [
   },
   { path: '',
     component: PrivateComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'calendar', component: CalendarComponent },
       { path: 'colleges', component: CollegesComponent },
-      { path: 'committee', component: GroupManagerComponent },
-      { path: 'minutes', component: MinutesComponent},
+      { path: 'committee', component: CommitteeComponent },
+      { path: 'minutes', component: MinutesComponent },
       { path: 'resources', component: ResourcesComponent},
       { path: 'settings', component: SettingsComponent },
       { path: '**', component: PageNotFoundComponent }
