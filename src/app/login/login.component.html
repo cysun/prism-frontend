@@ -16,6 +16,11 @@
             <input type="password" [(ngModel)]="password" pInputText placeholder="Password" name="password" required>
           </div>
 
+          <div class="validation-error" *ngIf="wrongInfo === true">
+            The username and/or password are incorrect.<br>
+            Please try again.
+          </div>
+
           <div class="ui-md-12 footer-buttons">
             <button pButton type="submit" [disabled]="!f.form.valid" label="Sign In"></button>
           </div>
