@@ -6,6 +6,7 @@ import {Group} from '../models/group.model';
 
 @Injectable()
 export class GroupManagerService {
+  private HEADERS = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
 
   constructor(private http: HttpClient) { }
 
@@ -19,30 +20,23 @@ export class GroupManagerService {
 
   addGroup(group: Group): Observable<Group> {
     const body = JSON.stringify({'_id': group._id, 'name': group.name, 'members': group.members});
-    const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
-
-    return this.http.post<Group>('/api/group', body, header);
+    return this.http.post<Group>('/api/group', body, this.HEADERS);
   }
 
   updateGroup(group: Group): Observable<Group> {
     const body = JSON.stringify({'name': group.name});
-    const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
-
-    return this.http.patch<Group>('/api/group/' + group._id, body, header);
+    return this.http.patch<Group>('/api/group/' + group._id, body, this.HEADERS);
   }
 
   deleteGroup(id): Observable<Group> {
-    const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
-    return this.http.delete<Group>('/api/group/' + id, header);
+    return this.http.delete<Group>('/api/group/' + id, this.HEADERS);
   }
 
   addMember(userId, groupId): Observable<Group> {
-    const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
-    return this.http.put<Group>('/api/group/' + groupId + '/member/' + userId, header);
+    return this.http.put<Group>('/api/group/' + groupId + '/member/' + userId, this.HEADERS);
   }
 
   deleteMember(groupId, memberId): Observable<Group> {
-      const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
-      return this.http.delete<Group>('/api/group/' + groupId + '/member/' + memberId, header);
+      return this.http.delete<Group>('/api/group/' + groupId + '/member/' + memberId, this.HEADERS);
   }
 }
