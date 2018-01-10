@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 
-import {Group} from '../models/group.model';
+import { Group } from '../models/group.model';
+import { User } from '../models/user.model';
 
 @Injectable()
 export class GroupManagerService {
@@ -12,6 +13,10 @@ export class GroupManagerService {
 
   getGroups(): Observable<Group[]> {
     return this.http.get<Group[]>('/api/groups');
+  }
+
+  getUsers(): Observable<User> {
+    return this.http.get<User>('/api/users');
   }
 
   getGroup(id): Observable<Group> {

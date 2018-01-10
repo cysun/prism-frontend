@@ -28,6 +28,11 @@ export class GroupManagerComponent implements OnInit {
       this.groups = data;
       console.log(data);
     });
+
+
+    this.groupManagerService.getUsers().subscribe( data => {
+      console.log('List of all users: ' + JSON.stringify(data));
+    })
   }
 
   invalidErrorMessage(message) {
