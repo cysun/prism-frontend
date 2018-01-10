@@ -15,12 +15,21 @@ export class GroupManagerService {
     return this.http.get<Group[]>('/api/groups');
   }
 
-  getUsers(): Observable<User> {
-    return this.http.get<User>('/api/users');
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>('/api/users');
   }
 
   getGroup(id): Observable<Group> {
     return this.http.get<Group>('/api/group/' + id);
+  }
+
+  getUser(id): Observable<User> {
+    return this.http.get<User>('/api/user/' + id);
+  }
+
+  searchUser(username): Observable<User> {
+    const params = new HttpParams().set('username', username);
+    return this.http.get<User>('/api/users', { params: params });
   }
 
   addGroup(group: Group): Observable<Group> {

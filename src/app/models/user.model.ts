@@ -1,4 +1,4 @@
-export interface User {
+export class User {
   username: string;
   email: string;
 
@@ -12,7 +12,7 @@ export interface User {
   disabled: boolean;
   samlType: string;
   passwordHash: string;
-  
+
   config: {
     type: {
       email: {

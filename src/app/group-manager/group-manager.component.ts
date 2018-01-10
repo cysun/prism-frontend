@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Message } from 'primeng/components/common/api';
+
+import { Group } from '../models/group.model';
+import { User } from '../models/user.model';
 
 import { GroupManagerService } from './group-manager.service';
-import { Group } from '../models/group.model';
-
-import { Message } from 'primeng/components/common/api';
 
 @Component({
   selector: 'prism-group-manager',
@@ -16,9 +17,14 @@ export class GroupManagerComponent implements OnInit {
   displayAdd: Boolean = false;
   displayDelete: Boolean = false;
   displayGroupManager: Boolean = false;
+
   group: Group = new Group();
+  user: User = new User();
+
   groups: Group[] = [];
-  filteredMembers: Group[] = [];
+  users: User[] = [];
+
+  filteredMembers: User[] = [];
   msgs: Message[] = [];
 
   constructor(private groupManagerService: GroupManagerService, private router: Router) { }
@@ -29,9 +35,9 @@ export class GroupManagerComponent implements OnInit {
       console.log(data);
     });
 
-
     this.groupManagerService.getUsers().subscribe( data => {
-      console.log('List of all users: ' + JSON.stringify(data));
+      this.users = data;
+      console.log(data);
     })
   }
 
@@ -130,5 +136,21 @@ export class GroupManagerComponent implements OnInit {
     } else {
       this.invalidErrorMessage('empty group');
     }
+  }
+
+  getUser(username) {
+    this.groupManagerService.getUsers().subscribe( data => {
+      for (let i = 0; i < this.users.length; i ++) {
+        if (this.users[i].username === username) {
+          this.filteredMembers.push(this.users[i]);
+          break;
+        }
+      }
+    });
+
+    // this.groupManagerService.searchUser('testRoot8').subscribe( data => {
+    //   console.log('Testing if can filter a user by username: ');
+    //   console.log(data);
+    // })
   }
 }
