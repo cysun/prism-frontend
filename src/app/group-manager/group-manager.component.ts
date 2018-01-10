@@ -63,6 +63,7 @@ export class GroupManagerComponent implements OnInit {
     this.msgs = [];
     this.group = new Group();
     this.displayAdd = true;
+    this.getMembers('5a569127f1cf3b292128a629');
   }
 
   deleteGroupDialog() {
@@ -136,6 +137,12 @@ export class GroupManagerComponent implements OnInit {
     } else {
       this.invalidErrorMessage('empty group');
     }
+  }
+
+  getMembers(id) {
+    this.groupManagerService.getGroup(id).subscribe( data => {
+      console.log(data.members);
+    })
   }
 
   filteredUsers(event) {
