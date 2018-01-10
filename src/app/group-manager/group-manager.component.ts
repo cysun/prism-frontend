@@ -138,15 +138,26 @@ export class GroupManagerComponent implements OnInit {
     }
   }
 
-  getUser(username) {
-    this.groupManagerService.getUsers().subscribe( data => {
+  filteredUsers(event) {
+    const query = event.query;
+    this.groupManagerService.getUsers().subscribe( users => {
+      this.filteredMembers = this.getUser(query, users);
+    })
+  }
+
+  getUser(username, users: any[]): any[] {
+    const filtered = [];
+
+    this.groupManagerService.getUsers().subscribe( () => {
       for (let i = 0; i < this.users.length; i ++) {
-        if (this.users[i].username === username) {
-          this.filteredMembers.push(this.users[i]);
+        if ((this.users[i].username).toLowerCase().indexOf(username.toLowerCase()) === 0) {
+          filtered.push(this.users[i]);
           break;
         }
       }
     });
+
+    return filtered;
 
     // this.groupManagerService.searchUser('testRoot8').subscribe( data => {
     //   console.log('Testing if can filter a user by username: ');
