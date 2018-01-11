@@ -29,6 +29,8 @@ export class GroupManagerComponent implements OnInit {
   filteredMembers: User[] = [];
   msgs: Message[] = [];
 
+  displayList: any[] = [];
+
   constructor(private groupManagerService: GroupManagerService, private router: Router) { }
 
   ngOnInit() {
@@ -142,9 +144,12 @@ export class GroupManagerComponent implements OnInit {
   }
 
   listMembers(memberList) {
+    this.displayList = [];
+
     for (let i = 0; i < memberList.length; i++) {
       this.groupManagerService.getUser(memberList[i]).subscribe( data => {
-        console.log(data.username);
+        // console.log(data.username);
+        this.displayList.push(data.username);
       })
     }
   }

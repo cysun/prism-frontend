@@ -104,11 +104,10 @@
       </div>
     </p-header>
 
-    <ng-template let-group pTemplate="item" *ngFor="let group2 of groups">
-      <div style="padding:5px" class="ui-g-12 ui-md-4" *ngFor="let member of group2.members">
+    <ng-template let-group pTemplate="item">
+      <div style="padding:5px" class="ui-g-12 ui-md-4" *ngFor="let member of group.members">
         <p-panel [header]="member" [style]="{'text-align':'center', 'overflow-wrap': 'break-word'}">
-          Name: idk <br/>
-          E-mail: johndoe@gmail.com <br/>
+        placeholder
         </p-panel>
       </div>
     </ng-template>
