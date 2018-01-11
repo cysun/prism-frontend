@@ -24,6 +24,7 @@ export class GroupManagerComponent implements OnInit {
   groups: Group[] = [];
   users: User[] = [];
   groupMembers: User[] = [];
+  memberList: User[] = [];
 
   filteredMembers: User[] = [];
   msgs: Message[] = [];
@@ -140,21 +141,19 @@ export class GroupManagerComponent implements OnInit {
     }
   }
 
-  getGroup(id): any[] {
-    this.groupManagerService.getGroup(id).subscribe( data => {
-      this.groupMembers = data.members;
-    })
-    return this.groupMembers;
-  }
-
-  getMembers(id) {
-    const memberList = this.getGroup(id);
-
+  listMembers(memberList) {
     for (let i = 0; i < memberList.length; i++) {
       this.groupManagerService.getUser(memberList[i]).subscribe( data => {
         console.log(data.username);
       })
     }
+  }
+
+  getGroupMemberList(id) {
+    this.groupManagerService.getGroup(id).subscribe( data => {
+      this.groupMembers = data.members;
+      this.listMembers(this.groupMembers);
+    })
   }
 
   filteredUsers(event) {
