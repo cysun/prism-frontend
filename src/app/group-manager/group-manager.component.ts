@@ -23,6 +23,7 @@ export class GroupManagerComponent implements OnInit {
 
   groups: Group[] = [];
   users: User[] = [];
+  groupMembers: User[] = [];
 
   filteredMembers: User[] = [];
   msgs: Message[] = [];
@@ -39,6 +40,7 @@ export class GroupManagerComponent implements OnInit {
       this.users = data;
       console.log(data);
     })
+
   }
 
   invalidErrorMessage(message) {
@@ -63,7 +65,6 @@ export class GroupManagerComponent implements OnInit {
     this.msgs = [];
     this.group = new Group();
     this.displayAdd = true;
-    this.getMembers('5a569127f1cf3b292128a629');
   }
 
   deleteGroupDialog() {
@@ -139,10 +140,21 @@ export class GroupManagerComponent implements OnInit {
     }
   }
 
-  getMembers(id) {
+  getGroup(id): any[] {
     this.groupManagerService.getGroup(id).subscribe( data => {
-      console.log(data.members);
+      this.groupMembers = data.members;
     })
+    return this.groupMembers;
+  }
+
+  getMembers(id) {
+    const memberList = this.getGroup(id);
+
+    for (let i = 0; i < memberList.length; i++) {
+      this.groupManagerService.getUser(memberList[i]).subscribe( data => {
+        console.log(data.username);
+      })
+    }
   }
 
   filteredUsers(event) {
