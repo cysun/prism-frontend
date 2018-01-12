@@ -79,9 +79,10 @@ export class GroupManagerComponent implements OnInit {
   groupManagerDialog(id) {
     this.msgs = [];
     this.displayGroupManager = true;
-    this.groupManagerService.getGroup(id).subscribe(
-      data => this.group = data
-    );
+    this.groupManagerService.getGroup(id).subscribe(data => {
+      this.group = data;
+      this.listMembers(data.members);
+    });
   }
 
   submitGroup() {
@@ -148,8 +149,7 @@ export class GroupManagerComponent implements OnInit {
 
     for (let i = 0; i < memberList.length; i++) {
       this.groupManagerService.getUser(memberList[i]).subscribe( data => {
-        // console.log(data.username);
-        this.displayList.push(data.username);
+        this.displayList.push({'name': data.username});
       })
     }
   }
