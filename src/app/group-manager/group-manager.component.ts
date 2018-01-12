@@ -126,7 +126,7 @@ export class GroupManagerComponent implements OnInit {
         }
       });
 
-      this.displayDelete = false;
+      this.displayGroupManager = false;
       this.group = new Group();
     } else {
       this.invalidErrorMessage('invalid delete');
