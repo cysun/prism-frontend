@@ -40,7 +40,7 @@
 
 .group-manager-buttons {
   display: table-cell;
-  height: 50px;
+  padding: 20px;
   text-align: center;
   vertical-align: bottom;
   width: 800px;

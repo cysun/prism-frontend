@@ -74,7 +74,6 @@ export class GroupManagerComponent implements OnInit {
   deleteGroupDialog() {
     this.msgs = [];
     this.displayDelete = true;
-    this.group = new Group();
   }
 
   groupManagerDialog(id) {
@@ -120,12 +119,12 @@ export class GroupManagerComponent implements OnInit {
         for (let i = 0; i < this.groups.length; i++) {
           if (this.groups[i]._id === id) {
             this.groups.splice(i, 1);
-            this.groups = this.groups.slice(0);
             break;
           }
         }
       });
 
+      this.displayDelete = false;
       this.displayGroupManager = false;
       this.group = new Group();
     } else {

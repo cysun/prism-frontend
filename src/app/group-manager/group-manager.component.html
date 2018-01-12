@@ -2,7 +2,6 @@
 <p-toolbar>
   <div class="ui-toolbar-group-left">
     <button pButton type="button" label="Add Group" icon="fa-plus" class="ui-button-success" (click)=addGroupDialog()></button>
-    <button pButton type="button" label="Delete Group" icon="fa-minus" class="ui-button-danger" [disabled]="groups.length == 0" (click)=deleteGroupDialog()></button>
   </div>
 </p-toolbar>
 
@@ -83,7 +82,7 @@
   <div class="ui-grid ui-grid-col-12">
     <div class="group-manager-buttons">
       <button type="button" pButton icon="fa-save" (click)="updateGroup(group.name)"    label="Save" class="ui-button-success"></button>
-      <button type="button" pButton icon="fa-trash" (click)="deleteGroup(group._id)"    label="Delete Group" class="ui-button-danger"></button>
+      <button type="button" pButton icon="fa-trash" (click)="deleteGroupDialog()"    label="Delete Group" class="ui-button-danger"></button>
       <button type="button" pButton icon="fa-close" (click)="displayGroupManager=false" label="Cancel"></button>
     </div>
   </div>
