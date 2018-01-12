@@ -31,7 +31,8 @@ export class GroupManagerComponent implements OnInit {
 
   displayList: any[] = [];
 
-  constructor(private groupManagerService: GroupManagerService, private router: Router) { }
+  constructor(private groupManagerService: GroupManagerService,
+              private router: Router) { }
 
   ngOnInit() {
     this.groupManagerService.getGroups().subscribe(data => {
@@ -88,7 +89,9 @@ export class GroupManagerComponent implements OnInit {
   submitGroup() {
     if (typeof(this.group.name) !== 'undefined') {
       if (this.group.name.trim().length > 0) {
-        const groupExists = this.groups.some(checkGroup => checkGroup.name === this.group.name);
+        const groupExists = this.groups.some( checkGroup =>
+          checkGroup.name.toLowerCase() === this.group.name.toLowerCase()
+        );
 
         if (!groupExists) {
           this.groupManagerService.addGroup(this.group).subscribe(
