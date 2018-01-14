@@ -38,7 +38,13 @@ export class GroupManagerComponent implements OnInit {
     this.groupManagerService.getGroups().subscribe(data => {
       this.groups = data;
       console.log(data);
-    });
+    },
+    err => {
+      localStorage.removeItem('jwt_token');
+      localStorage.removeItem('currentUser');
+      this.router.navigate(['dashboard']);
+
+  });
 
     this.groupManagerService.getUsers().subscribe( data => {
       this.users = data;
