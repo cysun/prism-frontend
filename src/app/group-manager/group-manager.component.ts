@@ -166,13 +166,6 @@ export class GroupManagerComponent implements OnInit {
     return displayList;
   }
 
-  getGroupMemberList(id) {
-    this.groupManagerService.getGroup(id).subscribe( data => {
-      this.groupMembers = data.members;
-      this.listMembers(this.groupMembers);
-    })
-  }
-
   filteredUsers(event) {
     const query = event.query;
     this.groupManagerService.getUsers().subscribe( users => {
