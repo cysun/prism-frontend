@@ -29,28 +29,29 @@ export class GroupManagerComponent implements OnInit {
   filteredMembers: User[] = [];
   msgs: Message[] = [];
 
-  displayList: any[] = [];
-
   constructor(private groupManagerService: GroupManagerService,
               private router: Router) { }
 
   ngOnInit() {
-    this.groupManagerService.getGroups().subscribe(data => {
-      this.groups = data;
-      console.log(data);
-    },
-    err => {
-      localStorage.removeItem('jwt_token');
-      localStorage.removeItem('currentUser');
-      this.router.navigate(['dashboard']);
-
-  });
-
     this.groupManagerService.getUsers().subscribe( data => {
       this.users = data;
       console.log(data);
     })
 
+    this.groupManagerService.getGroups().subscribe(data => {
+      this.groups = data;
+
+      for (let i = 0; i < this.groups.length; i++) {
+        const members = this.groups[i].members;
+        this.groups[i].members = this.listMembers(members);
+      }
+      console.log(this.groups)
+    },
+    err => {
+      localStorage.removeItem('jwt_token');
+      localStorage.removeItem('currentUser');
+      this.router.navigate(['login']);
+    });
   }
 
   invalidErrorMessage(message) {
@@ -152,14 +153,17 @@ export class GroupManagerComponent implements OnInit {
     }
   }
 
-  listMembers(memberList) {
-    this.displayList = [];
+  listMembers(memberList): any[] {
+    const displayList = [];
 
     for (let i = 0; i < memberList.length; i++) {
-      this.groupManagerService.getUser(memberList[i]).subscribe( data => {
-        this.displayList.push({'name': data.username});
-      })
+      for (let j = 0; j < this.users.length; j++) {
+        if (memberList[i] === this.users[j]._id) {
+          displayList.push(this.users[j]);
+        }
+      }
     }
+    return displayList;
   }
 
   getGroupMemberList(id) {
