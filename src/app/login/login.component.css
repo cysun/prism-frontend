@@ -21,3 +21,7 @@
 .ui-inputgroup {
   padding: 15px;
 }
+
+.validation-error {
+  color: #FF0000;
+}
