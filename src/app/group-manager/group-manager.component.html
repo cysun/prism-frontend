@@ -104,68 +104,40 @@
 </div> -->
 
 <div *ngIf="groups.length > 0; else emptyGroup">
-  <p-dataTable [value]="groups"
+<div *ngFor="let group of groups">
+  <p-dataTable [value]="group.members"
                rowGroupMode="subheader"
-                 expandableRowGroups="true"
-                 groupField="name"
-                 [sortableRowGroup]="false"
-                 [style]="{'padding-top': '50px'}" >
+               [sortableRowGroup]="false"
+               expandableRowGroups="true"
+               [style]="{'padding-top': '50px'}">
 
-    <p-header>Group Management</p-header>
-
-    <ng-template pTemplate="rowgroupheader" let-group>
-      <div class="header-container ui-grid ui-grid-col-12 ui-grid">
-        <div class="header-panel ">
+    <p-header>
+      <div class="header-container">
+        <div class="header-panel">
           {{group.name}}
-          <!-- <div class="panel-buttons">
+          <div class="panel-buttons">
             <button type="button" pButton icon="fa-gear" (click)=groupManagerDialog(group._id)></button>
-          </div> -->
+          </div>
         </div>
       </div>
-    </ng-template>
+    </p-header>
 
-     <p-column header="Username">
-       <ng-template let-member="rowData" pTemplate="body">
-         <div *ngFor="let x of member.members">
-          <table>
-            <tr>
-              <td> {{x.username}}</td>
-            </tr>
-          </table>
-        </div>
+    <p-column field="username" header="Username" [style]="{'text-align':'center'}"></p-column>
+    <p-column field="name.first" header="First Name" [style]="{'text-align':'center'}"></p-column>
+    <p-column field="name.last" header="Last Name" [style]="{'text-align':'center'}"></p-column>
 
-      </ng-template>
+    <p-column [style]="{'text-align':'center'}">
+        <ng-template pTemplate="header">
+            Delete?
+        </ng-template>
+        <ng-template let-member="rowData" pTemplate="body">
+            <button type="button" pButton (click)="deleteMember(group._id, member._id)" icon="fa-trash"></button>
+        </ng-template>
     </p-column>
 
-    <p-column header="Name">
-     <ng-template let-member="rowData" pTemplate="body">
-       <div *ngFor="let x of member.members">
-         <table>
-           <tr>
-             <td> {{x.name.first}} {{x.name.last}}</td>
-           </tr>
-         </table>
-       </div>
-     </ng-template>
-   </p-column>
 
-   <p-column styleClass="col-button">
-     <ng-template pTemplate="header">
-       Delete?
-     </ng-template>
-
-     <ng-template let-group="rowData" pTemplate="body">
-       <div *ngFor="let member of group.members">
-         <table>
-           <tr>
-             <td><button type="button" pButton (click)="deleteMember(group._id, member._id)" icon="fa-trash"></button></td>
-           </tr>
-         </table>
-       </div>
-     </ng-template>
-    </p-column>
   </p-dataTable>
-
+</div>
 </div>
 
 <!-- Info message when there are no groups -->
