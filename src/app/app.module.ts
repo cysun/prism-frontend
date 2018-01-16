@@ -19,7 +19,7 @@ import { AccordionModule } from 'primeng/primeng';
 import { AutoCompleteModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/components/button/button';
 import { DataGridModule } from 'primeng/primeng';
-import { DataTableModule, SharedModule } from 'primeng/primeng';
+import { TreeTableModule, TreeNode, DataTableModule, SharedModule } from 'primeng/primeng';
 import { DialogModule } from 'primeng/primeng';
 import { DropdownModule } from 'primeng/primeng';
 import { FieldsetModule } from 'primeng/primeng';
@@ -78,7 +78,8 @@ import {GroupManagerService} from './group-manager/group-manager.service';
     SharedModule,
     SplitButtonModule,
     TabViewModule,
-    ToolbarModule
+    ToolbarModule,
+    TreeTableModule
   ],
   providers: [
     AuthGuard,

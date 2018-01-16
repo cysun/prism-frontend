@@ -96,9 +96,16 @@
 </p-dialog>
 
 <!-- Displays the current groups and their members -->
+
+<!-- <div>
+  <code>
+    <pre>{{groups |json}}</pre>
+  </code>
+</div> -->
+
 <div *ngIf="groups.length > 0; else emptyGroup">
-    <p-dataTable [value]="groups"
-                 rowGroupMode="subheader"
+  <p-dataTable [value]="groups"
+               rowGroupMode="subheader"
                  expandableRowGroups="true"
                  groupField="name"
                  [sortableRowGroup]="false"
@@ -117,14 +124,48 @@
       </div>
     </ng-template>
 
-    <p-column header="Username">
-      <ng-template let-col let-member="rowData.members" pTemplate="body">
-        <div *ngFor="let x of member">
-          {{x.username}}
+     <p-column header="Username">
+       <ng-template let-member="rowData" pTemplate="body">
+         <div *ngFor="let x of member.members">
+          <table>
+            <tr>
+              <td> {{x.username}}</td>
+            </tr>
+          </table>
         </div>
+
       </ng-template>
     </p-column>
+
+    <p-column header="Name">
+     <ng-template let-member="rowData" pTemplate="body">
+       <div *ngFor="let x of member.members">
+         <table>
+           <tr>
+             <td> {{x.name.first}} {{x.name.last}}</td>
+           </tr>
+         </table>
+       </div>
+     </ng-template>
+   </p-column>
+
+   <p-column styleClass="col-button">
+     <ng-template pTemplate="header">
+       Delete?
+     </ng-template>
+
+     <ng-template let-group="rowData" pTemplate="body">
+       <div *ngFor="let member of group.members">
+         <table>
+           <tr>
+             <td><button type="button" pButton (click)="deleteMember(group._id, member._id)" icon="fa-trash"></button></td>
+           </tr>
+         </table>
+       </div>
+     </ng-template>
+    </p-column>
   </p-dataTable>
+
 </div>
 
 <!-- Info message when there are no groups -->

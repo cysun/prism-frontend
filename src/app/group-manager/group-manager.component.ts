@@ -6,6 +6,7 @@ import { Group } from '../models/group.model';
 import { User } from '../models/user.model';
 
 import { GroupManagerService } from './group-manager.service';
+import {  TreeNode } from 'primeng/primeng';
 
 @Component({
   selector: 'prism-group-manager',
@@ -151,6 +152,22 @@ export class GroupManagerComponent implements OnInit {
     } else {
       this.invalidErrorMessage('empty group');
     }
+  }
+
+  deleteMember(groupId, memberId) {
+    this.groupManagerService.deleteMember(groupId, memberId).subscribe( () => {
+      console.log('deleted')
+      for (let i = 0; i < this.groups.length; i++) {
+        if (this.groups[i]._id === groupId) {
+          for (let j = 0; j < this.groups[i].members.length; j++) {
+            if  (this.groups[i].members[j]._id === memberId) {
+              this.groups[i].members.splice(j, 1);
+              break;
+            }
+          }
+        }
+      }
+    })
   }
 
   listMembers(memberList): any[] {
