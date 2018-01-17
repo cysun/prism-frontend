@@ -27,7 +27,7 @@ export class GroupManagerComponent implements OnInit {
   groupMembers: User[] = [];
   memberList: User[] = [];
 
-  filteredMembers: User[] = [];
+  filteredMembers: any[] = [];
   msgs: Message[] = [];
 
   constructor(private groupManagerService: GroupManagerService,
@@ -149,19 +149,19 @@ export class GroupManagerComponent implements OnInit {
         this.groupManagerService.updateGroup(this.group).subscribe( updatedGroup => {
           const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
           this.groups[index] = updatedGroup;
-          this.groups = this.groups.slice(0);
         });
+
       }
       this.displayGroupManager = false;
       this.group = new Group();
     } else {
       this.invalidErrorMessage('empty group');
     }
+    this.groups = this.groups.slice(0);
   }
 
   deleteMember(groupId, memberId) {
     this.groupManagerService.deleteMember(groupId, memberId).subscribe( () => {
-      console.log('deleted')
       for (let i = 0; i < this.groups.length; i++) {
         if (this.groups[i]._id === groupId) {
           for (let j = 0; j < this.groups[i].members.length; j++) {
@@ -190,28 +190,17 @@ export class GroupManagerComponent implements OnInit {
 
   filteredUsers(event) {
     const query = event.query;
-    this.groupManagerService.getUsers().subscribe( users => {
-      this.filteredMembers = this.getUser(query, users);
-    })
+    this.filteredMembers = this.getUser(query, this.users);
   }
 
   getUser(username, users: any[]): any[] {
     const filtered = [];
 
-    this.groupManagerService.getUsers().subscribe( () => {
-      for (let i = 0; i < this.users.length; i ++) {
-        if ((this.users[i].username).toLowerCase().indexOf(username.toLowerCase()) === 0) {
-          filtered.push(this.users[i]);
-          break;
-        }
+    for (let i = 0; i < users.length; i ++) {
+      if ((users[i].username).toLowerCase().indexOf(username.toLowerCase()) === 0) {
+        filtered.push({'name': users[i].username});
       }
-    });
-
+    }
     return filtered;
-
-    // this.groupManagerService.searchUser('testRoot8').subscribe( data => {
-    //   console.log('Testing if can filter a user by username: ');
-    //   console.log(data);
-    // })
   }
 }
