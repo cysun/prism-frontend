@@ -141,12 +141,17 @@ export class GroupManagerComponent implements OnInit {
   }
 
   updateGroup() {
-    if (this.group.name.trim().length > 0) {
-      this.groupManagerService.updateGroup(this.group).subscribe( updatedGroup => {
-        const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
-        this.groups[index] = updatedGroup;
-      });
+    const findGroup = this.groups.find( item => item._id === this.group._id);
+    const nameChange = findGroup.name === this.group.name ? false : true;
 
+    if (this.group.name.trim().length > 0) {
+      if (nameChange) {
+        this.groupManagerService.updateGroup(this.group).subscribe( updatedGroup => {
+          const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
+          this.groups[index] = updatedGroup;
+          this.groups = this.groups.slice(0);
+        });
+      }
       this.displayGroupManager = false;
       this.group = new Group();
     } else {
