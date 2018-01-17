@@ -162,7 +162,6 @@ export class GroupManagerComponent implements OnInit {
           for (let j = 0; j < this.groups[i].members.length; j++) {
             if  (this.groups[i].members[j]._id === memberId) {
               this.groups[i].members.splice(j, 1);
-              this.groups = this.groups.splice(0);
               break;
             }
           }
