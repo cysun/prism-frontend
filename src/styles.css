@@ -1,5 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
 html, body {
     height: 100%;
     margin:0; padding:0;
+}
+
+.container {
+  min-height: 100%;
+}
+
+.footer {
+  background-color: #1A1A1A;
+  color: #FFF;
+  height: 60px;
+  margin-top: -60px;
+  text-align: center;
+  width: 100%;
+}
+
+.footer-text {
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+
+.main {
+  padding-bottom: 100px;
+  padding-top: 20px;
 }
