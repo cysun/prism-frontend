@@ -67,7 +67,7 @@
     <div class ="ui-grid-col-12 grid-space">
       <span class="group-label ui-grid-col-3">Add Members</span>
       <span class="ui-grid-col-8">
-        <p-autoComplete [(ngModel)]="displayList"
+        <p-autoComplete [(ngModel)]="suggestedUsers"
                         [suggestions]="filteredMembers"
                         (completeMethod)="filteredUsers($event)"
                         [minLength]="1" placeholder="Enter a username"
@@ -107,9 +107,7 @@
     <p-dataTable [value]="group.members"
                  [immutable]=false
                  [sortableRowGroup]="false"
-                 [style]="{'padding-top': '50px'}"
-                 expandableRowGroups="true"
-                 rowGroupMode="subheader">
+                 [style]="{'padding-top': '50px'}">
 
       <p-header>
         <div class="header-container">

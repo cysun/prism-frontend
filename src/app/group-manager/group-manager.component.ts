@@ -30,6 +30,8 @@ export class GroupManagerComponent implements OnInit {
   filteredMembers: any[] = [];
   msgs: Message[] = [];
 
+  suggestedUsers: any[] = [];
+
   constructor(private groupManagerService: GroupManagerService,
               private router: Router) { }
 
@@ -86,6 +88,7 @@ export class GroupManagerComponent implements OnInit {
 
   groupManagerDialog(id) {
     this.msgs = [];
+    this.filteredMembers = [];
     this.displayGroupManager = true;
     this.groupManagerService.getGroup(id).subscribe(data => {
       this.group = data;
@@ -144,20 +147,34 @@ export class GroupManagerComponent implements OnInit {
     const findGroup = this.groups.find( item => item._id === this.group._id);
     const nameChange = findGroup.name === this.group.name ? false : true;
 
+    /* Updating the group's name */
     if (this.group.name.trim().length > 0) {
       if (nameChange) {
         this.groupManagerService.updateGroup(this.group).subscribe( updatedGroup => {
           const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
           this.groups[index] = updatedGroup;
         });
-
+        this.displayGroupManager = false;
       }
-      this.displayGroupManager = false;
-      this.group = new Group();
     } else {
       this.invalidErrorMessage('empty group');
     }
-    this.groups = this.groups.slice(0);
+
+    /* Adding members to the group */
+    if (this.suggestedUsers.length !== 0 ) {
+      for (let i = 0; i < this.suggestedUsers.length; i++) {
+        const userObj = this.users.find(foundUser => foundUser.username === this.suggestedUsers[i].name);
+
+        this.groupManagerService.addMember(userObj._id, this.group._id).subscribe( newMember => {
+          findGroup.members.push(newMember);
+          this.groups = this.groups.slice(0);
+        })
+      }
+      this.displayGroupManager = false;
+    }
+    this.group = new Group();
+    this.suggestedUsers = [];
+
   }
 
   deleteMember(groupId, memberId) {
@@ -189,6 +206,7 @@ export class GroupManagerComponent implements OnInit {
   }
 
   filteredUsers(event) {
+    this.filteredMembers = [];
     const query = event.query;
     this.filteredMembers = this.getUser(query, this.users);
   }
