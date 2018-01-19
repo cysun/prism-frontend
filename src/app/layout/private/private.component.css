@@ -1,4 +1,5 @@
 .action-menu {
+  margin-left: 15px;
   position: fixed;
   width: inherit;
 }
