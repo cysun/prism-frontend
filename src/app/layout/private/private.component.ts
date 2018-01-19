@@ -18,8 +18,6 @@ export class PrivateComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.menuItems = [ { label: 'PRISM', icon: 'fa-2x fa-cubes'}];
-
     this.actionMenu = [{
       label: 'Actions',
       items: [
@@ -31,16 +29,5 @@ export class PrivateComponent implements OnInit {
         { label: 'Committee', icon: 'fa-users', routerLink: '/committee' }
       ]
     }];
-
-    this.userMenuItems = [
-      { label: 'Settings', icon: 'fa-gear'},
-      { label: 'Logout',
-        icon: 'fa-sign-out',
-        command: (event: any) => {
-          this.authService.logout();
-          this.router.navigate(['login'])
-        }
-      },
-    ];
   }
 }
