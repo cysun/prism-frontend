@@ -13,10 +13,14 @@ import { AuthService } from './login/auth.service';
 
 export class AppComponent implements OnInit {
   userMenuItems: MenuItem[];
+  username: string;
 
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    this.username = currentUser.username;
+
     this.userMenuItems = [
       { label: 'Settings', icon: 'fa-gear'},
       { label: 'Logout',

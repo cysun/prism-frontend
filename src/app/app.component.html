@@ -3,8 +3,9 @@
     <div class="left-header">
       <i class="fa fa-cubes fa-3x"></i> <span class="header-logo">PRISM</span>
     </div>
+
     <div class="right-header">
-      <p-splitButton *ngIf="authService.isAuthenticated()" class="user-button" label="User" icon="fa-user-o" [model]="userMenuItems"></p-splitButton>
+      <p-splitButton *ngIf="authService.isAuthenticated()" class="user-button" label="{{username}}" icon="fa-user-o" [model]="userMenuItems"></p-splitButton>
     </div>
   </div>
 
