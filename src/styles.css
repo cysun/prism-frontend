@@ -27,8 +27,10 @@ html, body {
   color: #FFF;
   height: 60px;
   margin-top: -60px;
+  position: relative;
   text-align: center;
   width: 100%;
+  z-index: 2;
 }
 
 .footer-text {
