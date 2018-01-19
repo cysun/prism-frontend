@@ -21,7 +21,12 @@ export class AppComponent implements OnInit {
     this.username = this.authService.getUser().username;
 
     this.userMenuItems = [
-      { label: 'Settings', icon: 'fa-gear'},
+      { label: 'Settings',
+        icon: 'fa-gear',
+        command: (event: any) => {
+          this.router.navigate(['settings']);
+        }
+      },
       { label: 'Logout',
         icon: 'fa-sign-out',
         command: (event: any) => {
