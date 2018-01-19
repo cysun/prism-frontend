@@ -1,1 +1,21 @@
-<router-outlet></router-outlet>
+<div class="container">
+  <div class="header">
+    <div class="left-header">
+      <i class="fa fa-cubes fa-3x"></i> <span class="header-logo">PRISM</span>
+    </div>
+
+    <div class="right-header">
+      <p-splitButton *ngIf="authService.isAuthenticated()" class="user-button" label="{{username}}" icon="fa-user-o" [model]="userMenuItems"></p-splitButton>
+    </div>
+  </div>
+
+  <div class="main">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-text">
+    Copyright © 2017-2018, PRISM Team. All rights reserved.
+  </div>
+</div>
