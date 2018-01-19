@@ -18,8 +18,7 @@ export class AppComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'))
-    this.username = currentUser.username;
+    this.username = this.authService.getUser().username;
 
     this.userMenuItems = [
       { label: 'Settings', icon: 'fa-gear'},
@@ -27,6 +26,7 @@ export class AppComponent implements OnInit {
         icon: 'fa-sign-out',
         command: (event: any) => {
           this.authService.logout();
+          this.username = '';
           this.router.navigate(['login'])
         }
       },
