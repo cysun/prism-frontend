@@ -46,7 +46,7 @@ import { AuthService } from './login/auth.service';
     CommitteeComponent,
     LoginComponent,
     PublicComponent,
-    PrivateComponent
+    PrivateComponent,
   ],
   imports: [
     BrowserModule,

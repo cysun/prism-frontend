@@ -8,7 +8,7 @@
       <p-splitButton *ngIf="authService.isAuthenticated()" class="user-button" label="{{username}}" icon="fa-user-o" [model]="userMenuItems"></p-splitButton>
     </div>
 
-    <div class="header-middle">
+    <div *ngIf="authService.isAuthenticated() && showNavbarLinks" class="header-middle">
       <div class="header-middle-items">
         <a [routerLink]="['dashboard']"><span class="header-item"><i class="fa fa-home"></i> Dashboard</span></a>
         <a [routerLink]="['calendar']"><span class="header-item"><i class="fa fa-calendar"></i> Calendar</span></a>
