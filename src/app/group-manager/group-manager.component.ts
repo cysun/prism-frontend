@@ -6,7 +6,6 @@ import { Group } from '../models/group.model';
 import { User } from '../models/user.model';
 
 import { GroupManagerService } from './group-manager.service';
-import {  TreeNode } from 'primeng/primeng';
 
 @Component({
   selector: 'prism-group-manager',
@@ -24,7 +23,6 @@ export class GroupManagerComponent implements OnInit {
 
   groups: Group[] = [];
   users: User[] = [];
-  groupMembers: User[] = [];
   memberList: User[] = [];
 
   filteredMembers: any[] = [];
@@ -57,7 +55,7 @@ export class GroupManagerComponent implements OnInit {
     });
   }
 
-  invalidErrorMessage(message) {
+  invalidErrorMessage(message: string) {
     this.msgs = [];
     let detailMsg = '';
 
@@ -75,27 +73,31 @@ export class GroupManagerComponent implements OnInit {
     this.msgs.push({severity: 'error', summary: 'Invalid Group:', detail: detailMsg });
   }
 
+  /* Displays the dialog box to add a group */
   addGroupDialog() {
     this.msgs = [];
     this.group = new Group();
     this.displayAdd = true;
   }
 
+  /* Displays the confirmation dialog to delete a group */
   deleteGroupDialog() {
     this.msgs = [];
     this.displayDelete = true;
   }
 
-  groupManagerDialog(id) {
+  /* Displays the manager dialog for the specific group to update its contents */
+  groupManagerDialog(id: string) {
     this.msgs = [];
     this.filteredMembers = [];
     this.displayGroupManager = true;
-    this.groupManagerService.getGroup(id).subscribe(data => {
+    this.groupManagerService.getGroup(id).subscribe( data => {
       this.group = data;
       this.getMembersObject(data.members);
     });
   }
 
+  /* Function to add a new group */
   submitGroup() {
     if (typeof(this.group.name) !== 'undefined') {
       if (this.group.name.trim().length > 0) {
@@ -104,8 +106,7 @@ export class GroupManagerComponent implements OnInit {
         );
 
         if (!groupExists) {
-          this.groupManagerService.addGroup(this.group).subscribe(
-            data => {
+          this.groupManagerService.addGroup(this.group).subscribe( data => {
               this.groups.push(data);
               this.groups = this.groups.slice(0);
             }
@@ -124,7 +125,8 @@ export class GroupManagerComponent implements OnInit {
     }
   }
 
-  deleteGroup(id) {
+  /* Function to delete an existing group */
+  deleteGroup(id: string) {
     if (typeof(id) !== 'undefined') {
       this.groupManagerService.deleteGroup(id).subscribe( () => {
         for (let i = 0; i < this.groups.length; i++) {
@@ -143,6 +145,7 @@ export class GroupManagerComponent implements OnInit {
     }
   }
 
+  /* Function to update a group's name and members */
   updateGroup() {
     const findGroup = this.groups.find( item => item._id === this.group._id);
     const nameChange = findGroup.name === this.group.name ? false : true;
@@ -172,17 +175,18 @@ export class GroupManagerComponent implements OnInit {
       }
       this.displayGroupManager = false;
     }
+
     this.group = new Group();
     this.suggestedUsers = [];
-
   }
 
-  deleteMember(groupId, memberId) {
+  /* Function delete a member off of the selected group */
+  deleteMember(groupId: string, memberId: string) {
     this.groupManagerService.deleteMember(groupId, memberId).subscribe( () => {
       for (let i = 0; i < this.groups.length; i++) {
         if (this.groups[i]._id === groupId) {
           for (let j = 0; j < this.groups[i].members.length; j++) {
-            if  (this.groups[i].members[j]._id === memberId) {
+            if (this.groups[i].members[j]._id === memberId) {
               this.groups[i].members.splice(j, 1);
               break;
             }
@@ -192,7 +196,8 @@ export class GroupManagerComponent implements OnInit {
     })
   }
 
-  getMembersObject(memberList): any[] {
+  /* Give a group's member list of IDs and return their corresponding member objects */
+  getMembersObject(memberList: any[]): any[] {
     const displayList = [];
 
     for (let i = 0; i < memberList.length; i++) {
@@ -205,13 +210,15 @@ export class GroupManagerComponent implements OnInit {
     return displayList;
   }
 
+  /* Populates filteredMembers array with given suggested users to add to the group */
   filteredUsers(event) {
     this.filteredMembers = [];
     const query = event.query;
-    this.filteredMembers = this.getSuggestedUser(query, this.users);
+    this.filteredMembers = this.getSuggestedUsers(query, this.users);
   }
 
-  getSuggestedUser(username, users: any[]): any[] {
+  /* Function that returns a list of suggested users based on user's current field input */
+  getSuggestedUsers(username: string, users: any[]): any[] {
     const filtered = [];
     const currentMembers = this.getMembersObject(this.group.members);
 
@@ -235,6 +242,7 @@ export class GroupManagerComponent implements OnInit {
     return filtered;
   }
 
+  /* Function to sort the suggested user list in alphabetical order */
   compareUsernames(user1, user2) {
     const username1 = user1.name.toLowerCase();
     const username2 = user2.name.toLowerCase();
