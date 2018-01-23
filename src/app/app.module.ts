@@ -8,6 +8,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 
+<<<<<<< HEAD
 import {AccordionModule} from 'primeng/primeng';
 import {AutoCompleteModule} from 'primeng/primeng';
 import {ButtonModule} from 'primeng/components/button/button';
@@ -22,6 +23,18 @@ import {PanelModule} from 'primeng/primeng';
 import {SplitButtonModule} from 'primeng/primeng';
 import {TabViewModule} from 'primeng/primeng';
 import {ToolbarModule} from 'primeng/primeng';
+=======
+import { AccordionModule } from 'primeng/primeng';
+import { ButtonModule } from 'primeng/components/button/button';
+import { DataTableModule } from 'primeng/primeng';
+import { FieldsetModule } from 'primeng/primeng';
+import { InputTextModule } from 'primeng/primeng';
+import { MenubarModule, MenuModule, MenuItem } from 'primeng/primeng';
+import { MessagesModule, MessageModule } from 'primeng/primeng';
+import { SplitButtonModule } from 'primeng/primeng';
+import { TabViewModule } from 'primeng/primeng';
+import { ToolbarModule } from 'primeng/primeng';
+>>>>>>> master
 
 import { CollegesComponent } from './colleges/colleges.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -57,7 +70,7 @@ import { AuthService } from './login/auth.service';
     GroupManagerComponent,
     LoginComponent,
     PublicComponent,
-    PrivateComponent
+    PrivateComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,9 +82,13 @@ import { AuthService } from './login/auth.service';
     AccordionModule,
     AutoCompleteModule,
     ButtonModule,
+<<<<<<< HEAD
     DataGridModule,
     DialogModule,
     DropdownModule,
+=======
+    DataTableModule,
+>>>>>>> master
     FieldsetModule,
     InputTextModule,
     MenuModule,

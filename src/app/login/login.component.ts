@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { decode as jwtDecode } from 'jsonwebtoken';
 
 import { AuthService } from './auth.service';
-
-import * as jwtDecode from 'jwt-decode';
 
 @Component({
   selector: 'prism-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent implements OnInit {
   username: string;
   password: string;
@@ -25,13 +25,17 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.authService.login(this.username, this.password).subscribe( data => {
+      const decoded = JSON.stringify(jwtDecode(data.token));
+
       localStorage.setItem('jwt_token', data.token);
-      localStorage.setItem('currentUser', jwtDecode(data.token));
+      localStorage.setItem('currentUser', decoded);
 
-      console.log('Some info about User: ' + JSON.stringify(data.groups));
+      console.log('Group info about User: ' + JSON.stringify(data.groups));
 
-      console.log('the token is: ' + data.token);
-      console.log('here is the token decoded: ' + JSON.stringify(jwtDecode(data.token)));
+      const decodedParsed = JSON.parse(decoded);
+      const date = new Date(parseInt(decodedParsed.iat, 10) * 1000 )
+
+      console.log('converted iat: ' + date)
 
       this.wrongInfo = false;
       this.router.navigate(['dashboard']);
