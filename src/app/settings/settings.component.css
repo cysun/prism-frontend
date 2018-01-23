@@ -1,3 +1,18 @@
+.row-label {
+  background: #9ec745;
+  font-weight: bold;
+}
+
 .settings-div {
-  margin: 20px;
+  padding:20px;
+}
+
+.table-style {
+  border-collapse: collapse;
+  width: 50%;
+}
+
+td {
+  border: 1px solid #000;
+  padding: 8px;
 }

@@ -1,11 +1,22 @@
 <div class="settings-div">
-<p-tabView>
-    <p-tabPanel header="Account" leftIcon="fa-info-circle">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  <p-tabView>
+    <p-tabPanel header="Profile" leftIcon="fa-info-circle">
+      <table class="table-style">
+        <tr>
+          <td class="row-label">Username</td>
+          <td>{{currentUser.username}}</td>
+        </tr>
+        <tr>
+          <td class="row-label">Name</td>
+          <td>{{currentUser.name.first}} {{currentUser.name.last}}</td>
+        </tr>
+        <tr>
+          <td class="row-label">E-mail</td>
+          <td>{{currentUser.email}}</td>
+        </tr>
+      </table>
     </p-tabPanel>
+
     <p-tabPanel header="Notification Settings" leftIcon="fa-envelope-o">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
       Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
@@ -13,13 +24,11 @@
       proident, sunt in culpa qui officia deserunt mollit anim id est laborum. 2
     </p-tabPanel>
 
-    <p-tabPanel header="User Management" leftIcon="fa-group">
+    <p-tabPanel header="Group Management" leftIcon="fa-group">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
       Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
       dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
       proident, sunt in culpa qui officia deserunt mollit anim id est laborum. 3
     </p-tabPanel>
-
-
-</p-tabView>
+  </p-tabView>
 </div>
