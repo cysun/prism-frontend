@@ -1,3 +1,11 @@
+<p-accordion>
+  <p-accordionTab header="College of Arts and Letters">
+    Art
+  </p-accordionTab>
+  <p-accordionTab header="College of Business and Economics">
+    Accountancy
+  </p-accordionTab>
+</p-accordion>
 <!-- Toolbar to add or delete a college-->
 <p-toolbar>
   <div class="ui-toolbar-college-left">
@@ -14,13 +22,21 @@
     <div class="dialog-box ui-grid ui-grid-responsive ui-fluid">
       <div class="ui-grid-col-12">
         <div class="ui-inputgroup">
-          <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
+          <span class="ui-inputgroup-addon"><i class="fa fa-university"></i></span>
           <input type="text" [(ngModel)]="college.name" pInputText name="college-name" placeholder="Enter New College Title">
         </div>
+        <div class="text-hints">Enter a name for the new college.</div>
+      </div>
+      <div class="ui-grid-col-12">
+        <div class="ui-inputgroup">
+          <span class="ui-inputgroup-addon"><i class="fa fa-info"></i></span>
+          <input type="text" [(ngModel)]="college.abbreviation" pInputText name="college-abbreviation" placeholder="Enter The College's Abbreviation">
+        </div>
+        <div class="text-hints">Enter an abbreviation for the new college.</div>
       </div>
     </div>
 
-    <div class="text-hints">Enter a name for the new college.</div>
+
 
     <div class="ui-grid ui-grid-col-12">
       <div class="footer-buttons">
@@ -89,7 +105,7 @@
   </div>
 </p-dialog>
 
-<!-- Displays the current college and their members -->
+<!-- Displays the current college and their deans -->
 <div *ngIf="colleges.length > 0; else emptyCollege">
   <p-dataGrid [style]="{'padding-top': '50px'}" [value]="colleges" [paginator]="true" [rows]="12" *ngFor="let college of colleges">
     <p-header>
