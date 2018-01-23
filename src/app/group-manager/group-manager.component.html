@@ -106,6 +106,7 @@
   <div *ngFor="let group of groups">
     <p-dataTable [value]="group.members"
                  [immutable]=false
+                 sortField="username"
                  [sortableRowGroup]="false"
                  [style]="{'padding-top': '50px'}">
 

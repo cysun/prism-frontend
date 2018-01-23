@@ -219,6 +219,21 @@ export class GroupManagerComponent implements OnInit {
         filtered.push({'name': users[i].username});
       }
     }
+    filtered.sort(this.compareUsernames);
     return filtered;
+  }
+
+  compareUsernames(user1, user2) {
+    const username1 = user1.name.toLowerCase();
+    const username2 = user2.name.toLowerCase();
+
+    let compare = 0;
+
+    if (username1 > username2) {
+      compare = 1;
+    } else if (username1 < username2) {
+      compare = -1;
+    }
+    return compare;
   }
 }
