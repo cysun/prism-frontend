@@ -1,3 +1,8 @@
+.notification-label {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
 .row-label {
   background: #9ec745;
   font-weight: bold;
