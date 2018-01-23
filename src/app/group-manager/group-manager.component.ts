@@ -46,7 +46,7 @@ export class GroupManagerComponent implements OnInit {
 
       for (let i = 0; i < this.groups.length; i++) {
         const members = this.groups[i].members;
-        this.groups[i].members = this.listMembers(members);
+        this.groups[i].members = this.getMembersObject(members);
       }
       console.log(this.groups)
     },
@@ -92,7 +92,7 @@ export class GroupManagerComponent implements OnInit {
     this.displayGroupManager = true;
     this.groupManagerService.getGroup(id).subscribe(data => {
       this.group = data;
-      this.listMembers(data.members);
+      this.getMembersObject(data.members);
     });
   }
 
@@ -192,7 +192,7 @@ export class GroupManagerComponent implements OnInit {
     })
   }
 
-  listMembers(memberList): any[] {
+  getMembersObject(memberList): any[] {
     const displayList = [];
 
     for (let i = 0; i < memberList.length; i++) {
@@ -208,18 +208,30 @@ export class GroupManagerComponent implements OnInit {
   filteredUsers(event) {
     this.filteredMembers = [];
     const query = event.query;
-    this.filteredMembers = this.getUser(query, this.users);
+    this.filteredMembers = this.getSuggestedUser(query, this.users);
   }
 
-  getUser(username, users: any[]): any[] {
+  getSuggestedUser(username, users: any[]): any[] {
     const filtered = [];
+    const currentMembers = this.getMembersObject(this.group.members);
 
     for (let i = 0; i < users.length; i ++) {
       if ((users[i].username).toLowerCase().indexOf(username.toLowerCase()) === 0) {
         filtered.push({'name': users[i].username});
       }
     }
+
     filtered.sort(this.compareUsernames);
+
+    for (let i = 0; i < filtered.length; i++) {
+      for (let j = 0; j < currentMembers.length; j++) {
+        if ((filtered[i].name).toLowerCase() === (currentMembers[j].username).toLowerCase()) {
+          filtered.splice(i, 1);
+          break;
+        }
+      }
+    }
+
     return filtered;
   }
 
