@@ -38,17 +38,10 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'calendar', component: CalendarComponent },
       { path: 'colleges', component: CollegesComponent },
-<<<<<<< HEAD
       { path: 'committee', component: GroupManagerComponent },
       { path: 'minutes', component: MinutesComponent},
       { path: 'resources', component: ResourcesComponent},
       { path: 'settings', component: SettingsComponent },
-=======
-      { path: 'committee', component: CommitteeComponent },
-      { path: 'minutes', component: MinutesComponent },
-      { path: 'resources', component: ResourcesComponent },
-      // { path: 'settings', component: SettingsComponent },
->>>>>>> master
       { path: '**', component: PageNotFoundComponent }
     ]
   }
