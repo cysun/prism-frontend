@@ -12,7 +12,6 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ResourcesComponent } from './resources/resources.component';
 import { SettingsComponent } from './settings/settings.component';
 
-import { PublicComponent } from './layout/public/public.component';
 import { PrivateComponent } from './layout/private/private.component';
 
 import { AuthGuard } from './login/auth.guard';
