@@ -20,7 +20,6 @@ import { AuthGuard } from './login/auth.guard';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full'},
   { path: '',
-    component: PublicComponent,
     children: [
       { path: 'login', component: LoginComponent },
     ]
@@ -40,7 +39,6 @@ const routes: Routes = [
       { path: 'committee', component: CommitteeComponent },
       { path: 'minutes', component: MinutesComponent },
       { path: 'resources', component: ResourcesComponent },
-      // { path: 'settings', component: SettingsComponent },
       { path: '**', component: PageNotFoundComponent }
     ]
   }
