@@ -31,7 +31,7 @@
 </p-dialog>
 
 <!-- Dialog module for deleting a group -->
-<p-dialog class="dialog-module" header="Delete Group" [(visible)]="displayDelete" modal="modal" width="600" [responsive]="true">
+<p-dialog class="dialog-module" header="Delete Group" [(visible)]="displayGroupDelete" modal="modal" width="600" [responsive]="true">
   <p-messages [(value)]="msgs"></p-messages>
 
   <div class="dialog-box ui-grid ui-grid-responsive ui-fluid">
@@ -43,10 +43,32 @@
   <div class="ui-grid ui-grid-col-12">
     <div class="footer-buttons">
       <button type="button" pButton icon="fa-check" (click)="deleteGroup(group._id)" label="Delete"></button>
-      <button type="button" pButton icon="fa-close" (click)="displayDelete=false" label="Cancel"></button>
+      <button type="button" pButton icon="fa-close" (click)="displayGroupDelete=false" label="Cancel"></button>
     </div>
   </div>
 </p-dialog>
+
+
+<!-- Dialog module for deleting a group member -->
+<p-dialog class="dialog-module" header="Delete Member from Group" [(visible)]="displayMemberDelete" modal="modal" width="600" [responsive]="true">
+  <p-messages [(value)]="msgs"></p-messages>
+
+  <div class="dialog-box ui-grid ui-grid-responsive ui-fluid">
+    <div class="ui-grid-col-12">
+      <b><u>NOTE:</u></b> Deleting <b>{{member.username}}</b> from the group will remove their given access. Are you sure you want to delete them from the group?
+    </div>
+  </div>
+
+  <div class="ui-grid ui-grid-col-12">
+    <div class="footer-buttons">
+      <button type="button" pButton icon="fa-check" (click)="deleteMember()" label="Delete"></button>
+      <button type="button" pButton icon="fa-close" (click)="displayMemberDelete=false" label="Cancel"></button>
+    </div>
+  </div>
+</p-dialog>
+
+
+
 
 <!-- Dialog module for updating a specific group -->
 <p-dialog class="dialog-module" header="Edit Group Manager" [(visible)]="displayGroupManager" modal="modal" width="800" [responsive]="true">
@@ -131,7 +153,7 @@
 
       <p-column [style]="{'text-align':'center', 'width':'55px'}">
         <ng-template let-member="rowData" pTemplate="body">
-          <button type="button" pButton (click)="deleteMember(group._id, member._id)" icon="fa-trash"></button>
+          <button type="button" pButton (click)="deleteMemberDialog(group._id, member._id)" icon="fa-trash"></button>
         </ng-template>
       </p-column>
     </p-dataTable>

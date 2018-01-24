@@ -15,11 +15,12 @@ import { GroupManagerService } from './group-manager.service';
 
 export class GroupManagerComponent implements OnInit {
   displayAdd: Boolean = false;
-  displayDelete: Boolean = false;
+  displayGroupDelete: Boolean = false;
+  displayMemberDelete: Boolean = false;
   displayGroupManager: Boolean = false;
 
   group: Group = new Group();
-  user: User = new User();
+  member: User = new User();
 
   groups: Group[] = [];
   users: User[] = [];
@@ -83,7 +84,15 @@ export class GroupManagerComponent implements OnInit {
   /* Displays the confirmation dialog to delete a group */
   deleteGroupDialog() {
     this.msgs = [];
-    this.displayDelete = true;
+    this.displayGroupDelete = true;
+  }
+
+  deleteMemberDialog(groupId, memberId) {
+    this.displayMemberDelete = true;
+    this.group._id = groupId;
+
+    const chosenUser = this.getMembersObject([memberId]);
+    this.member = chosenUser[0];
   }
 
   /* Displays the manager dialog for the specific group to update its contents */
@@ -137,7 +146,7 @@ export class GroupManagerComponent implements OnInit {
         }
       });
 
-      this.displayDelete = false;
+      this.displayGroupDelete = false;
       this.displayGroupManager = false;
       this.group = new Group();
     } else {
@@ -181,12 +190,12 @@ export class GroupManagerComponent implements OnInit {
   }
 
   /* Function delete a member off of the selected group */
-  deleteMember(groupId: string, memberId: string) {
-    this.groupManagerService.deleteMember(groupId, memberId).subscribe( () => {
+  deleteMember() {
+    this.groupManagerService.deleteMember(this.group._id, this.member._id).subscribe( () => {
       for (let i = 0; i < this.groups.length; i++) {
-        if (this.groups[i]._id === groupId) {
+        if (this.groups[i]._id === this.group._id) {
           for (let j = 0; j < this.groups[i].members.length; j++) {
-            if (this.groups[i].members[j]._id === memberId) {
+            if (this.groups[i].members[j]._id === this.member._id) {
               this.groups[i].members.splice(j, 1);
               break;
             }
@@ -194,6 +203,7 @@ export class GroupManagerComponent implements OnInit {
         }
       }
     })
+    this.displayMemberDelete = false;
   }
 
   /* Give a group's member list of IDs and return their corresponding member objects */
