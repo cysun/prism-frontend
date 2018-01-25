@@ -38,6 +38,7 @@ import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
 import { AuthService } from './login/auth.service';
 import {GroupManagerService} from './group-manager/group-manager.service';
+import { CommitteeComponent } from './committee/committee.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import {GroupManagerService} from './group-manager/group-manager.service';
     LoginComponent,
     PublicComponent,
     PrivateComponent,
+    CommitteeComponent,
   ],
   imports: [
     BrowserModule,
