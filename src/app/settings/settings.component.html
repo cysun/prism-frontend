@@ -17,9 +17,35 @@
       </table>
     </p-tabPanel>
 
-    <p-tabPanel header="Notification Settings" leftIcon="fa-envelope-o">
-      <div class="notification-label">Current Settings</div>
-    </p-tabPanel>
+    <span *ngIf="currentUser.config">
+      <p-tabPanel header="Notification Settings" leftIcon="fa-envelope-o">
+        <div class="notification-label">
+          <span>Current Settings</span>
+          <button pButton type="button" icon="fa-pencil" (click)=addGroupDialog()></button>
+        </div>
+
+        <table class="table-style">
+          <tr>
+            <td colspan="2" class="row-label">E-mail Notifications</td>
+          </tr>
+
+          <tr>
+            <td>Document Finalized</td>
+            <td>{{currentUser.config.type.email.type.documentFinalized ? "On" : "Off" }}</td>
+          </tr>
+
+          <tr>
+            <td>New Comments</td>
+            <td>{{currentUser.config.type.email.type.newComment  ? "On" : "Off" }}</td>
+          </tr>
+
+          <tr>
+            <td>Rescheduled Meetings</td>
+            <td>{{currentUser.config.type.email.type.meetingChange  ? "On" : "Off" }}</td>
+          </tr>
+        </table>
+      </p-tabPanel>
+    </span>
 
     <p-tabPanel header="Group Management" leftIcon="fa-group">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
