@@ -250,13 +250,13 @@ export class GroupManagerComponent implements OnInit {
     }
 
     /* Filter out usernames that were previously selected (but not added to the group) */
-    // for (let i = 0; i < filtered.length; i++) {
-    //   for (let j = 0; j < this.suggestedUsers.length; j++) {
-    //     if (filtered[i].name === this.suggestedUsers[j].name) {
-    //       filtered.splice(i, 1);
-    //     }
-    //   }
-    // }
+    for (let i = 0; i < this.suggestedUsers.length; i++) {
+      for (let j = 0; j < filtered.length; j++) {
+        if (filtered[j].name === this.suggestedUsers[i].name) {
+          filtered.splice(j, 1);
+        }
+      }
+    }
 
     filtered.sort(this.compareUsernames);
 
