@@ -99,6 +99,7 @@ export class GroupManagerComponent implements OnInit {
   groupManagerDialog(id: string) {
     this.msgs = [];
     this.filteredMembers = [];
+    this.suggestedUsers = [];
     this.displayGroupManager = true;
     this.groupManagerService.getGroup(id).subscribe( data => {
       this.group = data;
@@ -232,22 +233,32 @@ export class GroupManagerComponent implements OnInit {
     const filtered = [];
     const currentMembers = this.getMembersObject(this.group.members);
 
+    /* Push matching usernames to filtered list */
     for (let i = 0; i < users.length; i ++) {
       if ((users[i].username).toLowerCase().indexOf(username.toLowerCase()) === 0) {
         filtered.push({'name': users[i].username});
       }
     }
 
-    filtered.sort(this.compareUsernames);
-
-    for (let i = 0; i < filtered.length; i++) {
-      for (let j = 0; j < currentMembers.length; j++) {
-        if ((filtered[i].name).toLowerCase() === (currentMembers[j].username).toLowerCase()) {
-          filtered.splice(i, 1);
-          break;
+    /* Filter out members that are already part of the group */
+    for (let i = 0; i < currentMembers.length; i++) {
+      for (let j = 0; j < filtered.length; j++) {
+        if (filtered[j].name === currentMembers[i].username) {
+          filtered.splice(j, 1);
         }
       }
     }
+
+    /* Filter out usernames that were previously selected (but not added to the group) */
+    // for (let i = 0; i < filtered.length; i++) {
+    //   for (let j = 0; j < this.suggestedUsers.length; j++) {
+    //     if (filtered[i].name === this.suggestedUsers[j].name) {
+    //       filtered.splice(i, 1);
+    //     }
+    //   }
+    // }
+
+    filtered.sort(this.compareUsernames);
 
     return filtered;
   }

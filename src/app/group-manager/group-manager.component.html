@@ -93,6 +93,7 @@
                         [suggestions]="filteredMembers"
                         (completeMethod)="filteredUsers($event)"
                         [minLength]="1" placeholder="Enter a username"
+                        forceSelection=true
                         field="name" [multiple]="true" [style]="{'text-align':'left'}">
         </p-autoComplete>
 
