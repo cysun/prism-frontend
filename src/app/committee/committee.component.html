@@ -1,3 +1,14 @@
-<p>
-  committee works!
-</p>
+<p-dataTable [value]="group.members"
+             sortField="username"
+             [sortableRowGroup]="false">
+
+  <p-header>{{group.name}}</p-header>
+
+  <p-column field="username" header="Username" [style]="{'text-align':'center'}"></p-column>
+
+  <p-column header="Name" [style]="{'text-align':'center'}">
+    <ng-template let-member="rowData.name" pTemplate="body">
+      {{member.first}} {{member.last}}
+    </ng-template>
+  </p-column>
+</p-dataTable>
