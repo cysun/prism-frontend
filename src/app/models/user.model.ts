@@ -1,12 +1,28 @@
-export interface User {
+export class User {
+  _id: string;
   username: string;
   email: string;
+
   name: {
     first: string;
     last: string;
   };
+  
   internal: boolean;
   root: boolean;
+  disabled: boolean;
   samlType: string;
   passwordHash: string;
+
+  config: {
+    type: {
+      email: {
+        type: {
+          documentFinalized: boolean;
+          newComment: boolean;
+          meetingChange: boolean;
+        }
+      }
+    }
+  };
 }
