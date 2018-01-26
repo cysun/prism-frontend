@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
- import { MenuItem } from 'primeng/components/common/api';
+import { MenuItem } from 'primeng/components/common/api';
+
+import { AuthService } from '../../login/auth.service';
 
 @Component({
   selector: 'prism-private',
@@ -12,9 +15,9 @@ export class PrivateComponent implements OnInit {
   menuItems: MenuItem[];
   userMenuItems: MenuItem[];
 
-  ngOnInit() {
-    this.menuItems = [ { label: 'PRISM', icon: 'fa-2x fa-cubes'}];
+  constructor(private authService: AuthService, private router: Router) { }
 
+  ngOnInit() {
     this.actionMenu = [{
       label: 'Actions',
       items: [
@@ -26,10 +29,5 @@ export class PrivateComponent implements OnInit {
         { label: 'Committee', icon: 'fa-users', routerLink: '/committee' }
       ]
     }];
-
-    this.userMenuItems = [
-      { label: 'Settings', icon: 'fa-gear'},
-      { label: 'Logout', icon: 'fa-sign-out', url: '/login' },
-    ];
   }
 }

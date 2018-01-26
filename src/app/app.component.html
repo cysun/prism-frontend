@@ -1,1 +1,33 @@
-<router-outlet></router-outlet>
+<div class="container">
+  <div class="header">
+    <div class="header-left">
+      <i class="fa fa-cubes fa-3x"></i> <span class="header-logo">PRISM</span>
+    </div>
+
+    <div class="header-right">
+      <p-splitButton *ngIf="authService.isAuthenticated()" class="user-button" label="{{username}}" icon="fa-user-o" [model]="userMenuItems"></p-splitButton>
+    </div>
+
+    <div *ngIf="authService.isAuthenticated() && showNavbarLinks" class="header-middle">
+      <div class="header-middle-items">
+        <a [routerLink]="['dashboard']"><span class="header-item"><i class="fa fa-home"></i> Dashboard</span></a>
+        <a [routerLink]="['calendar']"><span class="header-item"><i class="fa fa-calendar"></i> Calendar</span></a>
+        <a [routerLink]="['minutes']"><span class="header-item"><i class="fa fa-clock-o"></i> Minutes</span></a>
+        <a [routerLink]="['colleges']"><span class="header-item"><i class="fa fa-graduation-cap"></i> College Hierarchy</span></a>
+        <a [routerLink]="['resources']"><span class="header-item"><i class="fa fa-folder-open-o"></i> Resources</span></a>
+        <a [routerLink]="['committee']"><span class="header-item"><i class="fa fa-users"></i> Program Review Subcommittee</span></a>
+        <a [routerLink]="['committee']"><span class="header-item"><i class="fa fa-users"></i> Program Review Subcommittee</span></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-text">
+    Copyright © 2017-2018, PRISM Team. All rights reserved.
+  </div>
+</div>
