@@ -17,14 +17,13 @@
       </table>
     </p-tabPanel>
 
-    <span *ngIf="currentUser.config">
-      <p-tabPanel header="Notification Settings" leftIcon="fa-envelope-o">
+      <p-tabPanel *ngIf="currentUser.config" header="Notification Settings" leftIcon="fa-envelope-o">
         <div class="notification-label">
           <span>Current Settings</span>
-          <button pButton type="button" icon="fa-pencil" (click)=addGroupDialog()></button>
+          <button pButton type="button" icon="fa-pencil" (click)="updateSettings=true"></button>
         </div>
 
-        <table class="table-style">
+        <table class="table-style" *ngIf="updateSettings==false">
           <tr>
             <td colspan="2" class="row-label">E-mail Notifications</td>
           </tr>
@@ -44,8 +43,13 @@
             <td>{{currentUser.config.type.email.type.meetingChange  ? "On" : "Off" }}</td>
           </tr>
         </table>
+
+        <div *ngIf="updateSettings">
+          <div>Update Settings form shall be here</div>
+          <button pButton type="button" label="Update" (click)="updateSettings=false"></button>
+          <button pButton type="button" label="Cancel" (click)="updateSettings=false"></button>
+        </div>
       </p-tabPanel>
-    </span>
 
     <p-tabPanel header="Group Management" leftIcon="fa-group">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
