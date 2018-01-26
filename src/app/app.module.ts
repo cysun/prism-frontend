@@ -11,7 +11,9 @@ import { AccordionModule } from 'primeng/primeng';
 import { AutoCompleteModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/components/button/button';
 import { DataTableModule } from 'primeng/primeng';
+import { DataGridModule } from 'primeng/primeng';
 import { DialogModule } from 'primeng/primeng';
+import { DropdownModule } from 'primeng/primeng';
 import { FieldsetModule } from 'primeng/primeng';
 import { InputTextModule } from 'primeng/primeng';
 import { MenubarModule, MenuModule, MenuItem } from 'primeng/primeng';
@@ -67,8 +69,10 @@ import { AuthService } from './login/auth.service';
     AccordionModule,
     AutoCompleteModule,
     ButtonModule,
+    DataGridModule,
     DataTableModule,
     DialogModule,
+    DropdownModule,
     FieldsetModule,
     InputTextModule,
     MenuModule,
