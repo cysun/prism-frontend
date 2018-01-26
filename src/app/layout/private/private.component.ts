@@ -26,7 +26,8 @@ export class PrivateComponent implements OnInit {
         { label: 'Minutes', icon: 'fa-clock-o', routerLink: '/minutes'},
         { label: 'College Hierarchy', icon: 'fa-graduation-cap', routerLink: '/colleges'},
         { label: 'Resources', icon: 'fa-folder-open-o', routerLink: '/resources'},
-        { label: 'Committee', icon: 'fa-users', routerLink: '/committee' }
+        { label: 'Committee', icon: 'fa-users', routerLink: '/committee' },
+        { label: 'Dcoument Page', icon: 'fa-file', routerLink: '/document'}
       ]
     }];
   }
