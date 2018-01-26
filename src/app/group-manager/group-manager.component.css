@@ -32,13 +32,13 @@
   padding-top: 20px;
 }
 
-.college-label {
+.group-label {
   padding: 5px;
   padding-right: 15px;
   text-align: right;
 }
 
-.college-manager-buttons {
+.group-manager-buttons {
   display: table-cell;
   height: 50px;
   text-align: center;

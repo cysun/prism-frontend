@@ -7,7 +7,7 @@ export class User {
     first: string;
     last: string;
   };
-
+  
   internal: boolean;
   root: boolean;
   disabled: boolean;

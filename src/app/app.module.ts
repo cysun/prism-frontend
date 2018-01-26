@@ -8,12 +8,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { AccordionModule } from 'primeng/primeng';
+import { AutoCompleteModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/components/button/button';
 import { DataTableModule } from 'primeng/primeng';
+import { DialogModule } from 'primeng/primeng';
 import { FieldsetModule } from 'primeng/primeng';
 import { InputTextModule } from 'primeng/primeng';
 import { MenubarModule, MenuModule, MenuItem } from 'primeng/primeng';
 import { MessagesModule, MessageModule } from 'primeng/primeng';
+import { PanelModule } from 'primeng/primeng';
 import { SplitButtonModule } from 'primeng/primeng';
 import { TabViewModule } from 'primeng/primeng';
 import { ToolbarModule } from 'primeng/primeng';
@@ -26,9 +29,14 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { MinutesComponent } from './minutes/minutes.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { CommitteeComponent } from './committee/committee.component';
+import { GroupManagerComponent } from './group-manager/group-manager.component';
 import { LoginComponent } from './login/login.component';
+
 import { PublicComponent } from './layout/public/public.component';
 import { PrivateComponent } from './layout/private/private.component';
+
+import {GroupManagerService} from './group-manager/group-manager.service';
+import {CollegesService} from './colleges/colleges.service';
 
 import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
@@ -45,6 +53,7 @@ import { AuthService } from './login/auth.service';
     MinutesComponent,
     ResourcesComponent,
     CommitteeComponent,
+    GroupManagerComponent,
     LoginComponent,
     PublicComponent,
     PrivateComponent,
@@ -56,21 +65,27 @@ import { AuthService } from './login/auth.service';
     AppRoutingModule,
     BrowserAnimationsModule,
     AccordionModule,
+    AutoCompleteModule,
     ButtonModule,
     DataTableModule,
+    DialogModule,
     FieldsetModule,
     InputTextModule,
     MenuModule,
     MenubarModule,
     MessageModule,
     MessagesModule,
+    PanelModule,
     SplitButtonModule,
-    TabViewModule
+    TabViewModule,
+    ToolbarModule
   ],
   providers: [
     AuthGuard,
     AuthService,
     HttpClientModule,
+    CollegesService,
+    GroupManagerService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
