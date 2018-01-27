@@ -21,6 +21,7 @@ export class GroupManagerComponent implements OnInit {
 
   group: Group = new Group();
   member: User = new User();
+  currentUser: User = new User();
 
   groups: Group[] = [];
   users: User[] = [];
@@ -35,6 +36,8 @@ export class GroupManagerComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+
     this.groupManagerService.getUsers().subscribe( data => {
       this.users = data;
       console.log(data);
