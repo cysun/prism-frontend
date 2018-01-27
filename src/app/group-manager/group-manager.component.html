@@ -130,6 +130,8 @@
     <p-dataTable [value]="group.members"
                  [immutable]=false
                  sortField="username"
+                 expandableRowGroups="true"
+                 rowGroupMode="subheader"
                  [sortableRowGroup]="false"
                  [style]="{'padding-top': '50px'}">
 
