@@ -9,8 +9,12 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 
 import { AccordionModule } from 'primeng/primeng';
+import { AutoCompleteModule } from 'primeng/primeng';
+import { PanelModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/components/button/button';
 import { DataTableModule } from 'primeng/primeng';
+import { DataGridModule } from 'primeng/primeng';
+import { DropdownModule } from 'primeng/primeng';
 import { FieldsetModule } from 'primeng/primeng';
 import { InputTextModule } from 'primeng/primeng';
 import { MenubarModule, MenuModule, MenuItem } from 'primeng/primeng';
@@ -18,6 +22,7 @@ import { MessagesModule, MessageModule } from 'primeng/primeng';
 import { SplitButtonModule } from 'primeng/primeng';
 import { TabViewModule } from 'primeng/primeng';
 import { ToolbarModule } from 'primeng/primeng';
+import { DialogModule } from 'primeng/primeng';
 
 import { CollegesComponent } from './colleges/colleges.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -72,6 +77,9 @@ import { AuthService } from './login/auth.service';
     MenubarModule,
     MessageModule,
     MessagesModule,
+    DialogModule,
+    DropdownModule,
+    DataGridModule,
     PanelModule,
     SplitButtonModule,
     TabViewModule,
