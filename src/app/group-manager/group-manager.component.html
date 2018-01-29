@@ -1,5 +1,5 @@
 <!-- Toolbar to add or delete a group-->
-<p-toolbar>
+<p-toolbar *ngIf="currentUser.root">
   <div class="ui-toolbar-group-right">
     <button pButton type="button" icon="fa-plus" class="ui-button-success" (click)=addGroupDialog()></button>
   </div>
@@ -124,8 +124,7 @@
 </div> -->
 
 <div *ngIf="groups.length > 0; else emptyGroup">
-  <div *ngIf="currentUser.root; else nonAdmin">
-    <div *ngFor="let group of groups">
+  <div *ngFor="let group of groups">
       <p-dataTable [value]="group.members"
                    [immutable]=false
                    sortField="username"
@@ -160,11 +159,6 @@
         </p-column>
       </p-dataTable>
     </div>
-  </div>
-
-  <ng-template #nonAdmin>
-    <prism-committee></prism-committee>
-  </ng-template>
 </div>
 
 <!-- Info message when there are no groups -->

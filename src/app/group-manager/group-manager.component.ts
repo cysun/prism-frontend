@@ -43,20 +43,24 @@ export class GroupManagerComponent implements OnInit {
       console.log(data);
     })
 
-    this.groupManagerService.getGroups().subscribe(data => {
-      this.groups = data;
+    /* If current user is logged in, execute function that retrieves editable groups */
+    if (this.currentUser.root === true) {
+      this.groupManagerService.getGroups().subscribe(data => {
+        this.groups = data;
 
-      for (let i = 0; i < this.groups.length; i++) {
-        const members = this.groups[i].members;
-        this.groups[i].members = this.getMembersObject(members);
-      }
-      console.log(this.groups)
-    },
-    err => {
-      localStorage.removeItem('jwt_token');
-      localStorage.removeItem('currentUser');
-      this.router.navigate(['login']);
-    });
+        for (let i = 0; i < this.groups.length; i++) {
+          const members = this.groups[i].members;
+          this.groups[i].members = this.getMembersObject(members);
+        }
+        console.log(this.groups)
+      },
+
+      err => {
+        localStorage.removeItem('jwt_token');
+        localStorage.removeItem('currentUser');
+        this.router.navigate(['login']);
+      });
+    }
   }
 
   invalidErrorMessage(message: string) {

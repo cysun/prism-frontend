@@ -31,7 +31,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'calendar', component: CalendarComponent },
       { path: 'colleges', component: CollegesComponent },
-      { path: 'committee', component: GroupManagerComponent },
+      { path: 'committee', component: CommitteeComponent },
       { path: 'minutes', component: MinutesComponent },
       { path: 'resources', component: ResourcesComponent },
       { path: 'settings', component: SettingsComponent },

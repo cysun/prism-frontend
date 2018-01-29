@@ -15,6 +15,10 @@ export class GroupManagerService {
     return this.http.get<Group[]>('/api/groups');
   }
 
+  getPrs(): Observable<Group> {
+    return this.http.get<Group>('/api/prs')
+  }
+
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>('/api/users');
   }

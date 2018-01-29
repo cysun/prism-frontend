@@ -11,37 +11,17 @@ import { GroupManagerService } from '../group-manager/group-manager.service';
   styleUrls: ['./committee.component.css']
 })
 export class CommitteeComponent implements OnInit {
-  groups: Group[] = [];
-  users: User[] = [];
-
-  group: Group = new Group();
+  prs: Group = new Group();
+  currentUser: User = new User();
 
   constructor(private groupManagerService: GroupManagerService) { }
 
   ngOnInit() {
-    this.groupManagerService.getUsers().subscribe( data => {
-      this.users = data;
-    })
 
-    this.groupManagerService.getGroups().subscribe( data => {
-      this.groups = data;
-      this.group = this.groups.find(group => group.name === 'Program Review Subcommittee');
-
-      const members = this.group.members;
-      this.group.members = this.getMembersObject(members);
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    this.groupManagerService.getPrs().subscribe( data => {
+      this.prs = data;
     })
   }
 
-  getMembersObject(memberList: any[]): any[] {
-    const displayList = [];
-
-    for (let i = 0; i < memberList.length; i++) {
-      for (let j = 0; j < this.users.length; j++) {
-        if (memberList[i] === this.users[j]._id) {
-          displayList.push(this.users[j]);
-        }
-      }
-    }
-    return displayList;
-  }
 }
