@@ -12,7 +12,6 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ResourcesComponent } from './resources/resources.component';
 import { SettingsComponent } from './settings/settings.component';
 
-import { PublicComponent } from './layout/public/public.component';
 import { PrivateComponent } from './layout/private/private.component';
 
 import { AuthGuard } from './login/auth.guard';
@@ -20,7 +19,6 @@ import { AuthGuard } from './login/auth.guard';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full'},
   { path: '',
-    component: PublicComponent,
     children: [
       { path: 'login', component: LoginComponent },
     ]
@@ -40,7 +38,6 @@ const routes: Routes = [
       { path: 'committee', component: CommitteeComponent },
       { path: 'minutes', component: MinutesComponent },
       { path: 'resources', component: ResourcesComponent },
-      // { path: 'settings', component: SettingsComponent },
       { path: '**', component: PageNotFoundComponent }
     ]
   }
