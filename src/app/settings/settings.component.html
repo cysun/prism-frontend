@@ -1,7 +1,12 @@
 <div class="settings-div">
   <p-tabView>
     <p-tabPanel header="Profile" leftIcon="fa-info-circle">
-      <table class="table-style">
+      <div class="notification-label">
+        <span>{{currentUser.name.first}}'s Profile</span>
+        <button pButton type="button" icon="fa-pencil" (click)="updateInfo=true"></button>
+      </div>
+
+      <table *ngIf="!updateInfo" class="table-style">
         <tr>
           <td class="row-label">Username</td>
           <td>{{currentUser.username}}</td>
@@ -15,6 +20,79 @@
           <td>{{currentUser.email}}</td>
         </tr>
       </table>
+
+      <!-- Update user's basic information and/or current password -->
+      <div *ngIf="updateInfo">
+        <div class="update-module ui-grid ui-grid-responsive ui-fluid">
+          <div class="text-hint">Basic Information</div>
+          <div class="ui-grid-col-10">
+            <span class="ui-grid-col-3">First Name</span>
+            <span class="ui-grid-col-6">
+              <div class="ui-inputgroup">
+                <input type="text" pInputText placeholder="Enter a first name" [(ngModel)]="currentUser.name.first" ngDefaultControl/>
+              </div>
+            </span>
+          </div>
+
+          <div class="ui-grid-col-10">
+            <span class="ui-grid-col-3">Last Name</span>
+            <span class="ui-grid-col-6">
+              <div class="ui-inputgroup">
+                <input type="text" pInputText placeholder="Enter a first name" [(ngModel)]="currentUser.name.last" ngDefaultControl/>
+              </div>
+            </span>
+          </div>
+
+          <div class="ui-grid-col-10">
+            <span class="ui-grid-col-3">E-mail</span>
+            <span class="ui-grid-col-6">
+              <div class="ui-inputgroup">
+                <input type="text" pInputText placeholder="Enter a first name" [(ngModel)]="currentUser.email" ngDefaultControl/>
+              </div>
+            </span>
+          </div>
+
+          <div class="ui-grid-col-10">
+            <div class="text-hint">Change Password</div>
+            <span class="ui-grid-col-3">Current Password</span>
+            <span class="ui-grid-col-6">
+              <div class="ui-inputgroup">
+                <input type="password" pInputText placeholder="Enter current password" ngDefaultControl/>
+              </div>
+            </span>
+          </div>
+
+          <div class="ui-grid-col-10">
+            <span class="ui-grid-col-3">New Password</span>
+            <span class="ui-grid-col-6">
+              <div class="ui-inputgroup">
+                <input type="password" pInputText placeholder="Enter a new password" ngDefaultControl/>
+              </div>
+            </span>
+          </div>
+
+          <div class="ui-grid-col-10">
+            <span class="ui-grid-col-3">Re-enter New Password</span>
+            <span class="ui-grid-col-6">
+              <div class="ui-inputgroup">
+                <input type="password" pInputText/>
+              </div>
+            </span>
+          </div>
+        </div>
+
+        <div class="update-buttons">
+
+          <button pButton type="button" label="Save" (click)="updateInfo=false"></button>
+          <button pButton type="button" label="Cancel" (click)="updateInfo=false"></button>
+        
+        </div>
+
+
+
+
+
+      </div>
     </p-tabPanel>
 
       <p-tabPanel *ngIf="currentUser.config" header="Notification Settings" leftIcon="fa-envelope-o">
@@ -50,12 +128,5 @@
           <button pButton type="button" label="Cancel" (click)="updateSettings=false"></button>
         </div>
       </p-tabPanel>
-
-    <p-tabPanel header="Group Management" leftIcon="fa-group">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-      dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-      proident, sunt in culpa qui officia deserunt mollit anim id est laborum. 3
-    </p-tabPanel>
   </p-tabView>
 </div>
