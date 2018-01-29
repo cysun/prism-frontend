@@ -39,10 +39,12 @@ import { PrivateComponent } from './layout/private/private.component';
 
 import {GroupManagerService} from './group-manager/group-manager.service';
 import {CollegesService} from './colleges/colleges.service';
+import {DepartmentService} from './colleges/departments/department.service';
 
 import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
 import { AuthService } from './login/auth.service';
+import { DepartmentsComponent } from './colleges/departments/departments.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +61,7 @@ import { AuthService } from './login/auth.service';
     LoginComponent,
     PublicComponent,
     PrivateComponent,
+    DepartmentsComponent,
   ],
   imports: [
     BrowserModule,
@@ -91,6 +94,7 @@ import { AuthService } from './login/auth.service';
     HttpClientModule,
     GroupManagerService,
     CollegesService,
+    DepartmentService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

@@ -1,11 +1,3 @@
-<p-accordion>
-  <p-accordionTab header="College of Arts and Letters">
-    Art
-  </p-accordionTab>
-  <p-accordionTab header="College of Business and Economics">
-    Accountancy
-  </p-accordionTab>
-</p-accordion>
 <!-- Toolbar to add or delete a college-->
 <p-toolbar>
   <div class="ui-toolbar-college-left">
@@ -107,8 +99,14 @@
 
 <!-- Displays the current college and their deans -->
 <div *ngIf="colleges.length > 0; else emptyCollege">
-  <p-dataGrid [style]="{'padding-top': '50px'}" [value]="colleges" [paginator]="true" [rows]="12" *ngFor="let college of colleges">
-    <p-header>
+  <p-accordion *ngFor="let college of colleges" [lazy]="true" (onOpen)="getDepartments(college._id)">
+
+    <p-accordionTab>
+      <p-header>
+        {{college.name}} ({{college.abbreviation}})
+      </p-header>
+      <departments [collegeId]="college.id"></departments>
+      <!--
       <div class="header-container">
         <div class="header-panel">
           {{college.name}}
@@ -118,17 +116,9 @@
           </div>
         </div>
       </div>
-    </p-header>
-
-    <ng-template let-group pTemplate="item">
-      <div style="padding:5px" class="ui-g-12 ui-md-4">
-        <p-panel [header]="college.name" [style]="{'text-align':'center', 'overflow-wrap': 'break-word'}">
-          Name: John Doe <br/>
-          E-mail: johndoe@gmail.com <br/>
-        </p-panel>
-      </div>
-    </ng-template>
-  </p-dataGrid>
+    -->
+    </p-accordionTab>
+  </p-accordion>
 </div>
 
 <!-- Info message when there are no colleges -->

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { CollegesService } from './colleges.service'
+import { CollegesService } from './colleges.service';
+
 import { College } from '../models/college.model';
 
 import { Message } from 'primeng/components/common/api';
