@@ -1,24 +1,19 @@
-<div class="container">
-  <div class="header">
-    <div class="header-left">
-      <i class="fa fa-cubes fa-3x"></i> <span class="header-logo">PRISM</span>
-    </div>
+<div class="app-container">
+  <nav class="navbar sticky-top navbar-dark">
+    <a class="navbar-brand" [routerLink]="['/dashboard']" routerLinkActive="active">
+      <i class="fa fa-cubes fa-2x"></i> <span class="header-logo">PRISM</span>
+    </a>
 
-    <div class="header-right">
-      <p-splitButton *ngIf="authService.isAuthenticated()" class="user-button" label="{{username}}" icon="fa-user-o" [model]="userMenuItems"></p-splitButton>
-    </div>
+    <div ngbDropdown placement="bottom-right" class="d-inline-block" *ngIf="authService.isAuthenticated()">
+      <button class="btn btn-outline-primary" ngbDropdownToggle><i class="fa fa-user-o"></i>{{username}}</button>
 
-    <!-- <div *ngIf="authService.isAuthenticated() && showNavbarLinks" class="header-middle">
-      <div class="header-middle-items">
-        <a [routerLink]="['dashboard']"><span class="header-item"><i class="fa fa-home"></i> Dashboard</span></a>
-        <a [routerLink]="['calendar']"><span class="header-item"><i class="fa fa-calendar"></i> Calendar</span></a>
-        <a [routerLink]="['minutes']"><span class="header-item"><i class="fa fa-clock-o"></i> Minutes</span></a>
-        <a [routerLink]="['colleges']"><span class="header-item"><i class="fa fa-graduation-cap"></i> College Hierarchy</span></a>
-        <a [routerLink]="['resources']"><span class="header-item"><i class="fa fa-folder-open-o"></i> Resources</span></a>
-        <a [routerLink]="['committee']"><span class="header-item"><i class="fa fa-users"></i> Program Review Subcommittee</span></a>
+      <div ngbDropdownMenu>
+        <button class="dropdown-item" [routerLink]="['settings']"><i class="fa fa-gear"></i>Settings</button>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item" (click)="logout()"><i class="fa fa-sign-out"></i>Sign Out</button>
       </div>
-    </div> -->
-  </div>
+    </div>
+  </nav>
 
   <div class="main">
     <router-outlet></router-outlet>

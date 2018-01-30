@@ -15,9 +15,14 @@ import { MinutesComponent } from './minutes/minutes.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
 
+
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 import { AccordionModule } from 'primeng/primeng';
 import { AutoCompleteModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/components/button/button';
+import { CheckboxModule } from 'primeng/primeng';
+import { DataTableModule } from 'primeng/primeng';
 import { TreeTableModule, TreeNode, DataTableModule, SharedModule } from 'primeng/primeng';
 import { DialogModule } from 'primeng/primeng';
 import { DropdownModule } from 'primeng/primeng';
@@ -57,6 +62,7 @@ import { CommitteeComponent } from './committee/committee.component';
     CommitteeComponent,
   ],
   imports: [
+    NgbModule.forRoot(),
     BrowserModule,
     FormsModule,
     HttpClientModule,
@@ -65,6 +71,7 @@ import { CommitteeComponent } from './committee/committee.component';
     AccordionModule,
     AutoCompleteModule,
     ButtonModule,
+    CheckboxModule,
     DataTableModule,
     DialogModule,
     DropdownModule,
