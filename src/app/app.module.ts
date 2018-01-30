@@ -26,6 +26,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 import { AccordionModule } from 'primeng/primeng';
 import { AutoCompleteModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/components/button/button';
@@ -93,6 +96,7 @@ import { DepartmentsComponent } from './colleges/departments/departments.compone
     DepartmentsComponent,
   ],
   imports: [
+    NgbModule.forRoot(),
     BrowserModule,
     FormsModule,
 <<<<<<< HEAD
