@@ -1,3 +1,20 @@
-<p>
-  committee works!
-</p>
+<div *ngIf="currentUser.root; else nonAdmin">
+  <prism-group-manager></prism-group-manager>
+</div>
+
+<ng-template #nonAdmin>
+  <p-dataTable [value]="prs.members"
+               sortField="username"
+               [sortableRowGroup]="false">
+
+    <p-header>{{prs.name}}</p-header>
+
+    <p-column field="username" header="Username" [style]="{'text-align':'center'}"></p-column>
+
+    <p-column header="Name" [style]="{'text-align':'center'}">
+      <ng-template let-member="rowData.name" pTemplate="body">
+        {{member.first}} {{member.last}}
+      </ng-template>
+    </p-column>
+  </p-dataTable>
+</ng-template>

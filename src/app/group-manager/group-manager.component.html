@@ -1,0 +1,167 @@
+<!-- Toolbar to add or delete a group-->
+<p-toolbar *ngIf="currentUser.root">
+  <div class="ui-toolbar-group-right">
+    <button pButton type="button" icon="fa-plus" class="ui-button-success" (click)=addGroupDialog()></button>
+  </div>
+</p-toolbar>
+
+<!-- Dialog module for adding a new group -->
+<p-dialog class="dialog-module" header="Add New Group" [(visible)]="displayAdd" modal="modal" width="600" [responsive]="true">
+  <p-messages [(value)]="msgs"></p-messages>
+
+  <form class="dialog-box" #f="ngForm" (ngSubmit)="submitGroup()">
+    <div class="dialog-box ui-grid ui-grid-responsive ui-fluid">
+      <div class="ui-grid-col-12">
+        <div class="ui-inputgroup">
+          <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
+          <input type="text" [(ngModel)]="group.name" pInputText name="group-name" placeholder="Enter New Group Title">
+        </div>
+      </div>
+    </div>
+
+    <div class="text-hints">Enter a name for the new group.</div>
+
+    <div class="ui-grid ui-grid-col-12">
+      <div class="footer-buttons">
+        <button type="submit" pButton icon="fa-plus" label="Add"></button>
+        <button type="button" pButton icon="fa-close" (click)="displayAdd=false" label="Cancel"></button>
+      </div>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- Dialog module for deleting a group -->
+<p-dialog class="dialog-module" header="Delete Group" [(visible)]="displayGroupDelete" modal="modal" width="600" [responsive]="true">
+  <p-messages [(value)]="msgs"></p-messages>
+
+  <div class="dialog-box ui-grid ui-grid-responsive ui-fluid">
+    <div class="ui-grid-col-12">
+      <b><u>NOTE:</u></b> Deleting a group will permanently remove the access given to its members. Are you sure you want to delete?
+    </div>
+  </div>
+
+  <div class="ui-grid ui-grid-col-12">
+    <div class="footer-buttons">
+      <button type="button" pButton icon="fa-check" (click)="deleteGroup(group._id)" label="Delete"></button>
+      <button type="button" pButton icon="fa-close" (click)="displayGroupDelete=false" label="Cancel"></button>
+    </div>
+  </div>
+</p-dialog>
+
+
+<!-- Dialog module for deleting a group member -->
+<p-dialog class="dialog-module" header="Delete Member from Group" [(visible)]="displayMemberDelete" modal="modal" width="600" [responsive]="true">
+  <p-messages [(value)]="msgs"></p-messages>
+
+  <div class="dialog-box ui-grid ui-grid-responsive ui-fluid">
+    <div class="ui-grid-col-12">
+      <b><u>NOTE:</u></b> Deleting <b>{{member.username}}</b> from the group will remove their given access. Are you sure you want to delete them from the group?
+    </div>
+  </div>
+
+  <div class="ui-grid ui-grid-col-12">
+    <div class="footer-buttons">
+      <button type="button" pButton icon="fa-check" (click)="deleteMember()" label="Delete"></button>
+      <button type="button" pButton icon="fa-close" (click)="displayMemberDelete=false" label="Cancel"></button>
+    </div>
+  </div>
+</p-dialog>
+
+
+<!-- Dialog module for updating a specific group -->
+<p-dialog class="dialog-module" header="Edit Group Manager" [(visible)]="displayGroupManager" modal="modal" width="800" [responsive]="true">
+  <p-messages [(value)]="msgs"></p-messages>
+
+  <div class="update-module ui-grid ui-grid-responsive ui-fluid">
+    <div class="ui-grid-col-12">
+      <span class="group-label ui-grid-col-3">Group Name</span>
+      <span class="ui-grid-col-8">
+        <div class="ui-inputgroup">
+          <input type="text" pInputText placeholder="Enter a new group name" [(ngModel)]="group.name" ngDefaultControl/>
+        </div>
+
+        <div class="text-hints">Enter a new name for the group.</div>
+      </span>
+    </div>
+
+    <div class ="ui-grid-col-12 grid-space">
+      <span class="group-label ui-grid-col-3">Add Members</span>
+      <span class="ui-grid-col-8">
+        <p-autoComplete [(ngModel)]="suggestedUsers"
+                        [suggestions]="filteredMembers"
+                        (completeMethod)="filteredUsers($event)"
+                        [minLength]="1" placeholder="Enter a username"
+                        forceSelection=true
+                        field="name" [multiple]="true" [style]="{'text-align':'left'}">
+        </p-autoComplete>
+
+        <div class="text-hints">Type in a username to get a list of possible users to add in the group.</div>
+      </span>
+    </div>
+
+    <div class="ui-grid-col-12 grid-space">
+      <span class="group-label ui-grid-col-3">Deleting Group</span>
+      <span class="ui-grid-col-8">
+        <button type="button" pButton (click)="deleteGroupDialog()" label="Delete Group" class="ui-button-danger"></button>
+        <div class="text-hints">If the group is deleted, all its members will lose their given access.</div>
+      </span>
+    </div>
+  </div>
+
+  <div class="ui-grid ui-grid-col-12">
+    <div class="group-manager-buttons">
+      <button type="button" pButton icon="fa-save" (click)="updateGroup(group.name)" label="Save"></button>
+      <button type="button" pButton icon="fa-close" (click)="displayGroupManager=false" label="Cancel"></button>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- Displays the current groups and their members -->
+<!-- <div>
+  <code>
+    <pre>{{groups |json}}</pre>
+  </code>
+</div> -->
+
+<div *ngIf="groups.length > 0; else emptyGroup">
+  <div *ngFor="let group of groups">
+      <p-dataTable [value]="group.members"
+                   [immutable]=false
+                   sortField="username"
+                   expandableRowGroups="true"
+                   rowGroupMode="subheader"
+                   [sortableRowGroup]="false"
+                   [style]="{'padding-top': '50px'}">
+
+        <p-header>
+          <div class="header-container">
+            <div class="header-panel">
+              {{group.name}}
+              <div class="panel-buttons">
+                <button type="button" pButton icon="fa-gear" (click)=groupManagerDialog(group._id)></button>
+              </div>
+            </div>
+          </div>
+        </p-header>
+
+        <p-column field="username" header="Username" [style]="{'text-align':'center'}"></p-column>
+
+        <p-column header="Name" [style]="{'text-align':'center'}">
+          <ng-template let-member="rowData.name" pTemplate="body">
+            {{member.first}} {{member.last}}
+          </ng-template>
+        </p-column>
+
+        <p-column [style]="{'text-align':'center', 'width':'55px'}">
+          <ng-template let-member="rowData" pTemplate="body">
+            <button type="button" pButton (click)="deleteMemberDialog(group._id, member._id)" icon="fa-trash"></button>
+          </ng-template>
+        </p-column>
+      </p-dataTable>
+    </div>
+</div>
+
+<!-- Info message when there are no groups -->
+<ng-template #emptyGroup>
+  <p-message class="info-message" severity="info" text="There are currently no groups."></p-message>
+</ng-template>
