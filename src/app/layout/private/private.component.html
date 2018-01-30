@@ -1,10 +1,21 @@
-<div class="dashboard-module">
-  <div class="ui-g -ui-grid-col-12">
-    <div class="menu-grid ui-fluid ui-grid-col-2">
-      <p-menu class="action-menu" [model]="actionMenu"></p-menu>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-2 menu-grid">
+      <div class="row">
+        <div class="col-12 menu-label">Action Menu</div>
+
+        <div class="vertical-menu">
+          <a class="nav-link" [routerLink]="['/dashboard']"><i class="fa fa-home"></i> Dashboard</a>
+          <a class="nav-link" [routerLink]="['/calendar']"><i class="fa fa-calendar"></i> Calendar</a>
+          <a class="nav-link" [routerLink]="['/minutes']"><i class="fa fa-clock-o"></i> Minutes</a>
+          <a class="nav-link" [routerLink]="['/colleges']"><i class="fa fa-graduation-cap"></i> University Hierarchy</a>
+          <a class="nav-link" [routerLink]="['/minutes']"><i class="fa fa-folder-open-o"></i> Resources</a>
+          <a class="nav-link" [routerLink]="['/committee']"><i class="fa fa-users"></i> Committee</a>
+        </div>
+      </div>
     </div>
 
-    <div class="tab-grid ui-grid-col-10">
+    <div class="col-10 tab-grid">
       <router-outlet></router-outlet>
     </div>
   </div>

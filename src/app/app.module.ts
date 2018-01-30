@@ -7,6 +7,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 import { AccordionModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/components/button/button';
 import { CheckboxModule } from 'primeng/primeng';
@@ -51,6 +54,7 @@ import { AuthService } from './login/auth.service';
     PrivateComponent,
   ],
   imports: [
+    NgbModule.forRoot(),
     BrowserModule,
     FormsModule,
     HttpClientModule,
