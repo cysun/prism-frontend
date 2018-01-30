@@ -18,7 +18,9 @@ export class AppComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.username = this.authService.getUser().username;
+    if (this.authService.isAuthenticated()) {
+      this.username = this.authService.getUser().username;
+    }
     this.router.events.subscribe(event => this.modifyHeader(event));
 
     this.userMenuItems = [
