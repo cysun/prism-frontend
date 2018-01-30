@@ -36,16 +36,10 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'calendar', component: CalendarComponent },
       { path: 'colleges', component: CollegesComponent },
-<<<<<<< HEAD
       { path: 'committee', component: GroupManagerComponent },
       { path: 'minutes', component: MinutesComponent},
       { path: 'resources', component: ResourcesComponent},
       { path: 'settings', component: SettingsComponent },
-=======
-      { path: 'committee', component: CommitteeComponent },
-      { path: 'minutes', component: MinutesComponent },
-      { path: 'resources', component: ResourcesComponent },
->>>>>>> 9e6eea623d4c47ec131a5c5a4fe5147ca8dc39ce
       { path: '**', component: PageNotFoundComponent }
     ]
   }
