@@ -12,6 +12,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import { AccordionModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/components/button/button';
+import { CheckboxModule } from 'primeng/primeng';
 import { DataTableModule } from 'primeng/primeng';
 import { FieldsetModule } from 'primeng/primeng';
 import { InputTextModule } from 'primeng/primeng';
@@ -61,6 +62,7 @@ import { AuthService } from './login/auth.service';
     BrowserAnimationsModule,
     AccordionModule,
     ButtonModule,
+    CheckboxModule,
     DataTableModule,
     FieldsetModule,
     InputTextModule,
