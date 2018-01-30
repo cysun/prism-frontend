@@ -2,6 +2,7 @@
   font-size: 1.5em;
   font-weight: bold;
   margin-bottom: 40px;
+  margin-top: 30px;
 }
 
 .row-label {
@@ -9,12 +10,7 @@
   font-weight: bold;
 }
 
-.settings-div {
-  padding:20px;
-}
-
 .table-style {
-  border-collapse: collapse;
   width: 50%;
 }
 
@@ -30,14 +26,12 @@ td {
   padding: 8px;
 }
 
-.ui-grid-col-6 {
+.row {
+  align-items: center;
+  display: flex;
   margin-bottom: 25px;
 }
 
 .update-buttons {
-  margin: 0 auto;
-}
-
-.update-module {
-  margin-top: 20px;
+  text-align: center;
 }

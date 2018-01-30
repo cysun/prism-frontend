@@ -23,11 +23,6 @@ const routes: Routes = [
       { path: 'login', component: LoginComponent },
     ]
   },
-  {
-    path: 'settings',
-    component: SettingsComponent,
-    canActivate: [AuthGuard]
-  },
   { path: '',
     component: PrivateComponent,
     canActivate: [AuthGuard],
@@ -38,6 +33,7 @@ const routes: Routes = [
       { path: 'committee', component: CommitteeComponent },
       { path: 'minutes', component: MinutesComponent },
       { path: 'resources', component: ResourcesComponent },
+      { path: 'settings', component: SettingsComponent },
       { path: '**', component: PageNotFoundComponent }
     ]
   }
