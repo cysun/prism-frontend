@@ -3,18 +3,31 @@
 </div>
 
 <ng-template #nonAdmin>
-  <p-dataTable [value]="prs.members"
-               sortField="username"
-               [sortableRowGroup]="false">
+  <div class="container-fluid">
+    <span class="label">Committee Members</span>
+    <blockquote>
+      Here is the list of current members of the Program Review Subcommittee
+    </blockquote>
 
-    <p-header>{{prs.name}}</p-header>
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th class="table-label" colspan="2">Program Review Subcommittee</th>
+        </tr>
+        <tr>
+          <th class="table-header">Username</th>
+          <th class="table-header">Name</th>
+        </tr>
+      </thead>
 
-    <p-column field="username" header="Username" [style]="{'text-align':'center'}"></p-column>
-
-    <p-column header="Name" [style]="{'text-align':'center'}">
-      <ng-template let-member="rowData.name" pTemplate="body">
-        {{member.first}} {{member.last}}
-      </ng-template>
-    </p-column>
-  </p-dataTable>
+      <tbody>
+        <ng-template ngFor let-member [ngForOf]="prs">
+          <tr>
+            <td>{{ member.username }}</td>
+            <td>{{ member.name.first }} {{ member.name.last }}</td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </table>
+  </div>
 </ng-template>
