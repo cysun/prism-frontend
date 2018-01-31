@@ -1,10 +1,7 @@
-.dialog-box {
-  margin-top: 20px;
-}
-
 .dialog-module {
   text-align: center;
 }
+
 
 .buttons-container {
   display: table;
@@ -46,6 +43,22 @@
   display: grid;
   font-size: 25px;
   margin-top: 20px;
+}
+
+.modal {
+  padding-top: 50px;
+}
+
+.modal-title {
+  width: 100%;
+}
+
+.modal-header {
+  background-color: #1A1A1A;
+  border-radius: 1px;
+  color: #FFF;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .panel-buttons {

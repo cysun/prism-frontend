@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Message } from 'primeng/components/common/api';
 
+import { NgbModal, NgbModalRef,  NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+
 import { Group } from '../models/group.model';
 import { User } from '../models/user.model';
 
@@ -19,6 +21,8 @@ export class GroupManagerComponent implements OnInit {
   displayMemberDelete: Boolean = false;
   displayGroupManager: Boolean = false;
 
+  modal: NgbModalRef;
+
   group: Group = new Group();
   member: User = new User();
   currentUser: User = new User();
@@ -33,6 +37,7 @@ export class GroupManagerComponent implements OnInit {
   suggestedUsers: any[] = [];
 
   constructor(private groupManagerService: GroupManagerService,
+              private modalService: NgbModal,
               private router: Router) { }
 
   ngOnInit() {
@@ -81,12 +86,18 @@ export class GroupManagerComponent implements OnInit {
     this.msgs.push({severity: 'error', summary: 'Invalid Group:', detail: detailMsg });
   }
 
-  /* Displays the dialog box to add a group */
-  addGroupDialog() {
-    this.msgs = [];
+  openModal(content) {
+    const options: NgbModalOptions = {
+  size: 'lg'
+};
     this.group = new Group();
-    this.displayAdd = true;
+    this.modal = this.modalService.open(content, options);
   }
+
+  closeModal() {
+    this.modal.close()
+  }
+
 
   /* Displays the confirmation dialog to delete a group */
   deleteGroupDialog() {
@@ -128,9 +139,7 @@ export class GroupManagerComponent implements OnInit {
               this.groups = this.groups.slice(0);
             }
           );
-
-          this.displayAdd = false;
-          this.group = new Group();
+          this.closeModal();
         } else {
           this.invalidErrorMessage('existing group');
         }

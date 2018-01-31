@@ -1,34 +1,42 @@
 <!-- Toolbar to add or delete a group-->
-<p-toolbar *ngIf="currentUser.root">
-  <div class="ui-toolbar-group-right">
-    <button pButton type="button" icon="fa-plus" class="ui-button-success" (click)=addGroupDialog()></button>
+
+<button type="button" class="btn btn-success" (click)=openModal(content)><i class="fa fa-plus"></i></button>
+
+<!-- <p-toolbar *ngIf="currentUser.root">
+<div class="ui-toolbar-group-right">
+<button pButton type="button" icon="fa-plus" class="ui-button-success" (click)=addGroupDialog()></button>
+</div>
+</p-toolbar> -->
+
+<!-- Modal for adding a new group -->
+<ng-template #content>
+  <div class="modal-header">
+    <h5 class="modal-title">Add New Group</h5>
   </div>
-</p-toolbar>
 
-<!-- Dialog module for adding a new group -->
-<p-dialog class="dialog-module" header="Add New Group" [(visible)]="displayAdd" modal="modal" width="600" [responsive]="true">
-  <p-messages [(value)]="msgs"></p-messages>
-
-  <form class="dialog-box" #f="ngForm" (ngSubmit)="submitGroup()">
-    <div class="dialog-box ui-grid ui-grid-responsive ui-fluid">
-      <div class="ui-grid-col-12">
-        <div class="ui-inputgroup">
-          <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-          <input type="text" [(ngModel)]="group.name" pInputText name="group-name" placeholder="Enter New Group Title">
+  <form #f="ngForm" (ngSubmit)="submitGroup()">
+    <div class="modal-body">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fa fa-user"></i></span>
         </div>
+        <input type="text" class="form-control" placeholder="Enter a new group title" name="group-name" [(ngModel)]="group.name">
       </div>
+
+      <div class="text-hints">Enter a name for the new group.</div>
     </div>
 
-    <div class="text-hints">Enter a name for the new group.</div>
-
-    <div class="ui-grid ui-grid-col-12">
-      <div class="footer-buttons">
-        <button type="submit" pButton icon="fa-plus" label="Add"></button>
-        <button type="button" pButton icon="fa-close" (click)="displayAdd=false" label="Cancel"></button>
-      </div>
+    <div class="modal-footer">
+      <button class="btn btn-dark" type="submit">Add</button>
+      <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
     </div>
   </form>
-</p-dialog>
+</ng-template>
+
+
+
+
+
 
 <!-- Dialog module for deleting a group -->
 <p-dialog class="dialog-module" header="Delete Group" [(visible)]="displayGroupDelete" modal="modal" width="600" [responsive]="true">
