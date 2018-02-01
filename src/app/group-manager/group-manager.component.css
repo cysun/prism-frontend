@@ -2,7 +2,6 @@
   text-align: center;
 }
 
-
 .buttons-container {
   display: table;
 }
@@ -18,6 +17,8 @@
 }
 
 .header-panel {
+  color: #FFF;
+  font-weight: bold;
   position: relative;
   text-align: center;
   text-transform: uppercase;
@@ -61,14 +62,28 @@
   text-transform: uppercase;
 }
 
-.panel-buttons {
-  bottom: -6px;
-  position: absolute;
-  right: -8px;
+ngb-accordion {
+  padding: 1px;
 }
 
-.text-boxes {
-  text-align: center;
+::ng-deep .card-header {
+  background: #363636;
+  border-radius: 5;
+  color: #FFF;
+}
+
+::ng-deep .card-body {
+  padding: 0;
+}
+
+.message {
+  margin: 10px;
+}
+
+.panel-buttons {
+  bottom: -7px;
+  position: absolute;
+  right: -8px;
 }
 
 .text-hints {
@@ -78,11 +93,14 @@
   text-align: left;
 }
 
+td, th {
+  vertical-align: middle;
+}
+
 :host ::ng-deep .ui-autocomplete-token {
   margin: 3px;
 }
 
 .update-module {
   padding: 35px;
-
 }

@@ -5,12 +5,12 @@
     </a>
 
     <div ngbDropdown placement="bottom-right" class="d-inline-block" *ngIf="authService.isAuthenticated()">
-      <button class="btn btn-outline-primary" ngbDropdownToggle><i class="fa fa-user-o"></i>{{username}}</button>
+      <button class="btn btn-outline-primary" ngbDropdownToggle><i class="fa fa-icon fa-user-o"></i>{{username}}</button>
 
       <div ngbDropdownMenu>
-        <button class="dropdown-item" [routerLink]="['settings']"><i class="fa fa-gear"></i>Settings</button>
+        <button class="dropdown-item" [routerLink]="['settings']"><i class="fa fa-icon fa-gear"></i>Settings</button>
         <div class="dropdown-divider"></div>
-        <button class="dropdown-item" (click)="logout()"><i class="fa fa-sign-out"></i>Sign Out</button>
+        <button class="dropdown-item" (click)="logout()"><i class="fa fa-icon fa-sign-out"></i>Sign Out</button>
       </div>
     </div>
   </nav>
