@@ -1,19 +1,15 @@
-.dialog-module {
-  text-align: center;
+.blockquote-header {
+  background: #EEE;
+  padding: 10px;
 }
 
-.buttons-container {
-  display: table;
+.blockquote-btn {
+  float:right;
+  margin-top: -3px;
 }
 
 .delete-btn {
   width: 100%;
-}
-
-.footer-buttons {
-  bottom: 0;
-  margin: 15px;
-  text-align: center;
 }
 
 .header-container {
@@ -38,16 +34,22 @@
   text-align: right;
 }
 
-.group-manager-buttons {
-  bottom: 0;
-  padding: 20px;
-  text-align: center;
-}
-
 .info-message {
   display: grid;
   font-size: 25px;
   margin-top: 20px;
+}
+
+.label {
+  font-size: 2em;
+  font-weight: bold;
+  padding-right: 10px;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.header-label {
+  padding-bottom: 40px;
 }
 
 .modal {
@@ -99,8 +101,4 @@ td, th {
 
 :host ::ng-deep .ui-autocomplete-token {
   margin: 3px;
-}
-
-.update-module {
-  padding: 35px;
 }
