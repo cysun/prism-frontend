@@ -86,10 +86,11 @@ export class GroupManagerComponent implements OnInit {
     this.msgs.push({severity: 'error', summary: 'Invalid Group:', detail: detailMsg });
   }
 
-  openModal(content) {
+  openModal(content, groupId?: string, memberId?: string) {
     const options: NgbModalOptions = {
-  size: 'lg'
-};
+      size: 'lg'
+    };
+
     this.group = new Group();
     this.modal = this.modalService.open(content, options);
   }

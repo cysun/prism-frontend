@@ -1,6 +1,6 @@
 <!-- Toolbar to add or delete a group-->
 
-<button type="button" class="btn btn-success" (click)=openModal(content)><i class="fa fa-plus"></i></button>
+<button type="button" class="btn btn-success" (click)=openModal(addGroupModal)><i class="fa fa-plus"></i></button>
 
 <!-- <p-toolbar *ngIf="currentUser.root">
 <div class="ui-toolbar-group-right">
@@ -9,7 +9,7 @@
 </p-toolbar> -->
 
 <!-- Modal for adding a new group -->
-<ng-template #content>
+<ng-template #addGroupModal>
   <div class="modal-header">
     <h5 class="modal-title">Add New Group</h5>
   </div>
@@ -34,22 +34,20 @@
 </ng-template>
 
 <!-- Dialog module for deleting a group -->
-<p-dialog class="dialog-module" header="Delete Group" [(visible)]="displayGroupDelete" modal="modal" width="600" [responsive]="true">
-  <p-messages [(value)]="msgs"></p-messages>
-
-  <div class="dialog-box ui-grid ui-grid-responsive ui-fluid">
-    <div class="ui-grid-col-12">
-      <b><u>NOTE:</u></b> Deleting a group will permanently remove the access given to its members. Are you sure you want to delete?
-    </div>
+<ng-template #deleteGroupModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Delete Group</h5>
   </div>
 
-  <div class="ui-grid ui-grid-col-12">
-    <div class="footer-buttons">
-      <button type="button" pButton icon="fa-check" (click)="deleteGroup(group._id)" label="Delete"></button>
-      <button type="button" pButton icon="fa-close" (click)="displayGroupDelete=false" label="Cancel"></button>
-    </div>
+  <div class="modal-body">
+    <strong><u>NOTE:</u></strong> Deleting a group will permanently remove the access given to its members. Are you sure you want to delete?
   </div>
-</p-dialog>
+
+  <div class="modal-footer">
+    <button class="btn btn-dark" type="button" (click)="deleteGroup(group._id)">Delete</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+  </div>
+</ng-template>
 
 
 <!-- Dialog module for deleting a group member -->
@@ -157,7 +155,7 @@
                   <tr>
                     <td>{{ member.username }}</td>
                     <td>{{ member.name.first }} {{ member.name.last }}</td>
-                    <td><button type="button" class="btn btn-dark" (click)="deleteMemberDialog(group._id, member._id)"><i class="fa fa-trash"></i></button></td>
+                    <td><button type="button" class="btn btn-dark" (click)="openModal(deleteMemberModal, group._id, member._id)"><i class="fa fa-trash"></i></button></td>
                   </tr>
                 </ng-template>
               </tbody>

@@ -62,13 +62,9 @@
   text-transform: uppercase;
 }
 
-ngb-accordion {
-  padding: 1px;
-}
-
 ::ng-deep .card-header {
   background: #363636;
-  border-radius: 5;
+  border-radius: 6px;
   color: #FFF;
 }
 
