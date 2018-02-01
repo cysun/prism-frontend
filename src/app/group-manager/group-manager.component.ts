@@ -184,7 +184,6 @@ export class GroupManagerComponent implements OnInit {
           const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
           this.groups[index] = updatedGroup;
         });
-        this.displayGroupManager = false;
       }
     } else {
       this.invalidErrorMessage('empty group');
@@ -197,13 +196,14 @@ export class GroupManagerComponent implements OnInit {
 
         this.groupManagerService.addMember(userObj._id, this.group._id).subscribe( newMember => {
           findGroup.members.push(newMember);
-          this.groups = this.groups.slice(0);
+          // this.groups = this.groups.slice(0);
         })
       }
-      this.displayGroupManager = false;
     }
 
     this.group = new Group();
+
+    this.modal.close();
     this.suggestedUsers = [];
   }
 
