@@ -19,6 +19,9 @@ export class GroupManagerComponent implements OnInit {
   displayGroupManager: Boolean = false;
 
   modal: NgbModalRef;
+  options: NgbModalOptions = {
+    size: 'lg'
+  };
 
   group: Group = new Group();
   member: User = new User();
@@ -34,102 +37,106 @@ export class GroupManagerComponent implements OnInit {
   suggestedUsers: any[] = [];
 
   constructor(private groupManagerService: GroupManagerService,
-              private modalService: NgbModal,
-              private router: Router) { }
+    private modalService: NgbModal,
+    private router: Router) { }
 
-  ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    ngOnInit() {
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
-    this.groupManagerService.getUsers().subscribe( data => {
-      this.users = data;
-      console.log(data);
-    })
+      this.groupManagerService.getUsers().subscribe( data => {
+        this.users = data;
+        console.log(data);
+      })
 
-    /* If current user is logged in, execute function that retrieves editable groups */
-    if (this.currentUser.root === true) {
-      this.groupManagerService.getGroups().subscribe(data => {
-        this.groups = data;
+      /* If current user is logged in, execute function that retrieves editable groups */
+      if (this.currentUser.root === true) {
+        this.groupManagerService.getGroups().subscribe(data => {
+          this.groups = data;
 
-        for (let i = 0; i < this.groups.length; i++) {
-          const members = this.groups[i].members;
-          this.groups[i].members = this.getMembersObject(members);
-        }
-        console.log(this.groups)
-      },
+          for (let i = 0; i < this.groups.length; i++) {
+            const members = this.groups[i].members;
+            this.groups[i].members = this.getMembersObject(members);
+          }
+          console.log(this.groups)
+        },
 
-      err => {
-        localStorage.removeItem('jwt_token');
-        localStorage.removeItem('currentUser');
-        this.router.navigate(['login']);
-      });
+        err => {
+          localStorage.removeItem('jwt_token');
+          localStorage.removeItem('currentUser');
+          this.router.navigate(['login']);
+        });
+      }
     }
-  }
 
-  invalidErrorMessage(message: string) {
-    this.msgs = [];
-    let detailMsg = '';
+    invalidErrorMessage(message: string) {
+      this.msgs = [];
+      let detailMsg = '';
 
-    switch (message) {
-      case 'empty group':
+      switch (message) {
+        case 'empty group':
         detailMsg = 'Please input a group name.';
         break;
-      case 'invalid delete':
+        case 'invalid delete':
         detailMsg = 'Please select a valid group to delete.';
         break;
-      case 'existing group':
+        case 'existing group':
         detailMsg = 'Name of group already exists.'
         break;
+      }
+      this.msgs.push({severity: 'error', summary: 'Invalid Group:', detail: detailMsg });
     }
-    this.msgs.push({severity: 'error', summary: 'Invalid Group:', detail: detailMsg });
-  }
 
-  openModal(content) {
-    const options: NgbModalOptions = {
-      size: 'lg'
-    };
+    /* Open a basic modal */
+    openModal(content) {
+      this.group = new Group();
+      this.modal = this.modalService.open(content, this.options);
+    }
 
-    this.group = new Group();
-    this.modal = this.modalService.open(content, options);
-  }
+    /* Open a modal with purpose of manipulating data */
+    editModal(content, groupId: string, memberId?: string) {
+      if (this.modal) {
+        this.modal.close();
+      }
 
-  editModal(content, groupId: string, memberId: string) {
-    const options: NgbModalOptions = {
-      size: 'lg'
-    };
+      this.groupManagerService.getGroup(groupId).subscribe( data => {
+        this.group = data;
+        this.group.members = this.getMembersObject(data.members);
 
-    this.group._id = groupId;
-    const chosenUser = this.getMembersObject([memberId]);
-    this.member = chosenUser[0];
+        if (this.group.members.length > 0) {
+          this.member = this.group.members.find( item => item._id === memberId);
+        }
+      });
 
-    this.modal = this.modalService.open(content, options);
-  }
+      this.modal = this.modalService.open(content, this.options);
+    }
 
-  closeModal() {
-    this.modal.close();
-  }
+    /* Closes the current open modal */
+    closeModal() {
+      this.modal.close();
+    }
 
-  /* Displays the manager dialog for the specific group to update its contents */
-  groupManagerDialog(id: string) {
-    this.msgs = [];
-    this.filteredMembers = [];
-    this.suggestedUsers = [];
-    this.displayGroupManager = true;
-    this.groupManagerService.getGroup(id).subscribe( data => {
-      this.group = data;
-      this.getMembersObject(data.members);
-    });
-  }
+    /* Displays the manager dialog for the specific group to update its contents */
+    groupManagerDialog(id: string) {
+      this.msgs = [];
+      this.filteredMembers = [];
+      this.suggestedUsers = [];
+      this.displayGroupManager = true;
+      this.groupManagerService.getGroup(id).subscribe( data => {
+        this.group = data;
+        this.getMembersObject(data.members);
+      });
+    }
 
-  /* Function to add a new group */
-  submitGroup() {
-    if (typeof(this.group.name) !== 'undefined') {
-      if (this.group.name.trim().length > 0) {
-        const groupExists = this.groups.some( checkGroup =>
-          checkGroup.name.toLowerCase() === this.group.name.toLowerCase()
-        );
+    /* Function to add a new group */
+    submitGroup() {
+      if (typeof(this.group.name) !== 'undefined') {
+        if (this.group.name.trim().length > 0) {
+          const groupExists = this.groups.some( checkGroup =>
+            checkGroup.name.toLowerCase() === this.group.name.toLowerCase()
+          );
 
-        if (!groupExists) {
-          this.groupManagerService.addGroup(this.group).subscribe( data => {
+          if (!groupExists) {
+            this.groupManagerService.addGroup(this.group).subscribe( data => {
               this.groups.push(data);
               this.groups = this.groups.slice(0);
             }

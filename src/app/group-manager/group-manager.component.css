@@ -6,6 +6,10 @@
   display: table;
 }
 
+.delete-btn {
+  width: 100%;
+}
+
 .footer-buttons {
   bottom: 0;
   margin: 15px;
@@ -29,7 +33,7 @@
 }
 
 .group-label {
-  padding: 5px;
+  padding: 8px;
   padding-right: 15px;
   text-align: right;
 }
