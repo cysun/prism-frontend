@@ -1,7 +1,5 @@
 <!-- Toolbar to add or delete a group-->
-
 <button type="button" class="btn btn-success" (click)=openModal(addGroupModal)><i class="fa fa-plus"></i></button>
-
 <!-- <p-toolbar *ngIf="currentUser.root">
 <div class="ui-toolbar-group-right">
 <button pButton type="button" icon="fa-plus" class="ui-button-success" (click)=addGroupDialog()></button>
@@ -33,7 +31,7 @@
   </form>
 </ng-template>
 
-<!-- Dialog module for deleting a group -->
+<!-- Modal for deleting a group -->
 <ng-template #deleteGroupModal>
   <div class="modal-header">
     <h5 class="modal-title">Delete Group</h5>
@@ -49,24 +47,21 @@
   </div>
 </ng-template>
 
-
-<!-- Dialog module for deleting a group member -->
-<p-dialog class="dialog-module" header="Delete Member from Group" [(visible)]="displayMemberDelete" modal="modal" width="600" [responsive]="true">
-  <p-messages [(value)]="msgs"></p-messages>
-
-  <div class="dialog-box ui-grid ui-grid-responsive ui-fluid">
-    <div class="ui-grid-col-12">
-      <b><u>NOTE:</u></b> Deleting <b>{{member.username}}</b> from the group will remove their given access. Are you sure you want to delete them from the group?
-    </div>
+<!-- Modal for deleting a group member -->
+<ng-template #deleteMemberModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Deleting a Member</h5>
   </div>
 
-  <div class="ui-grid ui-grid-col-12">
-    <div class="footer-buttons">
-      <button type="button" pButton icon="fa-check" (click)="deleteMember()" label="Delete"></button>
-      <button type="button" pButton icon="fa-close" (click)="displayMemberDelete=false" label="Cancel"></button>
-    </div>
+  <div class="modal-body">
+    <strong><u>NOTE:</u></strong> Deleting <b>{{member.username}}</b> from the group will remove their given access. Are you sure you want to delete them from the group?
   </div>
-</p-dialog>
+
+  <div class="modal-footer">
+    <button class="btn btn-dark" type="button" (click)="deleteMember()">Delete</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+  </div>
+</ng-template>
 
 
 <!-- Dialog module for updating a specific group -->
@@ -123,7 +118,6 @@
     <pre>{{groups |json}}</pre>
   </code>
 </div> -->
-
 <div *ngIf="groups.length > 0; else emptyGroup">
   <div *ngFor="let group of groups">
     <ngb-accordion>
@@ -155,7 +149,7 @@
                   <tr>
                     <td>{{ member.username }}</td>
                     <td>{{ member.name.first }} {{ member.name.last }}</td>
-                    <td><button type="button" class="btn btn-dark" (click)="openModal(deleteMemberModal, group._id, member._id)"><i class="fa fa-trash"></i></button></td>
+                    <td><button type="button" class="btn btn-dark" (click)="editModal(deleteMemberModal, group._id, member._id)"><i class="fa fa-trash"></i></button></td>
                   </tr>
                 </ng-template>
               </tbody>

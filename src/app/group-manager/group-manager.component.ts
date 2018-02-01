@@ -16,9 +16,6 @@ import { GroupManagerService } from './group-manager.service';
 })
 
 export class GroupManagerComponent implements OnInit {
-  displayAdd: Boolean = false;
-  displayGroupDelete: Boolean = false;
-  displayMemberDelete: Boolean = false;
   displayGroupManager: Boolean = false;
 
   modal: NgbModalRef;
@@ -86,7 +83,7 @@ export class GroupManagerComponent implements OnInit {
     this.msgs.push({severity: 'error', summary: 'Invalid Group:', detail: detailMsg });
   }
 
-  openModal(content, groupId?: string, memberId?: string) {
+  openModal(content) {
     const options: NgbModalOptions = {
       size: 'lg'
     };
@@ -95,23 +92,20 @@ export class GroupManagerComponent implements OnInit {
     this.modal = this.modalService.open(content, options);
   }
 
-  closeModal() {
-    this.modal.close()
-  }
+  editModal(content, groupId: string, memberId: string) {
+    const options: NgbModalOptions = {
+      size: 'lg'
+    };
 
-
-  /* Displays the confirmation dialog to delete a group */
-  deleteGroupDialog() {
-    this.msgs = [];
-    this.displayGroupDelete = true;
-  }
-
-  deleteMemberDialog(groupId, memberId) {
-    this.displayMemberDelete = true;
     this.group._id = groupId;
-
     const chosenUser = this.getMembersObject([memberId]);
     this.member = chosenUser[0];
+
+    this.modal = this.modalService.open(content, options);
+  }
+
+  closeModal() {
+    this.modal.close();
   }
 
   /* Displays the manager dialog for the specific group to update its contents */
@@ -164,8 +158,7 @@ export class GroupManagerComponent implements OnInit {
         }
       });
 
-      this.displayGroupDelete = false;
-      this.displayGroupManager = false;
+      this.closeModal();
       this.group = new Group();
     } else {
       this.invalidErrorMessage('invalid delete');
@@ -221,7 +214,7 @@ export class GroupManagerComponent implements OnInit {
         }
       }
     })
-    this.displayMemberDelete = false;
+    this.closeModal();
   }
 
   /* Give a group's member list of IDs and return their corresponding member objects */
