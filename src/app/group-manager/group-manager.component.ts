@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Message } from 'primeng/components/common/api';
 
 import { NgbModal, NgbModalRef,  NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
@@ -16,11 +15,11 @@ import { GroupManagerService } from './group-manager.service';
 })
 
 export class GroupManagerComponent implements OnInit {
-  displayGroupManager: Boolean = false;
-
   modal: NgbModalRef;
   options: NgbModalOptions = {
-    size: 'lg'
+    backdrop : 'static',
+    keyboard : false,
+    size: 'lg',
   };
 
   group: Group = new Group();
@@ -32,7 +31,7 @@ export class GroupManagerComponent implements OnInit {
   memberList: User[] = [];
 
   filteredMembers: any[] = [];
-  msgs: Message[] = [];
+  alert: any;
 
   suggestedUsers: any[] = [];
 
@@ -48,7 +47,7 @@ export class GroupManagerComponent implements OnInit {
         console.log(data);
       })
 
-      /* If current user is logged in, execute function that retrieves editable groups */
+      /* If current user is an admin, execute function that retrieves editable groups */
       if (this.currentUser.root === true) {
         this.groupManagerService.getGroups().subscribe(data => {
           this.groups = data;
@@ -68,22 +67,20 @@ export class GroupManagerComponent implements OnInit {
       }
     }
 
+    /* Error messages when performing invalid actions */
     invalidErrorMessage(message: string) {
-      this.msgs = [];
+      this.alert = '';
       let detailMsg = '';
 
       switch (message) {
         case 'empty group':
-        detailMsg = 'Please input a group name.';
-        break;
-        case 'invalid delete':
-        detailMsg = 'Please select a valid group to delete.';
-        break;
+          detailMsg = 'Please input a group name.';
+          break;
         case 'existing group':
-        detailMsg = 'Name of group already exists.'
-        break;
+          detailMsg = 'Name of group already exists.'
+          break;
       }
-      this.msgs.push({severity: 'error', summary: 'Invalid Group:', detail: detailMsg });
+      this.alert = { message: detailMsg };
     }
 
     /* Open a basic modal */
@@ -94,9 +91,7 @@ export class GroupManagerComponent implements OnInit {
 
     /* Open a modal with purpose of manipulating data */
     editModal(content, groupId: string, memberId?: string) {
-      if (this.modal) {
-        this.modal.close();
-      }
+      if (this.modal) { this.modal.close(); }
 
       this.groupManagerService.getGroup(groupId).subscribe( data => {
         this.group = data;
@@ -112,24 +107,15 @@ export class GroupManagerComponent implements OnInit {
 
     /* Closes the current open modal */
     closeModal() {
-      this.modal.close();
-    }
-
-    /* Displays the manager dialog for the specific group to update its contents */
-    groupManagerDialog(id: string) {
-      this.msgs = [];
+      this.alert = '';
       this.filteredMembers = [];
       this.suggestedUsers = [];
-      this.displayGroupManager = true;
-      this.groupManagerService.getGroup(id).subscribe( data => {
-        this.group = data;
-        this.getMembersObject(data.members);
-      });
+      this.modal.close();
     }
 
     /* Function to add a new group */
     submitGroup() {
-      if (typeof(this.group.name) !== 'undefined') {
+      if (this.group.name) {
         if (this.group.name.trim().length > 0) {
           const groupExists = this.groups.some( checkGroup =>
             checkGroup.name.toLowerCase() === this.group.name.toLowerCase()
@@ -155,143 +141,141 @@ export class GroupManagerComponent implements OnInit {
 
   /* Function to delete an existing group */
   deleteGroup(id: string) {
-    if (typeof(id) !== 'undefined') {
-      this.groupManagerService.deleteGroup(id).subscribe( () => {
-        for (let i = 0; i < this.groups.length; i++) {
-          if (this.groups[i]._id === id) {
-            this.groups.splice(i, 1);
-            break;
-          }
+    this.groupManagerService.deleteGroup(id).subscribe( () => {
+      for (let i = 0; i < this.groups.length; i++) {
+        if (this.groups[i]._id === id) {
+          this.groups.splice(i, 1);
+          break;
         }
-      });
-
-      this.closeModal();
-      this.group = new Group();
-    } else {
-      this.invalidErrorMessage('invalid delete');
-    }
+      }
+    });
+    this.closeModal();
+    this.group = new Group();
   }
 
   /* Function to update a group's name and members */
   updateGroup() {
+    /* Checks to see if there is a name change */
     const findGroup = this.groups.find( item => item._id === this.group._id);
     const nameChange = findGroup.name === this.group.name ? false : true;
 
     /* Updating the group's name */
-    if (this.group.name.trim().length > 0) {
-      if (nameChange) {
-        this.groupManagerService.updateGroup(this.group).subscribe( updatedGroup => {
-          const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
-          this.groups[index] = updatedGroup;
-        });
+    if (this.group.name.trim().length > 0 && nameChange) {
+      /* Checks if there is already a group with the given name */
+      if (this.groups.some(existingGroupName =>
+        existingGroupName.name.toLowerCase() === this.group.name.toLowerCase())) {
+          this.invalidErrorMessage('existing group');
+        } else {
+          this.groupManagerService.updateGroup(this.group).subscribe( updatedGroup => {
+            const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
+            this.groups[index] = updatedGroup;
+            this.group = new Group();
+            this.modal.close();
+          });
+        }
+      } else {
+        if (!nameChange) { this.modal.close(); } else { this.invalidErrorMessage('empty group'); }
       }
-    } else {
-      this.invalidErrorMessage('empty group');
+
+      /* Adding members to the group */
+      if (this.suggestedUsers.length !== 0 ) {
+        for (let i = 0; i < this.suggestedUsers.length; i++) {
+          const userObj = this.users.find(foundUser => foundUser.username === this.suggestedUsers[i].name);
+
+          this.groupManagerService.addMember(userObj._id, this.group._id).subscribe( newMember => {
+            findGroup.members.push(newMember);
+            // this.groups = this.groups.slice(0);
+          })
+        }
+        this.group = new Group();
+        this.modal.close();
+      }
+      this.suggestedUsers = [];
     }
 
-    /* Adding members to the group */
-    if (this.suggestedUsers.length !== 0 ) {
-      for (let i = 0; i < this.suggestedUsers.length; i++) {
-        const userObj = this.users.find(foundUser => foundUser.username === this.suggestedUsers[i].name);
-
-        this.groupManagerService.addMember(userObj._id, this.group._id).subscribe( newMember => {
-          findGroup.members.push(newMember);
-          // this.groups = this.groups.slice(0);
-        })
-      }
-    }
-
-    this.group = new Group();
-
-    this.modal.close();
-    this.suggestedUsers = [];
-  }
-
-  /* Function delete a member off of the selected group */
-  deleteMember() {
-    this.groupManagerService.deleteMember(this.group._id, this.member._id).subscribe( () => {
-      for (let i = 0; i < this.groups.length; i++) {
-        if (this.groups[i]._id === this.group._id) {
-          for (let j = 0; j < this.groups[i].members.length; j++) {
-            if (this.groups[i].members[j]._id === this.member._id) {
-              this.groups[i].members.splice(j, 1);
-              break;
+    /* Function delete a member off of the selected group */
+    deleteMember() {
+      this.groupManagerService.deleteMember(this.group._id, this.member._id).subscribe( () => {
+        for (let i = 0; i < this.groups.length; i++) {
+          if (this.groups[i]._id === this.group._id) {
+            for (let j = 0; j < this.groups[i].members.length; j++) {
+              if (this.groups[i].members[j]._id === this.member._id) {
+                this.groups[i].members.splice(j, 1);
+                break;
+              }
             }
           }
         }
-      }
-    })
-    this.closeModal();
-  }
+      })
+      this.closeModal();
+    }
 
-  /* Give a group's member list of IDs and return their corresponding member objects */
-  getMembersObject(memberList: any[]): any[] {
-    const displayList = [];
+    /* Give a group's member list of IDs and return their corresponding member objects */
+    getMembersObject(memberList: any[]): any[] {
+      const displayList = [];
 
-    for (let i = 0; i < memberList.length; i++) {
-      for (let j = 0; j < this.users.length; j++) {
-        if (memberList[i] === this.users[j]._id) {
-          displayList.push(this.users[j]);
+      for (let i = 0; i < memberList.length; i++) {
+        for (let j = 0; j < this.users.length; j++) {
+          if (memberList[i] === this.users[j]._id) {
+            displayList.push(this.users[j]);
+          }
         }
       }
-    }
-    return displayList;
-  }
-
-  /* Populates filteredMembers array with given suggested users to add to the group */
-  filteredUsers(event) {
-    this.filteredMembers = [];
-    const query = event.query;
-    this.filteredMembers = this.getSuggestedUsers(query, this.users);
-  }
-
-  /* Function that returns a list of suggested users based on user's current field input */
-  getSuggestedUsers(username: string, users: any[]): any[] {
-    const filtered = [];
-    const currentMembers = this.getMembersObject(this.group.members);
-
-    /* Push matching usernames to filtered list */
-    for (let i = 0; i < users.length; i ++) {
-      if ((users[i].username).toLowerCase().indexOf(username.toLowerCase()) === 0) {
-        filtered.push({'name': users[i].username});
-      }
+      return displayList;
     }
 
-    /* Filter out members that are already part of the group */
-    for (let i = 0; i < currentMembers.length; i++) {
-      for (let j = 0; j < filtered.length; j++) {
-        if (filtered[j].name === currentMembers[i].username) {
-          filtered.splice(j, 1);
+    /* Populates filteredMembers array with given suggested users to add to the group */
+    filteredUsers(event) {
+      this.filteredMembers = [];
+      const query = event.query;
+      this.filteredMembers = this.getSuggestedUsers(query, this.users);
+    }
+
+    /* Function that returns a list of suggested users based on user's current field input */
+    getSuggestedUsers(username: string, users: any[]): any[] {
+      const filtered = [];
+      const currentMembers = this.getMembersObject(this.group.members);
+
+      /* Push matching usernames to filtered list */
+      for (let i = 0; i < users.length; i ++) {
+        if ((users[i].username).toLowerCase().indexOf(username.toLowerCase()) === 0) {
+          filtered.push({'name': users[i].username});
         }
       }
-    }
 
-    /* Filter out usernames that were previously selected (but not added to the group) */
-    for (let i = 0; i < this.suggestedUsers.length; i++) {
-      for (let j = 0; j < filtered.length; j++) {
-        if (filtered[j].name === this.suggestedUsers[i].name) {
-          filtered.splice(j, 1);
+      /* Filter out members that are already part of the group */
+      for (let i = 0; i < currentMembers.length; i++) {
+        for (let j = 0; j < filtered.length; j++) {
+          if (filtered[j].name === currentMembers[i].username) {
+            filtered.splice(j, 1);
+          }
         }
       }
+
+      /* Filter out usernames that were previously selected (but not added to the group) */
+      for (let i = 0; i < this.suggestedUsers.length; i++) {
+        for (let j = 0; j < filtered.length; j++) {
+          if (filtered[j].name === this.suggestedUsers[i].name) {
+            filtered.splice(j, 1);
+          }
+        }
+      }
+
+      filtered.sort(this.compareUsernames);
+
+      return filtered;
     }
 
-    filtered.sort(this.compareUsernames);
+    /* Function to sort the suggested user list in alphabetical order */
+    compareUsernames(user1, user2) {
+      const username1 = user1.name.toLowerCase();
+      const username2 = user2.name.toLowerCase();
 
-    return filtered;
-  }
-
-  /* Function to sort the suggested user list in alphabetical order */
-  compareUsernames(user1, user2) {
-    const username1 = user1.name.toLowerCase();
-    const username2 = user2.name.toLowerCase();
-
-    let compare = 0;
-
-    if (username1 > username2) {
-      compare = 1;
-    } else if (username1 < username2) {
-      compare = -1;
+      if (username1 > username2) {
+        return 1;
+      } else if (username1 < username2) {
+        return -1;
+      }
+      return 0;
     }
-    return compare;
   }
-}

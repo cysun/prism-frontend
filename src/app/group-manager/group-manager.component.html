@@ -17,6 +17,10 @@
 
     <form #f="ngForm" (ngSubmit)="submitGroup()">
       <div class="modal-body">
+        <div *ngIf="alert">
+          <ngb-alert type="danger" [dismissible]="false"><strong>Invalid Group:</strong> {{ alert.message }}</ngb-alert>
+        </div>
+
         <div class="input-group">
           <div class="input-group-prepend">
             <span class="input-group-text"><i class="fa fa-user"></i></span>
@@ -74,6 +78,10 @@
     </div>
 
     <div class="modal-body">
+      <div *ngIf="alert">
+        <ngb-alert type="danger" [dismissible]="false"><strong>Invalid Group:</strong> {{ alert.message }}</ngb-alert>
+      </div>
+      
       <div class="row">
         <span class="col-3 group-label">Group Name</span>
         <span class="col-8">
@@ -167,7 +175,10 @@
 
   <!-- Info message when there are no groups -->
   <ng-template #emptyGroup>
-    <p-message class="info-message" severity="info" text="There are currently no groups."></p-message>
+    <p>
+      <ngb-alert class="info-message" type="info" [dismissible]="false">
+        <strong> Information: </strong> There are currently no groups.
+      </ngb-alert>
+    </p>
   </ng-template>
-
 </div>

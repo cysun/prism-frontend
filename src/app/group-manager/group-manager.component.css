@@ -1,6 +1,6 @@
 .blockquote-header {
   background: #EEE;
-  padding: 10px;
+  padding: 15px;
 }
 
 .blockquote-btn {
@@ -35,9 +35,7 @@
 }
 
 .info-message {
-  display: grid;
-  font-size: 25px;
-  margin-top: 20px;
+  font-size: 1.4em;
 }
 
 .label {
