@@ -1,3 +1,36 @@
-<p>
-  committee works!
-</p>
+<div *ngIf="currentUser.root; else nonAdmin">
+  <prism-group-manager></prism-group-manager>
+</div>
+
+<ng-template #nonAdmin>
+  <div class="container-fluid">
+    <div class="header-label">
+      <div class="blockquote-header">
+        <span class="label"><i class="fa fa-icon fa-users"></i>Committee Members</span>
+      </div>
+    </div>
+
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th class="table-label" colspan="3">Program Review Subcommittee</th>
+        </tr>
+        <tr>
+          <th class="table-header">Username</th>
+          <th class="table-header">Name</th>
+          <th class="table-header">E-mail</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <ng-template ngFor let-member [ngForOf]="prs">
+          <tr>
+            <td>{{ member.username }}</td>
+            <td>{{ member.name.first }} {{ member.name.last }}</td>
+            <td> {{ member.email }}</td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </table>
+  </div>
+</ng-template>

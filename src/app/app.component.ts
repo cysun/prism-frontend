@@ -1,4 +1,7 @@
-import {Component} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { AuthService } from './login/auth.service';
 
 @Component({
   selector: 'prism-root',
@@ -6,4 +9,20 @@ import {Component} from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent { }
+export class AppComponent implements OnInit {
+  username: string;
+
+  constructor(private authService: AuthService, private router: Router) { }
+
+  ngOnInit() {
+    if (this.authService.isAuthenticated()) {
+      this.username = this.authService.getUser().username;
+    }
+  }
+
+  logout() {
+    this.authService.logout();
+    this.username = '';
+    this.router.navigate(['login'])
+  }
+}

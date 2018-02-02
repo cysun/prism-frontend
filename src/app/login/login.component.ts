@@ -9,6 +9,7 @@ import { AuthService } from './auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent implements OnInit {
   username: string;
   password: string;
@@ -17,7 +18,7 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    if (this.authService.isAuthenticated) {
+    if (this.authService.isAuthenticated()) {
       this.router.navigate(['dashboard']);
     }
   }
@@ -36,9 +37,8 @@ export class LoginComponent implements OnInit {
 
       console.log('converted iat: ' + date)
 
-      this.wrongInfo = false;
       this.router.navigate(['dashboard']);
-
+      this.wrongInfo = false;
     }, err => {
       this.password = '';
       this.wrongInfo = true;
