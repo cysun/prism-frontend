@@ -2,8 +2,8 @@
   align-items: center;
   display: flex;
   font-weight: bold;
-  text-transform: uppercase;
   margin-top: 25px;
+  text-transform: uppercase;
 }
 
 .header-divider {
