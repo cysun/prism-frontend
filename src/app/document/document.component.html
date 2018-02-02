@@ -1,0 +1,43 @@
+<p-tabView>
+    <p-tabPanel header="Main Version" leftIcon="fa-file-text-o">
+        This tab holds the current version of the document. Revisions of the
+        same document can be found in the revisions tab.
+
+        <div class="header-container">
+          <p>Current Version</p>
+          <div class="header-divider"></div>
+        </div>
+
+        <p-growl [(value)]="msgs"></p-growl>
+
+        <p-fileUpload name="demo[]" (onSelect)="onFileSelect()"
+                      customUpload="true"
+                      (uploadHandler)="onUploadHandler($event)">
+
+          <ng-template pTemplate="content">
+            <ul *ngIf="uploadedFiles.length">
+              <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+            </ul>
+          </ng-template>
+        </p-fileUpload>
+
+        <div class="header-container">
+          <p>Deadline Date</p>
+          <div class="header-divider"></div>
+        </div>
+    </p-tabPanel>
+
+    <p-tabPanel header="Revisions" leftIcon="fa-list">
+        This tab holds previous revisions of the document for archiving purposes. Only the
+        administrator can revert to any previous revision without losing the current one.
+
+        <div class="header-container">
+          <p>Previous Revisions</p>
+          <div class="header-divider"></div>
+        </div>
+    </p-tabPanel>
+
+    <p-tabPanel header="Comments" leftIcon="fa-comments-o">
+        comments tab
+    </p-tabPanel>
+</p-tabView>
