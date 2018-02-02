@@ -3,7 +3,20 @@
     <ng-template ngbTabTitle><i class="fa fa-icon fa-file-text-o"></i>Main Version</ng-template>
     <ng-template ngbTabContent>
       This tab holds the current version of the document. Revisions of the
-      same document can be found in the revisions tab.
+      same document can be found in the revisions tab. <br/><br/>
+
+      <strong>Frontend testing purposes only</strong> <br/> 
+      (create a document, take the ID and paste it onto retrieveDocument function in ngOnInit before refreshing):
+
+      <div class="input-group">
+        <input type="text" class="form-control" [(ngModel)]="document.title" placeholder="Enter document title" name="document-title">
+        <button type="button" class="btn btn-success" (click)="createNewDocument(document.title)">Create Document</button>
+      </div>
+
+      <div>
+        <pre><p>Document file: {{ document | json}}</p></pre>
+      </div>
+
 
       <div class="header-container">
         Current Version

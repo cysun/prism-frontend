@@ -27,6 +27,7 @@ import { DocumentComponent } from './document/document.component';
 import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
 import { AuthService } from './login/auth.service';
+import { DocumentService } from './document/document.service';
 import { GroupManagerService } from './group-manager/group-manager.service';
 import { CommitteeComponent } from './committee/committee.component';
 
@@ -60,6 +61,7 @@ import { CommitteeComponent } from './committee/committee.component';
     AuthGuard,
     AuthService,
     HttpClientModule,
+    DocumentService,
     GroupManagerService,
     {
       provide: HTTP_INTERCEPTORS,
