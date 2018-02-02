@@ -1,11 +1,11 @@
 <ngb-tabset>
   <ngb-tab>
-    <ng-template ngbTabTitle><i class="fa fa-info-circle"></i>Profile</ng-template>
+    <ng-template ngbTabTitle><i class="fa fa-icon fa-info-circle"></i>Profile</ng-template>
     <ng-template ngbTabContent>
       <div class="container-fluid">
         <div class="notification-label">
           <span>{{currentUser.name.first}}'s Profile</span>
-          <button class="btn btn-outline-primary" *ngIf="!updateInfo" (click)="updateInfo=true"><i class="fa fa-pencil"></i>Edit</button>
+          <button class="btn btn-outline-primary" *ngIf="!updateInfo" (click)="updateInfo=true"><i class="fa fa-icon fa-pencil"></i>Edit</button>
         </div>
 
         <table *ngIf="!updateInfo" class="table-style">
@@ -44,7 +44,7 @@
           <div class="row">
             <span class="col-3">E-mail</span>
             <span class="col-6">
-              <input type="text" class="form-control" placeholder="Enter a valid e-mail" [(ngModel)]="currentUser.email">
+              <input type="email" class="form-control" placeholder="Enter a valid e-mail" [(ngModel)]="currentUser.email">
             </span>
           </div>
 
