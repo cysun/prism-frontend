@@ -8,9 +8,11 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
+
 import { AccordionModule } from 'primeng/primeng';
 import { AutoCompleteModule } from 'primeng/primeng';
-import { PanelModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/components/button/button';
 import { DataTableModule } from 'primeng/primeng';
 import { DataGridModule } from 'primeng/primeng';
@@ -88,6 +90,8 @@ import { DepartmentsComponent } from './colleges/departments/departments.compone
     PanelModule,
     SplitButtonModule,
     TabViewModule,
+    NgbModule.forRoot(),
+    NgbDropdownModule,
     ToolbarModule
   ],
   providers: [

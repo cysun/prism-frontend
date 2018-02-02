@@ -99,26 +99,18 @@
 
 <!-- Displays the current college and their deans -->
 <div *ngIf="colleges.length > 0; else emptyCollege">
-  <p-accordion *ngFor="let college of colleges" [lazy]="true" (onOpen)="getDepartments(college._id)">
-
-    <p-accordionTab>
-      <p-header>
-        {{college.name}} ({{college.abbreviation}})
-      </p-header>
-      <departments [collegeId]="college.id"></departments>
-      <!--
-      <div class="header-container">
-        <div class="header-panel">
-          {{college.name}}
-          <div class="panel-buttons">
-            <button type="button" pButton icon="fa-plus"></button>
-            <button type="button" pButton icon="fa-gear" (click)=collegeManagerDialog(college._id)></button>
-          </div>
-        </div>
-      </div>
-    -->
-    </p-accordionTab>
-  </p-accordion>
+  <ngb-accordion [closeOthers]="true">
+    <div *ngFor="let college of colleges">
+      <ngb-panel>
+        <ng-template ngbPanelTitle>
+          {{college.name}} ({{college.abbreviation}})
+        </ng-template>
+        <ng-template ngbPanelContent>
+          <departments [collegeId]="college._id"></departments>
+        </ng-template>
+      </ngb-panel>
+  </div>
+  </ngb-accordion>
 </div>
 
 <!-- Info message when there are no colleges -->
