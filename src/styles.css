@@ -17,6 +17,16 @@ a:hover {
   min-height: 100%;
 }
 
+.blockquote-header {
+  background: #EEE;
+  padding: 15px;
+}
+
+.blockquote-btn {
+  float:right;
+  margin-top: -3px;
+}
+
 .fa-icon {
   padding-right: 7px;
 }
@@ -46,6 +56,10 @@ blockquote {
 .navbar {
   background: #1A1A1A;
   height: 70px;
+}
+
+.header-label {
+  padding-bottom: 40px;
 }
 
 .header-logo {
