@@ -1,3 +1,13 @@
+.card-header {
+  background: #1A1A1A;
+  color: #FFF;
+  font-size: 1.6em;
+  font-weight: bold;
+  padding: 50px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
 .footer-buttons {
   padding: 15px;
 }
@@ -18,8 +28,9 @@
   margin: auto;
 }
 
-.ui-inputgroup {
-  padding: 15px;
+.input-group {
+  padding-bottom: 15px;
+  width: 100%;
 }
 
 .validation-error {
