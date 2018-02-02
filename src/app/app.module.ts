@@ -17,12 +17,8 @@ import { GroupManagerComponent } from './group-manager/group-manager.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { AccordionModule } from 'primeng/primeng';
 import { AutoCompleteModule } from 'primeng/primeng';
 import { FieldsetModule } from 'primeng/primeng';
-import { InputTextModule } from 'primeng/primeng';
-import { MessagesModule, MessageModule } from 'primeng/primeng';
-import { PanelModule } from 'primeng/primeng';
 
 import { LoginComponent } from './login/login.component';
 import { PublicComponent } from './layout/public/public.component';
@@ -57,13 +53,8 @@ import { CommitteeComponent } from './committee/committee.component';
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    AccordionModule,
     AutoCompleteModule,
     FieldsetModule,
-    InputTextModule,
-    MessageModule,
-    MessagesModule,
-    PanelModule,
   ],
   providers: [
     AuthGuard,
