@@ -16,9 +16,7 @@ import { ResourcesComponent } from './resources/resources.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
 import { AutoCompleteModule } from 'primeng/primeng';
-import { FieldsetModule } from 'primeng/primeng';
 
 import { LoginComponent } from './login/login.component';
 import { PublicComponent } from './layout/public/public.component';
@@ -54,7 +52,6 @@ import { CommitteeComponent } from './committee/committee.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     AutoCompleteModule,
-    FieldsetModule,
   ],
   providers: [
     AuthGuard,
