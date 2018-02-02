@@ -15,25 +15,14 @@ import { MinutesComponent } from './minutes/minutes.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
 
-
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccordionModule } from 'primeng/primeng';
 import { AutoCompleteModule } from 'primeng/primeng';
-import { ButtonModule } from 'primeng/components/button/button';
-import { CheckboxModule } from 'primeng/primeng';
-import { DataTableModule } from 'primeng/primeng';
-import { TreeTableModule, TreeNode, DataTableModule, SharedModule } from 'primeng/primeng';
-import { DialogModule } from 'primeng/primeng';
-import { DropdownModule } from 'primeng/primeng';
 import { FieldsetModule } from 'primeng/primeng';
 import { InputTextModule } from 'primeng/primeng';
-import { MenubarModule, MenuModule, MenuItem } from 'primeng/primeng';
 import { MessagesModule, MessageModule } from 'primeng/primeng';
 import { PanelModule } from 'primeng/primeng';
-import { SplitButtonModule } from 'primeng/primeng';
-import { TabViewModule } from 'primeng/primeng';
-import { ToolbarModule } from 'primeng/primeng';
 
 import { LoginComponent } from './login/login.component';
 import { PublicComponent } from './layout/public/public.component';
@@ -42,7 +31,7 @@ import { PrivateComponent } from './layout/private/private.component';
 import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
 import { AuthService } from './login/auth.service';
-import {GroupManagerService} from './group-manager/group-manager.service';
+import { GroupManagerService } from './group-manager/group-manager.service';
 import { CommitteeComponent } from './committee/committee.component';
 
 @NgModule({
@@ -70,23 +59,11 @@ import { CommitteeComponent } from './committee/committee.component';
     BrowserAnimationsModule,
     AccordionModule,
     AutoCompleteModule,
-    ButtonModule,
-    CheckboxModule,
-    DataTableModule,
-    DialogModule,
-    DropdownModule,
     FieldsetModule,
     InputTextModule,
-    MenuModule,
-    MenubarModule,
     MessageModule,
     MessagesModule,
     PanelModule,
-    SharedModule,
-    SplitButtonModule,
-    TabViewModule,
-    ToolbarModule,
-    TreeTableModule
   ],
   providers: [
     AuthGuard,
