@@ -53,26 +53,26 @@
           <div class="row">
             <span class="col-3">Current Password</span>
             <span class="col-6">
-              <input type="password" class="form-control" placeholder="Enter current password">
+              <input type="password" class="form-control" placeholder="Enter current password" [(ngModel)]="currentPassword">
             </span>
           </div>
 
           <div class="row">
             <span class="col-3">New Password</span>
             <span class="col-6">
-              <input type="password" class="form-control" placeholder="Enter a new password">
+              <input type="password" class="form-control" placeholder="Enter a new password" [(ngModel)]="newPassword">
             </span>
           </div>
 
           <div class="row">
             <span class="col-3">Re-enter New Password</span>
             <span class="col-6">
-              <input type="password" class="form-control">
+              <input type="password" class="form-control"[(ngModel)]="newPassword2">
             </span>
           </div>
 
           <div class="update-buttons col-9">
-            <button class="btn btn-outline-primary" (click)="updateInfo=false">Save</button>
+            <button class="btn btn-outline-primary" (click)="updatePassword(currentPassword, newPassword, newPassword2)">Save</button>
             <button class="btn btn-outline-primary" (click)="updateInfo=false">Cancel</button>
           </div>
         </div>

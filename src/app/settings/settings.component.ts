@@ -24,4 +24,8 @@ export class SettingsComponent implements OnInit {
       console.log(data);
     })
   }
+
+  updatePassword(currentPassword: string, newPassword: string, newPassword2: string) {
+    this.updateInfo = false;
+  }
 }
