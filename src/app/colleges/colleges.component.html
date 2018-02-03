@@ -1,24 +1,37 @@
-<!-- Add college button margin: 3px 3px 3px 100px;-->
+<!-- Add college button-->
 <div class="container-fluid">
   <div class="row">
      <div class="col-sm-12">
-       <button class="btn btn-success pull-right" (click)="open(content)">+ Add College</button>
+       <button class="btn btn-success pull-right" (click)="addCollegeDialog(content)">+ Add College</button>
     </div>
   </div>
 </div>
+
 <!-- Dialog module for adding a new college -->
-<ng-template #content let-c="close" let-d="dismiss">
+<ng-template #content let-cancel="close" let-esc="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title">Modal title</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+    <h4 class="modal-title">Add New College</h4>
+    <button type="button" class="close" aria-label="Close" (click)="esc()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <p>One fine body&hellip;</p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+    <form #f="ngForm" (ngSubmit)="submitCollege()">
+      <div class="form-group">
+        <label for="college-name">College: </label>
+        <input type="text" class="form-control"[(ngModel)]="college.name" name="college-name" placeholder="Enter New College Title">
+        <small class="form-text text-muted">Enter a name for the new college.</small>
+      </div>
+      <div class="form-group">
+        <label for="college-abbreviation">Abbreviation: </label>
+        <input type="text" class="form-control" [(ngModel)]="college.abbreviation" name="college-abbreviation" placeholder="Enter The College's Abbreviation">
+        <small class="form-text text-muted">Enter an abbreviation for the new college.</small>
+      </div>
+        <div>
+            <button type="submit" class="btn btn-primary" label="Add">Add</button>
+            <button type="button" class="btn btn-outline-dark" (click)="cancel()">Cancel</button>
+        </div>
+    </form>
   </div>
 </ng-template>
 

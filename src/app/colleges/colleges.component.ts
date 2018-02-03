@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 import { CollegesService } from './colleges.service';
 
@@ -24,7 +24,7 @@ export class CollegesComponent implements OnInit {
   filteredColleges: College[] = [];
   msgs: Message[] = [];
 
-  constructor(private collegesService: CollegesService, private router: Router) { }
+  constructor(private collegesService: CollegesService, private router: Router, private modalService: NgbModal) { }
 
   ngOnInit() {
     this.collegesService.getColleges().subscribe(data => {
@@ -48,10 +48,15 @@ export class CollegesComponent implements OnInit {
     this.msgs.push({severity: 'error', summary: 'Invalid College:', detail: detailMsg });
   }
 
-  addCollegeDialog(){
+  addCollegeDialog(content){
     this.msgs = [];
     this.college = new College();
-    this.displayAdd = true;
+    this.modalService.open(content).result.then((result) => {
+      ;
+    }, (reason) => {
+
+    });
+    //this.displayAdd = true;
   }
 
   deleteCollegeDialog(){
