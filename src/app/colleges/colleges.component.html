@@ -33,98 +33,18 @@
         </div>
     </form>
   </div>
+  <div *ngIf="alerts" class="modal-footer">
+    <p *ngFor="let alert of alerts">
+      <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
+    </p>
+  </div>
 </ng-template>
 
-<!-- Dialog module for adding a new college -->
-<p-dialog class="dialog-module" header="Add New College" [(visible)]="displayAdd" modal="modal" width="600" [responsive]="true">
-  <p-messages [(value)]="msgs"></p-messages>
-
-  <form class="dialog-box" #f="ngForm" (ngSubmit)="submitCollege()">
-    <div class="dialog-box ui-grid ui-grid-responsive ui-fluid">
-      <div class="ui-grid-col-12">
-        <div class="ui-inputgroup">
-          <span class="ui-inputgroup-addon"><i class="fa fa-university"></i></span>
-          <input type="text" [(ngModel)]="college.name" pInputText name="college-name" placeholder="Enter New College Title">
-        </div>
-        <div class="text-hints">Enter a name for the new college.</div>
-      </div>
-      <div class="ui-grid-col-12">
-        <div class="ui-inputgroup">
-          <span class="ui-inputgroup-addon"><i class="fa fa-info"></i></span>
-          <input type="text" [(ngModel)]="college.abbreviation" pInputText name="college-abbreviation" placeholder="Enter The College's Abbreviation">
-        </div>
-        <div class="text-hints">Enter an abbreviation for the new college.</div>
-      </div>
-    </div>
-
-
-
-    <div class="ui-grid ui-grid-col-12">
-      <div class="footer-buttons">
-        <button type="submit" pButton icon="fa-plus" label="Add"></button>
-        <button type="button" pButton icon="fa-close" (click)="displayAdd=false" label="Cancel"></button>
-      </div>
-    </div>
-  </form>
-</p-dialog>
-
 <!-- Dialog module for deleting a College -->
-<p-dialog class="dialog-module" header="Delete College" [(visible)]="displayDelete" modal="modal" width="600" [responsive]="true">
-  <p-messages [(value)]="msgs"></p-messages>
 
-  <div class="dialog-box ui-grid ui-grid-responsive ui-fluid">
-    <div class="ui-grid-col-12">
-      <p-dropdown appendTo="body" [options]="colleges" [(ngModel)]="college" [autoWidth]="false" placeholder="Select a College" name="college-names" optionLabel="name"></p-dropdown>
-      <div class="text-hints"><b><u>NOTE:</u></b> Deleting a college will permanently remove the departments.</div>
-    </div>
-  </div>
 
-  <div class="ui-grid ui-grid-col-12">
-    <div class="footer-buttons">
-      <button type="button" pButton icon="fa-check" (click)="deleteCollege(college._id)" label="Delete"></button>
-      <button type="button" pButton icon="fa-close" (click)="displayDelete=false" label="Cancel"></button>
-    </div>
-  </div>
-</p-dialog>
+<!-- Dialog module for updating a College -->
 
-<!-- Dialog module for updating a specific college -->
-<p-dialog class="dialog-module" header="Edit College Manager" [(visible)]="displayCollegeManager" modal="modal" width="800" [responsive]="true">
-  <p-messages [(value)]="msgs"></p-messages>
-
-  <div class="update-module ui-grid ui-grid-responsive ui-fluid">
-    <div class="ui-grid-col-12">
-      <span class="college-label ui-grid-col-2">College Name</span>
-      <span class="ui-grid-col-9">
-        <div class="ui-inputgroup">
-          <input type="text" pInputText placeholder="Enter a new College name" [(ngModel)]="college.name" ngDefaultControl/>
-        </div>
-
-        <div class="text-hints">Enter a new name for the college.</div>
-      </span>
-    </div>
-
-    <div class ="ui-grid-col-12 grid-space">
-      <span class="college-label ui-grid-col-2">Deans</span>
-      <span class="ui-grid-col-9">
-        <p-autoComplete [(ngModel)]="colleges"
-                        [suggestions]="placeholder"
-                        (completeMethod)="placeholder($event)"
-                        [minLength]="1" placeholder="Type in a username"
-                        field="name" [multiple]="true" [style]="{'text-align':'left'}">
-        </p-autoComplete>
-
-        <div class="text-hints">Type in a username to get a list of possible users to add in the college's deans.</div>
-      </span>
-    </div>
-  </div>
-
-  <div class="ui-grid ui-grid-col-12">
-    <div class="college-manager-buttons">
-      <button type="button" pButton icon="fa-save" (click)="updateCollege(college.name)" label="Save"></button>
-      <button type="button" pButton icon="fa-close" (click)="displayCollegeManager=false" label="Cancel"></button>
-    </div>
-  </div>
-</p-dialog>
 
 <!-- Displays the current college and their deans -->
 <div *ngIf="colleges.length > 0; else emptyCollege">

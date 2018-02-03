@@ -7,8 +7,6 @@ import { CollegesService } from './colleges.service';
 
 import { College } from '../models/college.model';
 
-import { Message } from 'primeng/components/common/api';
-
 @Component({
   selector: 'prism-colleges',
   templateUrl: './colleges.component.html',
@@ -16,13 +14,13 @@ import { Message } from 'primeng/components/common/api';
 })
 
 export class CollegesComponent implements OnInit {
-  displayAdd: Boolean = false;
+  @Input();
+  alerts: IAlert[] = [];
   displayDelete: Boolean = false;
   displayCollegeManager: Boolean = false;
   college: College = new College();
   colleges: College[] = [];
   filteredColleges: College[] = [];
-  msgs: Message[] = [];
 
   constructor(private collegesService: CollegesService, private router: Router, private modalService: NgbModal) { }
 
@@ -34,22 +32,28 @@ export class CollegesComponent implements OnInit {
   }
 
   invalidErrorMessage(message) {
-    this.msgs = [];
+    this.alerts = [];
     let detailMsg = '';
 
     switch (message) {
       case 'empty college':
         detailMsg = 'Please input a college name.';
         break;
-      case 'invalid delete':
-        detailMsg = 'Please select a valid college to delete.';
+      case 'empty abbreviation':
+        detailMsg = 'Please input an abbreviation.';
         break;
     }
-    this.msgs.push({severity: 'error', summary: 'Invalid College:', detail: detailMsg });
+    this.alerts.push({type: 'warning', message: detailMsg });
+  }
+
+  closeAlert(alert: IAlert) {
+    const index: number = this.alerts.indexOf(alert);
+    this.alerts.splice(index, 1);
+
   }
 
   addCollegeDialog(content){
-    this.msgs = [];
+    this.alerts = [];
     this.college = new College();
     this.modalService.open(content).result.then((result) => {
       ;
@@ -60,13 +64,13 @@ export class CollegesComponent implements OnInit {
   }
 
   deleteCollegeDialog(){
-    this.msgs = [];
+    this.alerts = [];
     this.displayDelete = true;
     this.college = new College();
   }
 
   collegeManagerDialog(id) {
-    this.msgs = [];
+    this.alerts = [];
     this.displayCollegeManager = true;
     this.collegesService.getCollege(id).subscribe(
       data => this.college = data
@@ -76,15 +80,21 @@ export class CollegesComponent implements OnInit {
   submitCollege() {
     if (typeof(this.college.name) !== 'undefined') {
       if(this.college.name.trim().length > 0) {
-        this.collegesService.addCollege(this.college).subscribe(
-          data => {
-            this.colleges.push(data);
-            this.colleges = this.colleges.slice(0);
+        if(typeof(this.college.abbreviation) !== 'undefined'){
+          if(this.college.abbreviation.trim().length > 0) {
+              this.collegesService.addCollege(this.college).subscribe(
+                data => {
+                  this.colleges.push(data);
+                  this.colleges = this.colleges.slice(0);
+                }
+              );
+              this.college = new College();
+          } else {
+            this.invalidErrorMessage('empty abbreviation');
           }
-        );
-
-        this.displayAdd = false;
-        this.college = new College();
+        } else {
+          this.invalidErrorMessage('empty abbreviation');
+        }
       } else {
         this.invalidErrorMessage('empty college');
       }
@@ -125,4 +135,9 @@ export class CollegesComponent implements OnInit {
       this.invalidErrorMessage('empty college');
     }
   }
+}
+
+export interface IAlert {
+  type: string;
+  message: string;
 }
