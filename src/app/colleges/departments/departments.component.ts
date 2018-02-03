@@ -6,8 +6,6 @@ import { DepartmentService } from './department.service';
 import { Department } from '../../models/department.model'
 import { College } from '../../models/college.model';
 
-import { Message } from 'primeng/components/common/api';
-
 @Component({
   selector: 'departments',
   templateUrl: './departments.component.html',

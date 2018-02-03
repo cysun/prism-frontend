@@ -79,10 +79,14 @@
 }
 
 .btn-success {
-  width:150px;
+  width: 150px;
   margin-top: 3px;
   margin-right: -12px;
   margin-bottom: 3px;
+}
+
+.btn-xs {
+  
 }
 
 .row {

@@ -2,13 +2,13 @@
 <div class="container-fluid">
   <div class="row">
      <div class="col-sm-12">
-       <button class="btn btn-success pull-right" (click)="addCollegeDialog(content)">+ Add College</button>
+       <button class="btn btn-success pull-right" (click)="addCollegeDialog(addition)">+ Add College</button>
     </div>
   </div>
 </div>
 
 <!-- Dialog module for adding a new college -->
-<ng-template #content let-cancel="close" let-esc="dismiss">
+<ng-template #addition let-cancel="close" let-esc="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Add New College</h4>
     <button type="button" class="close" aria-label="Close" (click)="esc()">
@@ -27,10 +27,10 @@
         <input type="text" class="form-control" [(ngModel)]="college.abbreviation" name="college-abbreviation" placeholder="Enter The College's Abbreviation">
         <small class="form-text text-muted">Enter an abbreviation for the new college.</small>
       </div>
-        <div>
-            <button type="submit" class="btn btn-primary" label="Add">Add</button>
-            <button type="button" class="btn btn-outline-dark" (click)="cancel()">Cancel</button>
-        </div>
+      <div>
+        <button type="submit" class="btn btn-primary" data-dismiss="modal" label="Add">Add</button>
+        <button type="button" class="btn btn-outline-dark" (click)="cancel()">Cancel</button>
+      </div>
     </form>
   </div>
   <div *ngIf="alerts" class="modal-footer">
@@ -53,16 +53,33 @@
       <ngb-panel>
         <ng-template ngbPanelTitle>
           {{college.name}} ({{college.abbreviation}})
+          <button type="button" class="close" aria-label="Close" (click)="deleteCollegeDialog(deletion, college._id)">x</button>
+          <ng-template #deletion let-close="close" let-esc="dismiss">
+            <div class="modal-header">
+              <h4 class="modal-title">Deleting {{college.abbreviation}}</h4>
+              <button type="button" class="close" aria-label="Close" (click)="esc()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p *ngFor="let alert of alerts">
+                <ngb-alert [type]="alert.type" [dismissible]="false">{{alert.message}}!</ngb-alert>
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-dark" (click)="close()" lable="OK">OK</button>
+            </div>
+          </ng-template>
         </ng-template>
         <ng-template ngbPanelContent>
           <departments [collegeId]="college._id"></departments>
         </ng-template>
       </ngb-panel>
-  </div>
+    </div>
   </ngb-accordion>
 </div>
 
 <!-- Info message when there are no colleges -->
 <ng-template #emptyCollege>
-  <p-message class="info-message" severity="info" text="There are currently no colleges."></p-message>
+  <ngb-alert type="info" [dismissible]="false">There are currently no colleges.</ngb-alert>
 </ng-template>

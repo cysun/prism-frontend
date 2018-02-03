@@ -14,10 +14,8 @@ import { College } from '../models/college.model';
 })
 
 export class CollegesComponent implements OnInit {
-  @Input();
+  @Input()
   alerts: IAlert[] = [];
-  displayDelete: Boolean = false;
-  displayCollegeManager: Boolean = false;
   college: College = new College();
   colleges: College[] = [];
   filteredColleges: College[] = [];
@@ -54,58 +52,45 @@ export class CollegesComponent implements OnInit {
 
   addCollegeDialog(content){
     this.alerts = [];
+    this.modalService.open(content);
     this.college = new College();
-    this.modalService.open(content).result.then((result) => {
-      ;
-    }, (reason) => {
-
-    });
-    //this.displayAdd = true;
   }
 
-  deleteCollegeDialog(){
+  deleteCollegeDialog(content, id){
     this.alerts = [];
-    this.displayDelete = true;
-    this.college = new College();
+    this.deleteCollege(id);
+    this.modalService.open(content);
   }
 
   collegeManagerDialog(id) {
     this.alerts = [];
-    this.displayCollegeManager = true;
     this.collegesService.getCollege(id).subscribe(
       data => this.college = data
     );
   }
 
   submitCollege() {
-    if (typeof(this.college.name) !== 'undefined') {
-      if(this.college.name.trim().length > 0) {
-        if(typeof(this.college.abbreviation) !== 'undefined'){
-          if(this.college.abbreviation.trim().length > 0) {
-              this.collegesService.addCollege(this.college).subscribe(
-                data => {
-                  this.colleges.push(data);
-                  this.colleges = this.colleges.slice(0);
-                }
-              );
-              this.college = new College();
-          } else {
-            this.invalidErrorMessage('empty abbreviation');
+    this.alerts = [];
+    if (typeof(this.college.name) !== 'undefined' && this.college.name.trim().length > 0) {
+      if(typeof(this.college.abbreviation) !== 'undefined' && this.college.abbreviation.trim().length > 0) {
+        this.collegesService.addCollege(this.college).subscribe(
+          data => {
+            this.colleges.push(data);
+            this.colleges = this.colleges.slice(0);
           }
-        } else {
+        );
+        this.college = new College();
+      } else {
           this.invalidErrorMessage('empty abbreviation');
         }
-      } else {
-        this.invalidErrorMessage('empty college');
-      }
     } else {
       this.invalidErrorMessage('empty college');
     }
   }
 
   deleteCollege(id) {
-    if (typeof(id) !== 'undefined') {
-      this.collegesService.deleteCollege(id).subscribe( () => {
+    this.alerts = [];
+      this.collegesService.deleteCollege(id).subscribe(() => {
         for (let i = 0; i < this.colleges.length; i++) {
           if (this.colleges[i]._id === id) {
             this.colleges.splice(i, 1);
@@ -114,12 +99,7 @@ export class CollegesComponent implements OnInit {
           }
         }
       });
-
-      this.displayDelete = false;
       this.college = new College();
-    } else {
-      this.invalidErrorMessage('invalid delete');
-    }
   }
 
   updateCollege() {
@@ -128,8 +108,6 @@ export class CollegesComponent implements OnInit {
         const index = this.colleges.findIndex(oldCollege => oldCollege._id === updatedCollege._id);
         this.colleges[index] = updatedCollege;
       });
-
-      this.displayCollegeManager = false;
       this.college = new College();
     } else {
       this.invalidErrorMessage('empty college');
