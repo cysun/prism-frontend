@@ -14,4 +14,15 @@ export class SettingsService {
     return this.http.get<User>('/api/user/' + userId);
   }
 
+  updateBasicInfo(user: User): Observable<User> {
+    const body = JSON.stringify({
+      'name': {
+        'first': user.name.first,
+        'last': user.name.last
+      },
+      'email': user.email
+    })
+    return this.http.patch<User>('/api/user/' + user._id, body, this.HEADERS);
+  }
+
 }

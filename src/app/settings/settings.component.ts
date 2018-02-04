@@ -22,7 +22,15 @@ export class SettingsComponent implements OnInit {
 
     this.settingsService.getUser(this.currentUser._id).subscribe(data => {
       console.log(data);
+      this.currentUser = data;
     })
+  }
+
+  updateBasicInfo() {
+    this.settingsService.updateBasicInfo(this.currentUser).subscribe( data => {
+      this.currentUser = data;
+    })
+    this.updateInfo = false;
   }
 
   updatePassword(currentPassword: string, newPassword: string, newPassword2: string) {
