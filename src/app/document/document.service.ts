@@ -10,13 +10,21 @@ export class DocumentService {
 
   constructor(private http: HttpClient) { }
 
+  /* Create a document */
   createDocument(title: string): Observable<Document> {
     const body = JSON.stringify({ 'title': title });
     return this.http.post<Document>('/api/document', body, this.HEADERS);
   }
 
+  /* Gets the document based on ID */
   retrieveDocument(documentId: string): Observable<Document> {
     return this.http.get<Document>('/api/document/' + documentId);
+  }
+
+  /* Edit a document's title */
+  editDocument(documentId: string, document: Document): Observable<Document> {
+    const body = JSON.stringify({ 'title': document.title });
+    return this.http.patch<Document>('/api/document/' + documentId, body, this.HEADERS);
   }
 
 }

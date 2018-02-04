@@ -1,3 +1,12 @@
+<div class="container-fluid document-header">
+  <div class="header-label">
+    <span class="label">{{document.title}}</span><button type="button" class="btn btn-dark" (click)=openModal(editDocumentNameModal)><i class="fa fa-icon fa-pencil"></i>Edit</button>
+    <span class ="document-btn-right">
+      <button type="button" class="btn btn-danger"><i class="fa fa-icon fa-eye"></i>Watch</button>
+    </span>
+  </div>
+</div>
+
 <ngb-tabset>
   <ngb-tab>
     <ng-template ngbTabTitle><i class="fa fa-icon fa-file-text-o"></i>Main Version</ng-template>
@@ -5,7 +14,7 @@
       This tab holds the current version of the document. Revisions of the
       same document can be found in the revisions tab. <br/><br/>
 
-      <strong>Frontend testing purposes only</strong> <br/> 
+      <strong>Frontend testing purposes only</strong> <br/>
       (create a document, take the ID and paste it onto retrieveDocument function in ngOnInit before refreshing):
 
       <div class="input-group">
@@ -24,35 +33,58 @@
       </div>
 
       <!-- <p-fileUpload name="demo[]" (onSelect)="onFileSelect()"
-                    customUpload="true"
-                    (uploadHandler)="onUploadHandler($event)">
+      customUpload="true"
+      (uploadHandler)="onUploadHandler($event)">
 
-        <ng-template pTemplate="content">
-          <ul *ngIf="uploadedFiles.length">
-            <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
-          </ul>
-        </ng-template>
-      </p-fileUpload> -->
-    </ng-template>
-  </ngb-tab>
+      <ng-template pTemplate="content">
+      <ul *ngIf="uploadedFiles.length">
+      <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+    </ul>
+  </ng-template>
+</p-fileUpload> -->
+</ng-template>
+</ngb-tab>
 
-  <ngb-tab>
-    <ng-template ngbTabTitle><i class="fa fa-icon fa-list"></i>Revisions</ng-template>
-    <ng-template ngbTabContent>
-      This tab holds previous revisions of the document for archiving purposes. Only the
-      administrator can revert to any previous revision without losing the current one.
+<ngb-tab>
+  <ng-template ngbTabTitle><i class="fa fa-icon fa-list"></i>Revisions</ng-template>
+  <ng-template ngbTabContent>
+    This tab holds previous revisions of the document for archiving purposes. Only the
+    administrator can revert to any previous revision without losing the current one.
 
-      <div class="header-container">
-        Previous Revisions
-        <div class="header-divider"></div>
-      </div>
-    </ng-template>
-  </ngb-tab>
+    <div class="header-container">
+      Previous Revisions
+      <div class="header-divider"></div>
+    </div>
+  </ng-template>
+</ngb-tab>
 
-  <ngb-tab>
-    <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
-    <ng-template ngbTabContent>
-      comments tab
-    </ng-template>
-  </ngb-tab>
+<ngb-tab>
+  <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
+  <ng-template ngbTabContent>
+    comments tab
+  </ng-template>
+</ngb-tab>
 </ngb-tabset>
+
+
+<ng-template #editDocumentNameModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Edit Document Name</h5>
+  </div>
+
+  <div class="modal-body">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><i class="fa fa-file-o"></i></span>
+      </div>
+      <input type="text" class="form-control" placeholder="Enter a new document title" name="document-title" [(ngModel)]="document.title">
+    </div>
+
+    <div class="text-hints">Enter a new title for the document.</div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-dark" type="button" (click)=editDocumentName(document._id)>Save</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+  </div>
+</ng-template>
