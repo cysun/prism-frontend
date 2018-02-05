@@ -8,6 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { CollegesComponent } from './colleges/colleges.component';
+import { CommitteeComponent } from './committee/committee.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -28,12 +29,13 @@ import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
 import { AuthService } from './login/auth.service';
 import { GroupManagerService } from './group-manager/group-manager.service';
-import { CommitteeComponent } from './committee/committee.component';
+import { SettingsService } from './settings/settings.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     CollegesComponent,
+    CommitteeComponent,
     DashboardComponent,
     PageNotFoundComponent,
     SettingsComponent,
@@ -61,6 +63,7 @@ import { CommitteeComponent } from './committee/committee.component';
     AuthService,
     HttpClientModule,
     GroupManagerService,
+    SettingsService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
