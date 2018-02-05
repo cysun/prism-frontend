@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
 import { CollegesComponent } from './colleges/colleges.component';
 import { CommitteeComponent } from './committee/committee.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -22,6 +23,7 @@ import { AutoCompleteModule } from 'primeng/primeng';
 import { LoginComponent } from './login/login.component';
 import { PublicComponent } from './layout/public/public.component';
 import { PrivateComponent } from './layout/private/private.component';
+import { DocumentComponent } from './document/document.component';
 
 import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
@@ -44,6 +46,8 @@ import { SettingsService } from './settings/settings.service';
     LoginComponent,
     PublicComponent,
     PrivateComponent,
+    CommitteeComponent,
+    DocumentComponent
   ],
   imports: [
     NgbModule.forRoot(),
