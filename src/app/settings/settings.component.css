@@ -1,3 +1,7 @@
+.alert-messages {
+  padding-top: 30px;
+}
+
 .notification-label {
   font-size: 1.5em;
   font-weight: bold;
@@ -18,6 +22,7 @@
   font-size: 1.2em;
   font-weight: bold;
   margin-bottom: 20px;
+  margin-top: 30px;
   text-transform: uppercase;
 }
 

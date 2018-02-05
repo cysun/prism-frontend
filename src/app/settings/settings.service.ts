@@ -24,5 +24,4 @@ export class SettingsService {
     })
     return this.http.patch<User>('/api/user/' + user._id, body, this.HEADERS);
   }
-
 }
