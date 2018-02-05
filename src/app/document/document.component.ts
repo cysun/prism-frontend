@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { NgbModal, NgbModalRef,  NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+
 
 import { Document } from '../models/document.model';
 import { DocumentService } from './document.service';
