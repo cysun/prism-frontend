@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { DepartmentService } from './department.service';
 
 import { Department } from '../../models/department.model'
@@ -13,14 +15,46 @@ import { College } from '../../models/college.model';
 })
 export class DepartmentsComponent implements OnInit {
   @Input() collegeId: string;
+  department: Department = new Department();
   departments: Department[] = [];
-  constructor(private departmentService: DepartmentService, private router: Router) { }
+  alerts: IAlert[] = [];
+
+  constructor(private departmentService: DepartmentService, private router: Router, private modalService: NgbModal) { }
 
   ngOnInit() {
-    this.departmentService.getDepartments(this.collegeId).subscribe(data => {
-      this.departments = data;
-      console.log(data);
-    });
+    // this.departmentService.getDepartmentsAt(this.collegeId).subscribe(data => {
+    //   this.departments = data;
+    //   console.log(data);
+    // });
   }
 
+  invalidErrorMessage(message) {
+    this.alerts = [];
+    let detailMsg = '';
+
+    switch (message) {
+      case 'empty department':
+        detailMsg = 'Please input a department name.';
+        break;
+      case 'empty abbreviation':
+        detailMsg = 'Please input an abbreviation.';
+        break;
+      case 'empty college':
+        detailMsg = 'Please select a college.';
+        break;
+    }
+    this.alerts.push({type: 'warning', message: detailMsg });
+  }
+
+  getDepartmentsAt(collegeId) {
+    this.departmentService.getDepartmentsAt(collegeId).subscribe( data => {
+      this.departments = data;
+      console.log(data);
+    })
+  }
+}
+
+export interface IAlert {
+  type: string;
+  message: string;
 }

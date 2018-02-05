@@ -1,11 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { NgbModule, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { CollegesService } from './colleges.service';
+import { DepartmentService } from './departments/department.service';
 
 import { College } from '../models/college.model';
+import { Department } from '../models/department.model';
 
 @Component({
   selector: 'prism-colleges',
@@ -16,11 +18,15 @@ import { College } from '../models/college.model';
 export class CollegesComponent implements OnInit {
   @Input()
   alerts: IAlert[] = [];
+  department: Department = new Department();
+  departments: Department[] = [];
   college: College = new College();
   colleges: College[] = [];
+
+
   filteredColleges: College[] = [];
 
-  constructor(private collegesService: CollegesService, private router: Router, private modalService: NgbModal) { }
+  constructor(private collegesService: CollegesService, private departmentService: DepartmentService, private router: Router, private modalService: NgbModal) { }
 
   ngOnInit() {
     this.collegesService.getColleges().subscribe(data => {
@@ -39,6 +45,9 @@ export class CollegesComponent implements OnInit {
         break;
       case 'empty abbreviation':
         detailMsg = 'Please input an abbreviation.';
+        break;
+      case 'empty departments':
+        detailMsg = 'There are no departments';
         break;
     }
     this.alerts.push({type: 'warning', message: detailMsg });
@@ -62,17 +71,21 @@ export class CollegesComponent implements OnInit {
     this.modalService.open(content);
   }
 
-  collegeManagerDialog(id) {
+  manageCollegeDialog(content) {
     this.alerts = [];
-    this.collegesService.getCollege(id).subscribe(
-      data => this.college = data
-    );
+    if (this.department != undefined) {
+
+    } else {
+      this.invalidErrorMessage('empty departments');
+    }
+    this.modalService.open(content);
+    this.department = new Department();
   }
 
   submitCollege() {
     this.alerts = [];
     if (typeof(this.college.name) !== 'undefined' && this.college.name.trim().length > 0) {
-      if(typeof(this.college.abbreviation) !== 'undefined' && this.college.abbreviation.trim().length > 0) {
+      if (typeof(this.college.abbreviation) !== 'undefined' && this.college.abbreviation.trim().length > 0) {
         this.collegesService.addCollege(this.college).subscribe(
           data => {
             this.colleges.push(data);
@@ -111,6 +124,28 @@ export class CollegesComponent implements OnInit {
       this.college = new College();
     } else {
       this.invalidErrorMessage('empty college');
+    }
+  }
+
+  submitDepartment() {
+    if (typeof(this.department.name) != undefined && this.department.name.trim().length > 0) {
+      if (typeof(this.department.abbreviation) != undefined && this.department.abbreviation.trim().length > 0) {
+        if (typeof(this.department.college) != undefined && typeof(this.department.college._id) != undefined) {
+          this.departmentService.addDepartment(this.department).subscribe(
+            data => {
+              this.departments.push(data);
+              this.departments = this.departments.slice(0);
+            }
+          );
+          this.department = new Department();
+        } else {
+          this.invalidErrorMessage('empty college');
+        }
+      } else {
+        this.invalidErrorMessage('empty abbreviation');
+      }
+    } else {
+      this.invalidErrorMessage('empty department');
     }
   }
 }
