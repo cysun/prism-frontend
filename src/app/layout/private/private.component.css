@@ -1,17 +1,19 @@
-.action-menu {
-  margin-left: 15px;
-  position: fixed;
-  width: inherit;
-  z-index: 1;
+.fa {
+  padding-right: 5px;
 }
 
-.dashboard-module {
-  padding-top: 50px;
+.menu-grid {
+  /* background: #000; */
+  padding-left: 30px;
+  word-wrap: break-word;
 }
 
-/* .menu-grid{
-  background-color: #aec6cf;
-} */
+.menu-label {
+  background: #18121E;
+  color: #FFF;
+  padding: 10px;
+  text-align: center;
+}
 
 .tab-grid{
   /* background-color: #BEF9E9; */
@@ -21,4 +23,15 @@
 
 .user-button {
   padding: 4px;
+}
+
+.vertical-menu, a {
+  background-color: #EEE;
+  color: #000;
+  text-decoration: none;
+  width: 100%;
+}
+
+.vertical-menu a:hover {
+    background-color: #CCC;
 }

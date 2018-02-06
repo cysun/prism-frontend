@@ -66,6 +66,7 @@
   color: #808080;
   font-size: 14px;
   margin-top: 6px;
+  margin-bottom: 6px;
   text-align: left;
 }
 
@@ -75,5 +76,19 @@
 
 .update-module {
   padding: 35px;
+}
 
+.btn-success {
+  width: 150px;
+  margin-top: 3px;
+  margin-right: -12px;
+  margin-bottom: 3px;
+}
+
+.btn-xs {
+  
+}
+
+.row {
+  background-color: black;
 }

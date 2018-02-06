@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { CollegesService } from './colleges.service'
-import { College } from '../models/college.model';
+import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { Message } from 'primeng/components/common/api';
+import { CollegesService } from './colleges.service';
+import { DepartmentService } from './departments/department.service';
+
+import { College } from '../models/college.model';
+import { Department } from '../models/department.model';
 
 @Component({
   selector: 'prism-colleges',
@@ -13,15 +16,17 @@ import { Message } from 'primeng/components/common/api';
 })
 
 export class CollegesComponent implements OnInit {
-  displayAdd: Boolean = false;
-  displayDelete: Boolean = false;
-  displayCollegeManager: Boolean = false;
+  @Input()
+  alerts: IAlert[] = [];
+  department: Department = new Department();
+  departments: Department[] = [];
   college: College = new College();
   colleges: College[] = [];
-  filteredColleges: College[] = [];
-  msgs: Message[] = [];
 
-  constructor(private collegesService: CollegesService, private router: Router) { }
+
+  filteredColleges: College[] = [];
+
+  constructor(private collegesService: CollegesService, private departmentService: DepartmentService, private router: Router, private modalService: NgbModal) { }
 
   ngOnInit() {
     this.collegesService.getColleges().subscribe(data => {
@@ -31,63 +36,74 @@ export class CollegesComponent implements OnInit {
   }
 
   invalidErrorMessage(message) {
-    this.msgs = [];
+    this.alerts = [];
     let detailMsg = '';
 
     switch (message) {
       case 'empty college':
         detailMsg = 'Please input a college name.';
         break;
-      case 'invalid delete':
-        detailMsg = 'Please select a valid college to delete.';
+      case 'empty abbreviation':
+        detailMsg = 'Please input an abbreviation.';
+        break;
+      case 'empty departments':
+        detailMsg = 'There are no departments';
         break;
     }
-    this.msgs.push({severity: 'error', summary: 'Invalid College:', detail: detailMsg });
+    this.alerts.push({type: 'warning', message: detailMsg });
   }
 
-  addCollegeDialog(){
-    this.msgs = [];
+  closeAlert(alert: IAlert) {
+    const index: number = this.alerts.indexOf(alert);
+    this.alerts.splice(index, 1);
+
+  }
+
+  addCollegeDialog(content){
+    this.alerts = [];
+    this.modalService.open(content);
     this.college = new College();
-    this.displayAdd = true;
   }
 
-  deleteCollegeDialog(){
-    this.msgs = [];
-    this.displayDelete = true;
-    this.college = new College();
+  deleteCollegeDialog(content, id){
+    this.alerts = [];
+    this.deleteCollege(id);
+    this.modalService.open(content);
   }
 
-  collegeManagerDialog(id) {
-    this.msgs = [];
-    this.displayCollegeManager = true;
-    this.collegesService.getCollege(id).subscribe(
-      data => this.college = data
-    );
+  manageCollegeDialog(content) {
+    this.alerts = [];
+    if (this.department != undefined) {
+
+    } else {
+      this.invalidErrorMessage('empty departments');
+    }
+    this.modalService.open(content);
+    this.department = new Department();
   }
 
   submitCollege() {
-    if (typeof(this.college.name) !== 'undefined') {
-      if(this.college.name.trim().length > 0) {
+    this.alerts = [];
+    if (typeof(this.college.name) !== 'undefined' && this.college.name.trim().length > 0) {
+      if (typeof(this.college.abbreviation) !== 'undefined' && this.college.abbreviation.trim().length > 0) {
         this.collegesService.addCollege(this.college).subscribe(
           data => {
             this.colleges.push(data);
             this.colleges = this.colleges.slice(0);
           }
         );
-
-        this.displayAdd = false;
         this.college = new College();
       } else {
-        this.invalidErrorMessage('empty college');
-      }
+          this.invalidErrorMessage('empty abbreviation');
+        }
     } else {
       this.invalidErrorMessage('empty college');
     }
   }
 
   deleteCollege(id) {
-    if (typeof(id) !== 'undefined') {
-      this.collegesService.deleteCollege(id).subscribe( () => {
+    this.alerts = [];
+      this.collegesService.deleteCollege(id).subscribe(() => {
         for (let i = 0; i < this.colleges.length; i++) {
           if (this.colleges[i]._id === id) {
             this.colleges.splice(i, 1);
@@ -96,12 +112,7 @@ export class CollegesComponent implements OnInit {
           }
         }
       });
-
-      this.displayDelete = false;
       this.college = new College();
-    } else {
-      this.invalidErrorMessage('invalid delete');
-    }
   }
 
   updateCollege() {
@@ -110,11 +121,36 @@ export class CollegesComponent implements OnInit {
         const index = this.colleges.findIndex(oldCollege => oldCollege._id === updatedCollege._id);
         this.colleges[index] = updatedCollege;
       });
-
-      this.displayCollegeManager = false;
       this.college = new College();
     } else {
       this.invalidErrorMessage('empty college');
     }
   }
+
+  submitDepartment() {
+    if (typeof(this.department.name) != undefined && this.department.name.trim().length > 0) {
+      if (typeof(this.department.abbreviation) != undefined && this.department.abbreviation.trim().length > 0) {
+        if (typeof(this.department.college) != undefined && typeof(this.department.college._id) != undefined) {
+          this.departmentService.addDepartment(this.department).subscribe(
+            data => {
+              this.departments.push(data);
+              this.departments = this.departments.slice(0);
+            }
+          );
+          this.department = new Department();
+        } else {
+          this.invalidErrorMessage('empty college');
+        }
+      } else {
+        this.invalidErrorMessage('empty abbreviation');
+      }
+    } else {
+      this.invalidErrorMessage('empty department');
+    }
+  }
+}
+
+export interface IAlert {
+  type: string;
+  message: string;
 }

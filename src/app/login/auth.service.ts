@@ -30,7 +30,7 @@ export class AuthService {
   }
 
   getUser() {
-    const user = JSON.parse(localStorage.getItem('currentUser'))
+    const user = JSON.parse(JSON.stringify(localStorage.getItem('currentUser')));
     return user;
   }
 

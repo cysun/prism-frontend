@@ -1,27 +1,17 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {NgModule} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {HttpModule} from '@angular/http';
+import {HttpClientModule, HttpClient, HTTP_INTERCEPTORS} from '@angular/common/http';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
 
-import { AccordionModule } from 'primeng/primeng';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
+
 import { AutoCompleteModule } from 'primeng/primeng';
-import { ButtonModule } from 'primeng/components/button/button';
-import { DataTableModule } from 'primeng/primeng';
-import { DataGridModule } from 'primeng/primeng';
-import { DialogModule } from 'primeng/primeng';
-import { DropdownModule } from 'primeng/primeng';
-import { FieldsetModule } from 'primeng/primeng';
-import { InputTextModule } from 'primeng/primeng';
-import { MenubarModule, MenuModule, MenuItem } from 'primeng/primeng';
-import { MessagesModule, MessageModule } from 'primeng/primeng';
-import { PanelModule } from 'primeng/primeng';
-import { SplitButtonModule } from 'primeng/primeng';
-import { TabViewModule } from 'primeng/primeng';
-import { ToolbarModule } from 'primeng/primeng';
 
 import { CollegesComponent } from './colleges/colleges.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -39,10 +29,12 @@ import { PrivateComponent } from './layout/private/private.component';
 
 import {GroupManagerService} from './group-manager/group-manager.service';
 import {CollegesService} from './colleges/colleges.service';
+import {DepartmentService} from './colleges/departments/department.service';
 
 import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
 import { AuthService } from './login/auth.service';
+import { DepartmentsComponent } from './colleges/departments/departments.component';
 
 @NgModule({
   declarations: [
@@ -59,37 +51,26 @@ import { AuthService } from './login/auth.service';
     LoginComponent,
     PublicComponent,
     PrivateComponent,
+    DepartmentsComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    HttpModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    AccordionModule,
     AutoCompleteModule,
-    ButtonModule,
-    DataGridModule,
-    DataTableModule,
-    DialogModule,
-    DropdownModule,
-    FieldsetModule,
-    InputTextModule,
-    MenuModule,
-    MenubarModule,
-    MessageModule,
-    MessagesModule,
-    PanelModule,
-    SplitButtonModule,
-    TabViewModule,
-    ToolbarModule
+    NgbModule.forRoot(),
+    NgbDropdownModule,
   ],
   providers: [
     AuthGuard,
     AuthService,
     HttpClientModule,
-    CollegesService,
     GroupManagerService,
+    CollegesService,
+    DepartmentService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

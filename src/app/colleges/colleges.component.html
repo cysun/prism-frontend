@@ -1,121 +1,127 @@
-<!-- Toolbar to add or delete a college-->
-<p-toolbar>
-  <div class="ui-toolbar-college-left">
-    <button pButton type="button" label="Add College" icon="fa-plus" class="ui-button-success" (click)=addCollegeDialog()></button>
-    <button pButton type="button" label="Delete College" icon="fa-minus" class="ui-button-danger" [disabled]="colleges.length == 0" (click)=deleteCollegeDialog()></button>
+<!-- Add college button-->
+<div class="container-fluid">
+  <div class="row">
+     <div class="col-sm-12">
+       <button class="btn btn-success pull-right" (click)="addCollegeDialog(addition)">+ Add College</button>
+    </div>
   </div>
-</p-toolbar>
+</div>
 
 <!-- Dialog module for adding a new college -->
-<p-dialog class="dialog-module" header="Add New College" [(visible)]="displayAdd" modal="modal" width="600" [responsive]="true">
-  <p-messages [(value)]="msgs"></p-messages>
-
-  <form class="dialog-box" #f="ngForm" (ngSubmit)="submitCollege()">
-    <div class="dialog-box ui-grid ui-grid-responsive ui-fluid">
-      <div class="ui-grid-col-12">
-        <div class="ui-inputgroup">
-          <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-          <input type="text" [(ngModel)]="college.name" pInputText name="college-name" placeholder="Enter New College Title">
-        </div>
+<ng-template #addition let-cancel="close" let-esc="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Add New College</h4>
+    <button type="button" class="close" aria-label="Close" (click)="esc()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #f="ngForm" (ngSubmit)="submitCollege()">
+      <div class="form-group">
+        <label for="college-name">College: </label>
+        <input type="text" class="form-control"[(ngModel)]="college.name" name="college-name" placeholder="Enter New College Title">
+        <small class="form-text text-muted">Enter a name for the new college.</small>
       </div>
-    </div>
-
-    <div class="text-hints">Enter a name for the new college.</div>
-
-    <div class="ui-grid ui-grid-col-12">
-      <div class="footer-buttons">
-        <button type="submit" pButton icon="fa-plus" label="Add"></button>
-        <button type="button" pButton icon="fa-close" (click)="displayAdd=false" label="Cancel"></button>
+      <div class="form-group">
+        <label for="college-abbreviation">Abbreviation: </label>
+        <input type="text" class="form-control" [(ngModel)]="college.abbreviation" name="college-abbreviation" placeholder="Enter The College's Abbreviation">
+        <small class="form-text text-muted">Enter an abbreviation for the new college.</small>
       </div>
-    </div>
-  </form>
-</p-dialog>
+      <div>
+        <button type="submit" class="btn btn-primary" data-dismiss="modal" label="Add">Add</button>
+        <button type="button" class="btn btn-outline-dark" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="alerts" class="modal-footer">
+    <p *ngFor="let alert of alerts">
+      <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
+    </p>
+  </div>
+</ng-template>
 
 <!-- Dialog module for deleting a College -->
-<p-dialog class="dialog-module" header="Delete College" [(visible)]="displayDelete" modal="modal" width="600" [responsive]="true">
-  <p-messages [(value)]="msgs"></p-messages>
 
-  <div class="dialog-box ui-grid ui-grid-responsive ui-fluid">
-    <div class="ui-grid-col-12">
-      <p-dropdown appendTo="body" [options]="colleges" [(ngModel)]="college" [autoWidth]="false" placeholder="Select a College" name="college-names" optionLabel="name"></p-dropdown>
-      <div class="text-hints"><b><u>NOTE:</u></b> Deleting a college will permanently remove the departments.</div>
-    </div>
+<!-- Dialog module for updating a College -->
+<!--  ==================== MANAGER ==================== -->
+<ng-template #manager let-cancel="close" let-esc="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">College Manager</h4>
+    <button type="button" class="close" aria-label="Close" (click)="esc()">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
-
-  <div class="ui-grid ui-grid-col-12">
-    <div class="footer-buttons">
-      <button type="button" pButton icon="fa-check" (click)="deleteCollege(college._id)" label="Delete"></button>
-      <button type="button" pButton icon="fa-close" (click)="displayDelete=false" label="Cancel"></button>
+  <div class="modal-body">
+    <!-- ========== ALERTS IN MANAGER ============== --->
+    <div ngFor="let alert of alerts">
+      <ngb-alert [type]="alert.type">{{alert.message}}</ngb-alert>
     </div>
+    <!-- ========== COLLEGE INFO ============== --->
+
+
+
+    <!-- ========== ADD DEPT FORM ============== --->
+
+    <form #f="ngForm" (ngSubmit)="submitDepartment()">
+      <div class="form-group">
+        <label for="department-name">Department: </label>
+        <input type="text" class="form-control"[(ngModel)]="department.name" name="department-name" placeholder="Enter New Department Title">
+        <small class="form-text text-muted">Enter a name for the new department.</small>
+      </div>
+      <div class="form-group">
+        <label for="college-abbreviation">Abbreviation: </label>
+        <input type="text" class="form-control" [(ngModel)]="college.abbreviation" name="college-abbreviation" placeholder="Enter The Department's Abbreviation">
+        <small class="form-text text-muted">Enter an abbreviation for the new department.</small>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary" data-dismiss="modal" label="Add">Add</button>
+        <button type="button" class="btn btn-outline-dark" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  
   </div>
-</p-dialog>
-
-<!-- Dialog module for updating a specific college -->
-<p-dialog class="dialog-module" header="Edit College Manager" [(visible)]="displayCollegeManager" modal="modal" width="800" [responsive]="true">
-  <p-messages [(value)]="msgs"></p-messages>
-
-  <div class="update-module ui-grid ui-grid-responsive ui-fluid">
-    <div class="ui-grid-col-12">
-      <span class="college-label ui-grid-col-2">College Name</span>
-      <span class="ui-grid-col-9">
-        <div class="ui-inputgroup">
-          <input type="text" pInputText placeholder="Enter a new College name" [(ngModel)]="college.name" ngDefaultControl/>
-        </div>
-
-        <div class="text-hints">Enter a new name for the college.</div>
-      </span>
-    </div>
-
-    <div class ="ui-grid-col-12 grid-space">
-      <span class="college-label ui-grid-col-2">Deans</span>
-      <span class="ui-grid-col-9">
-        <p-autoComplete [(ngModel)]="colleges"
-                        [suggestions]="placeholder"
-                        (completeMethod)="placeholder($event)"
-                        [minLength]="1" placeholder="Type in a username"
-                        field="name" [multiple]="true" [style]="{'text-align':'left'}">
-        </p-autoComplete>
-
-        <div class="text-hints">Type in a username to get a list of possible users to add in the college's deans.</div>
-      </span>
-    </div>
+  <div *ngIf="alerts" class="modal-footer">
+    <p *ngFor="let alert of alerts">
+      <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
+    </p>
   </div>
+</ng-template>
 
-  <div class="ui-grid ui-grid-col-12">
-    <div class="college-manager-buttons">
-      <button type="button" pButton icon="fa-save" (click)="updateCollege(college.name)" label="Save"></button>
-      <button type="button" pButton icon="fa-close" (click)="displayCollegeManager=false" label="Cancel"></button>
-    </div>
-  </div>
-</p-dialog>
-
-<!-- Displays the current college and their members -->
+<!-- Displays the current college and their deans -->
 <div *ngIf="colleges.length > 0; else emptyCollege">
-  <p-dataGrid [style]="{'padding-top': '50px'}" [value]="colleges" [paginator]="true" [rows]="12" *ngFor="let college of colleges">
-    <p-header>
-      <div class="header-container">
-        <div class="header-panel">
-          {{college.name}}
-          <div class="panel-buttons">
-            <button type="button" pButton icon="fa-plus"></button>
-            <button type="button" pButton icon="fa-gear" (click)=collegeManagerDialog(college._id)></button>
-          </div>
-        </div>
-      </div>
-    </p-header>
-
-    <ng-template let-group pTemplate="item">
-      <div style="padding:5px" class="ui-g-12 ui-md-4">
-        <p-panel [header]="college.name" [style]="{'text-align':'center', 'overflow-wrap': 'break-word'}">
-          Name: John Doe <br/>
-          E-mail: johndoe@gmail.com <br/>
-        </p-panel>
-      </div>
-    </ng-template>
-  </p-dataGrid>
+  <ngb-accordion [closeOthers]="true">
+    <div *ngFor="let college of colleges">
+      <ngb-panel>
+        <ng-template ngbPanelTitle>
+          {{college.name}} ({{college.abbreviation}})
+          <button type="button" class="close" aria-label="Close" (click)="deleteCollegeDialog(deletion, college._id)">X</button>
+          <button type="button" class="close" (click)="manageCollegeDialog(manager)"><span class="fa fa-cog">&nbsp;&nbsp;</span></button>
+          <ng-template #deletion let-close="close" let-esc="dismiss">
+            <div class="modal-header">
+              <h4 class="modal-title">Deleting {{college.abbreviation}}</h4>
+              <button type="button" class="close" aria-label="Close" (click)="esc()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p *ngFor="let alert of alerts">
+                <ngb-alert [type]="alert.type" [dismissible]="false">{{alert.message}}!</ngb-alert>
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-dark" (click)="close()" lable="OK">OK</button>
+            </div>
+          </ng-template>
+        </ng-template>
+        <ng-template ngbPanelContent>
+          <departments [collegeId]="college._id"></departments>
+        </ng-template>
+      </ngb-panel>
+    </div>
+  </ngb-accordion>
 </div>
 
 <!-- Info message when there are no colleges -->
 <ng-template #emptyCollege>
-  <p-message class="info-message" severity="info" text="There are currently no colleges."></p-message>
+  <ngb-alert type="info" [dismissible]="false">There are currently no colleges.</ngb-alert>
 </ng-template>
