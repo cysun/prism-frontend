@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { CollegesService } from './colleges.service';
 import { DepartmentService } from './departments/department.service';
@@ -19,6 +19,7 @@ export class CollegesComponent implements OnInit {
   @Input()
   alerts: IAlert[] = [];
   department: Department = new Department();
+  modal: NgbModalRef
   departments: Department[] = [];
   college: College = new College();
   colleges: College[] = [];
@@ -61,14 +62,14 @@ export class CollegesComponent implements OnInit {
 
   addCollegeDialog(content){
     this.alerts = [];
-    this.modalService.open(content);
+    this.modal = this.modalService.open(content);
     this.college = new College();
   }
 
   deleteCollegeDialog(content, id){
     this.alerts = [];
     this.deleteCollege(id);
-    this.modalService.open(content);
+    this.modal = this.modalService.open(content);
   }
 
   manageCollegeDialog(content) {
@@ -78,7 +79,7 @@ export class CollegesComponent implements OnInit {
     } else {
       this.invalidErrorMessage('empty departments');
     }
-    this.modalService.open(content);
+    this.modal = this.modalService.open(content);
     this.department = new Department();
   }
 
@@ -93,6 +94,7 @@ export class CollegesComponent implements OnInit {
           }
         );
         this.college = new College();
+        this.modal.close();
       } else {
           this.invalidErrorMessage('empty abbreviation');
         }
