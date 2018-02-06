@@ -13,6 +13,7 @@ import { DocumentService } from './document.service';
   styleUrls: ['./document.component.css']
 })
 export class DocumentComponent implements OnInit {
+  uploadForm: FormGroup;
   modal: NgbModalRef;
   options: NgbModalOptions = {
     backdrop : 'static',
@@ -23,22 +24,31 @@ export class DocumentComponent implements OnInit {
   uploadedFiles: any[] = [];
   document: Document = new Document();
 
-  constructor(private documentService: DocumentService, private modalService: NgbModal) { }
+  constructor(private documentService: DocumentService,
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.documentService.retrieveDocument('5a74ec2a2be15015df5ea703').subscribe( data => {
+    this.documentService.retrieveDocument('5a7900df9b263d9503ca14ab').subscribe( data => {
       this.document = data;
     })
 
+    this.createForm();
   }
 
-  // onUploadHandler(event) {
-  //   for (let file of event.files) {
-  //     this.uploadedFiles.push(file);
-  //   }
-  //   this.msgs = [];
-  //   this.msgs.push({severity: 'info', summary: 'File has been uploaded', detail: ''});
-  // }
+  createForm() {
+    this.uploadForm = this.formBuilder.group({
+      message: ['', Validators.required],
+      file: [null, Validators.required]
+    })
+  }
+
+  onFileChange(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.uploadForm.setValue({'file': file});
+    }
+  }
 
   createNewDocument(documentTitle: string) {
     this.documentService.createDocument(documentTitle).subscribe( data => {

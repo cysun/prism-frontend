@@ -26,56 +26,40 @@
         <pre><p>Document file: {{ document | json}}</p></pre>
       </div>
 
+      <!-- <div class="header-container">
+      Current Version
+      <div class="header-divider"></div> -->
+      <div>
+        <form [formGroup]="uploadForm">
+          <div class="form-group">
+            <input type="text" class="form-control" formControlName="message" placeholder="Enter a comment about the file">
+            <input type="file" clas="form-control" formControlName="file" (change)="onFileChange($event)">
+          </div>
+          <button type="submit" class="btn btn-success">Upload</button>
+        </form>
+      </div>
+    </ng-template>
+  </ngb-tab>
+
+  <ngb-tab>
+    <ng-template ngbTabTitle><i class="fa fa-icon fa-list"></i>Revisions</ng-template>
+    <ng-template ngbTabContent>
+      This tab holds previous revisions of the document for archiving purposes. Only the
+      administrator can revert to any previous revision without losing the current one.
 
       <div class="header-container">
-        Current Version
+        Previous Revisions
         <div class="header-divider"></div>
-        <!-- <form [formGroup]="form" (ngSubmit)="onSubmit()">
-          <div class="form-group">
-            <label for="name">File</label>
-            <input type="text" class="form-control" id="name" placeholder="Enter a title" formControlName="name">
-          </div>
-          <div class="form-group">
-
-            <input type="file" id="avatar" (change)="onFileChange($event)" #fileInput>
-            <button type="button" class="btn btn-sm btn-default" (click)="clearFile()">clear file</button>
-          </div>
-          <button type="submit" [disabled]="form.invalid || loading" class="btn btn-success">Submit <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i></button>
-        </form> -->
       </div>
+    </ng-template>
+  </ngb-tab>
 
-      <!-- <p-fileUpload name="demo[]" (onSelect)="onFileSelect()"
-      customUpload="true"
-      (uploadHandler)="onUploadHandler($event)">
-
-      <ng-template pTemplate="content">
-      <ul *ngIf="uploadedFiles.length">
-      <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
-    </ul>
-  </ng-template>
-</p-fileUpload> -->
-</ng-template>
-</ngb-tab>
-
-<ngb-tab>
-  <ng-template ngbTabTitle><i class="fa fa-icon fa-list"></i>Revisions</ng-template>
-  <ng-template ngbTabContent>
-    This tab holds previous revisions of the document for archiving purposes. Only the
-    administrator can revert to any previous revision without losing the current one.
-
-    <div class="header-container">
-      Previous Revisions
-      <div class="header-divider"></div>
-    </div>
-  </ng-template>
-</ngb-tab>
-
-<ngb-tab>
-  <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
-  <ng-template ngbTabContent>
-    comments tab
-  </ng-template>
-</ngb-tab>
+  <ngb-tab>
+    <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
+    <ng-template ngbTabContent>
+      comments tab
+    </ng-template>
+  </ngb-tab>
 </ngb-tabset>
 
 
