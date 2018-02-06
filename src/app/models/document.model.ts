@@ -1,5 +1,8 @@
 export class Document {
+  _id: String;
   title: String;
+
+  groups: any[];
 
   revisions: {
     message: String;
