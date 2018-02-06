@@ -53,15 +53,17 @@
   </div>
   <div class="modal-body">
     <!-- ========== ALERTS IN MANAGER ============== --->
+    <!-- 
     <div ngFor="let alert of alerts">
       <ngb-alert [type]="alert.type">{{alert.message}}</ngb-alert>
     </div>
+     -->
     <!-- ========== COLLEGE INFO ============== --->
 
 
 
     <!-- ========== ADD DEPT FORM ============== --->
-
+<!--
     <form #f="ngForm" (ngSubmit)="submitDepartment()">
       <div class="form-group">
         <label for="department-name">Department: </label>
@@ -78,7 +80,7 @@
         <button type="button" class="btn btn-outline-dark" (click)="cancel()">Cancel</button>
       </div>
     </form>
-  
+   -->
   </div>
   <div *ngIf="alerts" class="modal-footer">
     <p *ngFor="let alert of alerts">
