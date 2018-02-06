@@ -2,10 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 
-import {Group} from '../models/group.model';
+import { Group } from '../models/group.model';
+import { User } from '../models/user.model';
 
 @Injectable()
 export class GroupManagerService {
+  private HEADERS = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
 
   constructor(private http: HttpClient) { }
 
@@ -13,36 +15,46 @@ export class GroupManagerService {
     return this.http.get<Group[]>('/api/groups');
   }
 
+  getPrs(): Observable<Group> {
+    return this.http.get<Group>('/api/prs')
+  }
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>('/api/users');
+  }
+
   getGroup(id): Observable<Group> {
     return this.http.get<Group>('/api/group/' + id);
   }
 
+  getUser(id): Observable<User> {
+    return this.http.get<User>('/api/user/' + id);
+  }
+
+  searchUser(username): Observable<User> {
+    const params = new HttpParams().set('username', username);
+    return this.http.get<User>('/api/users', { params: params });
+  }
+
   addGroup(group: Group): Observable<Group> {
     const body = JSON.stringify({'_id': group._id, 'name': group.name, 'members': group.members});
-    const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
-
-    return this.http.post<Group>('/api/group', body, header);
+    return this.http.post<Group>('/api/group', body, this.HEADERS);
   }
 
   updateGroup(group: Group): Observable<Group> {
     const body = JSON.stringify({'name': group.name});
-    const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
-
-    return this.http.patch<Group>('/api/group/' + group._id, body, header);
+    return this.http.patch<Group>('/api/group/' + group._id, body, this.HEADERS);
   }
 
   deleteGroup(id): Observable<Group> {
-    const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
-    return this.http.delete<Group>('/api/group/' + id, header);
+    return this.http.delete<Group>('/api/group/' + id, this.HEADERS);
   }
 
-  addMember(userId, groupId): Observable<Group> {
-    const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
-    return this.http.put<Group>('/api/group/' + groupId + '/member/' + userId, header);
+  addMember(userId, groupId): Observable<User> {
+    return this.http.put<User>('/api/group/' + groupId + '/member/' + userId, this.HEADERS);
   }
 
   deleteMember(groupId, memberId): Observable<Group> {
-      const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
-      return this.http.delete<Group>('/api/group/' + groupId + '/member/' + memberId, header);
+      return this.http.delete<Group>('/api/group/' + groupId + '/member/' + memberId, this.HEADERS);
   }
 }

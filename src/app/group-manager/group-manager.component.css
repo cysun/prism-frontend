@@ -1,21 +1,5 @@
-.dialog-box {
-  margin-top: 20px;
-}
-
-.dialog-module {
-  text-align: center;
-}
-
-.buttons-container {
-  display: table;
-}
-
-.footer-buttons {
-  display: table-cell;
-  height: 50px;
-  text-align: center;
-  vertical-align: bottom;
-  width: 600px;
+.delete-btn {
+  width: 100%;
 }
 
 .header-container {
@@ -23,6 +7,8 @@
 }
 
 .header-panel {
+  color: #FFF;
+  font-weight: bold;
   position: relative;
   text-align: center;
   text-transform: uppercase;
@@ -33,33 +19,57 @@
 }
 
 .group-label {
-  padding: 5px;
+  padding: 8px;
   padding-right: 15px;
   text-align: right;
 }
 
-.group-manager-buttons {
-  display: table-cell;
-  height: 50px;
-  text-align: center;
-  vertical-align: bottom;
-  width: 800px;
+.info-message {
+  font-size: 1.4em;
 }
 
-.info-message {
-  display: grid;
-  font-size: 25px;
-  margin-top: 20px;
+.label {
+  font-size: 2em;
+  font-weight: bold;
+  padding-right: 10px;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.modal {
+  padding-top: 50px;
+}
+
+.modal-title {
+  width: 100%;
+}
+
+.modal-header {
+  background-color: #1A1A1A;
+  border-radius: 1px;
+  color: #FFF;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+::ng-deep .card-header {
+  background: #363636;
+  border-radius: 6px;
+  color: #FFF;
+}
+
+::ng-deep .card-body {
+  padding: 0;
+}
+
+.message {
+  margin: 10px;
 }
 
 .panel-buttons {
-  bottom: -6px;
+  bottom: -7px;
   position: absolute;
   right: -8px;
-}
-
-.text-boxes {
-  text-align: center;
 }
 
 .text-hints {
@@ -69,11 +79,10 @@
   text-align: left;
 }
 
-:host ::ng-deep .ui-autocomplete-token {
-  margin: 3px;
+td, th {
+  vertical-align: middle;
 }
 
-.update-module {
-  padding: 35px;
-
+:host ::ng-deep .ui-autocomplete-token {
+  margin: 3px;
 }
