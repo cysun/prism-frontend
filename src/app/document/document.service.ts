@@ -27,4 +27,22 @@ export class DocumentService {
     return this.http.patch<Document>('/api/document/' + documentId, body, this.HEADERS);
   }
 
+  /* Post a new revision */
+  postRevision(documentId: string, message: string) {
+    const body = JSON.stringify({'message': message});
+    return this.http.post('/api/document/' + documentId + '/revision', body, this.HEADERS);
+  }
+
+  /* Upload a file */
+  uploadFile(documentId: string, revisionIndex: string, message: string, file: File) {
+    const formHeader = { headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data'})};
+    const fileUpload = new FormData();
+
+    fileUpload.append('message', message);
+    fileUpload.append('file', file);
+
+    return this.http.post('/api/document/' + documentId + '/revision/' + revisionIndex + '/file',
+      fileUpload, formHeader);
+  }
+
 }
