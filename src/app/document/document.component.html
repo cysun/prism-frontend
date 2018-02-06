@@ -30,13 +30,16 @@
       Current Version
       <div class="header-divider"></div> -->
       <div>
-        <form [formGroup]="uploadForm">
+        <form #f="ngForm" (ngSubmit)="uploadFile()">
           <div class="form-group">
-            <input type="text" class="form-control" formControlName="message" placeholder="Enter a comment about the file">
-            <input type="file" clas="form-control" formControlName="file" (change)="onFileChange($event)">
+            <input type="text" class="form-control" [(ngModel)]="message" name="file-message" placeholder="Enter a comment about the file">
+            <!-- <input type="file" [(ngModel)]="file" name="file" (change)="onFileChange($event)"> -->
+            <input name="file" type="file" accept=".pdf" (change)="onFileChange($event)">
           </div>
           <button type="submit" class="btn btn-success">Upload</button>
         </form>
+
+        what is message: {{ message}}
       </div>
     </ng-template>
   </ngb-tab>

@@ -1,5 +1,5 @@
 export class Document {
-  _id: String;
+  _id: string;
   title: String;
 
   groups: any[];

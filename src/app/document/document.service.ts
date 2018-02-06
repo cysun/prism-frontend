@@ -28,20 +28,19 @@ export class DocumentService {
   }
 
   /* Post a new revision */
-  postRevision(documentId: string, message: string) {
+  postRevision(documentId: string, message: string): Observable<Document> {
     const body = JSON.stringify({'message': message});
-    return this.http.post('/api/document/' + documentId + '/revision', body, this.HEADERS);
+    return this.http.post<Document>('/api/document/' + documentId + '/revision', body, this.HEADERS);
   }
 
   /* Upload a file */
-  uploadFile(documentId: string, revisionIndex: string, message: string, file: File) {
+  uploadFile(documentId: string, revisionIndex: string, file: File): Observable<Document> {
     const formHeader = { headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data'})};
     const fileUpload = new FormData();
 
-    fileUpload.append('message', message);
     fileUpload.append('file', file);
 
-    return this.http.post('/api/document/' + documentId + '/revision/' + revisionIndex + '/file',
+    return this.http.post<Document>('/api/document/' + documentId + '/revision/' + revisionIndex + '/file',
       fileUpload, formHeader);
   }
 

@@ -21,32 +21,33 @@ export class DocumentComponent implements OnInit {
     size: 'lg',
   };
 
-  uploadedFiles: any[] = [];
   document: Document = new Document();
+  message: string;
+  file: File;
 
   constructor(private documentService: DocumentService,
     private modalService: NgbModal,
     private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.documentService.retrieveDocument('5a7900df9b263d9503ca14ab').subscribe( data => {
+    this.documentService.retrieveDocument('5a7a17879b263d9503ca14d1').subscribe( data => {
       this.document = data;
     })
 
-    this.createForm();
+    // this.createForm();
   }
 
-  createForm() {
-    this.uploadForm = this.formBuilder.group({
-      message: ['', Validators.required],
-      file: [null, Validators.required]
-    })
-  }
+  // createForm() {
+  //   this.uploadForm = this.formBuilder.group({
+  //     message: ['', Validators.required],
+  //     file: [null, Validators.required]
+  //   })
+  // }
 
   onFileChange(event) {
     if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.uploadForm.setValue({'file': file});
+      this.file = event.target.files[0];
+      // this.uploadForm.setValue({'file': this.file});
     }
   }
 
@@ -72,6 +73,17 @@ export class DocumentComponent implements OnInit {
 
   closeModal() {
     this.modal.close();
+  }
+
+  uploadFile() {
+    // this.documentService.postRevision(this.document._id, this.message).subscribe( data => {
+    //   this.document = data;
+    // });
+
+    this.documentService.uploadFile(this.document._id, '0', this.file).subscribe( data => {
+      console.log(data)
+      this.document = data;
+    });
   }
 
 
