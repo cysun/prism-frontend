@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
 import { NgbModal, NgbModalRef,  NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-
 
 import { Document } from '../models/document.model';
 import { DocumentService } from './document.service';
@@ -10,10 +7,9 @@ import { DocumentService } from './document.service';
 @Component({
   selector: 'prism-document',
   templateUrl: './document.component.html',
-  styleUrls: ['./document.component.css']
+  styleUrls: ['./document.component.css'],
 })
 export class DocumentComponent implements OnInit {
-  uploadForm: FormGroup;
   modal: NgbModalRef;
   options: NgbModalOptions = {
     backdrop : 'static',
@@ -25,29 +21,17 @@ export class DocumentComponent implements OnInit {
   message: string;
   file: File;
 
-  constructor(private documentService: DocumentService,
-    private modalService: NgbModal,
-    private formBuilder: FormBuilder) { }
+  constructor(private documentService: DocumentService, private modalService: NgbModal) { }
 
   ngOnInit() {
     this.documentService.retrieveDocument('5a7a17879b263d9503ca14d1').subscribe( data => {
       this.document = data;
     })
-
-    // this.createForm();
   }
-
-  // createForm() {
-  //   this.uploadForm = this.formBuilder.group({
-  //     message: ['', Validators.required],
-  //     file: [null, Validators.required]
-  //   })
-  // }
 
   onFileChange(event) {
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
-      // this.uploadForm.setValue({'file': this.file});
     }
   }
 
@@ -59,7 +43,6 @@ export class DocumentComponent implements OnInit {
   }
 
   editDocumentName(documentId: string) {
-    console.log('documentId: ' + documentId)
     this.documentService.editDocument(documentId, this.document).subscribe( data => {
       this.document.title = data.title;
     })
@@ -76,15 +59,21 @@ export class DocumentComponent implements OnInit {
   }
 
   uploadFile() {
-    // this.documentService.postRevision(this.document._id, this.message).subscribe( data => {
-    //   this.document = data;
-    // });
+    this.documentService.postRevision(this.document._id, this.message).subscribe( data => {
+      console.log(data)
+    });
+    const numOfRevisions = Object.keys(this.document.revisions).length - 1;
+    this.uploadActual(numOfRevisions);
+  }
 
-    this.documentService.uploadFile(this.document._id, '0', this.file).subscribe( data => {
+  uploadActual(index) {
+    this.documentService.uploadFile(this.document._id, index, this.file).subscribe( data => {
       console.log(data)
       this.document = data;
     });
   }
 
-
+  getNumOfRevisions(obj) {
+    return Object.keys(this.document.revisions).length;
+  }
 }

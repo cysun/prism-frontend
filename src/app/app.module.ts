@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -6,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ReversePipe } from './../pipe_manipulation';
 
 import { CollegesComponent } from './colleges/colleges.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -34,19 +36,20 @@ import { CommitteeComponent } from './committee/committee.component';
 @NgModule({
   declarations: [
     AppComponent,
-    CollegesComponent,
-    DashboardComponent,
-    PageNotFoundComponent,
-    SettingsComponent,
     CalendarComponent,
-    MinutesComponent,
-    ResourcesComponent,
+    CollegesComponent,
+    CommitteeComponent,
+    DashboardComponent,
+    DocumentComponent,
     GroupManagerComponent,
     LoginComponent,
-    PublicComponent,
+    MinutesComponent,
+    PageNotFoundComponent,
     PrivateComponent,
-    CommitteeComponent,
-    DocumentComponent
+    PublicComponent,
+    ResourcesComponent,
+    SettingsComponent,
+    ReversePipe,
   ],
   imports: [
     NgbModule.forRoot(),

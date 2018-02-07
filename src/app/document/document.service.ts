@@ -34,14 +34,12 @@ export class DocumentService {
   }
 
   /* Upload a file */
-  uploadFile(documentId: string, revisionIndex: string, file: File): Observable<Document> {
-    const formHeader = { headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data'})};
+  uploadFile(documentId: string, revisionIndex: Number, file: File): Observable<Document> {
     const fileUpload = new FormData();
-
     fileUpload.append('file', file);
 
     return this.http.post<Document>('/api/document/' + documentId + '/revision/' + revisionIndex + '/file',
-      fileUpload, formHeader);
+      fileUpload);
   }
 
 }

@@ -1,9 +1,38 @@
-.document-btn-right {
-  float:right;
+.card-body {
+  padding: 10px;
 }
+
+.card-action-buttons {
+  float: right;
+  margin-top: 5px;
+}
+
+.card-container {
+  margin-top: 15px;
+}
+
+.card-document-title {
+  float: left;
+  padding-left: 10px;
+}
+
+.document-btn-right {
+  float: right;
+}
+
 .document-header {
   margin-bottom: -25px;
   padding: 0;
+}
+
+.document-info {
+  color: #808080;
+  font-size: .8em;
+}
+
+.document-message {
+  font-size: 1.3em;
+  font-weight: bold;
 }
 
 .header-container {
