@@ -56,3 +56,11 @@
   text-transform: uppercase;
   vertical-align: middle;
 }
+
+.modal-message {
+  padding: 20px;
+}
+
+.revision-details {
+  padding-top: 20px;
+}

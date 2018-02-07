@@ -18,6 +18,7 @@ export class DocumentComponent implements OnInit {
   };
 
   document: Document = new Document();
+  revision: any[];
   message: string;
   file: File;
 
@@ -50,8 +51,10 @@ export class DocumentComponent implements OnInit {
   }
 
   /* Open a basic modal */
-  openModal(content) {
+  openModal(content, revisionIndex: string) {
     this.modal = this.modalService.open(content, this.options);
+    this.revision = this.document.revisions[revisionIndex];
+    console.log('printing out current revision: ' + JSON.stringify(this.revision))
   }
 
   closeModal() {
