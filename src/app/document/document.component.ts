@@ -19,6 +19,8 @@ export class DocumentComponent implements OnInit {
 
   document: Document = new Document();
   revision: any[];
+  revisionIndex: string;
+  totalIndices: Number;
   message: string;
   file: File;
 
@@ -27,6 +29,7 @@ export class DocumentComponent implements OnInit {
   ngOnInit() {
     this.documentService.retrieveDocument('5a7a17879b263d9503ca14d1').subscribe( data => {
       this.document = data;
+      this.totalIndices = this.getNumOfRevisions();
     })
   }
 
@@ -54,6 +57,7 @@ export class DocumentComponent implements OnInit {
   openModal(content, revisionIndex: string) {
     this.modal = this.modalService.open(content, this.options);
     this.revision = this.document.revisions[revisionIndex];
+    this.revisionIndex = revisionIndex;
     console.log('printing out current revision: ' + JSON.stringify(this.revision))
   }
 
@@ -73,10 +77,20 @@ export class DocumentComponent implements OnInit {
     this.documentService.uploadFile(this.document._id, index, this.file).subscribe( data => {
       console.log(data)
       this.document = data;
+      this.closeModal();
     });
   }
 
-  getNumOfRevisions(obj) {
+  deleteRevision() {
+    console.log('value of docId is: ' + JSON.stringify(this.document._id) + ' and revisionIndex is: ' + this.revisionIndex)
+    // this.documentService.deleteRevision(this.document._id, this.revisionIndex).subscribe(data => {
+    //   this.document = data;
+    //   this.totalIndices = this.getNumOfRevisions();
+    //   this.closeModal();
+    // })
+  }
+
+  getNumOfRevisions() {
     return Object.keys(this.document.revisions).length;
   }
 }
