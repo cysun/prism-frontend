@@ -108,21 +108,21 @@
           <div class="header-divider"></div>
         </div>
 
-        <div *ngFor="let revision of document.revisions | reverse; let idx = index">
+        <div *ngFor="let revision of document.revisions; let idx = index">
           <div class="card card-container" *ngIf="!revision.deleted">
             <div class="card-body">
               <div class="card-document-title">
                 <div class="document-message">{{revision.message}}</div>
                 <div class="document-info">
                   <strong>{{revision.uploader.username}}</strong> uploaded
-                  <strong>Revision #{{ totalIndices - idx }}</strong>
+                  <strong>Revision #{{ idx }}</strong>
                   on {{revision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}</div>
                 </div>
 
                 <div class="card-action-buttons">
                   <button class="btn btn-outline-secondary"><i class="fa fa-download"></i></button>
                   <button class="btn btn-outline-secondary"><i class="fa fa-exchange"></i></button>
-                  <button class="btn btn-outline-secondary" (click)="openModal(deleteRevisionModal, totalIndices - idx)"><i class="fa fa-trash"></i></button>
+                  <button class="btn btn-outline-secondary" (click)="openModal(deleteRevisionModal, idx)"><i class="fa fa-trash"></i></button>
                 </div>
               </div>
             </div></div>

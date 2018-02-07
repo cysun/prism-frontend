@@ -83,11 +83,18 @@ export class DocumentComponent implements OnInit {
 
   deleteRevision() {
     console.log('value of docId is: ' + JSON.stringify(this.document._id) + ' and revisionIndex is: ' + this.revisionIndex)
-    // this.documentService.deleteRevision(this.document._id, this.revisionIndex).subscribe(data => {
-    //   this.document = data;
-    //   this.totalIndices = this.getNumOfRevisions();
-    //   this.closeModal();
-    // })
+    this.documentService.deleteRevision(this.document._id, this.revisionIndex).subscribe(
+      () => {
+        console.log('passed here')
+        this.documentService.retrieveDocument(this.document._id).subscribe(data => {
+          this.document = data;
+          this.totalIndices = this.getNumOfRevisions();
+          this.closeModal();
+        })
+      }
+    );
+
+
   }
 
   getNumOfRevisions() {

@@ -34,8 +34,8 @@ export class DocumentService {
   }
 
   /* Delete a revision */
-  deleteRevision(documentId: string, revisionIndex: string): Observable<Document> {
-    return this.http.delete<Document>('/api/document/' + documentId + '/revision/' + revisionIndex, this.HEADERS);
+  deleteRevision(documentId: string, revisionIndex: string) {
+    return this.http.delete('/api/document/' + documentId + '/revision/' + revisionIndex, this.HEADERS);
   }
 
   /* Upload a file */
