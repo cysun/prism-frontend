@@ -33,6 +33,11 @@ export class DocumentService {
     return this.http.post<Document>('/api/document/' + documentId + '/revision', body, this.HEADERS);
   }
 
+  /* Delete a revision */
+  deleteRevision(documentId: string, revisionIndex: Number): Observable<Document> {
+    return this.http.delete<Document>('/api/document/' + documentId + '/revision/' + revisionIndex, this.HEADERS);
+  }
+
   /* Upload a file */
   uploadFile(documentId: string, revisionIndex: Number, file: File): Observable<Document> {
     const fileUpload = new FormData();

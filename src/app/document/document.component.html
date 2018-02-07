@@ -67,7 +67,7 @@ what is message: {{ message}}
           <div class="document-message">{{revision.message}}</div>
           <div class="document-info">
             <strong>{{revision.uploader.username}}</strong> uploaded
-            <strong>Revision #{{ getNumOfRevisions(document.revisions) - idx + 1}}</strong>
+            <strong>Revision #{{ getNumOfRevisions(document.revisions) - idx }}</strong>
             on {{revision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}</div>
         </div>
 
