@@ -47,4 +47,8 @@ export class DocumentService {
       fileUpload);
   }
 
+  /* Download a file */
+  downloadFile(documentId: string, revisionIndex: Number, file: File): Observable<File> {
+    return this.http.get<File>('/api/document/' + documentId + '/revision/' + revisionIndex + '/file');
+  }
 }
