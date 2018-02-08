@@ -17,12 +17,14 @@ export class DocumentComponent implements OnInit {
     size: 'lg',
   };
 
+  alert: any;
   document: Document = new Document();
   revision: any[];
   revisionIndex: string;
   totalIndices: Number;
   message: string;
   file: File;
+  fileName: string;
 
   constructor(private documentService: DocumentService, private modalService: NgbModal) { }
 
@@ -37,6 +39,7 @@ export class DocumentComponent implements OnInit {
   onFileChange(event) {
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
+      this.fileName = event.target.files[0].name;
     }
   }
 
@@ -46,15 +49,20 @@ export class DocumentComponent implements OnInit {
   }
 
   /* Open a basic modal passing the data of the specific revision */
-  openModal(content, revisionIndex: string) {
-    this.revision = this.document.revisions[revisionIndex];
-    this.revisionIndex = revisionIndex;
+  openModal(content, revisionIndex?: string) {
+    if (revisionIndex) {
+      this.revision = this.document.revisions[revisionIndex];
+      this.revisionIndex = revisionIndex;
+    }
     this.modal = this.modalService.open(content, this.options);
-    console.log('printing out current revision: ' + JSON.stringify(this.revision))
   }
 
   /* Close a modal */
   closeModal() {
+    this.alert = '';
+    this.message = '';
+    this.file = null;
+    this.fileName = '';
     this.modal.close();
   }
 
@@ -84,16 +92,21 @@ export class DocumentComponent implements OnInit {
 
   /* Upload revision message and the file being sent */
   uploadRevision() {
-    this.documentService.postRevision(this.document._id, this.message).subscribe( () => {
-      console.log('posted a revision')
-    }, (err) => {
-      console.log(err)
-      console.log('the num of revisions rn: ' + this.getNumOfRevisions())
-      const numOfRevisions = this.getNumOfRevisions();
+    if (this.file && this.message) {
+      this.documentService.postRevision(this.document._id, this.message).subscribe( () => {
+        console.log('posted a revision')
+      }, (err) => {
+        console.log(err)
+        console.log('the num of revisions rn: ' + this.getNumOfRevisions())
+        const numOfRevisions = this.getNumOfRevisions();
 
-      this.retrieveDocument();
-      this.uploadFile(numOfRevisions);
-    });
+        this.retrieveDocument();
+        this.uploadFile(numOfRevisions);
+        this.closeModal();
+      });
+    } else if (!this.file) {
+      this.alert = { message: 'Please upload a file.' };
+    }
   }
 
   /* Upload the file along with the revision message */

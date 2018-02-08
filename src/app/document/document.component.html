@@ -56,6 +56,46 @@
   </div>
 </ng-template>
 
+
+<!-- Modal for creating a revision -->
+<ng-template #uploadRevisionModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Upload Revision</h5>
+  </div>
+  <form #f="ngForm" (ngSubmit)="uploadRevision()">
+    <div class="modal-body">
+      <div *ngIf="alert">
+        <ngb-alert type="danger" [dismissible]="false"><i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}</ngb-alert>
+      </div>
+      <div class="modal-message">
+
+          <div class="custom-file">
+            <input name="file" type="file" class="custom-file-input"
+            accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            (change)="onFileChange($event)">
+
+            <label class="custom-file-label">
+              {{ fileName ? fileName : 'Choose a file'}}
+            </label>
+          </div>
+
+          <div class="file-message">
+            <input type="text" class="form-control"
+            [(ngModel)]="message" name="file-message"
+            placeholder="Enter a comment about the file" required>
+          </div>
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success" [disabled]="!f.form.valid">Upload</button>
+      <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+    </div>
+  </form>
+</ng-template>
+
+
 <ngb-tabset>
   <ngb-tab>
     <ng-template ngbTabTitle><i class="fa fa-icon fa-file-text-o"></i>Main Version</ng-template>
@@ -71,28 +111,18 @@
         <button type="button" class="btn btn-success" (click)="createNewDocument(document.title)">Create Document</button>
       </div>
 
-      <div>
-        <pre><p>Document file: {{ document | json}}</p></pre>
-      </div>
-
       <div class="header-container">
         Current Version
         <div class="header-divider"></div>
       </div>
       <div>
-        <form #f="ngForm" (ngSubmit)="uploadRevision()">
-          <div class="form-group">
-            <input type="text" class="form-control" [(ngModel)]="message" name="file-message" placeholder="Enter a comment about the file">
-            <input name="file"
-            type="file"
-            accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            (change)="onFileChange($event)">
-          </div>
-          <button type="submit" class="btn btn-success">Upload</button>
-        </form>
-
-        what is message: {{ message}}
+        <button type="button" class="btn btn-success" (click)="openModal(uploadRevisionModal)">Upload</button>
       </div>
+
+      <div>
+        <pre><p>Document file: {{ document | json}}</p></pre>
+      </div>
+
     </ng-template>
   </ngb-tab>
 
