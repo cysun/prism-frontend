@@ -154,7 +154,7 @@
         </div>
 
         <div *ngFor="let revision of document.revisions; let idx = index">
-          <div class="card card-container" *ngIf="!revision.deleted">
+          <div class="card card-container" *ngIf="!revision.deleted && (idx < totalIndices - 1)">
             <div class="card-body">
               <div class="card-document-title">
                 <div class="document-message">{{revision.message}}</div>
