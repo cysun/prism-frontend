@@ -28,9 +28,9 @@ export class DocumentService {
   }
 
   /* Post a new revision */
-  postRevision(documentId: string, message: string): Observable<Document> {
+  postRevision(documentId: string, message: string) {
     const body = JSON.stringify({'message': message});
-    return this.http.post<Document>('/api/document/' + documentId + '/revision', body, this.HEADERS);
+    return this.http.post('/api/document/' + documentId + '/revision', body, this.HEADERS);
   }
 
   /* Delete a revision */

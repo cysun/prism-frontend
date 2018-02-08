@@ -33,12 +33,32 @@ export class DocumentComponent implements OnInit {
     })
   }
 
+  /* Set file variable to the file the user has chosen */
   onFileChange(event) {
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
     }
   }
 
+  /* Get the total amount of revisions in the document */
+  getNumOfRevisions() {
+    return Object.keys(this.document.revisions).length;
+  }
+
+  /* Open a basic modal passing the data of the specific revision */
+  openModal(content, revisionIndex: string) {
+    this.revision = this.document.revisions[revisionIndex];
+    this.revisionIndex = revisionIndex;
+    this.modal = this.modalService.open(content, this.options);
+    console.log('printing out current revision: ' + JSON.stringify(this.revision))
+  }
+
+  /* Close a modal */
+  closeModal() {
+    this.modal.close();
+  }
+
+  /* Create a new document (for frontend test purposes only) */
   createNewDocument(documentTitle: string) {
     this.documentService.createDocument(documentTitle).subscribe( data => {
       this.document = data;
@@ -46,6 +66,7 @@ export class DocumentComponent implements OnInit {
     })
   }
 
+  /* Edit document's title */
   editDocumentName(documentId: string) {
     this.documentService.editDocument(documentId, this.document).subscribe( data => {
       this.document.title = data.title;
@@ -53,51 +74,42 @@ export class DocumentComponent implements OnInit {
     this.modal.close();
   }
 
-  /* Open a basic modal */
-  openModal(content, revisionIndex: string) {
-    this.modal = this.modalService.open(content, this.options);
-    this.revision = this.document.revisions[revisionIndex];
-    this.revisionIndex = revisionIndex;
-    console.log('printing out current revision: ' + JSON.stringify(this.revision))
-  }
-
-  closeModal() {
-    this.modal.close();
-  }
-
-  uploadFile() {
-    this.documentService.postRevision(this.document._id, this.message).subscribe( data => {
-      console.log(data)
-    });
-    const numOfRevisions = Object.keys(this.document.revisions).length - 1;
-    this.uploadActual(numOfRevisions);
-  }
-
-  uploadActual(index) {
-    this.documentService.uploadFile(this.document._id, index, this.file).subscribe( data => {
-      console.log(data)
+  /* Retrieve document data */
+  retrieveDocument() {
+    this.documentService.retrieveDocument(this.document._id).subscribe( data => {
       this.document = data;
+      this.totalIndices = this.getNumOfRevisions();
+    })
+  }
+
+  /* Upload revision message and the file being sent */
+  uploadRevision() {
+    this.documentService.postRevision(this.document._id, this.message).subscribe( () => {
+      console.log('posted a revision')
+    }, (err) => {
+      console.log(err)
+      console.log('the num of revisions rn: ' + this.getNumOfRevisions())
+      const numOfRevisions = this.getNumOfRevisions();
+
+      this.retrieveDocument();
+      this.uploadFile(numOfRevisions);
+    });
+  }
+
+  /* Upload the file along with the revision message */
+  uploadFile(index) {
+    this.documentService.uploadFile(this.document._id, index, this.file).subscribe( () => {
+    }, (err) => {
+      console.log(err);
+      this.retrieveDocument();
+    });
+  }
+
+  /* Delete a revision */
+  deleteRevision() {
+    this.documentService.deleteRevision(this.document._id, this.revisionIndex).subscribe( () => {
+      this.retrieveDocument();
       this.closeModal();
     });
-  }
-
-  deleteRevision() {
-    console.log('value of docId is: ' + JSON.stringify(this.document._id) + ' and revisionIndex is: ' + this.revisionIndex)
-    this.documentService.deleteRevision(this.document._id, this.revisionIndex).subscribe(
-      () => {
-        console.log('passed here')
-        this.documentService.retrieveDocument(this.document._id).subscribe(data => {
-          this.document = data;
-          this.totalIndices = this.getNumOfRevisions();
-          this.closeModal();
-        })
-      }
-    );
-
-
-  }
-
-  getNumOfRevisions() {
-    return Object.keys(this.document.revisions).length;
   }
 }
