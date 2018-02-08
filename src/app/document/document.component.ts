@@ -4,6 +4,8 @@ import { NgbModal, NgbModalRef,  NgbModalOptions } from '@ng-bootstrap/ng-bootst
 import { Document } from '../models/document.model';
 import { DocumentService } from './document.service';
 
+import { saveAs } from 'file-saver';
+
 @Component({
   selector: 'prism-document',
   templateUrl: './document.component.html',
@@ -19,9 +21,12 @@ export class DocumentComponent implements OnInit {
 
   alert: any;
   document: Document = new Document();
-  revision: any[];
+  currentRevision: any[];
+  mainRevision: any[];
+
   revisionIndex: string;
-  totalIndices: Number;
+  totalIndices: number;
+
   message: string;
   file: File;
   fileName: string;
@@ -32,6 +37,7 @@ export class DocumentComponent implements OnInit {
     this.documentService.retrieveDocument('5a7a17879b263d9503ca14d1').subscribe( data => {
       this.document = data;
       this.totalIndices = this.getNumOfRevisions();
+      this.getLatestRevision();
     })
   }
 
@@ -51,7 +57,7 @@ export class DocumentComponent implements OnInit {
   /* Open a basic modal passing the data of the specific revision */
   openModal(content, revisionIndex?: string) {
     if (revisionIndex) {
-      this.revision = this.document.revisions[revisionIndex];
+      this.currentRevision = this.document.revisions[revisionIndex];
       this.revisionIndex = revisionIndex;
     }
     this.modal = this.modalService.open(content, this.options);
@@ -105,17 +111,31 @@ export class DocumentComponent implements OnInit {
         this.closeModal();
       });
     } else if (!this.file) {
-      this.alert = { message: 'Please upload a file.' };
+      this.alert = { message: 'Please attach a file.' };
     }
   }
 
+  getLatestRevision() {
+    const lastIndex = this.totalIndices - 1;
+    this.mainRevision = this.document.revisions[lastIndex];
+  }
+
   /* Upload the file along with the revision message */
-  uploadFile(index) {
-    this.documentService.uploadFile(this.document._id, index, this.file).subscribe( () => {
+  uploadFile(revisionIndex: number) {
+    this.documentService.uploadFile(this.document._id, revisionIndex, this.file).subscribe( () => {
     }, (err) => {
       console.log(err);
       this.retrieveDocument();
+      this.getLatestRevision();
     });
+  }
+
+  downloadFile(revisionIndex: number) {
+    // this.documentService.downloadFile(this.document._id, revisionIndex).subscribe( data => {
+    // }, (err) => {
+    //   console.log(err);
+    //   saveAs(new Blob(['test'], { type: 'application/octet-stream' }), 'testing');
+    // })
   }
 
   /* Delete a revision */

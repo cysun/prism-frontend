@@ -42,10 +42,10 @@
       the document and can only be restored by an Administrator. Are you sure you want to delete?
 
       <div class="revision-details">
-        <i class="fa fa-icon fa-edit"></i><strong>Revision Message:</strong> {{ revision.message }}<br/>
-        <i class="fa fa-icon fa-calendar"></i><strong>Date Uploaded:</strong> {{ revision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss' }}<br/>
-        <i class="fa fa-icon fa-user"></i><strong>Uploader:</strong> {{ revision.uploader.username }}<br/>
-        <i class="fa fa-icon fa-file-o"></i><strong>File Type:</strong> {{ revision.fileExtension}}
+        <i class="fa fa-icon fa-edit"></i><strong>Revision Message:</strong> {{ currentRevision.message }}<br/>
+        <i class="fa fa-icon fa-calendar"></i><strong>Date Uploaded:</strong> {{ currentRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss' }}<br/>
+        <i class="fa fa-icon fa-user"></i><strong>Uploader:</strong> {{ currentRevision.uploader.username }}<br/>
+        <i class="fa fa-icon fa-file-o"></i><strong>File Type:</strong> {{ currentRevision.fileExtension}}
       </div>
     </div>
   </div>
@@ -116,7 +116,22 @@
         <div class="header-divider"></div>
       </div>
       <div>
-        <button type="button" class="btn btn-success" (click)="openModal(uploadRevisionModal)">Upload</button>
+        <div class="card card-container">
+          <div class="card-body">
+            <div class="card-document-title">
+              <div class="document-message">{{mainRevision.message}}</div>
+              <div class="document-info">
+                <strong>{{mainRevision.uploader.username}}</strong> uploaded
+                <strong>Revision #{{ totalIndices }}</strong>
+                on {{mainRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}</div>
+              </div>
+
+              <div class="card-action-buttons">
+                <button class="btn btn-outline-secondary" (click)="openModal(uploadRevisionModal)"><i class="fa fa-upload"></i></button>
+                <button class="btn btn-outline-secondary" (click)="downloadFile(totalIndices)"><i class="fa fa-download"></i></button>
+              </div>
+            </div>
+          </div>
       </div>
 
       <div>
@@ -150,12 +165,13 @@
                 </div>
 
                 <div class="card-action-buttons">
-                  <button class="btn btn-outline-secondary"><i class="fa fa-download"></i></button>
+                  <button class="btn btn-outline-secondary" (click)="downloadFile(idx)"><i class="fa fa-download"></i></button>
                   <button class="btn btn-outline-secondary"><i class="fa fa-exchange"></i></button>
                   <button class="btn btn-outline-secondary" (click)="openModal(deleteRevisionModal, idx)"><i class="fa fa-trash"></i></button>
                 </div>
               </div>
-            </div></div>
+            </div>
+          </div>
           </div>
         </ng-template>
       </ngb-tab>

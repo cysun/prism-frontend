@@ -39,7 +39,7 @@ export class DocumentService {
   }
 
   /* Upload a file */
-  uploadFile(documentId: string, revisionIndex: string, file: File): Observable<Document> {
+  uploadFile(documentId: string, revisionIndex: Number, file: File): Observable<Document> {
     const fileUpload = new FormData();
     fileUpload.append('file', file);
 
@@ -48,7 +48,13 @@ export class DocumentService {
   }
 
   /* Download a file */
-  downloadFile(documentId: string, revisionIndex: Number): Observable<File> {
-    return this.http.get<File>('/api/document/' + documentId + '/revision/' + revisionIndex + '/file');
+  downloadFile(documentId: string, revisionIndex: Number) {
+    const idk = { headers: new HttpHeaders({ 'Response': 'application/json'})};
+    return this.http.get<File>('/api/document/' + documentId + '/revision/' + revisionIndex + '/file',
+
+  ).subscribe( res => {
+    console.log('haha! i is here')
+    console.log(res)
+  });
   }
 }
