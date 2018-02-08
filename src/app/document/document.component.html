@@ -116,69 +116,70 @@
         <div class="header-divider"></div>
       </div>
 
-      <div class="card card-container">
+      <div class="card card-container" *ngIf="mainRevision">
         <div class="card-body">
           <div class="card-document-title">
             <div class="document-message">{{mainRevision.message}}</div>
             <div class="document-info">
               <strong>{{mainRevision.uploader.username}}</strong> uploaded
               <strong>Revision #{{ totalIndices }}</strong>
-              on {{mainRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}</div>
-            </div>
-
-            <div class="card-action-buttons">
-              <button class="btn btn-outline-secondary" (click)="openModal(uploadRevisionModal)"><i class="fa fa-upload"></i></button>
-              <button class="btn btn-outline-secondary" (click)="downloadFile(totalIndices)"><i class="fa fa-download"></i></button>
+              on {{mainRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}
             </div>
           </div>
-        </div>
 
-        <div>
-          <pre><p>Document file: {{ document | json}}</p></pre>
-        </div>
-
-      </ng-template>
-    </ngb-tab>
-
-    <ngb-tab>
-      <ng-template ngbTabTitle><i class="fa fa-icon fa-list"></i>Revisions</ng-template>
-      <ng-template ngbTabContent>
-        <div class="container" style="padding-top: 20px;">
-          This tab holds previous revisions of the document for archiving purposes. Only the
-          administrator can revert to any previous revision without losing the current one.
-
-          <div class="header-container">
-            Previous Revisions
-            <div class="header-divider"></div>
+          <div class="card-action-buttons">
+            <button class="btn btn-outline-secondary" (click)="openModal(uploadRevisionModal)" placement="top" ngbTooltip="Upload Revision"><i class="fa fa-upload"></i></button>
+            <button class="btn btn-outline-secondary" (click)="downloadFile(totalIndices)" placement="top" ngbTooltip="Download Revision"><i class="fa fa-download"></i></button>
           </div>
+        </div>
+      </div>
 
-          <div *ngFor="let revision of document.revisions; let idx = index">
-            <div class="card card-container" *ngIf="!revision.deleted">
-              <div class="card-body">
-                <div class="card-document-title">
-                  <div class="document-message">{{revision.message}}</div>
-                  <div class="document-info">
-                    <strong>{{revision.uploader.username}}</strong> uploaded
-                    <strong>Revision #{{ idx }}</strong>
-                    on {{revision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}</div>
-                  </div>
+      <div>
+        <pre><p>Document file: {{ document | json}}</p></pre>
+      </div>
 
-                  <div class="card-action-buttons">
-                    <button class="btn btn-outline-secondary" (click)="downloadFile(idx)"><i class="fa fa-download"></i></button>
-                    <button class="btn btn-outline-secondary"><i class="fa fa-exchange"></i></button>
-                    <button class="btn btn-outline-secondary" (click)="openModal(deleteRevisionModal, idx)"><i class="fa fa-trash"></i></button>
-                  </div>
+    </ng-template>
+  </ngb-tab>
+
+  <ngb-tab>
+    <ng-template ngbTabTitle><i class="fa fa-icon fa-list"></i>Revisions</ng-template>
+    <ng-template ngbTabContent>
+      <div class="container" style="padding-top: 20px;">
+        This tab holds previous revisions of the document for archiving purposes. Only the
+        administrator can revert to any previous revision without losing the current one.
+
+        <div class="header-container">
+          Previous Revisions
+          <div class="header-divider"></div>
+        </div>
+
+        <div *ngFor="let revision of document.revisions; let idx = index">
+          <div class="card card-container" *ngIf="!revision.deleted">
+            <div class="card-body">
+              <div class="card-document-title">
+                <div class="document-message">{{revision.message}}</div>
+                <div class="document-info">
+                  <strong>{{revision.uploader.username}}</strong> uploaded
+                  <strong>Revision #{{ idx }}</strong>
+                  on {{revision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}</div>
+                </div>
+
+                <div class="card-action-buttons">
+                  <button class="btn btn-outline-secondary" (click)="downloadFile(idx)" placement="top" ngbTooltip="Download Revision"><i class="fa fa-download"></i></button>
+                  <button class="btn btn-outline-secondary" placement="top" ngbTooltip="Revert as Main"><i class="fa fa-exchange"></i></button>
+                  <button class="btn btn-outline-secondary" (click)="openModal(deleteRevisionModal, idx)" placement="top" ngbTooltip="Delete Revision"><i class="fa fa-trash"></i></button>
                 </div>
               </div>
             </div>
           </div>
-        </ng-template>
-      </ngb-tab>
+        </div>
+      </ng-template>
+    </ngb-tab>
 
-      <ngb-tab>
-        <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
-        <ng-template ngbTabContent>
-          comments tab
-        </ng-template>
-      </ngb-tab>
-    </ngb-tabset>
+    <ngb-tab>
+      <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
+      <ng-template ngbTabContent>
+        comments tab
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>

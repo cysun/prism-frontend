@@ -24,7 +24,7 @@ export class DocumentComponent implements OnInit {
   currentRevision: any[];
   mainRevision: any[];
 
-  revisionIndex: string;
+  revisionIndex: number;
   totalIndices: number;
 
   message: string;
@@ -55,12 +55,14 @@ export class DocumentComponent implements OnInit {
   }
 
   /* Open a basic modal passing the data of the specific revision */
-  openModal(content, revisionIndex?: string) {
-    if (revisionIndex) {
+  openModal(content, revisionIndex?: number) {
+    if (revisionIndex >= 0) {
       this.currentRevision = this.document.revisions[revisionIndex];
       this.revisionIndex = revisionIndex;
     }
     this.modal = this.modalService.open(content, this.options);
+    console.log('current revision: ' + JSON.stringify(this.currentRevision))
+    console.log('revisionIndex: ' + this.revisionIndex);
   }
 
   /* Close a modal */

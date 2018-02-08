@@ -34,12 +34,12 @@ export class DocumentService {
   }
 
   /* Delete a revision */
-  deleteRevision(documentId: string, revisionIndex: string) {
+  deleteRevision(documentId: string, revisionIndex: number) {
     return this.http.delete('/api/document/' + documentId + '/revision/' + revisionIndex, this.HEADERS);
   }
 
   /* Upload a file */
-  uploadFile(documentId: string, revisionIndex: Number, file: File): Observable<Document> {
+  uploadFile(documentId: string, revisionIndex: number, file: File): Observable<Document> {
     const fileUpload = new FormData();
     fileUpload.append('file', file);
 
