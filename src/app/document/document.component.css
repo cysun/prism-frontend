@@ -16,6 +16,10 @@
   padding-left: 10px;
 }
 
+.deleted-revisions {
+  background: #E8E8E8;
+}
+
 .document-btn-right {
   float: right;
 }

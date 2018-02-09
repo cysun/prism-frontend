@@ -98,41 +98,43 @@
   <ngb-tab>
     <ng-template ngbTabTitle><i class="fa fa-icon fa-file-text-o"></i>Main Version</ng-template>
     <ng-template ngbTabContent>
-      This tab holds the current version of the document. Revisions of the
-      same document can be found in the revisions tab. <br/><br/>
+      <div class="container" style="padding-top: 20px;">
+        This tab holds the current version of the document. Revisions of the
+        same document can be found in the revisions tab. <br/><br/>
 
-      <strong>Frontend testing purposes only</strong> <br/>
-      (create a document, take the ID and paste it onto retrieveDocument function in ngOnInit before refreshing):
+        <strong>Frontend testing purposes only</strong> <br/>
+        (create a document, take the ID and paste it onto retrieveDocument function in ngOnInit before refreshing):
 
-      <div class="input-group">
-        <input type="text" class="form-control" [(ngModel)]="document.title" placeholder="Enter document title" name="document-title">
-        <button type="button" class="btn btn-success" (click)="createNewDocument(document.title)">Create Document</button>
-      </div>
+        <div class="input-group">
+          <input type="text" class="form-control" [(ngModel)]="document.title" placeholder="Enter document title" name="document-title">
+          <button type="button" class="btn btn-success" (click)="createNewDocument(document.title)">Create Document</button>
+        </div>
 
-      <div class="header-container">
-        Current Version
-        <div class="header-divider"></div>
-      </div>
+        <div class="header-container">
+          Current Version
+          <div class="header-divider"></div>
+        </div>
 
-      <div class="card card-container" *ngIf="mainRevision">
-        <div class="card-body">
-          <div class="card-document-title">
-            <div class="document-message">{{mainRevision.message}}</div>
-            <div class="document-info">
-              <strong>{{mainRevision.uploader.username}}</strong> uploaded
-              <strong>Revision #{{ totalIndices }}</strong>
-              on {{mainRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}
+        <div class="card card-container" *ngIf="mainRevision">
+          <div class="card-body">
+            <div class="card-document-title">
+              <div class="document-message">{{mainRevision.message}}</div>
+              <div class="document-info">
+                <strong>{{mainRevision.uploader.username}}</strong> uploaded
+                <strong>Revision #{{ totalIndices }}</strong>
+                on {{mainRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}
+              </div>
+            </div>
+
+            <div class="card-action-buttons">
+              <button class="btn btn-outline-secondary" (click)="openModal(uploadRevisionModal)" placement="top" ngbTooltip="Upload Revision"><i class="fa fa-upload"></i></button>
+              <button class="btn btn-outline-secondary" (click)="downloadFile(totalIndices)" placement="top" ngbTooltip="Download Revision"><i class="fa fa-download"></i></button>
             </div>
           </div>
-
-          <div class="card-action-buttons">
-            <button class="btn btn-outline-secondary" (click)="openModal(uploadRevisionModal)" placement="top" ngbTooltip="Upload Revision"><i class="fa fa-upload"></i></button>
-            <button class="btn btn-outline-secondary" (click)="downloadFile(totalIndices)" placement="top" ngbTooltip="Download Revision"><i class="fa fa-download"></i></button>
-          </div>
         </div>
-      </div>
 
-      <div><pre><p>Document file: {{ document | json}}</p></pre></div>
+        <div><pre><p>Document file: {{ document | json}}</p></pre></div>
+      </div>
     </ng-template>
   </ngb-tab>
 
@@ -148,8 +150,8 @@
           <div class="header-divider"></div>
         </div>
 
-        <div *ngFor="let revision of document.revisions | reverse; let idx = index">
-          <div class="card card-container" *ngIf="!revision.deleted && (idx > 0)">
+        <ng-container *ngFor="let revision of document.revisions | reverse; let idx = index">
+          <div class="card card-container" *ngIf="!revision.deleted && (idx > 0) ; else deletedRevisions">
             <div class="card-body">
               <div class="card-document-title">
                 <div class="document-message">{{revision.message}}</div>
@@ -162,7 +164,7 @@
 
               <div class="card-action-buttons">
                 <button class="btn btn-outline-secondary"
-                        (click)="downloadFile(idx)" placement="top" ngbTooltip="Download Revision">
+                        (click)="downloadFile(totalIndices - idx - 1)" placement="top" ngbTooltip="Download Revision">
                         <i class="fa fa-download"></i>
                 </button>
                 <button class="btn btn-outline-secondary"
@@ -172,21 +174,39 @@
                 </button>
                 <button class="btn btn-outline-secondary"
                         (click)="openModal(revisionModal, totalIndices - idx - 1, 'delete')"
-                        placement="top" ngbTooltip="Delete Revision">
+                        placement="top" ngbTooltip="Delete">
                         <i class="fa fa-trash"></i>
                 </button>
               </div>
             </div>
           </div>
-        </div>
+
+          <ng-template #deletedRevisions>
+            <div class="card card-container deleted-revisions" *ngIf="idx > 0">
+              <div class="card-body">
+                <div class="card-document-title">
+                  <div class="document-message">{{revision.message}}</div>
+                  <div class="document-info">Revision #{{totalIndices - idx}}</div>
+                </div>
+
+                <div class="card-action-buttons">
+                  <button class="btn btn-outline-secondary"
+                          (click)="restoreRevision(totalIndices - idx - 1)" placement="top" ngbTooltip="Restore">
+                          <i class="fa fa-arrow-circle-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ng-container>
       </div>
     </ng-template>
-</ngb-tab>
+  </ngb-tab>
 
-<ngb-tab>
-  <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
-  <ng-template ngbTabContent>
-    comments tab
-  </ng-template>
-</ngb-tab>
+  <ngb-tab>
+    <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
+    <ng-template ngbTabContent>
+      comments tab
+    </ng-template>
+  </ngb-tab>
 </ngb-tabset>
