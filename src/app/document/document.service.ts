@@ -63,6 +63,6 @@ export class DocumentService {
 
   /* Restore revision */
   restoreRevision(documentId: string, revisionIndex: number) {
-    return this.http.post('/doccument/' + documentId + '/revision/' + revisionIndex + '/restore', this.HEADERS);
+    return this.http.post('/api/document/' + documentId + '/revision/' + revisionIndex + '/restore', this.HEADERS);
   }
 }

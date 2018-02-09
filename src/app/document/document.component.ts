@@ -180,4 +180,14 @@ export class DocumentComponent implements OnInit {
       this.closeModal();
     })
   }
+
+  /* Restore a revision */
+  restoreRevision(revisionIndex: number) {
+    this.documentService.restoreRevision(this.document._id, revisionIndex).subscribe( () => {
+    }, (err) => {
+      console.log('restore complete');
+      console.log(err);
+      this.retrieveDocument();
+    })
+  }
 }
