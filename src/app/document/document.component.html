@@ -25,7 +25,7 @@
   </div>
 
   <div class="modal-footer">
-    <button class="btn btn-dark" type="button" (click)=editDocumentName(document._id)>Save</button>
+    <button class="btn btn-dark" type="button" (click)="editDocumentName(document._id, newTitle)">Save</button>
     <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
   </div>
 </ng-template>
@@ -133,7 +133,10 @@
           </div>
         </div>
 
-        <div><pre><p>Document file: {{ document | json}}</p></pre></div>
+        <div style="margin-top: 20px;">
+          <button type="button" class="btn btn-outline-primary" (click)="isCollapsed = !isCollapsed">Toggle</button>
+        </div>
+        <div [ngbCollapse]="isCollapsed"><pre><p>Document file: {{ document | json}}</p></pre></div>
       </div>
     </ng-template>
   </ngb-tab>
@@ -190,7 +193,7 @@
                 </div>
 
                 <div class="card-action-buttons">
-                  <button class="btn btn-outline-secondary"
+                  <button class="btn btn-dark"
                           (click)="restoreRevision(totalIndices - idx - 1)" placement="top" ngbTooltip="Restore">
                           <i class="fa fa-arrow-circle-up"></i>
                   </button>
