@@ -30,16 +30,15 @@
   </div>
 </ng-template>
 
-<!-- Modal for deleting a revision -->
-<ng-template #deleteRevisionModal>
+<!-- Modal for deleting and reverting a revision -->
+<ng-template #revisionModal>
   <div class="modal-header">
-    <h5 class="modal-title"><i class="fa fa-icon fa-exclamation-triangle"></i>Delete Revision</h5>
+    <h5 class="modal-title">{{ modalMessage.title }}</h5>
   </div>
 
   <div class="modal-body">
     <div class="modal-message">
-      <strong><u>Warning:</u></strong> Deleting this revision will remove it from
-      the document and can only be restored by an Administrator. Are you sure you want to delete?
+      {{ modalMessage.message }}
 
       <div class="revision-details">
         <i class="fa fa-icon fa-edit"></i><strong>Revision Message:</strong> {{ currentRevision.message }}<br/>
@@ -51,11 +50,10 @@
   </div>
 
   <div class="modal-footer">
-    <button class="btn btn-dark" type="button" (click)="deleteRevision()">Delete</button>
+    <button class="btn btn-dark" type="button" (click)="modalMessage.button === 'Delete' ? deleteRevision() : revertRevision()">{{ modalMessage.button }}</button>
     <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
   </div>
 </ng-template>
-
 
 <!-- Modal for creating a revision -->
 <ng-template #uploadRevisionModal>
@@ -95,7 +93,7 @@
   </form>
 </ng-template>
 
-
+<!-- Tabs consisting Main Version tab, Revisions tab, and Comments tab -->
 <ngb-tabset>
   <ngb-tab>
     <ng-template ngbTabTitle><i class="fa fa-icon fa-file-text-o"></i>Main Version</ng-template>
@@ -134,10 +132,7 @@
         </div>
       </div>
 
-      <div>
-        <pre><p>Document file: {{ document | json}}</p></pre>
-      </div>
-
+      <div><pre><p>Document file: {{ document | json}}</p></pre></div>
     </ng-template>
   </ngb-tab>
 
@@ -146,7 +141,7 @@
     <ng-template ngbTabContent>
       <div class="container" style="padding-top: 20px;">
         This tab holds previous revisions of the document for archiving purposes. Only the
-        administrator can revert to any previous revision without losing the current one.
+        administrator can revert to any previous revision without losing the current version.
 
         <div class="header-container">
           Previous Revisions
@@ -161,25 +156,37 @@
                 <div class="document-info">
                   <strong>{{revision.uploader.username}}</strong> uploaded
                   <strong>Revision #{{ totalIndices - idx }}</strong>
-                  on {{revision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}</div>
+                  on {{revision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}
                 </div>
+              </div>
 
-                <div class="card-action-buttons">
-                  <button class="btn btn-outline-secondary" (click)="downloadFile(idx)" placement="top" ngbTooltip="Download Revision"><i class="fa fa-download"></i></button>
-                  <button class="btn btn-outline-secondary" placement="top" ngbTooltip="Revert as Main"><i class="fa fa-exchange"></i></button>
-                  <button class="btn btn-outline-secondary" (click)="openModal(deleteRevisionModal, totalIndices - idx - 1)" placement="top" ngbTooltip="Delete Revision"><i class="fa fa-trash"></i></button>
-                </div>
+              <div class="card-action-buttons">
+                <button class="btn btn-outline-secondary"
+                        (click)="downloadFile(idx)" placement="top" ngbTooltip="Download Revision">
+                        <i class="fa fa-download"></i>
+                </button>
+                <button class="btn btn-outline-secondary"
+                        (click)="openModal(revisionModal, totalIndices - idx - 1, 'revert')"
+                        placement="top" ngbTooltip="Revert as Main">
+                        <i class="fa fa-exchange"></i>
+                </button>
+                <button class="btn btn-outline-secondary"
+                        (click)="openModal(revisionModal, totalIndices - idx - 1, 'delete')"
+                        placement="top" ngbTooltip="Delete Revision">
+                        <i class="fa fa-trash"></i>
+                </button>
               </div>
             </div>
           </div>
         </div>
-      </ng-template>
-    </ngb-tab>
+      </div>
+    </ng-template>
+</ngb-tab>
 
-    <ngb-tab>
-      <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
-      <ng-template ngbTabContent>
-        comments tab
-      </ng-template>
-    </ngb-tab>
-  </ngb-tabset>
+<ngb-tab>
+  <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
+  <ng-template ngbTabContent>
+    comments tab
+  </ng-template>
+</ngb-tab>
+</ngb-tabset>

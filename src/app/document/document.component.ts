@@ -30,6 +30,7 @@ export class DocumentComponent implements OnInit {
   message: string;
   file: File;
   fileName: string;
+  modalMessage: any;
 
   constructor(private documentService: DocumentService, private modalService: NgbModal) { }
 
@@ -55,11 +56,32 @@ export class DocumentComponent implements OnInit {
   }
 
   /* Open a basic modal passing the data of the specific revision */
-  openModal(content, revisionIndex?: number) {
+  openModal(content, revisionIndex?: number, modalType?: string) {
     if (revisionIndex >= 0) {
       this.currentRevision = this.document.revisions[revisionIndex];
       this.revisionIndex = revisionIndex;
     }
+
+    if (modalType === 'delete') {
+      const modalMessage = 'This revision will be removed from the document and ' +
+        'can only be restored by an Administrator. Are you sure you want to delete?';
+
+      this.modalMessage = {
+        title: 'Deleting Revision',
+        message: modalMessage,
+        button: 'Delete',
+      };
+    } else if (modalType === 'revert') {
+      const modalMessage = 'This revision will become a new copy and be treated as the' +
+        ' main version of the document. Are you sure you want to revert to this revision?';
+
+      this.modalMessage = {
+        title: 'Reverting Revision',
+        message: modalMessage,
+        button: 'Revert',
+      };
+    }
+
     this.modal = this.modalService.open(content, this.options);
     console.log('current revision: ' + JSON.stringify(this.currentRevision))
     console.log('revisionIndex: ' + this.revisionIndex);
@@ -95,6 +117,7 @@ export class DocumentComponent implements OnInit {
     this.documentService.retrieveDocument(this.document._id).subscribe( data => {
       this.document = data;
       this.totalIndices = this.getNumOfRevisions();
+      this.getLatestRevision();
     })
   }
 
@@ -128,7 +151,6 @@ export class DocumentComponent implements OnInit {
     }, (err) => {
       console.log(err);
       this.retrieveDocument();
-      this.getLatestRevision();
     });
   }
 
@@ -146,5 +168,16 @@ export class DocumentComponent implements OnInit {
       this.retrieveDocument();
       this.closeModal();
     });
+  }
+
+  /* Revert to a previous revision */
+  revertRevision() {
+    this.documentService.revertRevision(this.document._id, this.revisionIndex).subscribe( () => {
+    }, (err) => {
+      console.log('reverting complete');
+      console.log(err);
+      this.retrieveDocument();
+      this.closeModal();
+    })
   }
 }
