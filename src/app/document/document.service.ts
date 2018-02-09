@@ -44,17 +44,20 @@ export class DocumentService {
     fileUpload.append('file', file);
 
     return this.http.post<Document>('/api/document/' + documentId + '/revision/' + revisionIndex + '/file',
-      fileUpload);
+    fileUpload);
   }
 
   /* Download a file */
-  downloadFile(documentId: string, revisionIndex: Number) {
-    const idk = { headers: new HttpHeaders({ 'Response': 'application/json'})};
-    return this.http.get<File>('/api/document/' + documentId + '/revision/' + revisionIndex + '/file',
+  downloadFile(documentId: string, revisionIndex: number) {
+    return this.http.get<File>('/api/document/' + documentId + '/revision/' + revisionIndex + '/file')
+    .subscribe( res => {
+      console.log(res)
+    });
+  }
 
-  ).subscribe( res => {
-    console.log('haha! i is here')
-    console.log(res)
-  });
+  /* Revert to a revision */
+  revertRevision(documentId: string, revisionIndex: number) {
+    const body = JSON.stringify({ 'revert': revisionIndex })
+    return this.http.post('/api/document/' + documentId + '/revision', body, this.HEADERS);
   }
 }
