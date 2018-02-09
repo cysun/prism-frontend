@@ -27,6 +27,7 @@ export class DocumentComponent implements OnInit {
   revisionIndex: number;
   totalIndices: number;
 
+  documentTitle: string;
   message: string;
   file: File;
   fileName: string;
@@ -37,6 +38,7 @@ export class DocumentComponent implements OnInit {
   ngOnInit() {
     this.documentService.retrieveDocument('5a7a17879b263d9503ca14d1').subscribe( data => {
       this.document = data;
+      this.documentTitle = this.document.title;
       this.totalIndices = this.getNumOfRevisions();
       this.getLatestRevision();
     })
@@ -64,7 +66,7 @@ export class DocumentComponent implements OnInit {
 
     if (modalType === 'delete') {
       const modalMessage = 'This revision will be removed from the document and ' +
-        'can only be restored by an Administrator. Are you sure you want to delete?';
+      'can only be restored by an Administrator. Are you sure you want to delete?';
 
       this.modalMessage = {
         title: 'Deleting Revision',
@@ -73,7 +75,7 @@ export class DocumentComponent implements OnInit {
       };
     } else if (modalType === 'revert') {
       const modalMessage = 'This revision will become a new copy and be treated as the' +
-        ' main version of the document. Are you sure you want to revert to this revision?';
+      ' main version of the document. Are you sure you want to revert to this revision?';
 
       this.modalMessage = {
         title: 'Reverting Revision',
@@ -105,11 +107,16 @@ export class DocumentComponent implements OnInit {
   }
 
   /* Edit document's title */
-  editDocumentName(documentId: string) {
-    this.documentService.editDocument(documentId, this.document).subscribe( data => {
-      this.document.title = data.title;
+  editDocumentName(documentId: string, newDocumentTitle: string) {
+    const trimmedTitle = newDocumentTitle.trim();
+
+    this.documentService.editDocument(documentId, trimmedTitle).subscribe( data => {
+      this.documentTitle = data.title;
+      this.modal.close();
+    }, (err) => {
+      console.log(err);
+      this.alert = { message: 'Field is blank. Please enter a new document title.' };
     })
-    this.modal.close();
   }
 
   /* Retrieve document data */

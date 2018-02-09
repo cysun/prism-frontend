@@ -1,6 +1,6 @@
 <div class="container-fluid document-header">
   <div class="header-label">
-    <span class="label">{{document.title}}</span><button type="button" class="btn btn-dark" (click)=openModal(editDocumentNameModal)><i class="fa fa-icon fa-pencil"></i>Edit</button>
+    <span class="label">{{ documentTitle }}</span><button type="button" class="btn btn-dark" (click)=openModal(editDocumentNameModal)><i class="fa fa-icon fa-pencil"></i>Edit</button>
     <span class ="document-btn-right">
       <button type="button" class="btn btn-danger"><i class="fa fa-icon fa-eye"></i>Watch</button>
     </span>
@@ -14,6 +14,10 @@
   </div>
 
   <div class="modal-body">
+    <div *ngIf="alert">
+      <ngb-alert type="danger" [dismissible]="false"><i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}</ngb-alert>
+    </div>
+
     <div class="input-group">
       <div class="input-group-prepend">
         <span class="input-group-text"><i class="fa fa-file-o"></i></span>
@@ -25,7 +29,7 @@
   </div>
 
   <div class="modal-footer">
-    <button class="btn btn-dark" type="button" (click)="editDocumentName(document._id, newTitle)">Save</button>
+    <button class="btn btn-dark" type="button" (click)="editDocumentName(document._id, document.title)">Save</button>
     <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
   </div>
 </ng-template>

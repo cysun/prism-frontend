@@ -22,8 +22,8 @@ export class DocumentService {
   }
 
   /* Edit a document's title */
-  editDocument(documentId: string, document: Document): Observable<Document> {
-    const body = JSON.stringify({ 'title': document.title });
+  editDocument(documentId: string, newDocumentTitle: string): Observable<Document> {
+    const body = JSON.stringify({ 'title': newDocumentTitle });
     return this.http.patch<Document>('/api/document/' + documentId, body, this.HEADERS);
   }
 
