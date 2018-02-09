@@ -30,7 +30,11 @@ export class DocumentService {
   /* Post a new revision */
   postRevision(documentId: string, message: string) {
     const body = JSON.stringify({'message': message});
-    return this.http.post('/api/document/' + documentId + '/revision', body, this.HEADERS);
+
+    return this.http.post('/api/document/' + documentId + '/revision', body, {
+      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      responseType: 'text'
+    });
   }
 
   /* Delete a revision */
@@ -39,20 +43,16 @@ export class DocumentService {
   }
 
   /* Upload a file */
-  uploadFile(documentId: string, revisionIndex: number, file: File): Observable<string> {
+  uploadFile(documentId: string, revisionIndex: number, file: File) {
     const fileUpload = new FormData();
     fileUpload.append('file', file);
 
-    const fileHeader = { headers: new HttpHeaders({ responseType: 'text'})};
-
-    return this.http.post<string>('/api/document/' + documentId + '/revision/' + revisionIndex + '/file',
-    fileUpload);
+    return this.http.post('/api/document/' + documentId + '/revision/' + revisionIndex + '/file',
+    fileUpload, { responseType: 'text' });
   }
 
   /* Download a file */
   downloadFile(documentId: string, revisionIndex: number) {
-    const fileHeader = { headers: new HttpHeaders({ responseType: 'text'})};
-
     return this.http.get('/api/document/' + documentId + '/revision/' + revisionIndex + '/file',
     { responseType: 'blob', observe: 'response'});
   }
@@ -60,11 +60,15 @@ export class DocumentService {
   /* Revert to a revision */
   revertRevision(documentId: string, revisionIndex: number) {
     const body = JSON.stringify({ 'revert': revisionIndex })
-    return this.http.post('/api/document/' + documentId + '/revision', body, this.HEADERS);
+    return this.http.post('/api/document/' + documentId + '/revision', body, {
+      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      responseType: 'text'
+    });
   }
 
   /* Restore revision */
   restoreRevision(documentId: string, revisionIndex: number) {
-    return this.http.post('/api/document/' + documentId + '/revision/' + revisionIndex + '/restore', this.HEADERS);
+    return this.http.post('/api/document/' + documentId + '/revision/' + revisionIndex + '/restore', null,
+    { responseType: 'text' });
   }
 }

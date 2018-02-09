@@ -131,17 +131,13 @@ export class DocumentComponent implements OnInit {
   /* Upload revision message and the file being sent */
   uploadRevision() {
     if (this.file && this.message) {
-      this.documentService.postRevision(this.document._id, this.message).subscribe( (data) => {
-        console.log(data)
-        console.log('posted a revision')
-      }, (err) => {
-        console.log(err)
-        console.log('the num of revisions rn: ' + this.getNumOfRevisions())
+      this.documentService.postRevision(this.document._id, this.message).subscribe( data => {
         const numOfRevisions = this.getNumOfRevisions();
-
         this.retrieveDocument();
         this.uploadFile(numOfRevisions);
         this.closeModal();
+      }, (err) => {
+        console.log(err)
       });
     } else if (!this.file) {
       this.alert = { message: 'Please attach a file.' };
@@ -155,10 +151,11 @@ export class DocumentComponent implements OnInit {
 
   /* Upload the file along with the revision message */
   uploadFile(revisionIndex: number) {
-    this.documentService.uploadFile(this.document._id, revisionIndex, this.file).subscribe( () => {
+    this.documentService.uploadFile(this.document._id, revisionIndex, this.file).subscribe( data => {
+      console.log(data)
+      this.retrieveDocument();
     }, (err) => {
       console.log(err);
-      this.retrieveDocument();
     });
   }
 
@@ -182,22 +179,22 @@ export class DocumentComponent implements OnInit {
 
   /* Revert to a previous revision */
   revertRevision() {
-    this.documentService.revertRevision(this.document._id, this.revisionIndex).subscribe( () => {
-    }, (err) => {
-      console.log('reverting complete');
-      console.log(err);
+    this.documentService.revertRevision(this.document._id, this.revisionIndex).subscribe( data => {
+      console.log(data);
       this.retrieveDocument();
       this.closeModal();
+    }, (err) => {
+      console.log(err);
     })
   }
 
   /* Restore a revision */
   restoreRevision(revisionIndex: number) {
-    this.documentService.restoreRevision(this.document._id, revisionIndex).subscribe( () => {
-    }, (err) => {
-      console.log('restore complete');
-      console.log(err);
+    this.documentService.restoreRevision(this.document._id, revisionIndex).subscribe( data => {
+      console.log(data);
       this.retrieveDocument();
+    }, (err) => {
+      console.log(err);
     })
   }
 }
