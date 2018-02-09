@@ -1,41 +1,41 @@
 export class Document {
   _id: string;
-  title: String;
+  title: string;
 
   groups: any[];
 
   revisions: {
-    message: String;
-    filename: String;
-    fileExtension: String;
+    message: string;
+    filename: string;
+    fileExtension: string;
     dateUploaded: Date;
 
     uploader: {
-      _id: String;
-      username: String;
+      _id: string;
+      username: string;
     },
 
-    template: Boolean;
-    deleted: Boolean;
+    template: boolean;
+    deleted: boolean;
   };
 
   comments: {
-    text: String;
+    text: string;
 
     author: {
-      _id: String;
-      username: String;
+      _id: string;
+      username: string;
       name: {
-        first: String;
-        last: String;
+        first: string;
+        last: string;
       }
     };
 
-    creationDate: String;
-    revision: Number;
+    creationDate: string;
+    revision: number;
   };
 
-  template: Boolean;
-  coreTemplate: Boolean;
-  completionEstimate: Number;
+  template: boolean;
+  coreTemplate: boolean;
+  completionEstimate: number;
 }
