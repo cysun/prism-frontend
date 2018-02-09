@@ -60,4 +60,9 @@ export class DocumentService {
     const body = JSON.stringify({ 'revert': revisionIndex })
     return this.http.post('/api/document/' + documentId + '/revision', body, this.HEADERS);
   }
+
+  /* Restore revision */
+  restoreRevision(documentId: string, revisionIndex: number) {
+    return this.http.post('/doccument/' + documentId + '/revision/' + revisionIndex + '/restore', this.HEADERS);
+  }
 }
