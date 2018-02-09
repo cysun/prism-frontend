@@ -1,5 +1,5 @@
 <!-- Add college button-->
-<div class="container-fluid">
+<div class="header-container">
   <div class="row">
      <div class="col-sm-12">
        <button class="btn btn-success pull-right" (click)="addCollegeDialog(addition)">+ Add College</button>
@@ -52,8 +52,25 @@
     </button>
   </div>
   <div class="modal-body">
+
+    <!-- NAME --->
+    <div class="row">
+      <span class="col-3 group-label">College Name</span>
+      <span class="col-8">
+        <div class="ui-inputgroup">
+          <input type="text" class="form-control" placeholder="Enter a new group name" [(ngModel)]="college.name" name="college-name">
+        </div>
+        <div class="text-hints">Enter a new name for the college.</div>
+      </span>
+    </div>
+    <!-- ABBV --->
+
+    <!-- DEANS -->
+
+
+  </div>
     <!-- ========== ALERTS IN MANAGER ============== --->
-    <!-- 
+    <!--
     <div ngFor="let alert of alerts">
       <ngb-alert [type]="alert.type">{{alert.message}}</ngb-alert>
     </div>
@@ -81,7 +98,6 @@
       </div>
     </form>
    -->
-  </div>
   <div *ngIf="alerts" class="modal-footer">
     <p *ngFor="let alert of alerts">
       <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
