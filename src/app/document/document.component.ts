@@ -131,7 +131,8 @@ export class DocumentComponent implements OnInit {
   /* Upload revision message and the file being sent */
   uploadRevision() {
     if (this.file && this.message) {
-      this.documentService.postRevision(this.document._id, this.message).subscribe( () => {
+      this.documentService.postRevision(this.document._id, this.message).subscribe( (data) => {
+        console.log(data)
         console.log('posted a revision')
       }, (err) => {
         console.log(err)
@@ -162,11 +163,13 @@ export class DocumentComponent implements OnInit {
   }
 
   downloadFile(revisionIndex: number) {
-    // this.documentService.downloadFile(this.document._id, revisionIndex).subscribe( data => {
-    // }, (err) => {
-    //   console.log(err);
-    //   saveAs(new Blob(['test'], { type: 'application/octet-stream' }), 'testing');
-    // })
+    this.documentService.downloadFile(this.document._id, revisionIndex).subscribe ( data => {
+      const contentDisposition = data.headers.get('content-disposition');
+      const contentType = data.headers.get('content-type');
+      const fileName = contentDisposition.slice(22, contentDisposition.length - 1);
+
+      saveAs(new Blob([data.body], { type: contentType }), fileName);
+    });
   }
 
   /* Delete a revision */

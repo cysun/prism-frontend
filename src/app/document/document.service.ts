@@ -39,20 +39,22 @@ export class DocumentService {
   }
 
   /* Upload a file */
-  uploadFile(documentId: string, revisionIndex: number, file: File): Observable<Document> {
+  uploadFile(documentId: string, revisionIndex: number, file: File): Observable<string> {
     const fileUpload = new FormData();
     fileUpload.append('file', file);
 
-    return this.http.post<Document>('/api/document/' + documentId + '/revision/' + revisionIndex + '/file',
+    const fileHeader = { headers: new HttpHeaders({ responseType: 'text'})};
+
+    return this.http.post<string>('/api/document/' + documentId + '/revision/' + revisionIndex + '/file',
     fileUpload);
   }
 
   /* Download a file */
   downloadFile(documentId: string, revisionIndex: number) {
-    return this.http.get<File>('/api/document/' + documentId + '/revision/' + revisionIndex + '/file')
-    .subscribe( res => {
-      console.log(res)
-    });
+    const fileHeader = { headers: new HttpHeaders({ responseType: 'text'})};
+
+    return this.http.get('/api/document/' + documentId + '/revision/' + revisionIndex + '/file',
+    { responseType: 'blob', observe: 'response'});
   }
 
   /* Revert to a revision */
