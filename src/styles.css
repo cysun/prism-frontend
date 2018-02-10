@@ -71,6 +71,22 @@ blockquote {
   padding-top: 40px;
 }
 
+.modal {
+  padding-top: 50px;
+}
+
+.modal-title {
+  width: 100%;
+}
+
+.modal-header {
+  background-color: #1A1A1A;
+  border-radius: 1px;
+  color: #FFF;
+  text-align: center;
+  text-transform: uppercase;
+}
+
 table {
   table-layout: fixed;
   text-align: center;
@@ -86,4 +102,11 @@ table {
 .table-header {
   background: #737b8c;
   color: #FFF;
+}
+
+.text-hints {
+  color: #808080;
+  font-size: 14px;
+  margin-top: 6px;
+  text-align: left;
 }
