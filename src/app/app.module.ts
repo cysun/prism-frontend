@@ -12,6 +12,7 @@ import { ReversePipe } from './../pipe_manipulation';
 import { CollegesComponent } from './colleges/colleges.component';
 import { CommitteeComponent } from './committee/committee.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DepartmentComponent} from './colleges/departments/department.component';
 import { DocumentComponent } from './document/document.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -34,7 +35,6 @@ import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
 import { AuthService } from './login/auth.service';
 import { DocumentService } from './document/document.service';
-import { DepartmentService} from './colleges/department/department.service';
 
 @NgModule({
   declarations: [
@@ -48,7 +48,7 @@ import { DepartmentService} from './colleges/department/department.service';
     SettingsComponent,
     CalendarComponent,
     CommitteeComponent,
-    DepartmentsComponent,
+    DepartmentComponent,
     DocumentComponent,
     MinutesComponent,
     ResourcesComponent,

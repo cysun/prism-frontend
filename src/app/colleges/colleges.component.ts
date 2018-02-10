@@ -15,6 +15,7 @@ import { Department } from '../models/department.model';
   templateUrl: './colleges.component.html',
   styleUrls: ['./colleges.component.css']
 })
+
 export class CollegesComponent implements OnInit {
   @Input()
   modal: NgbModalRef
@@ -28,11 +29,10 @@ export class CollegesComponent implements OnInit {
 
   filteredColleges: College[] = [];
 
-  constructor(private collegesService: CollegesService, private departmentService: DepartmentService, private router: Router, private modalService: NgbModal) { }
+  constructor(private collegesService: CollegesService,
+    private departmentService: DepartmentService, private router: Router, private modalService: NgbModal) { }
 
   ngOnInit() {
-  }
-
     this.collegesService.getColleges().subscribe(data => {
       this.colleges = data;
       console.log(data);
@@ -42,6 +42,7 @@ export class CollegesComponent implements OnInit {
       console.log(data);
     })
   }
+
 
   invalidErrorMessage(message) {
     this.alerts = [];
@@ -181,9 +182,4 @@ export class CollegesComponent implements OnInit {
 export interface IAlert {
   type: string;
   message: string;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 }
