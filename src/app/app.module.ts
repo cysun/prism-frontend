@@ -77,6 +77,8 @@ import { DocumentService } from './document/document.service';
     AuthGuard,
     AuthService,
     HttpClientModule,
+    CollegesService,
+    DepartmentService,
     DocumentService,
     GroupManagerService,
     SettingsService,
