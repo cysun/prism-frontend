@@ -79,12 +79,14 @@
           <label class="custom-file-label">
             {{ fileName ? fileName : 'Choose a file'}}
           </label>
+          <div class="text-hints">Click on browse to attach a file.</div>
         </div>
 
         <div class="file-message">
           <input type="text" class="form-control"
           [(ngModel)]="message" name="file-message"
-          placeholder="Enter a comment about the file" required>
+          placeholder="Enter a message about the file" required>
+          <div class="text-hints">Type a brief message about the new revision.</div>
         </div>
       </div>
 
@@ -119,11 +121,11 @@
           <div class="header-divider"></div>
         </div>
 
-        <div class="card card-container" *ngIf="mainRevision">
+        <div class="card card-container">
           <div class="card-body">
             <div class="card-document-title">
-              <div class="document-message">{{mainRevision.message}}</div>
-              <div class="document-info">
+              <div class="document-message">{{ mainRevision ? mainRevision.message : 'Select upload button to add a revision'}}</div>
+              <div class="document-info" *ngIf="mainRevision">
                 <strong>{{mainRevision.uploader.username}}</strong> uploaded
                 <strong>Revision #{{ totalIndices }}</strong>
                 on {{mainRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}
@@ -132,7 +134,7 @@
 
             <div class="card-action-buttons">
               <button class="btn btn-outline-secondary" (click)="openModal(uploadRevisionModal)" placement="top" ngbTooltip="Upload Revision"><i class="fa fa-upload"></i></button>
-              <button class="btn btn-outline-secondary" (click)="downloadFile(totalIndices - 1)" placement="top" ngbTooltip="Download Revision"><i class="fa fa-download"></i></button>
+              <button class="btn btn-outline-secondary" *ngIf="mainRevision" (click)="downloadFile(totalIndices - 1)" placement="top" ngbTooltip="Download Revision"><i class="fa fa-download"></i></button>
             </div>
           </div>
         </div>

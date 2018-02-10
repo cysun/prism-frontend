@@ -36,7 +36,8 @@ export class DocumentComponent implements OnInit {
   constructor(private documentService: DocumentService, private modalService: NgbModal) { }
 
   ngOnInit() {
-    this.documentService.retrieveDocument('5a7a17879b263d9503ca14d1').subscribe( data => {
+    // '5a7a17879b263d9503ca14d1'
+    this.documentService.retrieveDocument('5a7e376c9b263d9503ca155f').subscribe( data => {
       this.document = data;
       this.documentTitle = this.document.title;
       this.totalIndices = this.getNumOfRevisions();
