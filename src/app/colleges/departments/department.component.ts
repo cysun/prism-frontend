@@ -55,6 +55,13 @@ export class DepartmentComponent implements OnInit {
   openModal(content) {
     this.modalService.open(content, this.options)
   }
+  closeModal() {
+    this.alert = '';
+    this.message = '';
+    this.file = null;
+    this.fileName = '';
+    this.modal.close();
+  }
   //
   // // deleteDepartmentModal(content, id){
   // //   this.alerts = [];
@@ -62,25 +69,27 @@ export class DepartmentComponent implements OnInit {
   // //   this.modal = this.modalService.open(content, this.options);
   // // }
   //
-  // submitDepartment() {
-  //   this.alerts = [];
-  //   if (typeof(this.college.name) !== 'undefined' && this.college.name.trim().length > 0) {
-  //     if (typeof(this.college.abbreviation) !== 'undefined' && this.college.abbreviation.trim().length > 0) {
-  //       this.collegesService.addCollege(this.college).subscribe(
-  //         data => {
-  //           this.colleges.push(data);
-  //           this.colleges = this.colleges.slice(0);
-  //         }
-  //       );
-  //       this.college = new College();
-  //       this.modal.close();
-  //     } else {
-  //         this.invalidErrorMessage('empty abbreviation');
-  //       }
-  //   } else {
-  //     this.invalidErrorMessage('empty college');
-  //   }
-  // }
+  submitDepartment() {
+    this.alerts = [];
+    console.log("Sumbitted")
+    this.department.college = this.collegeId;
+    if (typeof(this.department.name) !== 'undefined' && this.department.name.trim().length > 0) {
+      if (typeof(this.department.abbreviation) !== 'undefined' && this.department.abbreviation.trim().length > 0) {
+        this.departmentService.addDepartment(this.department).subscribe(
+          data => {
+            this.departments.push(data);
+            this.departments = this.department.slice(0);
+          }
+        );
+        this.department = new Department();
+        this.closeModal();
+      } else {
+          this.invalidErrorMessage('empty abbreviation');
+        }
+    } else {
+      this.invalidErrorMessage('empty department');
+    }
+  }
 
   getDepartmentsAt(collegeId) {
     this.departmentService.getDepartmentsAt(collegeId).subscribe( data => {
