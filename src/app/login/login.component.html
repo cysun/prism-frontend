@@ -1,19 +1,26 @@
-<div class="tab-grid ui-md-6">
-  <p-fieldset legend="Login">
-    <div class="ui-g ui-fluid">
-      <div class="ui-g-12 ui-md-10 login-module">
-        <div class="logo-symbol"><i class="fa fa-3x fa-diamond"></i></div>
-        Please enter your CalStateLA credentials to log into PRISM.
+<div class="tab-grid col-6">
+  <div class="card">
+    <div class="card-header">
+      <div class="logo-symbol"><i class="fa fa-3x fa-diamond"></i></div>
+      PRISM
+    </div>
+    <div class="card-body login-module">
 
-        <form #f="ngForm" (ngSubmit)="login()">
-          <div class="ui-inputgroup">
-            <span class="ui-inputgroup-addon"><i class="fa fa-id-badge"></i></span>
-            <input type="text" [(ngModel)]="username" pInputText placeholder="Username" name="username" required>
+      <p class="card-text">Please enter your CalStateLA credentials to log into the system.</p>
+
+      <form #f="ngForm" (ngSubmit)="login()">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-id-badge"></i></span>
+            </div>
+            <input type="text" class="form-control" [(ngModel)]="username" placeholder="Username" name="username" required>
           </div>
 
-          <div class="ui-inputgroup">
-            <span class="ui-inputgroup-addon"><i class="fa fa-key"></i></span>
-            <input type="password" [(ngModel)]="password" pInputText placeholder="Password" name="password" required>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-key"></i></span>
+            </div>
+            <input type="password" class="form-control" [(ngModel)]="password" placeholder="Password" name="password" required>
           </div>
 
           <div class="validation-error" *ngIf="wrongInfo === true">
@@ -21,11 +28,10 @@
             Please try again.
           </div>
 
-          <div class="ui-md-12 footer-buttons">
-            <button pButton type="submit" [disabled]="!f.form.valid" label="Sign In"></button>
+          <div class="col-12 footer-buttons">
+            <button class="btn btn-dark" type="submit" [disabled]="!f.form.valid">Sign In</button>
           </div>
-        </form>
-      </div>
+      </form>
     </div>
-  </p-fieldset>
+  </div>
 </div>

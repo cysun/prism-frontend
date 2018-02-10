@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-2 menu-grid">
+    <div class="col-3 menu-grid">
       <div class="row">
         <div class="col-12 menu-label">Action Menu</div>
 
@@ -9,13 +9,14 @@
           <a class="nav-link" [routerLink]="['/calendar']"><i class="fa fa-calendar"></i> Calendar</a>
           <a class="nav-link" [routerLink]="['/minutes']"><i class="fa fa-clock-o"></i> Minutes</a>
           <a class="nav-link" [routerLink]="['/colleges']"><i class="fa fa-graduation-cap"></i> University Hierarchy</a>
-          <a class="nav-link" [routerLink]="['/minutes']"><i class="fa fa-folder-open-o"></i> Resources</a>
+          <a class="nav-link" [routerLink]="['/resources']"><i class="fa fa-folder-open-o"></i> Resources</a>
           <a class="nav-link" [routerLink]="['/committee']"><i class="fa fa-users"></i> Committee</a>
+          <a class="nav-link" [routerLink]="['/document']"><i class="fa fa-file-o"></i> Document</a>
         </div>
       </div>
     </div>
 
-    <div class="col-10 tab-grid">
+    <div class="col-9 tab-grid">
       <router-outlet></router-outlet>
     </div>
   </div>
