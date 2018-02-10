@@ -14,8 +14,8 @@ import { Department } from '../models/department.model';
   templateUrl: './colleges.component.html',
   styleUrls: ['./colleges.component.css']
 })
-
 export class CollegesComponent implements OnInit {
+  
   @Input()
   alerts: IAlert[] = [];
   department: Department = new Department();
@@ -24,12 +24,11 @@ export class CollegesComponent implements OnInit {
   college: College = new College();
   colleges: College[] = [];
 
-
-  filteredColleges: College[] = [];
-
-  constructor(private collegesService: CollegesService, private departmentService: DepartmentService, private router: Router, private modalService: NgbModal) { }
+  constructor() { }
 
   ngOnInit() {
+  }
+
     this.collegesService.getColleges().subscribe(data => {
       this.colleges = data;
       console.log(data);

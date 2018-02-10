@@ -1,13 +1,74 @@
+.card-body {
+  padding: 10px;
+}
+
+.card-action-buttons {
+  float: right;
+  margin-top: 5px;
+}
+
+.card-container {
+  margin-top: 15px;
+}
+
+.card-document-title {
+  float: left;
+  padding-left: 10px;
+}
+
+.deleted-revisions {
+  background: #E8E8E8;
+}
+
+.document-btn-right {
+  float: right;
+}
+
+.document-header {
+  margin-bottom: -25px;
+  padding: 0;
+}
+
+.document-info {
+  color: #808080;
+  font-size: .8em;
+}
+
+.document-message {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.file-message {
+  margin-top: 20px;
+}
+
 .header-container {
   align-items: center;
   display: flex;
   font-weight: bold;
-  text-transform: uppercase;
   margin-top: 25px;
+  text-transform: uppercase;
 }
 
 .header-divider {
   border-top: 1px solid #989898;
   flex-grow: 1;
   margin: 0 10px;
+}
+
+.label {
+  font-size: 1.6em;
+  font-weight: bold;
+  padding-right: 10px;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.modal-message {
+  padding: 20px;
+}
+
+.revision-details {
+  padding-top: 20px;
 }
