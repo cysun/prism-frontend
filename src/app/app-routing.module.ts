@@ -7,6 +7,7 @@ import { CollegesComponent } from './colleges/colleges.component';
 import { CommitteeComponent } from './committee/committee.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
+import { DocumentComponent } from './document/document.component';
 import { LoginComponent } from './login/login.component';
 import { MinutesComponent } from './minutes/minutes.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -32,6 +33,7 @@ const routes: Routes = [
       { path: 'calendar', component: CalendarComponent },
       { path: 'colleges', component: CollegesComponent },
       { path: 'committee', component: CommitteeComponent },
+      { path: 'document', component: DocumentComponent },
       { path: 'minutes', component: MinutesComponent },
       { path: 'resources', component: ResourcesComponent },
       { path: 'settings', component: SettingsComponent },

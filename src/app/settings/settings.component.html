@@ -1,11 +1,22 @@
 <ngb-tabset>
   <ngb-tab>
-    <ng-template ngbTabTitle><i class="fa fa-info-circle"></i>Profile</ng-template>
+    <ng-template ngbTabTitle><i class="fa fa-icon fa-info-circle"></i>Profile</ng-template>
     <ng-template ngbTabContent>
       <div class="container-fluid">
-        <div class="notification-label">
+        <div *ngIf="!updateInfo" class="notification-label">
           <span>{{currentUser.name.first}}'s Profile</span>
-          <button class="btn btn-outline-primary" *ngIf="!updateInfo" (click)="updateInfo=true"><i class="fa fa-pencil"></i>Edit</button>
+          <button class="btn btn-outline-primary" (click)="toggleEditButton()"><i class="fa fa-icon fa-pencil"></i>Edit</button>
+        </div>
+
+        <div class="alert-messages" *ngIf="alert">
+          <ngb-alert type="danger" [dismissible]="false">
+            <i class="fa fa-icon fa-times-circle"></i><strong>Error:</strong> {{ alert.message }}
+            <span *ngIf="reasons">
+              <ng-container *ngFor="let reason of reasons ">
+                  <li>{{ reason }}</li>
+              </ng-container>
+            </span>
+          </ngb-alert>
         </div>
 
         <table *ngIf="!updateInfo" class="table-style">
@@ -44,7 +55,7 @@
           <div class="row">
             <span class="col-3">E-mail</span>
             <span class="col-6">
-              <input type="text" class="form-control" placeholder="Enter a valid e-mail" [(ngModel)]="currentUser.email">
+              <input type="email" class="form-control" placeholder="Enter a valid e-mail" [(ngModel)]="currentUser.email">
             </span>
           </div>
 
@@ -53,27 +64,27 @@
           <div class="row">
             <span class="col-3">Current Password</span>
             <span class="col-6">
-              <input type="password" class="form-control" placeholder="Enter current password">
+              <input type="password" class="form-control" placeholder="Enter current password" [(ngModel)]="currentPassword">
             </span>
           </div>
 
           <div class="row">
             <span class="col-3">New Password</span>
             <span class="col-6">
-              <input type="password" class="form-control" placeholder="Enter a new password">
+              <input type="password" class="form-control" placeholder="Enter a new password" [(ngModel)]="newPassword">
             </span>
           </div>
 
           <div class="row">
             <span class="col-3">Re-enter New Password</span>
             <span class="col-6">
-              <input type="password" class="form-control">
+              <input type="password" class="form-control"[(ngModel)]="newPassword2">
             </span>
           </div>
 
           <div class="update-buttons col-9">
-            <button class="btn btn-outline-primary" (click)="updateInfo=false">Save</button>
-            <button class="btn btn-outline-primary" (click)="updateInfo=false">Cancel</button>
+            <button class="btn btn-outline-primary" (click)="updateBasicInfo()">Save</button>
+            <button class="btn btn-outline-primary" (click)="toggleEditButton()">Cancel</button>
           </div>
         </div>
       </div>
@@ -112,7 +123,7 @@
       <div *ngIf="updateSettings">
         <div>Update Settings form shall be here</div>
         <button class="btn btn-outline-primary" (click)="updateSettings=false"><i class="fa fa-pencil"></i>Update</button>
-        <button class="btn btn-outline-primary" (click)="updateSettings=false">Cancel</button>
+        <button class="btn btn-outline-primary" (click)="toggleEditButton()">Cancel</button>
       </div>
     </ng-template>
   </ngb-tab>
