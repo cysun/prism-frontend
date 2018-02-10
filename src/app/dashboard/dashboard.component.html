@@ -22,20 +22,21 @@
   <ngb-tab>
     <ng-template ngbTabTitle><i class="fa fa-th-list"></i> Recent Actions</ng-template>
     <ng-template ngbTabContent>
-      <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth
-      master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh
-      dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum
-      iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
-
-      <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth
-      master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh
-      dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum
-      iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
-
-      <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth
-      master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh
-      dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum
-      iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+      <div class="container">
+      <ng-container *ngFor="let action of logHistory">
+        <div class="card card-container" *ngIf="action.date && action.user">
+          <div class="card-body">
+            <div class="card-header-title">
+              <div class="card-message">{{action.user.name.first}} {{ action.text }}</div>
+              <div class="card-info">
+                <strong>{{action.user.username}}</strong> on {{ action.date | date: 'MM/dd/yyyy hh:mm:ss' }}
+                <br/>OjectId: {{ action.object }} <br/>
+                Type: {{ action.type }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container></div>
     </ng-template>
   </ngb-tab>
  </ngb-tabset>
