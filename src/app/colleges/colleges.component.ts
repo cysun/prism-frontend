@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { NgbModule, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbModal, NgbModalRef, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+
 
 import { CollegesService } from './colleges.service';
 import { DepartmentService } from './departments/department.service';
@@ -18,7 +19,12 @@ import { Department } from '../models/department.model';
 
 export class CollegesComponent implements OnInit {
   @Input()
-  modal: NgbModalRef
+  modal: NgbModalRef;
+  options: NgbModalOptions = {
+    backdrop : 'static',
+    keyboard : false,
+    size: 'lg',
+  };
   alerts: IAlert[] = [];
   department: Department = new Department();
   departments: Department[] = [];
@@ -70,14 +76,14 @@ export class CollegesComponent implements OnInit {
 
   addCollegeDialog(content){
     this.alerts = [];
-    this.modal = this.modalService.open(content);
+    this.modal = this.modalService.open(content, this.options);
     this.college = new College();
   }
 
   deleteCollegeDialog(content, id){
     this.alerts = [];
     this.deleteCollege(id);
-    this.modal = this.modalService.open(content);
+    this.modal = this.modalService.open(content, this.options);
   }
 
   manageCollegeDialog(content, collegeId: string, deanId?: string) {
@@ -93,7 +99,7 @@ export class CollegesComponent implements OnInit {
       }
     });
 
-    this.modal = this.modalService.open(content);
+    this.modal = this.modalService.open(content, this.options);
   }
 
   submitCollege() {
