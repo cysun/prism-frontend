@@ -1,6 +1,6 @@
 <!-- Add college button-->
 <div class="header-container">
-  <div class="row">
+  <div class="row toolbar">
      <div class="col-sm-12">
        <button class="btn btn-success pull-right" (click)="addCollegeDialog(addition)">+ Add College</button>
     </div>
@@ -64,8 +64,40 @@
       </span>
     </div>
     <!-- ABBV --->
-
+    <div class="row">
+      <span class="col-3 group-label">College Abbreviation</span>
+      <span class="col-8">
+        <div class="ui-inputgroup">
+          <input type="text" class="form-control" placeholder="Enter a new abbreviation" [(ngModel)]="college.abbreviation" name="college-abbreviation">
+        </div>
+        <div class="text-hints">Enter a new abbreviation for the college.</div>
+      </span>
+    </div>
     <!-- DEANS -->
+    <div>
+      <table class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th class="table-header">Username</th>
+            <th class="table-header">Name</th>
+            <th class="table-header">E-mail</th>
+            <th class="table-header" style="width:65px"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-template>
+            <tr>
+              <td>Username</td>
+              <td>First Last</td>
+              <td>Email</td>
+              <td><button type="button" class="btn btn-dark" (click)="editModal(deleteMemberModal, group._id, member._id)"><i class="fa fa-trash"></i></button></td>
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+      </div>
+
 
 
   </div>
@@ -102,6 +134,8 @@
     <p *ngFor="let alert of alerts">
       <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
     </p>
+    <button class="btn btn-dark" type="button" (click)="updateGroup(group.name)">Save</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
   </div>
 </ng-template>
 
@@ -113,7 +147,8 @@
         <ng-template ngbPanelTitle>
           {{college.name}} ({{college.abbreviation}})
           <button type="button" class="close" aria-label="Close" (click)="deleteCollegeDialog(deletion, college._id)">X</button>
-          <button type="button" class="close" (click)="manageCollegeDialog(manager)"><span class="fa fa-cog">&nbsp;&nbsp;</span></button>
+          <button type="button" class="close" (click)="viewDeansDialog(deansViewer)"><i class="fa fa-icon fa-users"></i>&nbsp;&nbsp;</button>
+          <button type="button" class="close" (click)="manageCollegeDialog(manager)"><i class="fa fa-icon fa-cog"></i>&nbsp;&nbsp;</button>
           <ng-template #deletion let-close="close" let-esc="dismiss">
             <div class="modal-header">
               <h4 class="modal-title">Deleting {{college.abbreviation}}</h4>
