@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ReversePipe } from './../pipe_manipulation';
 
 import { CollegesComponent } from './colleges/colleges.component';
 import { CommitteeComponent } from './committee/committee.component';
@@ -28,26 +30,27 @@ import { DocumentComponent } from './document/document.component';
 import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
 import { AuthService } from './login/auth.service';
+import { DocumentService } from './document/document.service';
 import { GroupManagerService } from './group-manager/group-manager.service';
 import { SettingsService } from './settings/settings.service';
 
 @NgModule({
   declarations: [
     AppComponent,
+    CalendarComponent,
     CollegesComponent,
     CommitteeComponent,
     DashboardComponent,
-    PageNotFoundComponent,
-    SettingsComponent,
-    CalendarComponent,
-    MinutesComponent,
-    ResourcesComponent,
+    DocumentComponent,
     GroupManagerComponent,
     LoginComponent,
-    PublicComponent,
+    MinutesComponent,
+    PageNotFoundComponent,
     PrivateComponent,
-    CommitteeComponent,
-    DocumentComponent
+    PublicComponent,
+    ResourcesComponent,
+    SettingsComponent,
+    ReversePipe,
   ],
   imports: [
     NgbModule.forRoot(),
@@ -56,12 +59,14 @@ import { SettingsService } from './settings/settings.service';
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     AutoCompleteModule,
   ],
   providers: [
     AuthGuard,
     AuthService,
     HttpClientModule,
+    DocumentService,
     GroupManagerService,
     SettingsService,
     {
