@@ -1,0 +1,38 @@
+.card-header {
+  background: #1A1A1A;
+  color: #FFF;
+  font-size: 1.6em;
+  font-weight: bold;
+  padding: 50px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.footer-buttons {
+  padding: 15px;
+}
+
+.login-module {
+  margin: auto;
+  padding-bottom: 50px;
+  padding-top: 50px;
+  text-align: center;
+}
+
+.logo-symbol {
+  margin-top: -25px;
+  padding: 10px;
+}
+
+.tab-grid{
+  margin: auto;
+}
+
+.input-group {
+  padding-bottom: 15px;
+  width: 100%;
+}
+
+.validation-error {
+  color: #FF0000;
+}

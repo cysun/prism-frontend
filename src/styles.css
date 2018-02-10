@@ -1,1 +1,112 @@
-/* You can add global styles to this file, and also import other style files */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* a, a:visited {
+  color: #fff;
+  text-decoration:none;
+}
+
+a:hover {
+  color: #ffd700;
+} */
+
+.app-container {
+  min-height: 100%;
+}
+
+.blockquote-header {
+  background: #EEE;
+  padding: 15px;
+}
+
+.blockquote-btn {
+  float:right;
+  margin-top: -3px;
+}
+
+.fa-icon {
+  padding-right: 7px;
+}
+
+blockquote {
+  background: #eee;
+  border-left: 15px solid #000;
+  padding:10px;
+}
+
+.footer {
+  background-color: #1A1A1A;
+  color: #FFF;
+  height: 60px;
+  margin-top: -60px;
+  position: relative;
+  text-align: center;
+  width: 100%;
+  z-index: 2;
+}
+
+.footer-text {
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+
+.navbar {
+  background: #1A1A1A;
+  height: 70px;
+}
+
+.header-label {
+  padding-bottom: 40px;
+}
+
+.header-logo {
+  font-size: 1.9em;
+}
+
+.main {
+  padding-bottom: 100px;
+  padding-top: 40px;
+}
+
+.modal {
+  padding-top: 50px;
+}
+
+.modal-title {
+  width: 100%;
+}
+
+.modal-header {
+  background-color: #1A1A1A;
+  border-radius: 1px;
+  color: #FFF;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+table {
+  table-layout: fixed;
+  text-align: center;
+}
+
+.table-label {
+  background: #1A1A1A;
+  color: #FFF;
+  padding: 20px;
+  text-transform: uppercase;
+}
+
+.table-header {
+  background: #737b8c;
+  color: #FFF;
+}
+
+.text-hints {
+  color: #808080;
+  font-size: 14px;
+  margin-top: 6px;
+  text-align: left;
+}

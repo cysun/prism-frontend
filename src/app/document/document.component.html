@@ -1,0 +1,221 @@
+<div class="container-fluid document-header">
+  <div class="header-label">
+    <span class="label">{{ documentTitle }}</span><button type="button" class="btn btn-dark" (click)=openModal(editDocumentNameModal)><i class="fa fa-icon fa-pencil"></i>Edit</button>
+    <span class ="document-btn-right">
+      <button type="button" class="btn btn-danger"><i class="fa fa-icon fa-eye"></i>Watch</button>
+    </span>
+  </div>
+</div>
+
+<!-- Modal to edit the overall document's title -->
+<ng-template #editDocumentNameModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Edit Document Name</h5>
+  </div>
+
+  <div class="modal-body">
+    <div *ngIf="alert">
+      <ngb-alert type="danger" [dismissible]="false"><i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}</ngb-alert>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><i class="fa fa-file-o"></i></span>
+      </div>
+      <input type="text" class="form-control" placeholder="Enter a new document title" name="document-title" [(ngModel)]="document.title">
+    </div>
+
+    <div class="text-hints">Enter a new title for the document.</div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-dark" type="button" (click)="editDocumentName(document._id, document.title)">Save</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+  </div>
+</ng-template>
+
+<!-- Modal for deleting and reverting a revision -->
+<ng-template #revisionModal>
+  <div class="modal-header">
+    <h5 class="modal-title">{{ modalMessage.title }}</h5>
+  </div>
+
+  <div class="modal-body">
+    <div class="modal-message">
+      {{ modalMessage.message }}
+
+      <div class="revision-details">
+        <i class="fa fa-icon fa-edit"></i><strong>Revision Message:</strong> {{ currentRevision.message }}<br/>
+        <i class="fa fa-icon fa-calendar"></i><strong>Date Uploaded:</strong> {{ currentRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss' }}<br/>
+        <i class="fa fa-icon fa-user"></i><strong>Uploader:</strong> {{ currentRevision.uploader.username }}<br/>
+        <i class="fa fa-icon fa-file-o"></i><strong>File Type:</strong> {{ currentRevision.fileExtension}}
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-dark" type="button" (click)="modalMessage.button === 'Delete' ? deleteRevision() : revertRevision()">{{ modalMessage.button }}</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+  </div>
+</ng-template>
+
+<!-- Modal for creating a revision -->
+<ng-template #uploadRevisionModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Upload Revision</h5>
+  </div>
+  <form #f="ngForm" (ngSubmit)="uploadRevision()">
+    <div class="modal-body">
+      <div *ngIf="alert">
+        <ngb-alert type="danger" [dismissible]="false"><i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}</ngb-alert>
+      </div>
+      <div class="modal-message">
+
+        <div class="custom-file">
+          <input name="file" type="file" class="custom-file-input"
+          accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          (change)="onFileChange($event)">
+
+          <label class="custom-file-label">
+            {{ fileName ? fileName : 'Choose a file'}}
+          </label>
+          <div class="text-hints">Click on browse to attach a file.</div>
+        </div>
+
+        <div class="file-message">
+          <input type="text" class="form-control"
+          [(ngModel)]="message" name="file-message"
+          placeholder="Enter a message about the file" required>
+          <div class="text-hints">Type a brief message about the new revision.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success" [disabled]="!f.form.valid">Upload</button>
+      <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- Tabs consisting Main Version tab, Revisions tab, and Comments tab -->
+<ngb-tabset>
+  <ngb-tab>
+    <ng-template ngbTabTitle><i class="fa fa-icon fa-file-text-o"></i>Main Version</ng-template>
+    <ng-template ngbTabContent>
+      <div class="container" style="padding-top: 20px;">
+        This tab holds the current version of the document. Revisions of the
+        same document can be found in the revisions tab. <br/><br/>
+
+        <strong>Frontend testing purposes only</strong> <br/>
+        (create a document, take the ID and paste it onto retrieveDocument function in ngOnInit before refreshing):
+
+        <div class="input-group">
+          <input type="text" class="form-control" [(ngModel)]="document.title" placeholder="Enter document title" name="document-title">
+          <button type="button" class="btn btn-success" (click)="createNewDocument(document.title)">Create Document</button>
+        </div>
+
+        <div class="header-container">
+          Current Version
+          <div class="header-divider"></div>
+        </div>
+
+        <div class="card card-container">
+          <div class="card-body">
+            <div class="card-document-title">
+              <div class="document-message">{{ mainRevision ? mainRevision.message : 'Select upload button to add a revision'}}</div>
+              <div class="document-info" *ngIf="mainRevision">
+                <strong>{{mainRevision.uploader.username}}</strong> uploaded
+                <strong>Revision #{{ totalIndices }}</strong>
+                on {{mainRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}
+              </div>
+            </div>
+
+            <div class="card-action-buttons">
+              <button class="btn btn-outline-secondary" (click)="openModal(uploadRevisionModal)" placement="top" ngbTooltip="Upload Revision"><i class="fa fa-upload"></i></button>
+              <button class="btn btn-outline-secondary" *ngIf="mainRevision" (click)="downloadFile(totalIndices - 1)" placement="top" ngbTooltip="Download Revision"><i class="fa fa-download"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+          <button type="button" class="btn btn-outline-primary" (click)="isCollapsed = !isCollapsed">Toggle</button>
+        </div>
+        <div [ngbCollapse]="isCollapsed"><pre><p>Document file: {{ document | json}}</p></pre></div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+
+  <ngb-tab>
+    <ng-template ngbTabTitle><i class="fa fa-icon fa-list"></i>Revisions</ng-template>
+    <ng-template ngbTabContent>
+      <div class="container" style="padding-top: 20px;">
+        This tab holds previous revisions of the document for archiving purposes. Only the
+        administrator can revert to any previous revision without losing the current version.
+
+        <div class="header-container">
+          Previous Revisions
+          <div class="header-divider"></div>
+        </div>
+
+        <ng-container *ngFor="let revision of document.revisions | reverse; let idx = index">
+          <div class="card card-container" *ngIf="!revision.deleted && (idx > 0) ; else deletedRevisions">
+            <div class="card-body">
+              <div class="card-document-title">
+                <div class="document-message">{{revision.message}}</div>
+                <div class="document-info">
+                  <strong>{{revision.uploader.username}}</strong> uploaded
+                  <strong>Revision #{{ totalIndices - idx }}</strong>
+                  on {{revision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}
+                </div>
+              </div>
+
+              <div class="card-action-buttons">
+                <button class="btn btn-outline-secondary"
+                        (click)="downloadFile(totalIndices - idx - 1)" placement="top" ngbTooltip="Download Revision">
+                        <i class="fa fa-download"></i>
+                </button>
+                <button class="btn btn-outline-secondary"
+                        (click)="openModal(revisionModal, totalIndices - idx - 1, 'revert')"
+                        placement="top" ngbTooltip="Revert as Main">
+                        <i class="fa fa-exchange"></i>
+                </button>
+                <button class="btn btn-outline-secondary"
+                        (click)="openModal(revisionModal, totalIndices - idx - 1, 'delete')"
+                        placement="top" ngbTooltip="Delete">
+                        <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #deletedRevisions>
+            <div class="card card-container deleted-revisions" *ngIf="idx > 0">
+              <div class="card-body">
+                <div class="card-document-title">
+                  <div class="document-message">{{revision.message}}</div>
+                  <div class="document-info">Revision #{{totalIndices - idx}}</div>
+                </div>
+
+                <div class="card-action-buttons">
+                  <button class="btn btn-dark"
+                          (click)="restoreRevision(totalIndices - idx - 1)" placement="top" ngbTooltip="Restore">
+                          <i class="fa fa-arrow-circle-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ng-container>
+      </div>
+    </ng-template>
+  </ngb-tab>
+
+  <ngb-tab>
+    <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
+    <ng-template ngbTabContent>
+      comments tab
+    </ng-template>
+  </ngb-tab>
+</ngb-tabset>

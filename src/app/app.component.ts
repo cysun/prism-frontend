@@ -1,5 +1,7 @@
-import {Component} from '@angular/core';
-import {MenuItem} from 'primeng/components/common/api';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { AuthService } from './login/auth.service';
 
 @Component({
   selector: 'prism-root',
@@ -7,22 +9,20 @@ import {MenuItem} from 'primeng/components/common/api';
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent {
-  items: MenuItem[];
-  actionMenu: MenuItem[];
+export class AppComponent implements OnInit {
+  username: string;
+
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.items = [ { label: 'PRISM', icon: 'fa-2x fa-cubes'}];
+    if (this.authService.isAuthenticated()) {
+      this.username = this.authService.getUser().username;
+    }
+  }
 
-    this.actionMenu = [{
-            label: 'Actions',
-            items: [
-                { label: 'Dashboard', icon: 'fa-home', routerLink: '/dashboard' },
-                { label: 'Calendar', icon: 'fa-calendar', routerLink: '/calendar'},
-                { label: 'Minutes', icon: 'fa-clock-o', routerLink: '/minutes'},
-                { label: 'Resources', icon: 'fa-folder-open-o', routerLink: '/resources'},
-                { label: 'Committee', icon: 'fa-users', routerLink: '/committee' }
-            ]
-        }];
+  logout() {
+    this.authService.logout();
+    this.username = '';
+    this.router.navigate(['login'])
   }
 }

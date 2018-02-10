@@ -1,3 +1,7 @@
 <p>
-  Sorry, this page does not exist!
+  <ngb-alert type="info" [dismissible]="false">
+    <i class="fa fa-icon fa-times-circle"></i><strong>Page Not Found!</strong> The page you are trying to access does not exist.
+  </ngb-alert>
 </p>
+
+<button type="button" class="btn btn-dark" routerLink="/dashboard">Back to Dashboard</button>

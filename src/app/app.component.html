@@ -1,15 +1,27 @@
-<p-menubar [model]="items">
-  <button pButton label="User" icon="fa-user-o"></button>
-</p-menubar>
+<div class="app-container">
+  <nav class="navbar sticky-top navbar-dark">
+    <a class="navbar-brand" [routerLink]="['/dashboard']" routerLinkActive="active">
+      <i class="fa fa-cubes fa-2x"></i> <span class="header-logo">PRISM</span>
+    </a>
 
-<br/><br/>
+    <div ngbDropdown placement="bottom-right" class="d-inline-block" *ngIf="authService.isAuthenticated()">
+      <button class="btn btn-outline-primary" ngbDropdownToggle><i class="fa fa-icon fa-user-o"></i>{{username}}</button>
 
-<div class="ui-g">
-  <div class="menu-grid ui-g-12 ui-md-2">
-    <p-menu class="action-menu" [model]="actionMenu"></p-menu>
-  </div>
+      <div ngbDropdownMenu>
+        <button class="dropdown-item" [routerLink]="['settings']"><i class="fa fa-icon fa-gear"></i>Settings</button>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item" (click)="logout()"><i class="fa fa-icon fa-sign-out"></i>Sign Out</button>
+      </div>
+    </div>
+  </nav>
 
-  <div class="tab-grid ui-g-12 ui-md-10">
+  <div class="main">
     <router-outlet></router-outlet>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-text">
+    Copyright © 2017-2018, PRISM Team. All rights reserved.
   </div>
 </div>
