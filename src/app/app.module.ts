@@ -12,13 +12,13 @@ import { ReversePipe } from './../pipe_manipulation';
 import { CollegesComponent } from './colleges/colleges.component';
 import { CommitteeComponent } from './committee/committee.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DocumentComponent } from './document/document.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SettingsComponent } from './settings/settings.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { MinutesComponent } from './minutes/minutes.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
-
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AutoCompleteModule } from 'primeng/primeng';
 
@@ -34,8 +34,7 @@ import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
 import { AuthService } from './login/auth.service';
 import { DocumentService } from './document/document.service';
-import { GroupManagerService } from './group-manager/group-manager.service';
-import { SettingsService } from './settings/settings.service';
+import { DepartmentService} from './colleges/department/department.service';
 
 @NgModule({
   declarations: [

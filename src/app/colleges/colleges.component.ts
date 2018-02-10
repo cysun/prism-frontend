@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -10,9 +9,6 @@ import { DepartmentService } from './departments/department.service';
 import { User } from '../models/user.model';
 import { College } from '../models/college.model';
 import { Department } from '../models/department.model';
-=======
-import { Component, OnInit } from '@angular/core';
->>>>>>> master
 
 @Component({
   selector: 'prism-colleges',
@@ -20,7 +16,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./colleges.component.css']
 })
 export class CollegesComponent implements OnInit {
-<<<<<<< HEAD
   @Input()
   modal: NgbModalRef
   alerts: IAlert[] = [];
@@ -36,6 +31,8 @@ export class CollegesComponent implements OnInit {
   constructor(private collegesService: CollegesService, private departmentService: DepartmentService, private router: Router, private modalService: NgbModal) { }
 
   ngOnInit() {
+  }
+
     this.collegesService.getColleges().subscribe(data => {
       this.colleges = data;
       console.log(data);
@@ -184,12 +181,9 @@ export class CollegesComponent implements OnInit {
 export interface IAlert {
   type: string;
   message: string;
-=======
 
   constructor() { }
 
   ngOnInit() {
   }
-
->>>>>>> master
 }
