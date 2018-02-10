@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 
+import { User } from '../models/user.model';
 import { College } from '../models/college.model';
 
 @Injectable()
@@ -42,6 +43,10 @@ export class CollegesService {
   deleteDean(deanId, collegeId): Observable<College> {
     const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
     return this.http.delete<College>('/api/college/' + collegeId + '/dean/' + deanId, header);
+  }
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>('/api/users');
   }
 
 }

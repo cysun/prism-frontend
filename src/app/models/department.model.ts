@@ -6,5 +6,5 @@ export class Department {
   name: string;
   abbreviation: string;
   college: College;
-  chairs: [User];
+  chairs: any[];
 }

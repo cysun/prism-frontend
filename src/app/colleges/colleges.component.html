@@ -91,7 +91,7 @@
               <td>Username</td>
               <td>First Last</td>
               <td>Email</td>
-              <td><button type="button" class="btn btn-dark" (click)="editModal(deleteMemberModal, group._id, member._id)"><i class="fa fa-trash"></i></button></td>
+              <td><button type="button" class="btn btn-dark"><i class="fa fa-trash"></i></button></td>
               </tr>
             </ng-template>
           </tbody>
@@ -148,7 +148,7 @@
           {{college.name}} ({{college.abbreviation}})
           <button type="button" class="close" aria-label="Close" (click)="deleteCollegeDialog(deletion, college._id)">X</button>
           <button type="button" class="close" (click)="viewDeansDialog(deansViewer)"><i class="fa fa-icon fa-users"></i>&nbsp;&nbsp;</button>
-          <button type="button" class="close" (click)="manageCollegeDialog(manager)"><i class="fa fa-icon fa-cog"></i>&nbsp;&nbsp;</button>
+          <button type="button" class="close" (click)="manageCollegeDialog(manager, college._id)"><i class="fa fa-icon fa-cog"></i>&nbsp;&nbsp;</button>
           <ng-template #deletion let-close="close" let-esc="dismiss">
             <div class="modal-header">
               <h4 class="modal-title">Deleting {{college.abbreviation}}</h4>

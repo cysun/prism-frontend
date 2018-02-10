@@ -6,6 +6,7 @@ import { NgbModule, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CollegesService } from './colleges.service';
 import { DepartmentService } from './departments/department.service';
 
+import { User } from '../models/user.model';
 import { College } from '../models/college.model';
 import { Department } from '../models/department.model';
 
@@ -17,13 +18,14 @@ import { Department } from '../models/department.model';
 
 export class CollegesComponent implements OnInit {
   @Input()
+  modal: NgbModalRef
   alerts: IAlert[] = [];
   department: Department = new Department();
-  modal: NgbModalRef
   departments: Department[] = [];
   college: College = new College();
   colleges: College[] = [];
-
+  users: User[] = [];
+  dean: User = new User();
 
   filteredColleges: College[] = [];
 
@@ -34,6 +36,10 @@ export class CollegesComponent implements OnInit {
       this.colleges = data;
       console.log(data);
     });
+    this.collegesService.getUsers().subscribe( data => {
+      this.users = data;
+      console.log(data);
+    })
   }
 
   invalidErrorMessage(message) {
@@ -72,15 +78,20 @@ export class CollegesComponent implements OnInit {
     this.modal = this.modalService.open(content);
   }
 
-  manageCollegeDialog(content) {
+  manageCollegeDialog(content, collegeId: string, deanId?: string) {
     this.alerts = [];
-    if (this.department != undefined) {
+    if (this.modal) { this.modal.close(); }
 
-    } else {
-      this.invalidErrorMessage('empty departments');
-    }
+    this.collegesService.getCollege(collegeId).subscribe( data => {
+      this.college = data;
+      this.college.deans = this.getDeansObject(data.deans);
+
+      if (this.college.deans.length > 0) {
+        this.dean = this.college.deans.find( item => item._id === deanId);
+      }
+    });
+
     this.modal = this.modalService.open(content);
-    this.department = new Department();
   }
 
   submitCollege() {
@@ -149,6 +160,20 @@ export class CollegesComponent implements OnInit {
     } else {
       this.invalidErrorMessage('empty department');
     }
+  }
+
+  /* Give a group's member list of IDs and return their corresponding member objects */
+  getDeansObject(deanList: any[]): any[] {
+    const displayList = [];
+
+    for (let i = 0; i < deanList.length; i++) {
+      for (let j = 0; j < this.users.length; j++) {
+        if (deanList[i] === this.users[j]._id) {
+          displayList.push(this.users[j]);
+        }
+      }
+    }
+    return displayList;
   }
 }
 
