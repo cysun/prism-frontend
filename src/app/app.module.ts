@@ -12,6 +12,7 @@ import { ReversePipe } from './../pipe_manipulation';
 import { CollegesComponent } from './colleges/colleges.component';
 import { CommitteeComponent } from './committee/committee.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DocumentComponent } from './document/document.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SettingsComponent } from './settings/settings.component';
 import { CalendarComponent } from './calendar/calendar.component';
@@ -25,14 +26,18 @@ import { AutoCompleteModule } from 'primeng/primeng';
 import { LoginComponent } from './login/login.component';
 import { PublicComponent } from './layout/public/public.component';
 import { PrivateComponent } from './layout/private/private.component';
-import { DocumentComponent } from './document/document.component';
 
-import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
+import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthService } from './login/auth.service';
+import { CollegesService } from './colleges/colleges.service';
+import { DepartmentService } from './colleges/departments/department.service';
 import { DocumentService } from './document/document.service';
 import { GroupManagerService } from './group-manager/group-manager.service';
 import { SettingsService } from './settings/settings.service';
+
+
+
 
 @NgModule({
   declarations: [
@@ -41,15 +46,16 @@ import { SettingsService } from './settings/settings.service';
     CollegesComponent,
     CommitteeComponent,
     DashboardComponent,
+    DepartmentsComponent,
     DocumentComponent,
     GroupManagerComponent,
     LoginComponent,
     MinutesComponent,
     PageNotFoundComponent,
-    PrivateComponent,
-    PublicComponent,
     ResourcesComponent,
     SettingsComponent,
+    PrivateComponent,
+    PublicComponent,
     ReversePipe,
   ],
   imports: [
