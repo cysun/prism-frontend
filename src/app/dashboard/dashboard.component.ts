@@ -13,6 +13,8 @@ export class DashboardComponent implements OnInit {
   logHistory: ActionLogger[] = [];
   userActions: ActionLogger[] = [];
 
+  selectedOption = 'All';
+
   public filterOptions = ['All', 'College', 'Department', 'Document', 'Group',
   'Program', 'Review', 'User'];
 
@@ -25,10 +27,16 @@ export class DashboardComponent implements OnInit {
   searchUserActions(username: string) {
     const filteredList = [];
 
+    console.log('selected option is: ' + this.selectedOption)
+
     if (username && (username.trim().length > 0)) {
       this.getActionLogs().then( () => {
         for (let i = 0; i < this.logHistory.length; i++) {
-          if (this.logHistory[i].user) {
+          if ((this.selectedOption === 'All') && (this.logHistory[i].user)) {
+            if (username.toLowerCase() === (this.logHistory[i].user.username).toLowerCase()) {
+              filteredList.push(this.logHistory[i]);
+            }
+          } else if ((this.selectedOption.toLowerCase() === this.logHistory[i].type) && (this.logHistory[i].user)) {
             if (username.toLowerCase() === (this.logHistory[i].user.username).toLowerCase()) {
               filteredList.push(this.logHistory[i]);
             }
