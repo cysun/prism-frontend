@@ -9,8 +9,8 @@ export class DashboardService {
 
   constructor(private http: HttpClient) { }
 
-  getRootActionLogs(): Observable<ActionLogger> {
-    return this.http.get<ActionLogger>('/api/actions');
+  getRootActionLogs(): Observable<ActionLogger[]> {
+    return this.http.get<ActionLogger[]>('/api/actions');
   }
 
 }

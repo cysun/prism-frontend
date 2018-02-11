@@ -10,7 +10,7 @@ import { DashboardService } from './dashboard.service';
 })
 
 export class DashboardComponent implements OnInit {
-  logHistory: ActionLogger = new ActionLogger();
+  logHistory: ActionLogger[] = [];
 
   constructor(private dashboardService: DashboardService) { }
 
