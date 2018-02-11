@@ -11,14 +11,40 @@ import { DashboardService } from './dashboard.service';
 
 export class DashboardComponent implements OnInit {
   logHistory: ActionLogger[] = [];
+  userActions: ActionLogger[] = [];
+
+  public filterOptions = ['All', 'College', 'Department', 'Document', 'Group',
+  'Program', 'Review', 'User'];
 
   constructor(private dashboardService: DashboardService) { }
 
   ngOnInit() {
-    this.dashboardService.getRootActionLogs().subscribe( data => {
-      this.logHistory = data;
-      console.log(data);
-    })
+    this.getActionLogs();
   }
 
+  searchUserActions(username: string) {
+    const filteredList = [];
+
+    if (username && (username.trim().length > 0)) {
+      this.getActionLogs().then( () => {
+        for (let i = 0; i < this.logHistory.length; i++) {
+          if (this.logHistory[i].user) {
+            if (username.toLowerCase() === (this.logHistory[i].user.username).toLowerCase()) {
+              filteredList.push(this.logHistory[i]);
+            }
+          }
+        }
+        this.logHistory = filteredList;
+      })
+    }
+  }
+
+  getActionLogs() {
+    return new Promise((resolve, reject) => {
+      this.dashboardService.getRootActionLogs().subscribe( data => {
+        this.logHistory = data;
+        resolve();
+      })
+    });
+  }
 }

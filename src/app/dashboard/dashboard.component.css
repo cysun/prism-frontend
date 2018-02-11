@@ -1,9 +1,13 @@
-.search-bar {
-  margin: 0 auto;
-  padding: 30px;
-  text-align: center;
+.container {
+  margin-top: 40px;
 }
 
-.search-button {
-  margin-left: 20px;
+.form-row {
+  padding-left: 50px;
+  padding-top: 20px;
+}
+
+.search-bar {
+  background: #EEE;
+  padding: 20px;
 }

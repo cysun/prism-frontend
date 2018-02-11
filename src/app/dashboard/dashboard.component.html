@@ -24,14 +24,24 @@
   <ng-template ngbTabContent>
     <div class="container">
       <div class="search-bar">
-        <div class="input-group">
-          <input type="text" class="form-control rounded-0" placeholder="Search for...">
-          <span class="search-button">
-            <button class="btn btn-dark" type="button">Search</button>
-          </span>
+        <div class="form-row">
+          <div class="form-group col-md-7">
+            <input type="text" class="form-control rounded-0" placeholder="Search for..." [(ngModel)]="user">
+            <div class="text-hints">Search for a user to return all their action history.</div>
+          </div>
+
+          <div class="form-group col-md-3">
+            <select class="custom-select rounded-0" [(ngModel)]="filterOptions[0]">
+              <option *ngFor="let option of filterOptions">{{option}}</option>
+            </select>
+          </div>
+
+          <div class="form-group col-md-2">
+            <button class="btn btn-dark" type="button" (click)=searchUserActions(user)>Search</button>
+          </div>
         </div>
-        <div class="text-hints">Search for a user to return all their action history.</div>
       </div>
+
 
       <ng-container *ngFor="let action of logHistory">
         <div class="card card-container" *ngIf="action.date && action.user">
