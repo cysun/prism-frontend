@@ -49,21 +49,7 @@ export class GroupManagerComponent implements OnInit {
 
       /* If current user is an admin, execute function that retrieves editable groups */
       if (this.currentUser.root === true) {
-        this.groupManagerService.getGroups().subscribe(data => {
-          this.groups = data;
-
-          for (let i = 0; i < this.groups.length; i++) {
-            const members = this.groups[i].members;
-            this.groups[i].members = this.getMembersObject(members);
-          }
-          console.log(this.groups)
-        },
-
-        err => {
-          localStorage.removeItem('jwt_token');
-          localStorage.removeItem('currentUser');
-          this.router.navigate(['login']);
-        });
+        this.getAllGroups();
       }
     }
 
@@ -77,7 +63,7 @@ export class GroupManagerComponent implements OnInit {
           detailMsg = 'Please input a group name.';
           break;
         case 'existing group':
-          detailMsg = 'Name of group already exists.'
+          detailMsg = 'Name of group already exists.';
           break;
       }
       this.alert = { message: detailMsg };
@@ -101,7 +87,6 @@ export class GroupManagerComponent implements OnInit {
           this.member = this.group.members.find( item => item._id === memberId);
         }
       });
-
       this.modal = this.modalService.open(content, this.options);
     }
 
@@ -110,6 +95,7 @@ export class GroupManagerComponent implements OnInit {
       this.alert = '';
       this.filteredMembers = [];
       this.suggestedUsers = [];
+      this.group = new Group();
       this.modal.close();
     }
 
@@ -137,6 +123,27 @@ export class GroupManagerComponent implements OnInit {
     } else {
       this.invalidErrorMessage('empty group');
     }
+  }
+
+  /* Returns the list of groups */
+  getAllGroups() {
+    return new Promise((resolve, reject) => {
+      this.groupManagerService.getGroups().subscribe( data => {
+        this.groups = data;
+
+        for (let i = 0; i < this.groups.length; i++) {
+          const members = this.groups[i].members;
+          this.groups[i].members = this.getMembersObject(members);
+        }
+        console.log(this.groups)
+        resolve();
+      }, err => {
+        localStorage.removeItem('jwt_token');
+        localStorage.removeItem('currentUser');
+        this.router.navigate(['login']);
+        reject();
+      })
+    });
   }
 
   /* Function to delete an existing group */
@@ -168,8 +175,8 @@ export class GroupManagerComponent implements OnInit {
         } else {
           this.groupManagerService.updateGroup(this.group).subscribe( updatedGroup => {
             const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
+            updatedGroup.members = this.getMembersObject(updatedGroup.members);
             this.groups[index] = updatedGroup;
-            this.group = new Group();
             this.modal.close();
           });
         }
