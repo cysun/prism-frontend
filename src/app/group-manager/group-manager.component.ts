@@ -60,11 +60,11 @@ export class GroupManagerComponent implements OnInit {
 
       switch (message) {
         case 'empty group':
-          detailMsg = 'Please input a group name.';
-          break;
+        detailMsg = 'Please input a group name.';
+        break;
         case 'existing group':
-          detailMsg = 'Name of group already exists.';
-          break;
+        detailMsg = 'Name of group already exists.';
+        break;
       }
       this.alert = { message: detailMsg };
     }
@@ -95,7 +95,6 @@ export class GroupManagerComponent implements OnInit {
       this.alert = '';
       this.filteredMembers = [];
       this.suggestedUsers = [];
-      this.group = new Group();
       this.modal.close();
     }
 
@@ -177,6 +176,7 @@ export class GroupManagerComponent implements OnInit {
             const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
             updatedGroup.members = this.getMembersObject(updatedGroup.members);
             this.groups[index] = updatedGroup;
+            // this.group = new Group();
             this.modal.close();
           });
         }
@@ -189,9 +189,10 @@ export class GroupManagerComponent implements OnInit {
         for (let i = 0; i < this.suggestedUsers.length; i++) {
           const userObj = this.users.find(foundUser => foundUser.username === this.suggestedUsers[i].name);
 
-          this.groupManagerService.addMember(userObj._id, this.group._id).subscribe( newMember => {
-            findGroup.members.push(newMember);
-            // this.groups = this.groups.slice(0);
+          this.groupManagerService.addMember(userObj._id, this.group._id).subscribe( updatedGroup => {
+            updatedGroup.members = this.getMembersObject(updatedGroup.members)
+            const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
+            this.groups[index] = updatedGroup;
           })
         }
         this.group = new Group();
