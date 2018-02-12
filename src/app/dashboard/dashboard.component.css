@@ -2,6 +2,15 @@
   margin-top: 40px;
 }
 
+a {
+  color: #000000;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #7AA5C3;
+}
+
 .form-row {
   padding-left: 50px;
   padding-top: 20px;

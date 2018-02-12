@@ -42,17 +42,19 @@
           </div>
         </div>
       </div>
-
-
+      
       <ng-container *ngFor="let action of logHistory">
         <div class="card card-container" *ngIf="action.date && action.user">
           <div class="card-body">
             <div class="card-header-title">
-              <div class="card-message">{{action.user.name.first}} {{ action.text }}</div>
+              <div class="card-message">
+                <a routerLink="/{{action.type}}/{{action.type !== 'group' ? action.object : ''}}">
+                  {{action.user.name.first}} {{action.user.name.last }} {{ action.text }}
+                </a>
+              </div>
+
               <div class="card-info">
-                <strong>{{action.user.username}}</strong> on {{ action.date | date: 'MM/dd/yyyy hh:mm:ss' }}
-                <br/>OjectId: {{ action.object }} <br/>
-                Type: {{ action.type }}
+                <strong>{{action.user.username}}</strong> on <strong>{{ action.date | date: 'MM/dd/yyyy hh:mm:ss' }}</strong>
               </div>
             </div>
           </div>
