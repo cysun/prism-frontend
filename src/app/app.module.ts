@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { ReversePipe } from './../pipe_manipulation';
 
 import { CollegesComponent } from './colleges/colleges.component';
+import { CommitteeComponent } from './committee/committee.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -31,7 +32,7 @@ import { AuthGuard } from './login/auth.guard';
 import { AuthService } from './login/auth.service';
 import { DocumentService } from './document/document.service';
 import { GroupManagerService } from './group-manager/group-manager.service';
-import { CommitteeComponent } from './committee/committee.component';
+import { SettingsService } from './settings/settings.service';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { CommitteeComponent } from './committee/committee.component';
     HttpClientModule,
     DocumentService,
     GroupManagerService,
+    SettingsService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
