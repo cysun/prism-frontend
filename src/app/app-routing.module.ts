@@ -33,6 +33,7 @@ const routes: Routes = [
       { path: 'calendar', component: CalendarComponent },
       { path: 'colleges', component: CollegesComponent },
       { path: 'group', component: CommitteeComponent },
+      { path: 'document', component: DocumentComponent },
       { path: 'document/:id', component: DocumentComponent },
       { path: 'minutes', component: MinutesComponent },
       { path: 'resources', component: ResourcesComponent },
