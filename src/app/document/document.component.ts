@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbModalRef,  NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 import { Document } from '../models/document.model';
@@ -28,16 +29,22 @@ export class DocumentComponent implements OnInit {
   totalIndices: number;
 
   documentTitle: string;
+  documentId: string;
   message: string;
   file: File;
   fileName: string;
   modalMessage: any;
 
-  constructor(private documentService: DocumentService, private modalService: NgbModal) { }
+
+  constructor(private documentService: DocumentService, private modalService: NgbModal, private route: ActivatedRoute) {
+    this.route.params.subscribe( params => {
+      this.documentId = params.id;
+    })
+  }
 
   ngOnInit() {
     // '5a7a17879b263d9503ca14d1'
-    this.documentService.retrieveDocument('5a7e376c9b263d9503ca155f').subscribe( data => {
+    this.documentService.retrieveDocument(this.documentId).subscribe( data => {
       this.document = data;
       this.documentTitle = this.document.title;
       this.totalIndices = this.getNumOfRevisions();

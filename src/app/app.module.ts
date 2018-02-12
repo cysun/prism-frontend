@@ -30,9 +30,11 @@ import { DocumentComponent } from './document/document.component';
 import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
 import { AuthService } from './login/auth.service';
+import { DashboardService } from './dashboard/dashboard.service';
 import { DocumentService } from './document/document.service';
 import { GroupManagerService } from './group-manager/group-manager.service';
 import { SettingsService } from './settings/settings.service';
+
 
 @NgModule({
   declarations: [
@@ -66,6 +68,7 @@ import { SettingsService } from './settings/settings.service';
     AuthGuard,
     AuthService,
     HttpClientModule,
+    DashboardService,
     DocumentService,
     GroupManagerService,
     SettingsService,
