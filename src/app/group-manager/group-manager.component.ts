@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { NgbModal, NgbModalRef,  NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Group } from '../models/group.model';
 import { User } from '../models/user.model';
 
+import { Globals } from '../shared/app.global';
 import { GroupManagerService } from './group-manager.service';
 
 @Component({
@@ -16,11 +17,6 @@ import { GroupManagerService } from './group-manager.service';
 
 export class GroupManagerComponent implements OnInit {
   modal: NgbModalRef;
-  options: NgbModalOptions = {
-    backdrop : 'static',
-    keyboard : false,
-    size: 'lg',
-  };
 
   group: Group = new Group();
   member: User = new User();
@@ -37,7 +33,8 @@ export class GroupManagerComponent implements OnInit {
 
   constructor(private groupManagerService: GroupManagerService,
     private modalService: NgbModal,
-    private router: Router) { }
+    private router: Router,
+    private globals: Globals) { }
 
     ngOnInit() {
       this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
@@ -86,7 +83,7 @@ export class GroupManagerComponent implements OnInit {
     /* Open a basic modal */
     openModal(content) {
       this.group = new Group();
-      this.modal = this.modalService.open(content, this.options);
+      this.modal = this.modalService.open(content, this.globals.options);
     }
 
     /* Open a modal with purpose of manipulating data */
@@ -102,7 +99,7 @@ export class GroupManagerComponent implements OnInit {
         }
       });
 
-      this.modal = this.modalService.open(content, this.options);
+      this.modal = this.modalService.open(content, this.globals.options);
     }
 
     /* Closes the current open modal */

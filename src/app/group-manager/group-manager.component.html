@@ -81,7 +81,7 @@
       <div *ngIf="alert">
         <ngb-alert type="danger" [dismissible]="false"><strong>Invalid Group:</strong> {{ alert.message }}</ngb-alert>
       </div>
-      
+
       <div class="row">
         <span class="col-3 group-label">Group Name</span>
         <span class="col-8">
@@ -95,7 +95,7 @@
       <div class ="row grid-space">
         <span class="col-3 group-label">Add Members</span>
         <span class="col-8 ui-fluid">
-          <p-autoComplete [(ngModel)]="suggestedUsers"
+          <!-- <p-autoComplete [(ngModel)]="suggestedUsers"
           [suggestions]="filteredMembers"
           (completeMethod)="filteredUsers($event)"
           [minLength]="1" placeholder="Enter a username"
@@ -103,7 +103,7 @@
           name="groups"
           field="name" [multiple]="true"
           [style]="{'text-align':'left'}">
-        </p-autoComplete>
+        </p-autoComplete> -->
         <div class="text-hints">Type in a username to get a list of possible users to add in the group.</div>
       </span>
     </div>
