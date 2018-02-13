@@ -5,6 +5,7 @@ import { NgbModule, NgbModal, NgbModalRef, NgbModalOptions } from '@ng-bootstrap
 
 import { DepartmentService } from './department.service';
 
+import { User } from '../../models/user.model';
 import { Department } from '../../models/department.model'
 import { College } from '../../models/college.model';
 
@@ -14,13 +15,15 @@ import { College } from '../../models/college.model';
   styleUrls: ['./department.component.css']
 })
 export class DepartmentComponent implements OnInit {
-  @Input() collegeId: string;
+  @Input() collegeId: any;
   modal: NgbModalRef;
   options: NgbModalOptions = {
     backdrop : 'static',
     keyboard : false,
     size: 'lg',
   };
+  suggestedUsers: User[] = [];
+  filteredDeans: User[] = [];
   department: Department = new Department();
   departments: Department[] = [];
   alerts: IAlert[] = [];
@@ -56,10 +59,6 @@ export class DepartmentComponent implements OnInit {
     this.modalService.open(content, this.options)
   }
   closeModal() {
-    this.alert = '';
-    this.message = '';
-    this.file = null;
-    this.fileName = '';
     this.modal.close();
   }
   //
@@ -78,7 +77,7 @@ export class DepartmentComponent implements OnInit {
         this.departmentService.addDepartment(this.department).subscribe(
           data => {
             this.departments.push(data);
-            this.departments = this.department.slice(0);
+            this.departments = this.departments.slice(0);
           }
         );
         this.department = new Department();

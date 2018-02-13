@@ -74,32 +74,24 @@
       </span>
     </div>
     <!-- DEANS -->
-    <div>
-      <table class="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th class="table-header">Username</th>
-            <th class="table-header">Name</th>
-            <th class="table-header">E-mail</th>
-            <th class="table-header" style="width:65px"></th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <ng-template>
-            <tr>
-              <td>Username</td>
-              <td>First Last</td>
-              <td>Email</td>
-              <td><button type="button" class="btn btn-dark"><i class="fa fa-trash"></i></button></td>
-              </tr>
-            </ng-template>
-          </tbody>
-        </table>
-      </div>
-
-
-
+    <div class ="row grid-space">
+      <span class="col-3 group-label">Add Deans</span>
+      <span class="col-8 ui-fluid">
+        <input type="text" class="form-control" [inputFormatter]="formatter" [(ngModel)]="model" [ngbTypeahead]="search" placeholder="Enter a username"/>
+      <div class="text-hints">Type in a username to get a list of possible users to add in the dean list.</div>
+      </span>
+    </div>
+    <div class="card-header">
+      <h4><span class="header-container">ManageCollege Deans</span></h4>
+    </div>
+    <div *ngFor="let dean of deans" class="card">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">{{dean.firstname}} {{dean.lastname}}</li>
+      </ul>
+    </div>
+    <div *ngIf="deans.length == 0">
+      <ngb-alert type="info">No deans exist for this college.</ngb-alert>
+    </div>
   </div>
     <!-- ========== ALERTS IN MANAGER ============== --->
     <!--

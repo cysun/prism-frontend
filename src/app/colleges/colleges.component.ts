@@ -1,8 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
 
-import { NgbModule, NgbModal, NgbModalRef, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
-
+import { NgbModule, NgbModal, NgbModalRef, NgbModalOptions,  } from '@ng-bootstrap/ng-bootstrap';
 
 import { CollegesService } from './colleges.service';
 import { DepartmentService } from './departments/department.service';
@@ -11,6 +14,14 @@ import { User } from '../models/user.model';
 import { College } from '../models/college.model';
 import { Department } from '../models/department.model';
 
+const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'California', 'Colorado',
+  'Connecticut', 'Delaware', 'District Of Columbia', 'Federated States Of Micronesia', 'Florida', 'Georgia',
+  'Guam', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine',
+  'Marshall Islands', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana',
+  'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
+  'Northern Mariana Islands', 'Ohio', 'Oklahoma', 'Oregon', 'Palau', 'Pennsylvania', 'Puerto Rico', 'Rhode Island',
+  'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virgin Islands', 'Virginia',
+  'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
 @Component({
   selector: 'prism-colleges',
   templateUrl: './colleges.component.html',
@@ -32,8 +43,19 @@ export class CollegesComponent implements OnInit {
   colleges: College[] = [];
   users: User[] = [];
   dean: User = new User();
+  deans: User[] = [];
 
-  filteredColleges: College[] = [];
+  suggestedUsers: any[] = [];
+  filteredDeans: any[] = [];
+  filteredColleges: any[] = [];
+
+  model: any;
+  search = (text$: Observable<string>) =>
+    text$
+      .debounceTime(200)
+      .distinctUntilChanged()
+      .map(term => term.length < 2 ? []
+        : this.getSuggestedUsers(term, this.users);
 
   constructor(private collegesService: CollegesService,
     private departmentService: DepartmentService, private router: Router, private modalService: NgbModal) { }
@@ -62,7 +84,7 @@ export class CollegesComponent implements OnInit {
         detailMsg = 'Please input an abbreviation.';
         break;
       case 'empty departments':
-        detailMsg = 'There are no departments';
+        detailMsg = 'Please input a department name.';
         break;
     }
     this.alerts.push({type: 'warning', message: detailMsg });
@@ -182,6 +204,60 @@ export class CollegesComponent implements OnInit {
       }
     }
     return displayList;
+  }
+
+  /* Populates filteredDeans array with given suggested users to add to the college */
+  // filteredUsers(text$: Observable<string>) {
+  //   this.filteredDeans = [];
+  //   const query = event.query;
+  //   this.filteredDeans = this.getSuggestedUsers(query, this.users);
+  // }
+
+  /* Function that returns a list of suggested users based on user's current field input */
+  getSuggestedUsers(username: string, users: any[]): any[] {
+    const filtered = [];
+    const currentDeans = this.getDeansObject(this.college.deans);
+
+    /* Push matching usernames to filtered list */
+    for (let i = 0; i < users.length; i ++) {
+      if ((users[i].username).toLowerCase().indexOf(username.toLowerCase()) === 0) {
+        filtered.push({'name': users[i].username});
+      }
+    }
+
+    /* Filter out members that are already part of the group */
+    for (let i = 0; i < currentDeans.length; i++) {
+      for (let j = 0; j < filtered.length; j++) {
+        if (filtered[j].name === currentDeans[i].username) {
+          filtered.splice(j, 1);
+        }
+      }
+    }
+    /* Filter out usernames that were previously selected (but not added to the group) */
+    for (let i = 0; i < this.suggestedUsers.length; i++) {
+      for (let j = 0; j < filtered.length; j++) {
+        if (filtered[j].name === this.suggestedUsers[i].name) {
+          filtered.splice(j, 1);
+        }
+      }
+    }
+
+    filtered.sort(this.compareUsernames);
+
+    return filtered.map(v => v.name);
+  }
+
+  /* Function to sort the suggested user list in alphabetical order */
+  compareUsernames(user1, user2) {
+    const username1 = user1.name.toLowerCase();
+    const username2 = user2.name.toLowerCase();
+
+    if (username1 > username2) {
+      return 1;
+    } else if (username1 < username2) {
+      return -1;
+    }
+    return 0;
   }
 }
 
