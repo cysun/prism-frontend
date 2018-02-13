@@ -35,6 +35,20 @@ export class GroupManagerComponent implements OnInit {
 
   suggestedUsers: any[] = [];
 
+  config = {
+    labelField: 'username',
+    valueField: '_id',
+    highlight: true,
+    create: false,
+    openOnFocus: false,
+    searchField: ['username'],
+    plugins: ['dropdown_direction', 'remove_button'],
+    dropdownDirection: 'down',
+    selectOnTab: true,
+    maxItems: 20
+  };
+
+
   constructor(private groupManagerService: GroupManagerService,
     private modalService: NgbModal,
     private router: Router) { }
@@ -71,7 +85,6 @@ export class GroupManagerComponent implements OnInit {
 
     /* Open a basic modal */
     openModal(content) {
-      this.group = new Group();
       this.modal = this.modalService.open(content, this.options);
     }
 
@@ -92,6 +105,7 @@ export class GroupManagerComponent implements OnInit {
 
     /* Closes the current open modal */
     closeModal() {
+      this.group = new Group();
       this.alert = '';
       this.filteredMembers = [];
       this.suggestedUsers = [];
@@ -156,7 +170,6 @@ export class GroupManagerComponent implements OnInit {
       }
     });
     this.closeModal();
-    this.group = new Group();
   }
 
   /* Function to update a group's name and members */
@@ -185,20 +198,16 @@ export class GroupManagerComponent implements OnInit {
       }
 
       /* Adding members to the group */
-      if (this.suggestedUsers.length !== 0 ) {
-        for (let i = 0; i < this.suggestedUsers.length; i++) {
-          const userObj = this.users.find(foundUser => foundUser.username === this.suggestedUsers[i].name);
-
-          this.groupManagerService.addMember(userObj._id, this.group._id).subscribe( updatedGroup => {
-            updatedGroup.members = this.getMembersObject(updatedGroup.members)
-            const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
-            this.groups[index] = updatedGroup;
+      if (this.filteredMembers.length > 0) {
+        for (let i = 0; i < this.filteredMembers.length; i++) {
+          this.groupManagerService.addMember(this.filteredMembers[i], this.group._id).subscribe( () => {
+            const newMember = this.getMembersObject([this.filteredMembers[i]]);
+            const groupIndex = this.groups.findIndex(getGroup => getGroup._id === this.group._id);
+            this.groups[groupIndex].members.push(newMember[0]);
           })
         }
-        this.group = new Group();
         this.modal.close();
       }
-      this.suggestedUsers = [];
     }
 
     /* Function delete a member off of the selected group */

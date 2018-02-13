@@ -95,15 +95,8 @@
       <div class ="row grid-space">
         <span class="col-3 group-label">Add Members</span>
         <span class="col-8 ui-fluid">
-          <p-autoComplete [(ngModel)]="suggestedUsers"
-          [suggestions]="filteredMembers"
-          (completeMethod)="filteredUsers($event)"
-          [minLength]="1" placeholder="Enter a username"
-          forceSelection=true
-          name="groups"
-          field="name" [multiple]="true"
-          [style]="{'text-align':'left'}">
-        </p-autoComplete>
+
+          <ng-selectize [options] = "users" [config]="config"  [(ngModel)]="filteredMembers"></ng-selectize>
         <div class="text-hints">Type in a username to get a list of possible users to add in the group.</div>
       </span>
     </div>
@@ -118,7 +111,7 @@
   </div>
 
   <div class="modal-footer">
-    <button class="btn btn-dark" type="button" (click)="updateGroup(group.name)">Save</button>
+    <button class="btn btn-dark" type="button" (click)="updateGroup(value)">Save</button>
     <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
   </div>
 </ng-template>
