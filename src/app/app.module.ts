@@ -34,6 +34,7 @@ import { DashboardService } from './dashboard/dashboard.service';
 import { DocumentService } from './document/document.service';
 import { GroupManagerService } from './group-manager/group-manager.service';
 import { SettingsService } from './settings/settings.service';
+import { Globals } from './shared/app.global';
 
 
 @NgModule({
@@ -70,6 +71,7 @@ import { SettingsService } from './settings/settings.service';
     HttpClientModule,
     DashboardService,
     DocumentService,
+    Globals,
     GroupManagerService,
     SettingsService,
     {

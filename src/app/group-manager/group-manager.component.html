@@ -95,8 +95,7 @@
       <div class ="row grid-space">
         <span class="col-3 group-label">Add Members</span>
         <span class="col-8 ui-fluid">
-
-          <ng-selectize [options] = "users" [config]="config"  [(ngModel)]="filteredMembers"></ng-selectize>
+          <ng-selectize [options] = "users" [config]="globals.config"  [(ngModel)]="filteredMembers"></ng-selectize>
         <div class="text-hints">Type in a username to get a list of possible users to add in the group.</div>
       </span>
     </div>
