@@ -61,7 +61,7 @@
     </div>
 
     <div class="modal-body">
-      <strong><u>NOTE:</u></strong> Deleting <b>{{member.username}}</b> from the group will remove their given access. Are you sure you want to delete them from the group?
+      <strong><u>NOTE:</u></strong> Deleting a member from the group will remove their given access. Are you sure you want to delete them from the group?
     </div>
 
     <div class="modal-footer">
@@ -95,7 +95,7 @@
       <div class ="row grid-space">
         <span class="col-3 group-label">Add Members</span>
         <span class="col-8 ui-fluid">
-          <ng-selectize [options] = "users" [config]="globals.config"  [(ngModel)]="filteredMembers"></ng-selectize>
+          <ng-selectize [options]="suggestedUsers" [config]="globals.config" [(ngModel)]="filteredMembers"></ng-selectize>
         <div class="text-hints">Type in a username to get a list of possible users to add in the group.</div>
       </span>
     </div>

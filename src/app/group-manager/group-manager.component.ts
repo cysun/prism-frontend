@@ -18,18 +18,17 @@ import { GroupManagerService } from './group-manager.service';
 export class GroupManagerComponent implements OnInit {
   modal: NgbModalRef;
 
-  group: Group = new Group();
-  member: User = new User();
+  member: string;
   currentUser: User = new User();
+  group: Group = new Group();
 
   groups: Group[] = [];
   users: User[] = [];
   memberList: User[] = [];
 
   filteredMembers: any[] = [];
+  suggestedUsers = [];
   alert: any;
-
-  suggestedUsers: any[] = [];
 
   constructor(private groupManagerService: GroupManagerService,
     private modalService: NgbModal,
@@ -41,13 +40,15 @@ export class GroupManagerComponent implements OnInit {
 
       this.groupManagerService.getUsers().subscribe( data => {
         this.users = data;
-        console.log(data);
+        this.suggestedUsers = data;
       })
 
       /* If current user is an admin, execute function that retrieves editable groups */
       if (this.currentUser.root === true) {
         this.getAllGroups();
       }
+
+
     }
 
     /* Error messages when performing invalid actions */
@@ -74,26 +75,68 @@ export class GroupManagerComponent implements OnInit {
 
     /* Open a modal with purpose of manipulating data */
     editModal(content, groupId: string, memberId?: string) {
+      this.filteredMembers = [];
+
       if (this.modal) { this.modal.close(); }
 
-      this.groupManagerService.getGroup(groupId).subscribe( data => {
-        this.group = data;
-        this.group.members = this.getMembersObject(data.members);
+      this.getUserList().then( () => {
+        this.groupManagerService.getGroup(groupId).subscribe( data => {
+          this.group = data;
 
-        if (this.group.members.length > 0) {
-          this.member = this.group.members.find( item => item._id === memberId);
-        }
-      });
-      this.modal = this.modalService.open(content, this.globals.options);
+          for ( let i = 0; i < this.group.members.length; i++) {
+            for (let j = 0; j < this.suggestedUsers.length; j++) {
+              if (this.group.members[i] === this.suggestedUsers[j]._id) {
+                this.suggestedUsers.splice(j, 1);
+              }
+            }
+          }
+
+          if (this.group.members.length > 0) {
+            this.member = this.group.members.find( item => item === memberId);
+          }
+        });
+        this.modal = this.modalService.open(content, this.globals.options);
+      })
     }
 
     /* Closes the current open modal */
     closeModal() {
-      this.group = new Group();
       this.alert = '';
-      this.filteredMembers = [];
-      this.suggestedUsers = [];
+      this.suggestedUsers = this.users;
       this.modal.close();
+    }
+
+    /* Returns the list of groups */
+    getAllGroups() {
+      return new Promise((resolve, reject) => {
+        this.groupManagerService.getGroups().subscribe( data => {
+          this.groups = data;
+
+          for (let i = 0; i < this.groups.length; i++) {
+            const members = this.groups[i].members;
+            this.groups[i].members = this.getMembersObject(members);
+          }
+          console.log(this.groups)
+          resolve();
+        }, err => {
+          localStorage.removeItem('jwt_token');
+          localStorage.removeItem('currentUser');
+          this.router.navigate(['login']);
+          reject();
+        })
+      });
+    }
+
+    /* Grab all users up-to-date */
+    getUserList() {
+      return new Promise((resolve, reject) => {
+        this.groupManagerService.getUsers().subscribe( data => {
+          this.users = data;
+          this.suggestedUsers = data;
+          this.suggestedUsers.sort(this.compareUsernames)
+          resolve();
+        })
+      });
     }
 
     /* Function to add a new group */
@@ -120,27 +163,6 @@ export class GroupManagerComponent implements OnInit {
     } else {
       this.invalidErrorMessage('empty group');
     }
-  }
-
-  /* Returns the list of groups */
-  getAllGroups() {
-    return new Promise((resolve, reject) => {
-      this.groupManagerService.getGroups().subscribe( data => {
-        this.groups = data;
-
-        for (let i = 0; i < this.groups.length; i++) {
-          const members = this.groups[i].members;
-          this.groups[i].members = this.getMembersObject(members);
-        }
-        console.log(this.groups)
-        resolve();
-      }, err => {
-        localStorage.removeItem('jwt_token');
-        localStorage.removeItem('currentUser');
-        this.router.navigate(['login']);
-        reject();
-      })
-    });
   }
 
   /* Function to delete an existing group */
@@ -173,7 +195,6 @@ export class GroupManagerComponent implements OnInit {
             const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
             updatedGroup.members = this.getMembersObject(updatedGroup.members);
             this.groups[index] = updatedGroup;
-            // this.group = new Group();
             this.modal.close();
           });
         }
@@ -196,15 +217,13 @@ export class GroupManagerComponent implements OnInit {
 
     /* Function delete a member off of the selected group */
     deleteMember() {
-      this.groupManagerService.deleteMember(this.group._id, this.member._id).subscribe( () => {
-        for (let i = 0; i < this.groups.length; i++) {
-          if (this.groups[i]._id === this.group._id) {
-            for (let j = 0; j < this.groups[i].members.length; j++) {
-              if (this.groups[i].members[j]._id === this.member._id) {
-                this.groups[i].members.splice(j, 1);
-                break;
-              }
-            }
+      this.groupManagerService.deleteMember(this.group._id, this.member).subscribe( () => {
+        const findGroupIndex = this.groups.findIndex( item => item._id === this.group._id);
+
+        for (let i = 0; i < this.groups[findGroupIndex].members.length; i++) {
+          if (this.groups[findGroupIndex].members[i]._id === this.member) {
+            this.groups[findGroupIndex].members.splice(i, 1);
+            break;
           }
         }
       })
@@ -225,52 +244,10 @@ export class GroupManagerComponent implements OnInit {
       return displayList;
     }
 
-    /* Populates filteredMembers array with given suggested users to add to the group */
-    filteredUsers(event) {
-      this.filteredMembers = [];
-      const query = event.query;
-      this.filteredMembers = this.getSuggestedUsers(query, this.users);
-    }
-
-    /* Function that returns a list of suggested users based on user's current field input */
-    getSuggestedUsers(username: string, users: any[]): any[] {
-      const filtered = [];
-      const currentMembers = this.getMembersObject(this.group.members);
-
-      /* Push matching usernames to filtered list */
-      for (let i = 0; i < users.length; i ++) {
-        if ((users[i].username).toLowerCase().indexOf(username.toLowerCase()) === 0) {
-          filtered.push({'name': users[i].username});
-        }
-      }
-
-      /* Filter out members that are already part of the group */
-      for (let i = 0; i < currentMembers.length; i++) {
-        for (let j = 0; j < filtered.length; j++) {
-          if (filtered[j].name === currentMembers[i].username) {
-            filtered.splice(j, 1);
-          }
-        }
-      }
-
-      /* Filter out usernames that were previously selected (but not added to the group) */
-      for (let i = 0; i < this.suggestedUsers.length; i++) {
-        for (let j = 0; j < filtered.length; j++) {
-          if (filtered[j].name === this.suggestedUsers[i].name) {
-            filtered.splice(j, 1);
-          }
-        }
-      }
-
-      filtered.sort(this.compareUsernames);
-
-      return filtered;
-    }
-
     /* Function to sort the suggested user list in alphabetical order */
-    compareUsernames(user1, user2) {
-      const username1 = user1.name.toLowerCase();
-      const username2 = user2.name.toLowerCase();
+    compareUsernames(user1: User, user2: User) {
+      const username1 = user1.username.toLowerCase();
+      const username2 = user2.username.toLowerCase();
 
       if (username1 > username2) {
         return 1;
