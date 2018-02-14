@@ -20,6 +20,7 @@ import { ResourcesComponent } from './resources/resources.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectizeModule } from 'ng-selectize';
 
 import { LoginComponent } from './login/login.component';
 import { PublicComponent } from './layout/public/public.component';
@@ -56,6 +57,7 @@ import { Globals } from './shared/app.global';
   ],
   imports: [
     NgbModule.forRoot(),
+    NgSelectizeModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,
