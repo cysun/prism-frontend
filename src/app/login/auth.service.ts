@@ -20,8 +20,8 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     if (localStorage.getItem(this.TOKEN) && localStorage.getItem('currentUser')) {
-      console.log('Is authenticated and here is the token: ' + localStorage.getItem(this.TOKEN));
-      console.log('Is authenticated and here is the user info: ' + localStorage.getItem('currentUser'));
+      // console.log('Is authenticated and here is the token: ' + localStorage.getItem(this.TOKEN));
+      // console.log('Is authenticated and here is the user info: ' + localStorage.getItem('currentUser'));
 
       return true;
     }
@@ -32,6 +32,11 @@ export class AuthService {
   getUser() {
     const user = JSON.parse(localStorage.getItem('currentUser'))
     return user;
+  }
+
+  changePassword(userId: string, newPassword: string) {
+    const body = JSON.stringify({'password' : newPassword});
+    return this.http.patch('/api/user/' + userId, body, this.HEADERS);
   }
 
   logout() {
