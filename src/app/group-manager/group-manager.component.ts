@@ -42,13 +42,7 @@ export class GroupManagerComponent implements OnInit {
         this.users = data;
         this.suggestedUsers = data;
       })
-
-      /* If current user is an admin, execute function that retrieves editable groups */
-      if (this.currentUser.root === true) {
         this.getAllGroups();
-      }
-
-
     }
 
     /* Error messages when performing invalid actions */
@@ -119,9 +113,7 @@ export class GroupManagerComponent implements OnInit {
           console.log(this.groups)
           resolve();
         }, err => {
-          localStorage.removeItem('jwt_token');
-          localStorage.removeItem('currentUser');
-          this.router.navigate(['login']);
+          console.log(err);
           reject();
         })
       });
