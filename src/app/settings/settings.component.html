@@ -62,13 +62,6 @@
           <div class="text-hint">Change Password</div>
 
           <div class="row">
-            <span class="col-3">Current Password</span>
-            <span class="col-6">
-              <input type="password" class="form-control" placeholder="Enter current password" [(ngModel)]="currentPassword">
-            </span>
-          </div>
-
-          <div class="row">
             <span class="col-3">New Password</span>
             <span class="col-6">
               <input type="password" class="form-control" placeholder="Enter a new password" [(ngModel)]="newPassword">
@@ -76,9 +69,9 @@
           </div>
 
           <div class="row">
-            <span class="col-3">Re-enter New Password</span>
+            <span class="col-3">Confirm New Password</span>
             <span class="col-6">
-              <input type="password" class="form-control"[(ngModel)]="newPassword2">
+              <input type="password" class="form-control"placeholder="Re-enter the new password" [(ngModel)]="confirmPassword">
             </span>
           </div>
 

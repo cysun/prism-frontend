@@ -34,11 +34,6 @@ export class AuthService {
     return user;
   }
 
-  changePassword(userId: string, newPassword: string) {
-    const body = JSON.stringify({'password' : newPassword});
-    return this.http.patch('/api/user/' + userId, body, this.HEADERS);
-  }
-
   logout() {
     localStorage.removeItem(this.TOKEN);
     localStorage.removeItem('currentUser');
