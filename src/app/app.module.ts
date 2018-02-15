@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -76,8 +77,12 @@ import { Globals } from './shared/app.global';
     SettingsService,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
+      useFactory: function(router: Router) {
+        return new AuthInterceptor(router);
+      },
+      // useClass: AuthInterceptor,
+      multi: true,
+      deps: [Router]
     }
   ],
   bootstrap: [AppComponent]
