@@ -24,4 +24,9 @@ export class SettingsService {
     })
     return this.http.patch<User>('/api/user/' + user._id, body, this.HEADERS);
   }
+
+  changePassword(userId: string, newPassword: string): Observable<User> {
+    const body = JSON.stringify({'password' : newPassword});
+    return this.http.patch<User>('/api/user/' + userId, body, this.HEADERS);
+  }
 }

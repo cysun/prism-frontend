@@ -20,8 +20,8 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     if (localStorage.getItem(this.TOKEN) && localStorage.getItem('currentUser')) {
-      console.log('Is authenticated and here is the token: ' + localStorage.getItem(this.TOKEN));
-      console.log('Is authenticated and here is the user info: ' + localStorage.getItem('currentUser'));
+      // console.log('Is authenticated and here is the token: ' + localStorage.getItem(this.TOKEN));
+      // console.log('Is authenticated and here is the user info: ' + localStorage.getItem('currentUser'));
 
       return true;
     }
