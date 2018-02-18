@@ -12,11 +12,16 @@ import { DashboardService } from './dashboard.service';
 export class DashboardComponent implements OnInit {
   logHistory: ActionLogger[] = [];
   userActions: ActionLogger[] = [];
+  page = 1;
+
+  itemsPerPage = 25;
+  totalItems: number;
+  previousPage: any;
 
   selectedOption = 'All';
 
   public filterOptions = ['All', 'College', 'Department', 'Document', 'Group',
-  'Program', 'Review', 'User'];
+  'Program', 'Review'];
 
   constructor(private dashboardService: DashboardService) { }
 
@@ -26,8 +31,6 @@ export class DashboardComponent implements OnInit {
 
   searchUserActions(username: string) {
     const filteredList = [];
-
-    console.log('selected option is: ' + this.selectedOption)
 
     if (username && (username.trim().length > 0)) {
       this.getActionLogs().then( () => {
@@ -51,8 +54,16 @@ export class DashboardComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.dashboardService.getRootActionLogs().subscribe( data => {
         this.logHistory = data;
+        // this.logHistory = data.slice(this.page - 1, this.itemsPerPage);
         resolve();
       })
     });
+  }
+
+  loadPage(page: number) {
+    if (page !== this.previousPage) {
+      this.previousPage = page;
+      this.getActionLogs();
+    }
   }
 }
