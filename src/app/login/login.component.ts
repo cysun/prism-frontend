@@ -11,6 +11,8 @@ import { AuthService } from './auth.service';
 })
 
 export class LoginComponent implements OnInit {
+  // @Output() usernameEvent = new EventEmitter<string>();
+
   username: string;
   password: string;
   wrongInfo: Boolean = false;
@@ -18,7 +20,7 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    if (this.authService.isAuthenticated) {
+    if (this.authService.isAuthenticated()) {
       this.router.navigate(['dashboard']);
     }
   }
@@ -30,6 +32,8 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('jwt_token', data.token);
       localStorage.setItem('currentUser', decoded);
 
+      this.authService.sendUsername(data.user.username);
+
       console.log('Group info about User: ' + JSON.stringify(data.groups));
 
       const decodedParsed = JSON.parse(decoded);
@@ -37,9 +41,8 @@ export class LoginComponent implements OnInit {
 
       console.log('converted iat: ' + date)
 
-      this.wrongInfo = false;
       this.router.navigate(['dashboard']);
-
+      this.wrongInfo = false;
     }, err => {
       this.password = '';
       this.wrongInfo = true;

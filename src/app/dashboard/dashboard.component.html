@@ -1,11 +1,66 @@
-<p-tabView>
-    <p-tabPanel header="Program Reviews" leftIcon="fa-university">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p-tabPanel>
-    <p-tabPanel header="Recent Actions" leftIcon="fa-th-list">
-        Here is the recent actions tab
-    </p-tabPanel>
-</p-tabView>
+<ngb-tabset>
+  <!-- <ngb-tab>
+  <ng-template ngbTabTitle><i class="fa fa-university"></i> Program Reviews</ng-template>
+  <ng-template ngbTabContent>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+  dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+  proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+  dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+  proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+  dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+  proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+</ng-template>
+</ngb-tab> -->
+
+<ngb-tab>
+  <ng-template ngbTabTitle><i class="fa fa-th-list"></i> Recent Actions</ng-template>
+  <ng-template ngbTabContent>
+    <div class="container">
+      <div class="search-bar">
+        <div class="form-row">
+          <div class="form-group col-md-7">
+            <input type="text" class="form-control rounded-0" placeholder="Search for..." [(ngModel)]="user">
+            <div class="text-hints">Search for a user to return all their action history.</div>
+          </div>
+
+          <div class="form-group col-md-3">
+            <select class="custom-select rounded-0" [(ngModel)]="selectedOption">
+              <option *ngFor="let option of filterOptions">{{option}}</option>
+            </select>
+          </div>
+
+
+          <div class="form-group col-md-2">
+            <button class="btn btn-dark" type="button" (click)=searchUserActions(user)>Search</button>
+          </div>
+        </div>
+      </div>
+      
+      <ng-container *ngFor="let action of logHistory">
+        <div class="card card-container" *ngIf="action.date && action.user">
+          <div class="card-body">
+            <div class="card-header-title">
+              <div class="card-message">
+                <a routerLink="/{{action.type}}/{{action.type !== 'group' ? action.object : ''}}">
+                  {{action.user.name.first}} {{action.user.name.last }} {{ action.text }}
+                </a>
+              </div>
+
+              <div class="card-info">
+                <strong>{{action.user.username}}</strong> on <strong>{{ action.date | date: 'MM/dd/yyyy hh:mm:ss' }}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-template>
+</ngb-tab>
+</ngb-tabset>

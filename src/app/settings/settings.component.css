@@ -1,0 +1,43 @@
+.alert-messages {
+  padding-top: 30px;
+}
+
+.notification-label {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 40px;
+  margin-top: 30px;
+}
+
+.row-label {
+  background: #9ec745;
+  font-weight: bold;
+}
+
+.table-style {
+  width: 50%;
+}
+
+.text-hint {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-top: 30px;
+  text-transform: uppercase;
+}
+
+td {
+  border: 1px solid #000;
+  padding: 8px;
+  word-wrap: break-word;
+}
+
+.row {
+  align-items: center;
+  display: flex;
+  margin-bottom: 25px;
+}
+
+.update-buttons {
+  text-align: center;
+}

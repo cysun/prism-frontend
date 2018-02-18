@@ -1,3 +1,123 @@
-<p>
-  settings works!
-</p>
+<ngb-tabset>
+  <ngb-tab>
+    <ng-template ngbTabTitle><i class="fa fa-icon fa-info-circle"></i>Profile</ng-template>
+    <ng-template ngbTabContent>
+      <div class="container-fluid">
+        <div *ngIf="!updateInfo" class="notification-label">
+          <span>{{currentUser.name.first}}'s Profile</span>
+          <button class="btn btn-outline-primary" (click)="toggleEditButton()"><i class="fa fa-icon fa-pencil"></i>Edit</button>
+        </div>
+
+        <div class="alert-messages" *ngIf="alert">
+          <ngb-alert type="danger" [dismissible]="false">
+            <i class="fa fa-icon fa-times-circle"></i><strong>Error:</strong> {{ alert.message }}
+            <span *ngIf="reasons">
+              <ng-container *ngFor="let reason of reasons ">
+                  <li>{{ reason }}</li>
+              </ng-container>
+            </span>
+          </ngb-alert>
+        </div>
+
+        <table *ngIf="!updateInfo" class="table-style">
+          <tr>
+            <td class="row-label">Username</td>
+            <td>{{currentUser.username}}</td>
+          </tr>
+          <tr>
+            <td class="row-label">Name</td>
+            <td>{{currentUser.name.first}} {{currentUser.name.last}}</td>
+          </tr>
+          <tr>
+            <td class="row-label">E-mail</td>
+            <td>{{currentUser.email}}</td>
+          </tr>
+        </table>
+
+        <!-- Update current user's basic info and/or password -->
+        <div *ngIf="updateInfo">
+          <div class="text-hint">Basic Information</div>
+
+          <div class="row">
+            <span class="col-3">First Name</span>
+            <span class="col-6">
+              <input type="text" class="form-control" placeholder="Enter a first name" [(ngModel)]="currentUser.name.first">
+            </span>
+          </div>
+
+          <div class="row">
+            <span class="col-3">Last Name</span>
+            <span class="col-6">
+              <input type="text" class="form-control" placeholder="Enter a last name" [(ngModel)]="currentUser.name.last">
+            </span>
+          </div>
+
+          <div class="row">
+            <span class="col-3">E-mail</span>
+            <span class="col-6">
+              <input type="email" class="form-control" placeholder="Enter a valid e-mail" [(ngModel)]="currentUser.email">
+            </span>
+          </div>
+
+          <div class="text-hint">Change Password</div>
+
+          <div class="row">
+            <span class="col-3">New Password</span>
+            <span class="col-6">
+              <input type="password" class="form-control" placeholder="Enter a new password" [(ngModel)]="newPassword">
+            </span>
+          </div>
+
+          <div class="row">
+            <span class="col-3">Confirm New Password</span>
+            <span class="col-6">
+              <input type="password" class="form-control"placeholder="Re-enter the new password" [(ngModel)]="confirmPassword">
+            </span>
+          </div>
+
+          <div class="update-buttons col-9">
+            <button class="btn btn-outline-primary" (click)="updateBasicInfo()">Save</button>
+            <button class="btn btn-outline-primary" (click)="toggleEditButton()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+
+  <ngb-tab *ngIf="currentUser.config">
+    <ng-template ngbTabTitle><i class="fa fa-envelope-o"></i>E-mail Settings</ng-template>
+    <ng-template ngbTabContent>
+      <div class="notification-label">
+        <span>Current Settings</span>
+        <button class="btn btn-outline-primary" *ngIf="!updateSettings" (click)="updateSettings=true"><i class="fa fa-pencil"></i>Edit</button>
+      </div>
+
+      <table class="table table-style" *ngIf="!updateSettings">
+        <tr>
+          <td colspan="2" class="row-label">E-mail Notifications</td>
+        </tr>
+
+        <tr>
+          <td>Document Finalized</td>
+          <td>{{currentUser.config.type.email.type.documentFinalized ? "On" : "Off" }}</td>
+        </tr>
+
+        <tr>
+          <td>New Comments</td>
+          <td>{{currentUser.config.type.email.type.newComment  ? "On" : "Off" }}</td>
+        </tr>
+
+        <tr>
+          <td>Rescheduled Meetings</td>
+          <td>{{currentUser.config.type.email.type.meetingChange  ? "On" : "Off" }}</td>
+        </tr>
+      </table>
+
+      <div *ngIf="updateSettings">
+        <div>Update Settings form shall be here</div>
+        <button class="btn btn-outline-primary" (click)="updateSettings=false"><i class="fa fa-pencil"></i>Update</button>
+        <button class="btn btn-outline-primary" (click)="toggleEditButton()">Cancel</button>
+      </div>
+    </ng-template>
+  </ngb-tab>
+</ngb-tabset>

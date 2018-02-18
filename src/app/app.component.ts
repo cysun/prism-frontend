@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { MenuItem } from 'primeng/components/common/api';
+import { LoginComponent } from './login/login.component';
 
 import { AuthService } from './login/auth.service';
 
@@ -12,29 +11,27 @@ import { AuthService } from './login/auth.service';
 })
 
 export class AppComponent implements OnInit {
-  userMenuItems: MenuItem[];
   username: string;
 
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.username = this.authService.getUser().username;
+    if (this.authService.isAuthenticated()) {
+      /* Initially get the username upon login into the system */
+      this.authService.currentUsername.subscribe( data => {
+        this.username = data;
+      })
 
-    this.userMenuItems = [
-      { label: 'Settings',
-        icon: 'fa-gear',
-        command: (event: any) => {
-          this.router.navigate(['settings']);
-        }
-      },
-      { label: 'Logout',
-        icon: 'fa-sign-out',
-        command: (event: any) => {
-          this.authService.logout();
-          this.username = '';
-          this.router.navigate(['login'])
-        }
-      },
-    ];
+      /* After any browser refresh, retrieve the current username */
+      if (this.username.length <= 0) {
+        this.username = this.authService.getUser().username;
+      }
+    }
+  }
+
+  logout() {
+    this.authService.logout();
+    this.username = '';
+    this.router.navigate(['login'])
   }
 }

@@ -1,5 +1,7 @@
-<p-message class="err-message" severity="error" text="Sorry, the page does not exist!"></p-message>
+<p>
+  <ngb-alert type="info" [dismissible]="false">
+    <i class="fa fa-icon fa-times-circle"></i><strong>Page Not Found!</strong> The page you are trying to access does not exist.
+  </ngb-alert>
+</p>
 
-<br/>
-
-<button pButton type="button" label="Back" routerLink="/dashboard"></button>
+<button type="button" class="btn btn-dark" routerLink="/dashboard">Back to Dashboard</button>

@@ -1,0 +1,81 @@
+.delete-btn {
+  width: 100%;
+}
+
+.header-container {
+  padding: 7px;
+}
+
+.header-panel {
+  color: #FFF;
+  font-weight: bold;
+  position: relative;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.grid-space {
+  padding-top: 20px;
+}
+
+.group-label {
+  padding: 8px;
+  padding-right: 15px;
+  text-align: right;
+}
+
+.info-message {
+  font-size: 1.4em;
+}
+
+.label {
+  font-size: 2em;
+  font-weight: bold;
+  padding-right: 10px;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.modal {
+  padding-top: 50px;
+}
+
+.modal-title {
+  width: 100%;
+}
+
+.modal-header {
+  background-color: #1A1A1A;
+  border-radius: 1px;
+  color: #FFF;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+::ng-deep .card-header {
+  background: #363636;
+  border-radius: 6px;
+  color: #FFF;
+}
+
+::ng-deep .card-body {
+  padding: 0;
+}
+
+.message {
+  margin: 10px;
+}
+
+.panel-buttons {
+  bottom: -7px;
+  position: absolute;
+  right: -8px;
+}
+
+td, th {
+  vertical-align: middle;
+}
+
+:host ::ng-deep .ui-autocomplete-token {
+  margin: 3px;
+}
