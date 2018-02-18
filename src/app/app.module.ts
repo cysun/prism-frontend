@@ -35,6 +35,7 @@ import { AuthService } from './login/auth.service';
 import { DashboardService } from './dashboard/dashboard.service';
 import { DocumentService } from './document/document.service';
 import { GroupManagerService } from './group-manager/group-manager.service';
+import { ReviewService } from './review/review.service';
 import { SettingsService } from './settings/settings.service';
 import { Globals } from './shared/app.global';
 
@@ -76,6 +77,7 @@ import { Globals } from './shared/app.global';
     DocumentService,
     Globals,
     GroupManagerService,
+    ReviewService,
     SettingsService,
     {
       provide: HTTP_INTERCEPTORS,
