@@ -12,6 +12,7 @@ import { LoginComponent } from './login/login.component';
 import { MinutesComponent } from './minutes/minutes.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ResourcesComponent } from './resources/resources.component';
+import { ReviewComponent } from './review/review.component';
 import { SettingsComponent } from './settings/settings.component';
 
 import { PrivateComponent } from './layout/private/private.component';
@@ -37,6 +38,7 @@ const routes: Routes = [
       { path: 'document/:id', component: DocumentComponent },
       { path: 'minutes', component: MinutesComponent },
       { path: 'resources', component: ResourcesComponent },
+      { path: 'review', component: ReviewComponent },
       { path: 'settings', component: SettingsComponent },
       { path: '**', component: PageNotFoundComponent }
     ]

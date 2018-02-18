@@ -18,6 +18,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { MinutesComponent } from './minutes/minutes.component';
 import { ResourcesComponent } from './resources/resources.component';
+import { ReviewComponent } from './review/review.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -53,6 +54,7 @@ import { Globals } from './shared/app.global';
     PrivateComponent,
     PublicComponent,
     ResourcesComponent,
+    ReviewComponent,
     SettingsComponent,
     ReversePipe,
   ],
