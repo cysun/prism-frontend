@@ -184,7 +184,6 @@ export class CollegesComponent implements OnInit {
   }
 
   addDean() {
-    this.alerts = [];
     if (typeof(this.dean.username) !== 'undefined' && this.dean.username.trim().length > 0) {
       const userObj = this.users.find(item => item.username === this.dean.username);
       this.deans.push(userObj);
@@ -196,6 +195,19 @@ export class CollegesComponent implements OnInit {
       });
       this.dean = new User();
     }
+  }
+
+  deleteDean(dean) {
+    this.alerts = [];
+    this.alerts.push({type: 'warning', message: `${dean.username} was removed from the dean list`});
+    const index = this.deans.indexOf(dean);
+    this.deans.splice(index, 1);
+    const deanIds = this.deans.map(dean => dean._id);
+    this.college.deans = deanIds;
+    this.collegesService.updateCollege(this.college).subscribe( updatedCollege => {
+      const index = this.colleges.findIndex(oldCollege => oldCollege._id === updatedCollege._id);
+      this.colleges[index] = updatedCollege;
+    });
   }
 
   arraysEqual(a: any[] , b: any[]) {

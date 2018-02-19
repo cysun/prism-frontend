@@ -86,20 +86,19 @@
     </div>
     <div *ngFor="let dean of deans" class="card">
       <ul class="list-group list-group-flush">
-        <li class="list-group-item">{{dean.username}}</li>
+        <li class="list-group-item">
+          {{dean.username}}
+          <button type="button" class="close" aria-label="Close" (click)="deleteDean(dean)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </li>
       </ul>
     </div>
     <div *ngIf="deans.length == 0">
       <ngb-alert type="info">No deans exist for this college.</ngb-alert>
     </div>
   </div>
-    <!-- ========== ALERTS IN MANAGER ============== --->
-    <!--
-    <div ngFor="let alert of alerts">
-      <ngb-alert [type]="alert.type">{{alert.message}}</ngb-alert>
-    </div>
-     -->
-
+  <!-- ========== ALERTS IN MANAGER ============== --->
   <div *ngIf="alerts" class="modal-footer">
     <p *ngFor="let alert of alerts">
       <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
