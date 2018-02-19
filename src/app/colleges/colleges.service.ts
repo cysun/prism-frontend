@@ -19,13 +19,13 @@ export class CollegesService {
   }
 
   addCollege(college: College): Observable<College> {
-    const body = JSON.stringify({'_id': college._id, 'name': college.name, 'abbreviation': college.abbreviation, 'deans': college.deans});
+    const body = JSON.stringify({'name': college.name, 'abbreviation': college.abbreviation});
     const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
     return this.http.post<College>('api/college', body, header);
   }
 
   updateCollege(college: College): Observable<College> {
-    const body = JSON.stringify({'name': college.name});
+    const body = JSON.stringify({'name': college.name, 'abbreviation': college.abbreviation, 'deans': college.deans});
     const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
     return this.http.patch<College>('/api/college/' + college._id, body, header);
   }

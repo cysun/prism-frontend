@@ -14,14 +14,6 @@ import { User } from '../models/user.model';
 import { College } from '../models/college.model';
 import { Department } from '../models/department.model';
 
-const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'California', 'Colorado',
-  'Connecticut', 'Delaware', 'District Of Columbia', 'Federated States Of Micronesia', 'Florida', 'Georgia',
-  'Guam', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine',
-  'Marshall Islands', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana',
-  'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-  'Northern Mariana Islands', 'Ohio', 'Oklahoma', 'Oregon', 'Palau', 'Pennsylvania', 'Puerto Rico', 'Rhode Island',
-  'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virgin Islands', 'Virginia',
-  'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
 @Component({
   selector: 'prism-colleges',
   templateUrl: './colleges.component.html',
@@ -44,33 +36,29 @@ export class CollegesComponent implements OnInit {
   users: User[] = [];
   dean: User = new User();
   deans: User[] = [];
-
   suggestedUsers: any[] = [];
   filteredDeans: any[] = [];
   filteredColleges: any[] = [];
-
-  model: any;
   search = (text$: Observable<string>) =>
     text$
       .debounceTime(200)
       .distinctUntilChanged()
       .map(term => term.length < 2 ? []
-        : this.getSuggestedUsers(term, this.users);
+        : this.getSuggestedUsers(term, this.users));
 
   constructor(private collegesService: CollegesService,
     private departmentService: DepartmentService, private router: Router, private modalService: NgbModal) { }
 
   ngOnInit() {
-    this.collegesService.getColleges().subscribe(data => {
+    this.collegesService.getColleges().subscribe( data => {
       this.colleges = data;
       console.log(data);
     });
     this.collegesService.getUsers().subscribe( data => {
       this.users = data;
       console.log(data);
-    })
+    });
   }
-
 
   invalidErrorMessage(message) {
     this.alerts = [];
@@ -86,6 +74,12 @@ export class CollegesComponent implements OnInit {
       case 'empty departments':
         detailMsg = 'Please input a department name.';
         break;
+      case 'existing college':
+        detailMsg = 'Name of college already exists!';
+        break;
+      case 'update abbreviation':
+        detailMsg = 'Must update college abbreviation.'
+        break;
     }
     this.alerts.push({type: 'warning', message: detailMsg });
   }
@@ -93,7 +87,6 @@ export class CollegesComponent implements OnInit {
   closeAlert(alert: IAlert) {
     const index: number = this.alerts.indexOf(alert);
     this.alerts.splice(index, 1);
-
   }
 
   addCollegeDialog(content){
@@ -159,15 +152,49 @@ export class CollegesComponent implements OnInit {
   }
 
   updateCollege() {
-    if (this.college.name.trim().length > 0) {
-      this.collegesService.updateCollege(this.college).subscribe( updatedCollege => {
-        const index = this.colleges.findIndex(oldCollege => oldCollege._id === updatedCollege._id);
-        this.colleges[index] = updatedCollege;
-      });
-      this.college = new College();
-    } else {
-      this.invalidErrorMessage('empty college');
+    this.alerts = [];
+    const collegeTarget = this.colleges.find(item => item._id === this.college._id);
+    const changed = collegeTarget.name != this.college.name || collegeTarget.abbreviation != this.college.abbreviation || !this.arraysEqual(collegeTarget.deans, this.college.deans) ? true : false;
+
+    if (changed) {
+      if (this.college.name.trim().length > 0) {
+        if (this.colleges.some(existingCollege =>
+          existingCollege.name.toLowerCase() === this.college.name.toLowerCase() && existingCollege._id != this.college._id)) {
+            this.invalidErrorMessage('existing college');
+          } else {
+            if (this.college.abbreviation.trim().length > 0) {
+              if (collegeTarget.abbreviation != this.college.abbreviation) {
+                this.collegesService.updateCollege(this.college).subscribe( updatedCollege => {
+                  const index = this.colleges.findIndex(oldCollege => oldCollege._id === updatedCollege._id);
+                  this.colleges[index] = updatedCollege;
+                  this.college = new College();
+                  this.modal.close();
+                });
+              } else {
+                this.invalidErrorMessage('update abbreviation')
+              }
+            } else {
+              this.invalidErrorMessage('empty abbreviation')
+            }
+          }
+        } else {
+          this.invalidErrorMessage('empty college')
+        }
     }
+  }
+
+  arraysEqual(a: any[] , b: any[]) {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length != b.length) return false;
+
+    a.sort();
+    b.sort();
+
+    for (var i = 0; i < a.length; ++i) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
   }
 
   submitDepartment() {
@@ -206,13 +233,6 @@ export class CollegesComponent implements OnInit {
     return displayList;
   }
 
-  /* Populates filteredDeans array with given suggested users to add to the college */
-  // filteredUsers(text$: Observable<string>) {
-  //   this.filteredDeans = [];
-  //   const query = event.query;
-  //   this.filteredDeans = this.getSuggestedUsers(query, this.users);
-  // }
-
   /* Function that returns a list of suggested users based on user's current field input */
   getSuggestedUsers(username: string, users: any[]): any[] {
     const filtered = [];
@@ -221,14 +241,14 @@ export class CollegesComponent implements OnInit {
     /* Push matching usernames to filtered list */
     for (let i = 0; i < users.length; i ++) {
       if ((users[i].username).toLowerCase().indexOf(username.toLowerCase()) === 0) {
-        filtered.push({'name': users[i].username});
+        filtered.push(users[i].username);
       }
     }
 
     /* Filter out members that are already part of the group */
     for (let i = 0; i < currentDeans.length; i++) {
       for (let j = 0; j < filtered.length; j++) {
-        if (filtered[j].name === currentDeans[i].username) {
+        if (filtered[j] === currentDeans[i].username) {
           filtered.splice(j, 1);
         }
       }
@@ -236,7 +256,7 @@ export class CollegesComponent implements OnInit {
     /* Filter out usernames that were previously selected (but not added to the group) */
     for (let i = 0; i < this.suggestedUsers.length; i++) {
       for (let j = 0; j < filtered.length; j++) {
-        if (filtered[j].name === this.suggestedUsers[i].name) {
+        if (filtered[j] === this.suggestedUsers[i].name) {
           filtered.splice(j, 1);
         }
       }
@@ -244,13 +264,13 @@ export class CollegesComponent implements OnInit {
 
     filtered.sort(this.compareUsernames);
 
-    return filtered.map(v => v.name);
+    return filtered;
   }
 
   /* Function to sort the suggested user list in alphabetical order */
   compareUsernames(user1, user2) {
-    const username1 = user1.name.toLowerCase();
-    const username2 = user2.name.toLowerCase();
+    const username1 = user1.toLowerCase();
+    const username2 = user2.toLowerCase();
 
     if (username1 > username2) {
       return 1;

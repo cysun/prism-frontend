@@ -75,14 +75,14 @@
     </div>
     <!-- DEANS -->
     <div class ="row grid-space">
-      <span class="col-3 group-label">Add Deans</span>
+      <span class="col-3 group-label">Add a Dean</span>
       <span class="col-8 ui-fluid">
-        <input type="text" class="form-control" [inputFormatter]="formatter" [(ngModel)]="model" [ngbTypeahead]="search" placeholder="Enter a username"/>
+        <input type="text" class="form-control" [(ngModel)]="dean.username" [ngbTypeahead]="search" placeholder="Enter a username"/>
       <div class="text-hints">Type in a username to get a list of possible users to add in the dean list.</div>
       </span>
     </div>
     <div class="card-header">
-      <h4><span class="header-container">ManageCollege Deans</span></h4>
+      <h4><span class="header-container">Manage College Deans</span></h4>
     </div>
     <div *ngFor="let dean of deans" class="card">
       <ul class="list-group list-group-flush">
@@ -99,34 +99,12 @@
       <ngb-alert [type]="alert.type">{{alert.message}}</ngb-alert>
     </div>
      -->
-    <!-- ========== COLLEGE INFO ============== --->
 
-
-
-    <!-- ========== ADD DEPT FORM ============== --->
-<!--
-    <form #f="ngForm" (ngSubmit)="submitDepartment()">
-      <div class="form-group">
-        <label for="department-name">Department: </label>
-        <input type="text" class="form-control"[(ngModel)]="department.name" name="department-name" placeholder="Enter New Department Title">
-        <small class="form-text text-muted">Enter a name for the new department.</small>
-      </div>
-      <div class="form-group">
-        <label for="college-abbreviation">Abbreviation: </label>
-        <input type="text" class="form-control" [(ngModel)]="college.abbreviation" name="college-abbreviation" placeholder="Enter The Department's Abbreviation">
-        <small class="form-text text-muted">Enter an abbreviation for the new department.</small>
-      </div>
-      <div>
-        <button type="submit" class="btn btn-primary" data-dismiss="modal" label="Add">Add</button>
-        <button type="button" class="btn btn-outline-dark" (click)="cancel()">Cancel</button>
-      </div>
-    </form>
-   -->
   <div *ngIf="alerts" class="modal-footer">
     <p *ngFor="let alert of alerts">
       <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
     </p>
-    <button class="btn btn-dark" type="button" (click)="updateGroup(group.name)">Save</button>
+    <button class="btn btn-dark" type="button" (click)="updateCollege()">Save</button>
     <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
   </div>
 </ng-template>
