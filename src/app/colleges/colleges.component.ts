@@ -101,6 +101,20 @@ export class CollegesComponent implements OnInit {
     this.modal = this.modalService.open(content, this.options);
   }
 
+  viewDeansDialog(content, collegeId: string){
+    this.alerts = [];
+    if (this.modal) { this.modal.close(); }
+    this.collegesService.getCollege(collegeId).subscribe( data => {
+      this.college = data;
+      this.college.deans = this.getDeansObject(data.deans);
+      if (this.college.deans.length > 0) {
+        this.deans = this.college.deans;
+      }
+      console.log(collegeId);
+    });
+    this.modal = this.modalService.open(content, this.options);
+  }
+
   manageCollegeDialog(content, collegeId: string, deanId?: string) {
     this.alerts = [];
     if (this.modal) { this.modal.close(); }

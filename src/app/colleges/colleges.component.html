@@ -107,6 +107,48 @@
     <button class="btn btn-dark" type="button" (click)="cancel()">Cancel</button>
   </div>
 </ng-template>
+<!-- Display Deans -->
+<ng-template #displayDeans let-close="close" let-esc="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">College Deans</h4>
+    <button type="button" class="close" aria-label="Close" (click)="esc()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-inverse">
+  <thead>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Username</th>
+    </tr>
+  </thead>
+  <tbody>
+    <div *ngFor="let dean of deans">
+      <tr>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+      </tr>
+    </div>
+      <tr>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+      </tr>
+      <tr>
+        <td>Larry</td>
+        <td>the Bird</td>
+        <td>@twitter</td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-dark" type="button" (click)="close()">Close</button>
+  </div>
+</ng-template>
 
 <!-- Displays the current college and their deans -->
 <div *ngIf="colleges.length > 0; else emptyCollege">
@@ -116,7 +158,7 @@
         <ng-template ngbPanelTitle>
           {{college.name}} ({{college.abbreviation}})
           <button type="button" class="close" aria-label="Close" (click)="deleteCollegeDialog(deletion, college._id)">X</button>
-          <button type="button" class="close" (click)="viewDeansDialog(deansViewer)"><i class="fa fa-icon fa-users"></i>&nbsp;&nbsp;</button>
+          <button type="button" class="close" (click)="viewDeansDialog(displayDeans, college._id)"><i class="fa fa-icon fa-users"></i>&nbsp;&nbsp;</button>
           <button type="button" class="close" (click)="manageCollegeDialog(manager, college._id)"><i class="fa fa-icon fa-cog"></i>&nbsp;&nbsp;</button>
           <ng-template #deletion let-close="close" let-esc="dismiss">
             <div class="modal-header">
