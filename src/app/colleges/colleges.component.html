@@ -125,23 +125,11 @@
     </tr>
   </thead>
   <tbody>
-    <div *ngFor="let dean of deans">
-      <tr>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-      </tr>
-    </div>
-      <tr>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-      </tr>
-      <tr>
-        <td>Larry</td>
-        <td>the Bird</td>
-        <td>@twitter</td>
-      </tr>
+    <tr *ngFor="let dean of deans">
+      <td>{{dean.firstname || 'N/A'}}</td>
+      <td>{{dean.lastname || 'N/A'}}</td>
+      <td>{{dean.username || 'N/A'}}</td>
+    </tr>
   </tbody>
 </table>
   </div>
