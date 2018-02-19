@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
-import { NgbModule, NgbModal, NgbModalRef, NgbModalOptions,  } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbModal, NgbModalRef, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 import { CollegesService } from './colleges.service';
 import { DepartmentService } from './departments/department.service';
@@ -108,9 +108,8 @@ export class CollegesComponent implements OnInit {
     this.collegesService.getCollege(collegeId).subscribe( data => {
       this.college = data;
       this.college.deans = this.getDeansObject(data.deans);
-
       if (this.college.deans.length > 0) {
-        this.dean = this.college.deans.find( item => item._id === deanId);
+        this.deans = this.college.deans;
       }
     });
 
@@ -181,6 +180,22 @@ export class CollegesComponent implements OnInit {
           this.invalidErrorMessage('empty college')
         }
     }
+    this.modal.close();
+  }
+
+  addDean() {
+    this.alerts = [];
+    if (typeof(this.dean.username) !== 'undefined' && this.dean.username.trim().length > 0) {
+      const userObj = this.users.find(item => item.username === this.dean.username);
+      this.deans.push(userObj);
+      const deanIds = this.deans.map(dean => dean._id);
+      this.college.deans = deanIds;
+      this.collegesService.updateCollege(this.college).subscribe( updatedCollege => {
+        const index = this.colleges.findIndex(oldCollege => oldCollege._id === updatedCollege._id);
+        this.colleges[index] = updatedCollege;
+      });
+      this.dean = new User();
+    }
   }
 
   arraysEqual(a: any[] , b: any[]) {
@@ -198,9 +213,9 @@ export class CollegesComponent implements OnInit {
   }
 
   submitDepartment() {
-    if (typeof(this.department.name) != undefined && this.department.name.trim().length > 0) {
-      if (typeof(this.department.abbreviation) != undefined && this.department.abbreviation.trim().length > 0) {
-        if (typeof(this.department.college) != undefined && typeof(this.department.college._id) != undefined) {
+    if (typeof(this.department.name) !== 'undefined' && this.department.name.trim().length > 0) {
+      if (typeof(this.department.abbreviation) !== 'undefined' && this.department.abbreviation.trim().length > 0) {
+        if (typeof(this.department.college) !== 'undefined' && typeof(this.department.college._id) !== 'undefined') {
           this.departmentService.addDepartment(this.department).subscribe(
             data => {
               this.departments.push(data);
@@ -225,7 +240,7 @@ export class CollegesComponent implements OnInit {
 
     for (let i = 0; i < deanList.length; i++) {
       for (let j = 0; j < this.users.length; j++) {
-        if (deanList[i] === this.users[j]._id) {
+        if (deanList[i]._id === this.users[j]._id) {
           displayList.push(this.users[j]);
         }
       }

@@ -58,7 +58,7 @@
       <span class="col-3 group-label">College Name</span>
       <span class="col-8">
         <div class="ui-inputgroup">
-          <input type="text" class="form-control" placeholder="Enter a new group name" [(ngModel)]="college.name" name="college-name">
+          <input type="text" class="form-control" placeholder="Enter a new college name" [(ngModel)]="college.name" name="college-name">
         </div>
         <div class="text-hints">Enter a new name for the college.</div>
       </span>
@@ -75,7 +75,7 @@
     </div>
     <!-- DEANS -->
     <div class ="row grid-space">
-      <span class="col-3 group-label">Add a Dean</span>
+      <span class="col-3 group-label">Add a Dean<br><button class="btn-xs btn-success col-12" (click)="addDean()">add</button></span>
       <span class="col-8 ui-fluid">
         <input type="text" class="form-control" [(ngModel)]="dean.username" [ngbTypeahead]="search" placeholder="Enter a username"/>
       <div class="text-hints">Type in a username to get a list of possible users to add in the dean list.</div>
@@ -86,7 +86,7 @@
     </div>
     <div *ngFor="let dean of deans" class="card">
       <ul class="list-group list-group-flush">
-        <li class="list-group-item">{{dean.firstname}} {{dean.lastname}}</li>
+        <li class="list-group-item">{{dean.username}}</li>
       </ul>
     </div>
     <div *ngIf="deans.length == 0">
