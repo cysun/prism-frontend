@@ -71,4 +71,10 @@ export class DocumentService {
     return this.http.post('/api/document/' + documentId + '/revision/' + revisionIndex + '/restore', null,
     { responseType: 'text' });
   }
+
+  /* Add comment */
+  addComment(comment: string, documentId: string, revisionIndex: string) {
+    const body = JSON.stringify({'text': comment, 'revision': revisionIndex });
+    return this.http.post('/api/document/' + documentId + '/comment', body, { responseType: 'text' });
+  }
 }
