@@ -11,6 +11,8 @@ import { AuthService } from './auth.service';
 })
 
 export class LoginComponent implements OnInit {
+  // @Output() usernameEvent = new EventEmitter<string>();
+
   username: string;
   password: string;
   wrongInfo: Boolean = false;
@@ -29,6 +31,8 @@ export class LoginComponent implements OnInit {
 
       localStorage.setItem('jwt_token', data.token);
       localStorage.setItem('currentUser', decoded);
+
+      this.authService.sendUsername(data.user.username);
 
       console.log('Group info about User: ' + JSON.stringify(data.groups));
 

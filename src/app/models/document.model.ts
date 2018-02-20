@@ -7,7 +7,7 @@ export class Document {
   revisions: {
     message: string;
     filename: string;
-    fileExtension: string;
+    originalFilename: string;
     dateUploaded: Date;
 
     uploader: {
@@ -38,4 +38,5 @@ export class Document {
   template: boolean;
   coreTemplate: boolean;
   completionEstimate: number;
+  locked: boolean;
 }

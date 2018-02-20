@@ -48,7 +48,7 @@
         <i class="fa fa-icon fa-edit"></i><strong>Revision Message:</strong> {{ currentRevision.message }}<br/>
         <i class="fa fa-icon fa-calendar"></i><strong>Date Uploaded:</strong> {{ currentRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss' }}<br/>
         <i class="fa fa-icon fa-user"></i><strong>Uploader:</strong> {{ currentRevision.uploader.username }}<br/>
-        <i class="fa fa-icon fa-file-o"></i><strong>File Type:</strong> {{ currentRevision.fileExtension}}
+        <i class="fa fa-icon fa-file-o"></i><strong>File Name:</strong> {{ currentRevision.originalFilename }}
       </div>
     </div>
   </div>
@@ -99,6 +99,41 @@
   </form>
 </ng-template>
 
+
+<!-- Modal for making new comments on revisions -->
+<ng-template #newCommentModal>
+  <div class="modal-header">
+    <h5 class="modal-title">New Comment</h5>
+  </div>
+  <form #f="ngForm" (ngSubmit)="postComment()">
+    <div class="modal-body">
+      <div *ngIf="alert">
+        <ngb-alert type="danger" [dismissible]="false"><i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}</ngb-alert>
+      </div>
+      <div class="modal-message">
+
+        <div>
+          <textarea class="form-control" [(ngModel)]="comment" name="comment" required></textarea>
+          <div class="text-hints">MAX length: {{ 2000 - comment.length }} characters</div>
+        </div>
+
+        <div class="form-group file-message">
+          <select class="custom-select rounded-0" [(ngModel)]="selectedOption" name="document-files">
+            <option *ngFor="let option of document.revisions">{{option.originalFilename}}</option>
+          </select>
+          <div class="text-hints">Select the intended revision from the dropdown list</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success" [disabled]="!f.form.valid">Post</button>
+      <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+    </div>
+  </form>
+</ng-template>
+
+
 <!-- Tabs consisting Main Version tab, Revisions tab, and Comments tab -->
 <ngb-tabset>
   <ngb-tab>
@@ -109,8 +144,6 @@
         same document can be found in the revisions tab. <br/><br/>
 
         <strong>Frontend testing purposes only</strong> <br/>
-        (create a document, take the ID and paste it onto retrieveDocument function in ngOnInit before refreshing):
-
         <div class="input-group">
           <input type="text" class="form-control" [(ngModel)]="document.title" placeholder="Enter document title" name="document-title">
           <button type="button" class="btn btn-success" (click)="createNewDocument(document.title)">Create Document</button>
@@ -127,7 +160,7 @@
               <div class="document-message">{{ mainRevision ? mainRevision.message : 'Select upload button to add a revision'}}</div>
               <div class="document-info" *ngIf="mainRevision">
                 <strong>{{mainRevision.uploader.username}}</strong> uploaded
-                <strong>Revision #{{ totalIndices }}</strong>
+                <strong>{{ mainRevision.originalFilename }}</strong>
                 on {{mainRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}
               </div>
             </div>
@@ -166,56 +199,58 @@
                 <div class="document-message">{{revision.message}}</div>
                 <div class="document-info">
                   <strong>{{revision.uploader.username}}</strong> uploaded
-                  <strong>Revision #{{ totalIndices - idx }}</strong>
+                  <strong>{{ revision.originalFilename }}</strong>
                   on {{revision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}
                 </div>
               </div>
 
               <div class="card-action-buttons">
                 <button class="btn btn-outline-secondary"
-                        (click)="downloadFile(totalIndices - idx - 1)" placement="top" ngbTooltip="Download Revision">
-                        <i class="fa fa-download"></i>
-                </button>
-                <button class="btn btn-outline-secondary"
-                        (click)="openModal(revisionModal, totalIndices - idx - 1, 'revert')"
-                        placement="top" ngbTooltip="Revert as Main">
-                        <i class="fa fa-exchange"></i>
-                </button>
-                <button class="btn btn-outline-secondary"
-                        (click)="openModal(revisionModal, totalIndices - idx - 1, 'delete')"
-                        placement="top" ngbTooltip="Delete">
-                        <i class="fa fa-trash"></i>
-                </button>
-              </div>
+                (click)="downloadFile(totalIndices - idx - 1)" placement="top" ngbTooltip="Download Revision">
+                <i class="fa fa-download"></i>
+              </button>
+              <button class="btn btn-outline-secondary"
+              (click)="openModal(revisionModal, totalIndices - idx - 1, 'revert')"
+              placement="top" ngbTooltip="Revert as Main">
+              <i class="fa fa-exchange"></i>
+            </button>
+            <button class="btn btn-outline-secondary"
+            (click)="openModal(revisionModal, totalIndices - idx - 1, 'delete')"
+            placement="top" ngbTooltip="Delete">
+            <i class="fa fa-trash"></i>
+          </button>
+        </div>
+        </div>
+      </div>
+
+      <ng-template #deletedRevisions>
+        <div class="card card-container deleted-revisions" *ngIf="idx > 0">
+          <div class="card-body">
+            <div class="card-document-title">
+              <div class="document-message">{{revision.message}}</div>
+              <div class="document-info">Revision #{{totalIndices - idx}}</div>
             </div>
+
+            <div class="card-action-buttons">
+              <button class="btn btn-dark"
+              (click)="restoreRevision(totalIndices - idx - 1)" placement="top" ngbTooltip="Restore">
+              <i class="fa fa-arrow-circle-up"></i>
+            </button>
           </div>
-
-          <ng-template #deletedRevisions>
-            <div class="card card-container deleted-revisions" *ngIf="idx > 0">
-              <div class="card-body">
-                <div class="card-document-title">
-                  <div class="document-message">{{revision.message}}</div>
-                  <div class="document-info">Revision #{{totalIndices - idx}}</div>
-                </div>
-
-                <div class="card-action-buttons">
-                  <button class="btn btn-dark"
-                          (click)="restoreRevision(totalIndices - idx - 1)" placement="top" ngbTooltip="Restore">
-                          <i class="fa fa-arrow-circle-up"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </ng-template>
-        </ng-container>
+        </div>
       </div>
     </ng-template>
-  </ngb-tab>
+  </ng-container>
+</div>
+</ng-template>
+</ngb-tab>
 
-  <ngb-tab>
-    <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
-    <ng-template ngbTabContent>
-      comments tab
-    </ng-template>
-  </ngb-tab>
+<ngb-tab>
+  <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
+  <ng-template ngbTabContent>
+    <div class="container" style="padding-top: 20px;">
+      <button type="button" class="btn btn-dark" (click)="openModal(newCommentModal)">New Comment</button>
+    </div>
+  </ng-template>
+</ngb-tab>
 </ngb-tabset>
