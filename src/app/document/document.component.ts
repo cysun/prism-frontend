@@ -29,7 +29,7 @@ export class DocumentComponent implements OnInit {
   file: File;
   fileName: string;
   selectedOption: string;
-  comment = '';
+  textComment = '';
   modalMessage: any;
 
   constructor(private documentService: DocumentService,
@@ -44,7 +44,11 @@ export class DocumentComponent implements OnInit {
   ngOnInit() {
     this.documentService.retrieveDocument(this.documentId).subscribe( data => {
       this.document = data;
-      this.selectedOption = this.document.revisions[0].originalFilename;
+
+      if (this.document.revisions[0]) {
+        this.selectedOption = this.document.revisions[0].originalFilename;
+      }
+
       this.documentTitle = this.document.title;
       this.totalIndices = this.getNumOfRevisions();
       this.getLatestRevision();
@@ -100,6 +104,7 @@ export class DocumentComponent implements OnInit {
   /* Close a modal */
   closeModal() {
     this.alert = '';
+    this.textComment = '';
     this.message = '';
     this.file = null;
     this.fileName = '';
@@ -131,6 +136,7 @@ export class DocumentComponent implements OnInit {
   retrieveDocument() {
     this.documentService.retrieveDocument(this.document._id).subscribe( data => {
       this.document = data;
+      this.selectedOption = this.document.revisions[0].originalFilename;
       this.totalIndices = this.getNumOfRevisions();
       this.getLatestRevision();
     })
@@ -203,6 +209,15 @@ export class DocumentComponent implements OnInit {
       this.retrieveDocument();
     }, (err) => {
       console.log(err);
+    })
+  }
+
+  /* Post a comment */
+  postComment() {
+    this.documentService.addComment(this.document._id, this.textComment, 0).subscribe( data => {
+      console.log(data);
+      this.retrieveDocument();
+      this.modal.close();
     })
   }
 }

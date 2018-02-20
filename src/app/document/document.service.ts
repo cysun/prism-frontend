@@ -59,7 +59,7 @@ export class DocumentService {
 
   /* Revert to a revision */
   revertRevision(documentId: string, revisionIndex: number) {
-    const body = JSON.stringify({ 'revert': revisionIndex })
+    const body = JSON.stringify({ 'revert': revisionIndex });
     return this.http.post('/api/document/' + documentId + '/revision', body, {
       headers: new HttpHeaders({'Content-Type': 'application/json'}),
       responseType: 'text'
@@ -73,8 +73,11 @@ export class DocumentService {
   }
 
   /* Add comment */
-  addComment(comment: string, documentId: string, revisionIndex: string) {
+  addComment(documentId: string, comment: string, revisionIndex: number) {
     const body = JSON.stringify({'text': comment, 'revision': revisionIndex });
-    return this.http.post('/api/document/' + documentId + '/comment', body, { responseType: 'text' });
+    return this.http.post('/api/document/' + documentId + '/comment', body, {
+      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      responseType: 'text'
+    });
   }
 }
