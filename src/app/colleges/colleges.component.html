@@ -88,8 +88,8 @@
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
           {{dean.username}}
-          <button type="button" class="close" aria-label="Close" (click)="deleteDean(dean)">
-            <span aria-hidden="true">&times;</span>
+          <button type="button" class="btn btn-danger pull-right" aria-label="Close" (click)="deleteDean(dean)">
+            Remove
           </button>
         </li>
       </ul>
@@ -126,9 +126,9 @@
   </thead>
   <tbody>
     <tr *ngFor="let dean of deans">
-      <td>{{dean.firstname || 'N/A'}}</td>
-      <td>{{dean.lastname || 'N/A'}}</td>
-      <td>{{dean.username || 'N/A'}}</td>
+      <td>{{dean.name.first}}</td>
+      <td>{{dean.name.last}}</td>
+      <td>{{dean.username}}</td>
     </tr>
   </tbody>
 </table>
