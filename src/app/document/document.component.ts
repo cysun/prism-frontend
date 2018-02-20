@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NgbModal, NgbModalRef,  NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Globals } from '../shared/app.global';
 
 import { Document } from '../models/document.model';
 import { DocumentService } from './document.service';
@@ -14,12 +15,6 @@ import { saveAs } from 'file-saver';
 })
 export class DocumentComponent implements OnInit {
   modal: NgbModalRef;
-  options: NgbModalOptions = {
-    backdrop : 'static',
-    keyboard : false,
-    size: 'lg',
-  };
-
   alert: any;
   document: Document = new Document();
   currentRevision: any[];
@@ -33,19 +28,23 @@ export class DocumentComponent implements OnInit {
   message: string;
   file: File;
   fileName: string;
+  selectedOption: string;
+  comment = '';
   modalMessage: any;
 
-
-  constructor(private documentService: DocumentService, private modalService: NgbModal, private route: ActivatedRoute) {
+  constructor(private documentService: DocumentService,
+              private modalService: NgbModal,
+              private route: ActivatedRoute,
+              private globals: Globals) {
     this.route.params.subscribe( params => {
       this.documentId = params.id;
     })
   }
 
   ngOnInit() {
-    // '5a7a17879b263d9503ca14d1'
     this.documentService.retrieveDocument(this.documentId).subscribe( data => {
       this.document = data;
+      this.selectedOption = this.document.revisions[0].originalFilename;
       this.documentTitle = this.document.title;
       this.totalIndices = this.getNumOfRevisions();
       this.getLatestRevision();
@@ -70,6 +69,9 @@ export class DocumentComponent implements OnInit {
     if (revisionIndex >= 0) {
       this.currentRevision = this.document.revisions[revisionIndex];
       this.revisionIndex = revisionIndex;
+
+      console.log('current revision: ' + JSON.stringify(this.currentRevision))
+      console.log('revisionIndex: ' + this.revisionIndex);
     }
 
     if (modalType === 'delete') {
@@ -92,9 +94,7 @@ export class DocumentComponent implements OnInit {
       };
     }
 
-    this.modal = this.modalService.open(content, this.options);
-    console.log('current revision: ' + JSON.stringify(this.currentRevision))
-    console.log('revisionIndex: ' + this.revisionIndex);
+    this.modal = this.modalService.open(content, this.globals.options);
   }
 
   /* Close a modal */
