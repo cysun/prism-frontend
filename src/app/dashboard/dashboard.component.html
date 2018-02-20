@@ -43,24 +43,25 @@
           </div>
         </div>
 
-
         <div class="pagination-bar">
-          length of logHistory: {{ logHistory.length }} and page: {{ page }}
           <ngb-pagination class="d-flex justify-content-center"
-                          [collectionSize]="logHistory.length"
+                          [collectionSize]="totalLogs"
                           [pageSize]="itemsPerPage"
+                          [maxSize]="5"
                           [(page)]="page" [rotate]="true"
-                          [boundaryLinks]="true">
+                          [ellipses]="true"
+                          [boundaryLinks]="true"
+                          (pageChange)="loadPage($event)">
           </ngb-pagination>
         </div>
 
-        <ng-container *ngFor="let action of logHistory">
+        <ng-container *ngFor="let action of displayHistory; let idx = index">
           <div class="card card-container" *ngIf="action.date && action.user">
             <div class="card-body">
               <div class="card-header-title">
                 <div class="card-message">
                   <a routerLink="/{{action.type}}/{{action.type !== 'group' ? action.object : ''}}">
-                    {{action.user.name.first}} {{action.user.name.last }} {{ action.text }} {{ action.label }}
+                    {{idx+1}}. {{action.user.name.first}} {{action.user.name.last }} {{ action.text }} {{ action.label }}
                   </a>
                 </div>
 
