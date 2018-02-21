@@ -39,7 +39,7 @@ export class DocumentService {
 
   /* Delete a revision */
   deleteRevision(documentId: string, revisionIndex: number) {
-    return this.http.delete('/api/document/' + documentId + '/revision/' + revisionIndex, this.HEADERS);
+    return this.http.delete('/api/document/' + documentId + '/revision/' + revisionIndex);
   }
 
   /* Upload a file */
@@ -79,5 +79,19 @@ export class DocumentService {
       headers: new HttpHeaders({'Content-Type': 'application/json'}),
       responseType: 'text'
     });
+  }
+
+  /* Edit comment */
+  editComment(documentId: string, commentId: string, comment: string) {
+    const body = JSON.stringify({'text': comment });
+    return this.http.patch('/api/document/' + documentId + '/comment/' + commentId, body, {
+      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      responseType: 'text'
+    });
+  }
+
+  /* Delete comment */
+  deleteComment(documentId: string, commentId: string) {
+    return this.http.delete('/api/document/' + documentId + '/comment/' + commentId);
   }
 }
