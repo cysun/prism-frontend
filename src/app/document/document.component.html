@@ -99,7 +99,6 @@
   </form>
 </ng-template>
 
-
 <!-- Modal for making new comments on revisions -->
 <ng-template #newCommentModal>
   <div class="modal-header">
@@ -132,7 +131,6 @@
     </div>
   </form>
 </ng-template>
-
 
 <!-- Tabs consisting Main Version tab, Revisions tab, and Comments tab -->
 <ngb-tabset>
@@ -206,24 +204,27 @@
 
               <div class="card-action-buttons">
                 <button class="btn btn-outline-secondary"
-                (click)="downloadFile(totalIndices - idx - 1)" placement="top" ngbTooltip="Download Revision">
-                <i class="fa fa-download"></i>
-              </button>
-              <button class="btn btn-outline-secondary"
-              (click)="openModal(revisionModal, totalIndices - idx - 1, 'revert')"
-              placement="top" ngbTooltip="Revert as Main">
-              <i class="fa fa-exchange"></i>
-            </button>
-            <button class="btn btn-outline-secondary"
-            (click)="openModal(revisionModal, totalIndices - idx - 1, 'delete')"
-            placement="top" ngbTooltip="Delete">
-            <i class="fa fa-trash"></i>
-          </button>
-        </div>
-        </div>
-      </div>
+                        (click)="downloadFile(totalIndices - idx - 1)"
+                        placement="top" ngbTooltip="Download Revision">
+                        <i class="fa fa-download"></i>
+                </button>
 
-      <ng-template #deletedRevisions>
+                <button class="btn btn-outline-secondary"
+                        (click)="openModal(revisionModal, totalIndices - idx - 1, 'revert')"
+                        placement="top" ngbTooltip="Revert as Main">
+                        <i class="fa fa-exchange"></i>
+                </button>
+
+                <button class="btn btn-outline-secondary"
+                        (click)="openModal(revisionModal, totalIndices - idx - 1, 'delete')"
+                        placement="top" ngbTooltip="Delete">
+                        <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #deletedRevisions>
         <div class="card card-container deleted-revisions" *ngIf="idx > 0">
           <div class="card-body">
             <div class="card-document-title">
@@ -239,18 +240,51 @@
           </div>
         </div>
       </div>
+          </ng-template>
+        </ng-container>
+      </div>
     </ng-template>
-  </ng-container>
-</div>
-</ng-template>
-</ngb-tab>
+  </ngb-tab>
 
-<ngb-tab>
-  <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
-  <ng-template ngbTabContent>
-    <div class="container" style="padding-top: 20px;">
-      <button type="button" class="btn btn-dark" (click)="openModal(newCommentModal)">New Comment</button>
-    </div>
-  </ng-template>
-</ngb-tab>
+  <ngb-tab>
+    <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
+    <ng-template ngbTabContent>
+      <div class="container" style="padding-top: 20px;">
+        <button type="button" class="btn btn-dark" (click)="openModal(newCommentModal)">New Comment</button>
+
+
+
+
+        <ng-container *ngFor="let comment of document.comments">
+          <div class="card card-container">
+            <div class="card-body">
+              <div class="card-document-title">
+                <div class="document-message">{{ comment.text }}</div>
+                <div class="document-info">
+                  <strong>{{ comment.author.username }}</strong> commented about
+                  <strong>Revision #{{ comment.revision + 1}}</strong>
+                  on {{comment.creationDate | date: 'MM/dd/yyyy hh:mm:ss'}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+    </ng-template>
+  </ngb-tab>
 </ngb-tabset>
