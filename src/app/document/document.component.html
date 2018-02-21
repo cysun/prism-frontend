@@ -262,17 +262,24 @@
       <div class="container" style="padding-top: 20px;">
         <button type="button" class="btn btn-dark" (click)="openModal(newCommentModal)">New Comment</button>
 
-
-
-
         <ng-container *ngFor="let comment of document.comments">
           <div class="card card-container" style="padding: 10px;">
             <div class="card-body">
+
+              <div ngbDropdown placement="bottom-right">
+                <button class="close" ngbDropdownToggle><i class="fa fa-ellipsis-v"></i></button>
+                <div ngbDropdownMenu>
+                  <button class="dropdown-item"><i class="fa fa-icon fa-edit"></i>Edit</button>
+                  <button class="dropdown-item"><i class="fa fa-icon fa-trash"></i>Delete</button>
+                </div>
+              </div>
+
               <div class="card-comment-header">
                 <strong>{{ comment.author.name.first }} {{ comment.author.name.last }}</strong>
                 commented on <strong>Revision #{{ comment.revision + 1}}:</strong>
                 <div class="comment-date">{{comment.creationDate | date: 'MM/dd/yyyy hh:mm:ss'}}</div>
               </div>
+
               <hr/>
 
               <div class="card-comment-body">
@@ -281,20 +288,6 @@
             </div>
           </div>
         </ng-container>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
       </div>
     </ng-template>

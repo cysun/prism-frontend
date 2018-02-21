@@ -12,6 +12,14 @@
   margin-top: 15px;
 }
 
+.card-comment-header {
+  padding-top: -20px;
+}
+
+.testing {
+  background: orange;
+}
+
 .card-document-title {
   float: left;
   padding-left: 10px;
@@ -43,6 +51,10 @@
 .document-message {
   font-size: 1.3em;
   font-weight: bold;
+}
+
+.dropdown-toggle::after {
+  display: none;
 }
 
 .file-message {
