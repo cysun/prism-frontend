@@ -48,8 +48,8 @@ export class DepartmentComponent implements OnInit {
       case 'empty abbreviation':
         detailMsg = 'Please input an abbreviation.';
         break;
-      case 'empty college':
-        detailMsg = 'Please select a college.';
+      case 'existing department':
+        detailMsg = 'Name of department already exists.'
         break;
     }
     this.alerts.push({type: 'warning', message: detailMsg });
@@ -70,18 +70,21 @@ export class DepartmentComponent implements OnInit {
   //
   submitDepartment() {
     this.alerts = [];
-    console.log("Sumbitted")
     this.department.college = this.collegeId;
     if (typeof(this.department.name) !== 'undefined' && this.department.name.trim().length > 0) {
       if (typeof(this.department.abbreviation) !== 'undefined' && this.department.abbreviation.trim().length > 0) {
-        this.departmentService.addDepartment(this.department).subscribe(
-          data => {
-            this.departments.push(data);
-            this.departments = this.departments.slice(0);
-          }
-        );
-        this.department = new Department();
-        this.closeModal();
+        if (this.departments.find(item => item.name === this.department.name)) {
+          this.invalidErrorMessage('existing department');
+        } else {
+          this.departmentService.addDepartment(this.department).subscribe(
+            data => {
+              this.departments.push(data);
+              this.departments = this.departments.slice(0);
+            }
+          );
+          this.department = new Department();
+          this.closeModal();
+        }
       } else {
           this.invalidErrorMessage('empty abbreviation');
         }
@@ -93,8 +96,12 @@ export class DepartmentComponent implements OnInit {
   getDepartmentsAt(collegeId) {
     this.departmentService.getDepartmentsAt(collegeId).subscribe( data => {
       this.departments = data;
-      console.log(data);
     })
+  }
+
+  closeAlert(alert: IAlert) {
+    const index: number = this.alerts.indexOf(alert);
+    this.alerts.splice(index, 1);
   }
 }
 export interface IAlert {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -21,7 +21,6 @@ import { Department } from '../models/department.model';
 })
 
 export class CollegesComponent implements OnInit {
-  @Input()
   modal: NgbModalRef;
   options: NgbModalOptions = {
     backdrop : 'static',
@@ -95,38 +94,33 @@ export class CollegesComponent implements OnInit {
     this.college = new College();
   }
 
-  deleteCollegeDialog(content, id){
-    this.alerts = [];
-    this.deleteCollege(id);
+  deleteCollegeDialog(content, college){
+    this.departmentService.getDepartmentsAt(college._id).subscribe( data => {
+      this.departments = data;
+    })
+    this.college = college;
     this.modal = this.modalService.open(content, this.options);
   }
 
-  viewDeansDialog(content, collegeId: string){
-    this.alerts = [];
-    if (this.modal) { this.modal.close(); }
-    this.collegesService.getCollege(collegeId).subscribe( data => {
+  viewDeansDialog(content, college: any){
+    this.deans = college.deans;
+    this.collegesService.getCollege(college._id).subscribe( data => {
       this.college = data;
       this.college.deans = this.getDeansObject(data.deans);
       if (this.college.deans.length > 0) {
         this.deans = this.college.deans;
       }
-      console.log(collegeId);
     });
     this.modal = this.modalService.open(content, this.options);
   }
 
   manageCollegeDialog(content, collegeId: string, deanId?: string) {
     this.alerts = [];
-    if (this.modal) { this.modal.close(); }
-
     this.collegesService.getCollege(collegeId).subscribe( data => {
       this.college = data;
       this.college.deans = this.getDeansObject(data.deans);
-      if (this.college.deans.length > 0) {
-        this.deans = this.college.deans;
-      }
+      this.deans = this.college.deans;
     });
-
     this.modal = this.modalService.open(content, this.options);
   }
 
@@ -134,14 +128,18 @@ export class CollegesComponent implements OnInit {
     this.alerts = [];
     if (typeof(this.college.name) !== 'undefined' && this.college.name.trim().length > 0) {
       if (typeof(this.college.abbreviation) !== 'undefined' && this.college.abbreviation.trim().length > 0) {
-        this.collegesService.addCollege(this.college).subscribe(
-          data => {
-            this.colleges.push(data);
-            this.colleges = this.colleges.slice(0);
-          }
-        );
-        this.college = new College();
-        this.modal.close();
+        if (this.colleges.find(item => item.name === this.college.name)) {
+          this.invalidErrorMessage('existing college');
+        } else {
+          this.collegesService.addCollege(this.college).subscribe(
+            data => {
+              this.colleges.push(data);
+              this.colleges = this.colleges.slice(0);
+            }
+          );
+          this.college = new College();
+          this.modal.close();
+        }
       } else {
           this.invalidErrorMessage('empty abbreviation');
         }
@@ -150,18 +148,14 @@ export class CollegesComponent implements OnInit {
     }
   }
 
-  deleteCollege(id) {
-    this.alerts = [];
-      this.collegesService.deleteCollege(id).subscribe(() => {
-        for (let i = 0; i < this.colleges.length; i++) {
-          if (this.colleges[i]._id === id) {
-            this.colleges.splice(i, 1);
-            this.colleges = this.colleges.slice(0);
-            break;
-          }
-        }
-      });
-      this.college = new College();
+  deleteCollege() {
+    this.collegesService.deleteCollege(this.college._id).subscribe(() => {
+      const index = this.colleges.indexOf(this.college);
+      this.colleges.splice(index, 1);
+      this.colleges = this.colleges.slice(0);
+    });
+    this.college = new College();
+    this.modal.close();
   }
 
   updateCollege() {
@@ -176,16 +170,12 @@ export class CollegesComponent implements OnInit {
             this.invalidErrorMessage('existing college');
           } else {
             if (this.college.abbreviation.trim().length > 0) {
-              if (collegeTarget.abbreviation != this.college.abbreviation) {
-                this.collegesService.updateCollege(this.college).subscribe( updatedCollege => {
-                  const index = this.colleges.findIndex(oldCollege => oldCollege._id === updatedCollege._id);
-                  this.colleges[index] = updatedCollege;
-                  this.college = new College();
-                  this.modal.close();
-                });
-              } else {
-                this.invalidErrorMessage('update abbreviation')
-              }
+              this.collegesService.updateCollege(this.college).subscribe( updatedCollege => {
+                const index = this.colleges.findIndex(oldCollege => oldCollege._id === updatedCollege._id);
+                this.colleges[index] = updatedCollege;
+                this.college = new College();
+                this.modal.close();
+              });
             } else {
               this.invalidErrorMessage('empty abbreviation')
             }
@@ -193,8 +183,9 @@ export class CollegesComponent implements OnInit {
         } else {
           this.invalidErrorMessage('empty college')
         }
+    } else {
+      this.modal.close();
     }
-    this.modal.close();
   }
 
   addDean() {
