@@ -214,13 +214,22 @@ export class DocumentComponent implements OnInit {
 
   /* Post a comment */
   postComment() {
-    const findRevisionNum = this.document.revisions.findIndex(revision =>
-      revision._id === this.selectedOption);
 
-    this.documentService.addComment(this.document._id, this.textComment, findRevisionNum).subscribe( data => {
-      console.log(data);
-      this.retrieveDocument();
-      this.modal.close();
-    });
+    if (this.textComment.length <= 2000) {
+      const findRevisionNum = this.document.revisions.findIndex(revision =>
+        revision._id === this.selectedOption);
+
+      this.documentService.addComment(this.document._id, this.textComment, findRevisionNum).subscribe( data => {
+        console.log(data);
+        this.retrieveDocument();
+        this.modal.close();
+
+        this.alert = '';
+        this.textComment = '';
+      });
+    } else {
+      this.alert = { message: 'Comment exceeds maximum 2000 characters.' };
+    }
+
   }
 }
