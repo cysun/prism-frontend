@@ -19,6 +19,7 @@ export class DocumentComponent implements OnInit {
   document: Document = new Document();
   currentRevision: any[];
   mainRevision: any[];
+  selectedComment: any[];
 
   revisionIndex: number;
   totalIndices: number;
@@ -68,34 +69,38 @@ export class DocumentComponent implements OnInit {
     return Object.keys(this.document.revisions).length;
   }
 
-  /* Open a basic modal passing the data of the specific revision */
-  openModal(content, revisionIndex?: number, modalType?: string) {
+  /* Open a basic modal passing the data of the specific revision or comment */
+  openModal(content, revisionIndex?: number, modalType?: string, commentId?: string) {
+    /* If user wants to revert or delete a revision */
     if (revisionIndex >= 0) {
       this.currentRevision = this.document.revisions[revisionIndex];
       this.revisionIndex = revisionIndex;
 
       console.log('current revision: ' + JSON.stringify(this.currentRevision))
       console.log('revisionIndex: ' + this.revisionIndex);
-    }
 
-    if (modalType === 'delete') {
-      const modalMessage = 'This revision will be removed from the document and ' +
-      'can only be restored by an Administrator. Are you sure you want to delete?';
+      if (modalType === 'delete') {
+        const modalMessage = 'This revision will be removed from the document and ' +
+        'can only be restored by an Administrator. Are you sure you want to delete?';
 
-      this.modalMessage = {
-        title: 'Deleting Revision',
-        message: modalMessage,
-        button: 'Delete',
-      };
-    } else if (modalType === 'revert') {
-      const modalMessage = 'This revision will become a new copy and be treated as the' +
-      ' main version of the document. Are you sure you want to revert to this revision?';
+        this.modalMessage = {
+          title: 'Deleting Revision',
+          message: modalMessage,
+          button: 'Delete',
+        };
+      } else if (modalType === 'revert') {
+        const modalMessage = 'This revision will become a new copy and be treated as the' +
+        ' main version of the document. Are you sure you want to revert to this revision?';
 
-      this.modalMessage = {
-        title: 'Reverting Revision',
-        message: modalMessage,
-        button: 'Revert',
-      };
+        this.modalMessage = {
+          title: 'Reverting Revision',
+          message: modalMessage,
+          button: 'Revert',
+        };
+      }
+
+    } else if (commentId && commentId.length > 0) { /* If user wants to delete a comment */
+      this.selectedComment = this.document.comments.find(comm => comm._id === commentId);
     }
 
     this.modal = this.modalService.open(content, this.globals.options);
@@ -214,7 +219,6 @@ export class DocumentComponent implements OnInit {
 
   /* Post a comment */
   postComment() {
-
     if (this.textComment.length <= 2000) {
       const findRevisionNum = this.document.revisions.findIndex(revision =>
         revision._id === this.selectedOption);
@@ -231,5 +235,22 @@ export class DocumentComponent implements OnInit {
       this.alert = { message: 'Comment exceeds maximum 2000 characters.' };
     }
 
+  }
+
+  /* Edit a comment */
+  editComment(revisionIndex: number) {
+    // pending
+  }
+
+  /* Delete a comment */
+  deleteComment(commentId: string) {
+    const findCommentIndex = this.document.comments.findIndex(what => what._id === commentId);
+
+    this.documentService.deleteComment(this.document._id, findCommentIndex).subscribe( data => {
+      console.log('Comment deleted?: ' + data);
+      this.document.comments.splice(findCommentIndex, 1);
+      this.selectedComment = [];
+      this.closeModal();
+    })
   }
 }

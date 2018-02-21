@@ -132,6 +132,30 @@
   </form>
 </ng-template>
 
+
+<ng-template #deleteCommentModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Deleting Comment</h5>
+  </div>
+  
+  <div class="modal-body">
+    <div class="modal-message">
+      Are you sure you want to delete this comment?
+      <div class="revision-details">
+        <i class="fa fa-icon fa-user"></i><strong>User:</strong> {{ selectedComment.author.name.first}} {{ selectedComment.author.name.last}} ({{ selectedComment.author.username }})<br/>
+        <i class="fa fa-icon fa-calendar"></i><strong>Created:</strong> {{ selectedComment.creationDate | date: 'MM/dd/yyyy hh:mm:ss' }}<br/>
+        <i class="fa fa-icon fa-comment"></i><strong>Comment:</strong> "{{ selectedComment.text }}"
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-dark" type="button" (click)="deleteComment(selectedComment._id)">Delete</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+  </div>
+</ng-template>
+
+
 <!-- Tabs consisting Main Version tab, Revisions tab, and Comments tab -->
 <ngb-tabset>
   <ngb-tab>
@@ -232,15 +256,15 @@
           </div>
 
           <ng-template #deletedRevisions>
-        <div class="card card-container deleted-revisions" *ngIf="idx > 0">
-          <div class="card-body">
-            <div class="card-document-title">
-              <div class="document-message">{{revision.message}}</div>
-              <div class="document-info">
-                Revision #{{totalIndices - idx}}
-                <div>Click on the restore button to restore the file</div>
-              </div>
-            </div>
+            <div class="card card-container deleted-revisions" *ngIf="idx > 0">
+              <div class="card-body">
+                <div class="card-document-title">
+                  <div class="document-message">{{revision.message}}</div>
+                  <div class="document-info">
+                    Revision #{{totalIndices - idx}}
+                    <div>Click on the restore button to restore the file</div>
+                  </div>
+                </div>
 
             <div class="card-action-buttons">
               <button class="btn btn-dark"
@@ -270,7 +294,7 @@
                 <button class="close" ngbDropdownToggle><i class="fa fa-ellipsis-v"></i></button>
                 <div ngbDropdownMenu>
                   <button class="dropdown-item"><i class="fa fa-icon fa-edit"></i>Edit</button>
-                  <button class="dropdown-item"><i class="fa fa-icon fa-trash"></i>Delete</button>
+                  <button class="dropdown-item" (click)="openModal(deleteCommentModal, undefined, undefined, comment._id)"><i class="fa fa-icon fa-trash"></i>Delete</button>
                 </div>
               </div>
 

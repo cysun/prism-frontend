@@ -91,7 +91,7 @@ export class DocumentService {
   }
 
   /* Delete comment */
-  deleteComment(documentId: string, commentId: string) {
-    return this.http.delete('/api/document/' + documentId + '/comment/' + commentId);
+  deleteComment(documentId: string, commentIndex: number) {
+    return this.http.delete('/api/document/' + documentId + '/comment/' + commentIndex, { responseType: 'text' });
   }
 }

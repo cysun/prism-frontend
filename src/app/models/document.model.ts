@@ -3,24 +3,8 @@ export class Document {
   title: string;
 
   groups: any[];
-
   revisions: any[];
-
-  comments: {
-    text: string;
-
-    author: {
-      _id: string;
-      username: string;
-      name: {
-        first: string;
-        last: string;
-      }
-    };
-
-    creationDate: string;
-    revision: number;
-  };
+  comments: any[];
 
   template: boolean;
   coreTemplate: boolean;
