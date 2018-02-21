@@ -4,20 +4,7 @@ export class Document {
 
   groups: any[];
 
-  revisions: {
-    message: string;
-    filename: string;
-    originalFilename: string;
-    dateUploaded: Date;
-
-    uploader: {
-      _id: string;
-      username: string;
-    },
-
-    template: boolean;
-    deleted: boolean;
-  };
+  revisions: any[];
 
   comments: {
     text: string;

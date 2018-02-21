@@ -46,7 +46,7 @@ export class DocumentComponent implements OnInit {
       this.document = data;
 
       if (this.document.revisions[0]) {
-        this.selectedOption = this.document.revisions[0].originalFilename;
+        this.selectedOption = this.document.revisions[0]._id;
       }
 
       this.documentTitle = this.document.title;
@@ -136,7 +136,7 @@ export class DocumentComponent implements OnInit {
   retrieveDocument() {
     this.documentService.retrieveDocument(this.document._id).subscribe( data => {
       this.document = data;
-      this.selectedOption = this.document.revisions[0].originalFilename;
+      this.selectedOption = this.document.revisions[0]._id;
       this.totalIndices = this.getNumOfRevisions();
       this.getLatestRevision();
     })
@@ -214,10 +214,13 @@ export class DocumentComponent implements OnInit {
 
   /* Post a comment */
   postComment() {
-    this.documentService.addComment(this.document._id, this.textComment, 0).subscribe( data => {
+    const findRevisionNum = this.document.revisions.findIndex(revision =>
+      revision._id === this.selectedOption);
+
+    this.documentService.addComment(this.document._id, this.textComment, findRevisionNum).subscribe( data => {
       console.log(data);
       this.retrieveDocument();
       this.modal.close();
-    })
+    });
   }
 }

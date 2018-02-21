@@ -118,7 +118,7 @@
 
         <div class="form-group file-message">
           <select class="custom-select rounded-0" [(ngModel)]="selectedOption" name="document-files">
-            <option *ngFor="let option of document.revisions">{{option.originalFilename}}</option>
+            <option *ngFor="let option of document.revisions; let idx = index" [ngValue]="option._id">{{idx + 1}}. {{option.originalFilename}}</option>
           </select>
           <div class="text-hints">Select the intended revision from the dropdown list</div>
         </div>
@@ -155,12 +155,18 @@
         <div class="card card-container">
           <div class="card-body">
             <div class="card-document-title">
-              <div class="document-message">{{ mainRevision ? mainRevision.message : 'Select upload button to add a revision'}}</div>
-              <div class="document-info" *ngIf="mainRevision">
+              <div class="document-message">{{ mainRevision ? mainRevision.message : 'Currently no revision file'}}</div>
+              <div class="document-info" *ngIf="mainRevision; else emptyRevision">
+                <div>Revision #{{ totalIndices }}</div>
                 <strong>{{mainRevision.uploader.username}}</strong> uploaded
                 <strong>{{ mainRevision.originalFilename }}</strong>
                 on {{mainRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}
               </div>
+
+              <ng-template class="document-info" #emptyRevision>
+                <div>Click on the upload button to upload a file</div>
+                If valid, this template box will be replaced with the newly uploaded revision
+              </ng-template>
             </div>
 
             <div class="card-action-buttons">
@@ -196,6 +202,7 @@
               <div class="card-document-title">
                 <div class="document-message">{{revision.message}}</div>
                 <div class="document-info">
+                  <div>Revision #{{ totalIndices - idx }}</div>
                   <strong>{{revision.uploader.username}}</strong> uploaded
                   <strong>{{ revision.originalFilename }}</strong>
                   on {{revision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}
@@ -256,15 +263,17 @@
 
 
         <ng-container *ngFor="let comment of document.comments">
-          <div class="card card-container">
+          <div class="card card-container" style="padding: 10px;">
             <div class="card-body">
-              <div class="card-document-title">
-                <div class="document-message">{{ comment.text }}</div>
-                <div class="document-info">
-                  <strong>{{ comment.author.username }}</strong> commented about
-                  <strong>Revision #{{ comment.revision + 1}}</strong>
-                  on {{comment.creationDate | date: 'MM/dd/yyyy hh:mm:ss'}}
-                </div>
+              <div class="card-comment-header">
+                <strong>{{ comment.author.name.first }} {{ comment.author.name.last }}</strong>
+                commented on <strong>Revision #{{ comment.revision + 1}}:</strong>
+                <div class="comment-date">{{comment.creationDate | date: 'MM/dd/yyyy hh:mm:ss'}}</div>
+              </div>
+              <hr/>
+
+              <div class="card-comment-body">
+                {{ comment.text }}
               </div>
             </div>
           </div>
