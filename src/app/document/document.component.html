@@ -314,13 +314,17 @@
                 </span>
 
                 <ng-template #editInput>
-                  <textarea class="form-control" [(ngModel)]="selectedComment.text" name="comment" required></textarea>
-                  <div class="text-hints">MAX length: {{ 2000 - selectedComment.text.length }} characters</div>
+                  <div style="color: #FF0000; padding-bottom: 5px;" *ngIf="!validComment">* Comment exceeds maximum 2000 characters.</div>
 
-                  <div style="padding-top: 20px;">
-                    <button class="btn btn-dark" (click)="editComment(selectedComment._id, selectedComment.text)">Save</button>
-                    <button class="btn btn-dark" (click)="toggleEditButton()">Cancel</button>
-                  </div>
+                  <form #f="ngForm" (ngSubmit)="editComment(selectedComment._id, selectedComment.text)">
+                    <textarea class="form-control" [(ngModel)]="selectedComment.text" name="comment" required></textarea>
+                    <div class="text-hints">MAX length: {{ 2000 - selectedComment.text.length }} characters</div>
+
+                    <div style="padding-top: 20px;">
+                      <button type="submit" class="btn btn-dark" [disabled]="!f.form.valid">Save</button>
+                      <button type="button" class="btn btn-dark" (click)="toggleEditButton()">Cancel</button>
+                    </div>
+                  </form>
                 </ng-template>
               </div>
             </div>

@@ -21,6 +21,7 @@ export class DocumentComponent implements OnInit {
   currentRevision: any[];
   mainRevision: any[];
   selectedComment = [];
+  validComment = true;
 
   revisionIndex: number;
   totalIndices: number;
@@ -250,14 +251,18 @@ export class DocumentComponent implements OnInit {
 
   /* Edit a comment */
   editComment(commentId: string, text: string) {
-    const findCommentIndex = this.document.comments.findIndex(item => item._id === commentId);
+    if (text.length <= 2000) {
+      this.validComment = true;
+      const findCommentIndex = this.document.comments.findIndex(item => item._id === commentId);
 
-    this.documentService.editComment(this.document._id, findCommentIndex, text).subscribe( data => {
-      console.log('Edited?: ' + data);
-      this.document.comments[findCommentIndex].text = text;
-      this.toggleEditButton();
-    })
-
+      this.documentService.editComment(this.document._id, findCommentIndex, text).subscribe( data => {
+        console.log('Edited?: ' + data);
+        this.document.comments[findCommentIndex].text = text;
+        this.toggleEditButton();
+      })
+    } else {
+      this.validComment = false;
+    }
   }
 
   /* Delete a comment */
