@@ -50,8 +50,8 @@ export class GroupManagerService {
     return this.http.delete<Group>('/api/group/' + id, this.HEADERS);
   }
 
-  addMember(userId, groupId): Observable<User> {
-    return this.http.put<User>('/api/group/' + groupId + '/member/' + userId, this.HEADERS);
+  addMember(userId, groupId): Observable<Group> {
+    return this.http.put<Group>('/api/group/' + groupId + '/member/' + userId, this.HEADERS);
   }
 
   deleteMember(groupId, memberId): Observable<Group> {
