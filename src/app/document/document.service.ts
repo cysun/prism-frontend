@@ -82,9 +82,9 @@ export class DocumentService {
   }
 
   /* Edit comment */
-  editComment(documentId: string, commentId: string, comment: string) {
+  editComment(documentId: string, commentIndex: number, comment: string) {
     const body = JSON.stringify({'text': comment });
-    return this.http.patch('/api/document/' + documentId + '/comment/' + commentId, body, {
+    return this.http.patch('/api/document/' + documentId + '/comment/' + commentIndex, body, {
       headers: new HttpHeaders({'Content-Type': 'application/json'}),
       responseType: 'text'
     });

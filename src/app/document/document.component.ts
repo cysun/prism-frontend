@@ -13,13 +13,14 @@ import { saveAs } from 'file-saver';
   templateUrl: './document.component.html',
   styleUrls: ['./document.component.css'],
 })
+
 export class DocumentComponent implements OnInit {
   modal: NgbModalRef;
   alert: any;
   document: Document = new Document();
   currentRevision: any[];
   mainRevision: any[];
-  selectedComment: any[];
+  selectedComment = [];
 
   revisionIndex: number;
   totalIndices: number;
@@ -67,6 +68,16 @@ export class DocumentComponent implements OnInit {
   /* Get the total amount of revisions in the document */
   getNumOfRevisions() {
     return Object.keys(this.document.revisions).length;
+  }
+
+
+  /* Allow user to edit their own (specific) comment */
+  toggleEditButton(commentId?: string) {
+    if (commentId) {
+      this.selectedComment = this.document.comments.find( item => item._id === commentId);
+    } else {
+      this.selectedComment = [];
+    }
   }
 
   /* Open a basic modal passing the data of the specific revision or comment */
@@ -238,13 +249,20 @@ export class DocumentComponent implements OnInit {
   }
 
   /* Edit a comment */
-  editComment(revisionIndex: number) {
-    // pending
+  editComment(commentId: string, text: string) {
+    const findCommentIndex = this.document.comments.findIndex(item => item._id === commentId);
+
+    this.documentService.editComment(this.document._id, findCommentIndex, text).subscribe( data => {
+      console.log('Edited?: ' + data);
+      this.document.comments[findCommentIndex].text = text;
+      this.toggleEditButton();
+    })
+
   }
 
   /* Delete a comment */
   deleteComment(commentId: string) {
-    const findCommentIndex = this.document.comments.findIndex(what => what._id === commentId);
+    const findCommentIndex = this.document.comments.findIndex(item => item._id === commentId);
 
     this.documentService.deleteComment(this.document._id, findCommentIndex).subscribe( data => {
       console.log('Comment deleted?: ' + data);
