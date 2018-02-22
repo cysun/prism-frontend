@@ -309,7 +309,7 @@
               <hr/>
 
               <div class="card-comment-body">
-                <span *ngIf="comment._id !== selectedComment._id; else editInput">
+                <span *ngIf="(comment._id !== selectedComment._id) || performDelete; else editInput">
                   {{ comment.text }}
                 </span>
 

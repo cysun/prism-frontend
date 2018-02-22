@@ -21,7 +21,9 @@ export class DocumentComponent implements OnInit {
   currentRevision: any[];
   mainRevision: any[];
   selectedComment = [];
+
   validComment = true;
+  performDelete = false;
 
   revisionIndex: number;
   totalIndices: number;
@@ -74,8 +76,12 @@ export class DocumentComponent implements OnInit {
 
   /* Allow user to edit their own (specific) comment */
   toggleEditButton(commentId?: string) {
+    this.performDelete = false;
+    this.validComment = true;
+
     if (commentId) {
-      this.selectedComment = this.document.comments.find( item => item._id === commentId);
+      const copyText = this.document.comments.find(item => item._id === commentId);
+      this.selectedComment = JSON.parse(JSON.stringify(copyText));
     } else {
       this.selectedComment = [];
     }
@@ -113,6 +119,7 @@ export class DocumentComponent implements OnInit {
 
     } else if (commentId && commentId.length > 0) { /* If user wants to delete a comment */
       this.selectedComment = this.document.comments.find(comm => comm._id === commentId);
+      this.performDelete = true;
     }
 
     this.modal = this.modalService.open(content, this.globals.options);
