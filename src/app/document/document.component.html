@@ -118,7 +118,9 @@
 
         <div class="form-group file-message">
           <select class="custom-select rounded-0" [(ngModel)]="selectedOption" name="document-files">
-            <option *ngFor="let option of document.revisions; let idx = index" [ngValue]="option._id">{{idx + 1}}. {{option.originalFilename}}</option>
+            <option *ngFor="let option of document.revisions; let idx = index" [ngValue]="option._id">
+              {{idx + 1}}. {{option.originalFilename ? option.originalFilename : option.message }}
+            </option>
           </select>
           <div class="text-hints">Select the intended revision from the dropdown list</div>
         </div>
