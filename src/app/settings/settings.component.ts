@@ -78,16 +78,13 @@ export class SettingsComponent implements OnInit {
     if (emptyFields) {
       this.settingsService.updateBasicInfo(this.currentUser).subscribe( data => {
         this.currentUser = data;
-        // this.alert = '';
+
         this.updateSettings = true;
 
         if (!passwordFields) {
           this.alert = '';
           this.updateInfo = false;
         }
-
-        //  this.updateInfo = (!passwordFields) ? false : true;
-
       }, (err) => {
         console.log(err)
         this.invalidErrorMessage('invalid email');

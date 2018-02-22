@@ -167,6 +167,8 @@
         This tab holds the current version of the document. Revisions of the
         same document can be found in the revisions tab. <br/><br/>
 
+        {{ currentUser | json }}
+
         <strong>Frontend testing purposes only</strong> <br/>
         <div class="input-group">
           <input type="text" class="form-control" [(ngModel)]="document.title" placeholder="Enter document title" name="document-title">
@@ -292,13 +294,15 @@
           <div class="card card-container rounded-0" style="padding: 10px;">
             <div class="card-body">
 
-              <div ngbDropdown placement="bottom-right">
-                <button class="close" ngbDropdownToggle><i class="fa fa-ellipsis-v"></i></button>
-                <div ngbDropdownMenu>
-                  <button class="dropdown-item" (click)="toggleEditButton(comment._id)"><i class="fa fa-icon fa-edit"></i>Edit</button>
-                  <button class="dropdown-item" (click)="openModal(deleteCommentModal, undefined, undefined, comment._id)"><i class="fa fa-icon fa-trash"></i>Delete</button>
+              <span *ngIf="currentUser._id === comment.author._id">
+                <div ngbDropdown placement="bottom-right">
+                  <button class="close" ngbDropdownToggle><i class="fa fa-ellipsis-v"></i></button>
+                  <div ngbDropdownMenu>
+                    <button class="dropdown-item" (click)="toggleEditButton(comment._id)"><i class="fa fa-icon fa-edit"></i>Edit</button>
+                    <button class="dropdown-item" (click)="openModal(deleteCommentModal, undefined, undefined, comment._id)"><i class="fa fa-icon fa-trash"></i>Delete</button>
+                  </div>
                 </div>
-              </div>
+              </span>
 
               <div class="card-comment-header">
                 <strong>{{ comment.author.name.first }} {{ comment.author.name.last }}</strong>

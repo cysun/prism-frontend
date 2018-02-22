@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+
+import { User } from '../models/user.model';
 import { Globals } from '../shared/app.global';
 
 import { Document } from '../models/document.model';
@@ -15,8 +17,10 @@ import { saveAs } from 'file-saver';
 })
 
 export class DocumentComponent implements OnInit {
+  currentUser: User = new User();
   modal: NgbModalRef;
   alert: any;
+
   document: Document = new Document();
   currentRevision: any[];
   mainRevision: any[];
@@ -43,6 +47,11 @@ export class DocumentComponent implements OnInit {
               private globals: Globals) {
     this.route.params.subscribe( params => {
       this.documentId = params.id;
+    })
+
+    const userId = JSON.parse(localStorage.getItem('currentUser'))._id;
+    this.globals.settingsService.getUser(userId).subscribe( data => {
+      this.currentUser = data;
     })
   }
 
