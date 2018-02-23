@@ -1,31 +1,5 @@
-.dialog-box {
-  margin-top: 20px;
-}
-
-.dialog-module {
-  text-align: center;
-}
-
-.buttons-container {
-  display: table;
-}
-
-.footer-buttons {
-  display: table-cell;
-  height: 50px;
-  text-align: center;
-  vertical-align: bottom;
-  width: 600px;
-}
-
 .header-container {
   padding: 7px;
-}
-
-.header-panel {
-  position: relative;
-  text-align: center;
-  text-transform: uppercase;
 }
 
 .grid-space {
@@ -38,30 +12,6 @@
   text-align: right;
 }
 
-.college-manager-buttons {
-  display: table-cell;
-  height: 50px;
-  text-align: center;
-  vertical-align: bottom;
-  width: 800px;
-}
-
-.info-message {
-  display: grid;
-  font-size: 25px;
-  margin-top: 20px;
-}
-
-.panel-buttons {
-  bottom: -6px;
-  position: absolute;
-  right: -8px;
-}
-
-.text-boxes {
-  text-align: center;
-}
-
 .text-hints {
   color: #808080;
   font-size: 14px;
@@ -70,23 +20,11 @@
   text-align: left;
 }
 
-:host ::ng-deep .ui-autocomplete-token {
-  margin: 3px;
-}
-
-.update-module {
-  padding: 35px;
-}
-
 .btn-college {
   width: 150px;
   margin-top: 3px;
   margin-right: -12px;
   margin-bottom: 3px;
-}
-
-.btn-xs {
-
 }
 
 .toolbar {

@@ -1,7 +1,18 @@
-<p *ngFor="let department of departments">
-  {{department.name}}
-</p>
-<button class="btn btn-success" (click)="openModal(addDepartmentModal)">Add</button>
+<!-- Displays Current Departments -->
+<div *ngFor="let department of departments">
+  <div class="row">
+    <button type="button" class="close"(click)="manageDepartmentDialog(manager, department._id)"><i class="fa fa-icon fa-cog"></i></button>
+    <span>
+      <p>
+        {{department.name}} ({{department.abbreviation}})
+      </p>
+    </span>
+  </div>
+</div>
+
+<!-- Add Department button -->
+<button class="btn btn-success" (click)="openModal(addDepartmentModal)">+ Add Department</button>
+
 <!-- Dialog module for adding a new department -->
 <ng-template #addDepartmentModal let-cancel="close" let-esc="dismiss">
   <div class="modal-header">
