@@ -39,6 +39,7 @@ import { GroupManagerService } from './group-manager/group-manager.service';
 import { SettingsService } from './settings/settings.service';
 
 import { Globals } from './shared/app.global';
+import { TemplateManagerComponent } from './template-manager/template-manager.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { Globals } from './shared/app.global';
     PrivateComponent,
     PublicComponent,
     ReversePipe,
+    TemplateManagerComponent,
   ],
   imports: [
     NgbModule.forRoot(),
