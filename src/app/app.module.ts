@@ -85,7 +85,6 @@ import { Globals } from './shared/app.global';
       useFactory: function(router: Router) {
         return new AuthInterceptor(router);
       },
-      // useClass: AuthInterceptor,
       multi: true,
       deps: [Router]
     }

@@ -312,7 +312,7 @@
 
               <div class="card-comment-body">
                 <span *ngIf="(comment._id !== selectedComment._id) || performDelete; else editInput">
-                  {{ comment.text }}
+                  <span class="line-breaker">{{ comment.text }}</span>
                 </span>
 
                 <ng-template #editInput>

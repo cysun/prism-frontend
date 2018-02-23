@@ -75,6 +75,10 @@
   vertical-align: middle;
 }
 
+.line-breaker {
+  white-space: pre-line;
+}
+
 .modal-message {
   padding: 20px;
 }
