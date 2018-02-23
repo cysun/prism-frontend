@@ -118,8 +118,8 @@
 
         <div class="form-group file-message">
           <select class="custom-select rounded-0" [(ngModel)]="selectedOption" name="document-files">
-            <option *ngFor="let option of document.revisions; let idx = index" [ngValue]="option._id">
-              {{idx + 1}}. {{option.originalFilename ? option.originalFilename : option.message }}
+            <option *ngFor="let option of checkDeletedRevisions(document.revisions, 'Deleted revision')" [ngValue]="option._id">
+              {{ option.message }}
             </option>
           </select>
           <div class="text-hints">Select the intended revision from the dropdown list</div>
@@ -166,8 +166,6 @@
       <div class="container" style="padding-top: 20px;">
         This tab holds the current version of the document. Revisions of the
         same document can be found in the revisions tab. <br/><br/>
-
-        {{ currentUser | json }}
 
         <strong>Frontend testing purposes only</strong> <br/>
         <div class="input-group">

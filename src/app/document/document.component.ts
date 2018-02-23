@@ -59,8 +59,9 @@ export class DocumentComponent implements OnInit {
     this.documentService.retrieveDocument(this.documentId).subscribe( data => {
       this.document = data;
 
-      if (this.document.revisions[0]) {
-        this.selectedOption = this.document.revisions[0]._id;
+      if (this.document.revisions) {
+        this.selectedOption = this.document.revisions.find( item =>
+          item.message !== 'Deleted revision')._id;
       }
 
       this.documentTitle = this.document.title;
@@ -82,7 +83,6 @@ export class DocumentComponent implements OnInit {
     return Object.keys(this.document.revisions).length;
   }
 
-
   /* Allow user to edit their own (specific) comment */
   toggleEditButton(commentId?: string) {
     this.performDelete = false;
@@ -94,6 +94,11 @@ export class DocumentComponent implements OnInit {
     } else {
       this.selectedComment = [];
     }
+  }
+
+  /* Return list of revision objects not marked as deleted */
+  checkDeletedRevisions(arr: any[], message: string) {
+    return arr.filter( x => x.message !== message);
   }
 
   /* Open a basic modal passing the data of the specific revision or comment */
@@ -169,7 +174,8 @@ export class DocumentComponent implements OnInit {
   retrieveDocument() {
     this.documentService.retrieveDocument(this.document._id).subscribe( data => {
       this.document = data;
-      this.selectedOption = this.document.revisions[0]._id;
+      this.selectedOption = this.selectedOption = this.document.revisions.find(
+        item => item.message !== 'Deleted revision')._id;
       this.totalIndices = this.getNumOfRevisions();
       this.getLatestRevision();
     })
