@@ -210,7 +210,8 @@
     </ng-template>
   </ngb-tab>
 
-  <ngb-tab>
+
+  <ngb-tab [disabled]="totalIndices <= 1">
     <ng-template ngbTabTitle><i class="fa fa-icon fa-list"></i>Revisions</ng-template>
     <ng-template ngbTabContent>
       <div class="container" style="padding-top: 20px;">
@@ -280,7 +281,8 @@
         </ng-container>
       </div>
     </ng-template>
-  </ngb-tab>
+    </ngb-tab>
+
 
   <ngb-tab>
     <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
