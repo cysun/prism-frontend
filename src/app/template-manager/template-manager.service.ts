@@ -15,7 +15,7 @@ export class TemplateManagerService {
 
   /* Create a template */
   createTemplate(templateTitle: string, templateEstimate: number): Observable<Document> {
-    const headers = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
+    const headers = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     const body = JSON.stringify({ 'title': templateTitle, 'completionEstimate': templateEstimate });
 
     return this.http.post<Document>('/api/template', body, headers);

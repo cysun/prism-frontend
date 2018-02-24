@@ -14,6 +14,8 @@ import { saveAs } from 'file-saver';
   styleUrls: ['./template-manager.component.css']
 })
 export class TemplateManagerComponent implements OnInit {
+
+  /*
   templates = [
       {
           '_id': '5a8f9e63510eee15a17181ca',
@@ -47,8 +49,8 @@ export class TemplateManagerComponent implements OnInit {
               'Administrators'
           ]
       },
-  ]
-
+  ]*/
+  templates: Document[];
   modal: NgbModalRef;
   alert: any;
   message: string;
@@ -60,7 +62,11 @@ export class TemplateManagerComponent implements OnInit {
               private templateManagerService: TemplateManagerService,
               private globals: Globals) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.templateManagerService.listAllTemplates().subscribe( data => {
+      this.templates = data;
+    })
+  }
 
   /* Open a basic modal passing the data of the specific revision or comment */
   openModal(content, revisionIndex?: number, modalType?: string, commentId?: string) {
@@ -74,6 +80,15 @@ export class TemplateManagerComponent implements OnInit {
     this.file = null;
     this.fileName = '';
     this.modal.close();
+  }
+
+  /* Delete template from the list */
+  deleteTemplate(id: string) {
+    this.templateManagerService.deleteTemplate(id).subscribe( () => {
+      console.log('Template deleted')
+      const findTemplateIndex = this.templates.findIndex( temp => temp._id === id);
+      this.templates.splice(findTemplateIndex, 1);
+    })
   }
 
 }
