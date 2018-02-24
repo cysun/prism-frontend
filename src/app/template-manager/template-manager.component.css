@@ -1,0 +1,15 @@
+.bg-info {
+  color: #FFFFFF;
+}
+
+.file-title {
+  padding-bottom: 20px;
+}
+
+.label {
+  font-size: 2em;
+  font-weight: bold;
+  padding-right: 10px;
+  text-transform: uppercase;
+  vertical-align: middle;
+}

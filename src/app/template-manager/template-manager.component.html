@@ -1,3 +1,94 @@
-<p>
-  template-manager works!
-</p>
+<div class="container-fluid">
+
+  <!-- Modal for creating a template -->
+  <ng-template #uploadTemplateModal>
+    <div class="modal-header">
+      <h5 class="modal-title">Upload Template</h5>
+    </div>
+
+    <form #f="ngForm" (ngSubmit)="uploadTemplate()">
+      <div class="modal-body">
+        <div *ngIf="alert">
+          <ngb-alert type="danger" [dismissible]="false">
+            <i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}
+          </ngb-alert>
+        </div>
+
+        <div class="modal-message">
+          <div class="form-row">
+            <div class="col-md-8 file-title">
+              <input type="text" class="form-control"
+                     [(ngModel)]="message" name="file-title"
+                     placeholder="Enter a title for the template" required>
+              <div class="text-hints">Type in a title for the new template</div>
+            </div>
+
+            <div class="col-md-4 file-title">
+              <input type="number" min="1" class="form-control"
+                     [(ngModel)]="completionEstimate" name="completion-estimate"
+                     placeholder="Enter a number" required>
+              <div class="text-hints">Completion estimate in days</div>
+            </div>
+          </div>
+
+          <div class="custom-file file-title">
+            <input name="file" type="file" class="custom-file-input"
+                   accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                   (change)="onFileChange($event)">
+
+            <label class="custom-file-label">
+              {{ fileName ? fileName : 'Choose a file...'}}
+            </label>
+            <div class="text-hints">Click on browse to attach a file</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success" [disabled]="!f.form.valid">Upload</button>
+        <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+      </div>
+    </form>
+  </ng-template>
+
+
+  <!-- Title header of the page -->
+  <div class="header-label">
+    <div class="blockquote-header">
+      <span class="label"><i class="fa fa-icon fa-folder-open-o"></i>Template Manager
+        <span class ="blockquote-btn" placement="top" ngbTooltip="Upload Template">
+          <button type="button" class="btn btn-success"
+                  (click)=openModal(uploadTemplateModal)>
+            <i class="fa fa-plus"></i>
+          </button>
+        </span>
+      </span>
+    </div>
+  </div>
+
+
+  <!-- Display all the templates in a table -->
+  <table class="table table-hover">
+    <thead class="bg-info">
+      <tr>
+        <th>Template Name</th>
+        <th>Groups</th>
+        <th>Completion Estimate</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let template of templates; let idx = index">
+        <td>{{template.title}}</td>
+        <td >
+          <span *ngFor="let group of template.groups">
+          {{ group }}, </span>
+        </td>
+        <td>{{ template.completionEstimate }} days</td>
+        <td><button type="button" class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+</div>
