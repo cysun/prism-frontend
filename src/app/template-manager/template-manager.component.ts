@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { Globals } from '../shared/app.global';
 import { Document } from '../models/document.model';
 import { DocumentService } from '../document/document.service';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TemplateManagerService } from './template-manager.service';
 
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -54,17 +55,15 @@ export class TemplateManagerComponent implements OnInit {
   file: File;
   fileName: string;
 
-  constructor(private modalService: NgbModal, private documentService: DocumentService,
+  constructor(private modalService: NgbModal,
+              private documentService: DocumentService,
+              private templateManagerService: TemplateManagerService,
               private globals: Globals) { }
 
-  ngOnInit() {
-  }
-
+  ngOnInit() { }
 
   /* Open a basic modal passing the data of the specific revision or comment */
   openModal(content, revisionIndex?: number, modalType?: string, commentId?: string) {
-
-
     this.modal = this.modalService.open(content, this.globals.options);
   }
 
