@@ -114,6 +114,20 @@ blockquote {
   text-transform: uppercase;
 }
 
+.modal-message {
+  padding: 20px;
+}
+
+.modal-warning {
+  background: #DA3749;
+  border-radius: 5px;
+  color: #FFFFFF;
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 10px;
+  text-align: center;
+}
+
 table {
   table-layout: fixed;
   text-align: center;

@@ -14,48 +14,15 @@ import { saveAs } from 'file-saver';
   styleUrls: ['./template-manager.component.css']
 })
 export class TemplateManagerComponent implements OnInit {
-
-  /*
-  templates = [
-      {
-          '_id': '5a8f9e63510eee15a17181ca',
-          'title': 'Template Misc 2',
-          'completionEstimate': 3,
-          'groups': [
-              'Administrators', 'PRS Members'
-          ]
-      },
-      {
-          '_id': '5a8f9e63510eee15a17181cb',
-          'title': 'Template Misc 3',
-          'completionEstimate': 73,
-          'groups': [
-              'Administrators', 'Deans'
-          ]
-      },
-      {
-          '_id': '5a8f9e63510eee15a17181cc',
-          'title': 'Template Misc 4',
-          'completionEstimate': 8,
-          'groups': [
-              'Administrators', 'OGS Staff'
-          ]
-      },
-      {
-          '_id': '5a8f9e63510eee15a17181cd',
-          'title': 'Template Misc 5',
-          'completionEstimate': 31,
-          'groups': [
-              'Administrators'
-          ]
-      },
-  ]*/
   templates: Document[];
   modal: NgbModalRef;
   alert: any;
   message: string;
   file: File;
   fileName: string;
+
+  currentTemplateId: string;
+  currentTemplate: Document = new Document();
 
   constructor(private modalService: NgbModal,
               private documentService: DocumentService,
@@ -68,14 +35,18 @@ export class TemplateManagerComponent implements OnInit {
     })
   }
 
-  /* Open a basic modal passing the data of the specific revision or comment */
-  openModal(content, revisionIndex?: number, modalType?: string, commentId?: string) {
+  /* Open a basic modal passing the data of the specific template */
+  openModal(content, templateId?: string) {
     this.modal = this.modalService.open(content, this.globals.options);
+    // this.currentTemplateId = templateId;
+    this.currentTemplate = this.templates.find( temp => temp._id === templateId);
+    console.log('printing currentTemp: ' + JSON.stringify(this.currentTemplate))
   }
 
   /* Close a modal */
   closeModal() {
     this.alert = '';
+    this.currentTemplate = new Document();
     this.message = '';
     this.file = null;
     this.fileName = '';
@@ -83,11 +54,12 @@ export class TemplateManagerComponent implements OnInit {
   }
 
   /* Delete template from the list */
-  deleteTemplate(id: string) {
-    this.templateManagerService.deleteTemplate(id).subscribe( () => {
+  deleteTemplate() {
+    this.templateManagerService.deleteTemplate(this.currentTemplate._id).subscribe( () => {
       console.log('Template deleted')
-      const findTemplateIndex = this.templates.findIndex( temp => temp._id === id);
+      const findTemplateIndex = this.templates.findIndex( temp => temp._id === this.currentTemplate._id);
       this.templates.splice(findTemplateIndex, 1);
+      this.modal.close();
     })
   }
 

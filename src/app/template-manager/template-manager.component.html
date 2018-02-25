@@ -51,6 +51,29 @@
     </form>
   </ng-template>
 
+  <!-- Modal for deleting a template -->
+  <ng-template #deleteTemplateModal>
+    <div class="modal-header">
+      <h5 class="modal-title">Delete Template</h5>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-message">
+
+        <div style="text-align: center; padding-bottom: 20px;">
+          <span class="modal-warning"><i class="fa fa-icon fa-exclamation-triangle"></i>Warning</span>
+        </div>
+        Are you sure you want to delete <b>{{ currentTemplate.title }}</b> template? This action cannot be undone.
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-danger" type="button" (click)=deleteTemplate()>Delete</button>
+      <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+    </div>
+  </ng-template>
+
+
 
   <!-- Title header of the page -->
   <div class="header-label">
@@ -86,7 +109,7 @@
         </td>
         <td>{{ template.completionEstimate }} days</td>
         <td>
-          <button type="button" class="btn btn-danger" (click)=deleteTemplate(template._id)><i class="fa fa-trash"></i></button>
+          <button type="button" class="btn btn-danger" (click)="openModal(deleteTemplateModal, template._id)"><i class="fa fa-trash"></i></button>
         </td>
       </tr>
     </tbody>
