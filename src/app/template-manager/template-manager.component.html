@@ -6,7 +6,7 @@
       <h5 class="modal-title">Upload Template</h5>
     </div>
 
-    <form #f="ngForm" (ngSubmit)="uploadTemplate()">
+    <form #f="ngForm" (ngSubmit)="postTemplate()">
       <div class="modal-body">
         <div *ngIf="alert">
           <ngb-alert type="danger" [dismissible]="false">
@@ -16,18 +16,18 @@
 
         <div class="modal-message">
           <div class="form-row">
-            <div class="col-md-8 file-title">
+            <div class="col-md-9 file-title">
               <input type="text" class="form-control"
-                     [(ngModel)]="message" name="file-title"
+                     [(ngModel)]="currentTemplate.title" name="file-title"
                      placeholder="Enter a title for the template" required>
               <div class="text-hints">Type in a title for the new template</div>
             </div>
 
-            <div class="col-md-4 file-title">
+            <div class="col-md-3 file-title">
               <input type="number" min="1" class="form-control"
-                     [(ngModel)]="completionEstimate" name="completion-estimate"
-                     placeholder="Enter a number" required>
-              <div class="text-hints">Completion estimate in days</div>
+                     [(ngModel)]="currentTemplate.completionEstimate" name="completion-estimate"
+                     placeholder="Number in days" required>
+              <div class="text-hints">Completion estimate</div>
             </div>
           </div>
 
@@ -40,6 +40,13 @@
               {{ fileName ? fileName : 'Choose a file...'}}
             </label>
             <div class="text-hints">Click on browse to attach a file</div>
+          </div>
+
+          <div class="file-message">
+            <input type="text" class="form-control"
+            [(ngModel)]="message" name="file-message"
+            placeholder="Enter a message about the file" required>
+            <div class="text-hints">Type a brief message about the new revision.</div>
           </div>
         </div>
       </div>
@@ -73,8 +80,6 @@
     </div>
   </ng-template>
 
-
-
   <!-- Title header of the page -->
   <div class="header-label">
     <div class="blockquote-header">
@@ -105,7 +110,8 @@
         <td>{{template.title}}</td>
         <td >
           <span *ngFor="let group of template.groups; let idx = index">
-            {{ group }}{{ idx + 1 < template.groups.length ? ',' : '' }} </span>
+            {{ group }}{{ idx + 1 < template.groups.length ? ',' : '' }}
+          </span>
         </td>
         <td>{{ template.completionEstimate }} days</td>
         <td>
@@ -114,6 +120,11 @@
       </tr>
     </tbody>
   </table>
+
+
+  <div style="padding-bottom: 30px;">
+    <pre>{{ templates | json }}</pre>
+  </div>
 
 
 </div>
