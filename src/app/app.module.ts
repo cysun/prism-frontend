@@ -20,6 +20,7 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { MinutesComponent } from './minutes/minutes.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
+import { ProgramsComponent } from './colleges/departments/programs/programs.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AutoCompleteModule } from 'primeng/primeng';
 
@@ -29,6 +30,7 @@ import { PrivateComponent } from './layout/private/private.component';
 import { CollegesService } from './colleges/colleges.service';
 import { DepartmentService } from './colleges/departments/department.service';
 import { GroupManagerService } from './group-manager/group-manager.service';
+import { ProgramService } from './colleges/departments/programs/program.service';
 import { SettingsService } from './settings/settings.service';
 
 import { AuthInterceptor } from './login/auth.interceptor';
@@ -62,6 +64,7 @@ import { DocumentService } from './document/document.service';
     ResourcesComponent,
     SettingsComponent,
     ReversePipe,
+    ProgramsComponent,
   ],
   imports: [
     NgbModule.forRoot(),
@@ -81,6 +84,7 @@ import { DocumentService } from './document/document.service';
     DepartmentService,
     DocumentService,
     GroupManagerService,
+    ProgramService,
     SettingsService,
     {
       provide: HTTP_INTERCEPTORS,

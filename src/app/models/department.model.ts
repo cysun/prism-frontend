@@ -1,5 +1,4 @@
 import { College } from './college.model';
-import { User } from './user.model';
 
 export class Department {
   _id: string;

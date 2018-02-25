@@ -114,7 +114,7 @@ export class CollegesComponent implements OnInit {
     this.modal = this.modalService.open(content, this.options);
   }
 
-  manageCollegeDialog(content, collegeId: string, deanId?: string) {
+  manageCollegeDialog(content, collegeId: string) {
     this.alerts = [];
     this.collegesService.getCollege(collegeId).subscribe( data => {
       this.college = data;
@@ -251,7 +251,7 @@ export class CollegesComponent implements OnInit {
     }
   }
 
-  /* Give a group's member list of IDs and return their corresponding member objects */
+  /* Give a deans' member list of IDs and return their corresponding member objects */
   getDeansObject(deanList: any[]): any[] {
     const displayList = [];
 
@@ -277,7 +277,7 @@ export class CollegesComponent implements OnInit {
       }
     }
 
-    /* Filter out members that are already part of the group */
+    /* Filter out members that are already part of the deans */
     for (let i = 0; i < currentDeans.length; i++) {
       for (let j = 0; j < filtered.length; j++) {
         if (filtered[j] === currentDeans[i].username) {
@@ -285,7 +285,7 @@ export class CollegesComponent implements OnInit {
         }
       }
     }
-    /* Filter out usernames that were previously selected (but not added to the group) */
+    /* Filter out usernames that were previously selected (but not added to the deans) */
     for (let i = 0; i < this.suggestedUsers.length; i++) {
       for (let j = 0; j < filtered.length; j++) {
         if (filtered[j] === this.suggestedUsers[i].name) {

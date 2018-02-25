@@ -1,10 +1,11 @@
 <!-- Add college button-->
-<div class="header-container">
-  <div class="row toolbar">
-     <div class="col-sm-12">
-       <button class="btn btn-success btn-college pull-right" (click)="addCollegeDialog(addition)">+ Add College</button>
+<div class="page-header content-bar">
+  <div class="btn-toolbar pull-right">
+    <div class="btn-group">
+      <button type="button" (click)="addCollegeDialog(addition)" class="btn btn-success btn-college">+ Add College</button>
     </div>
   </div>
+  <h2 class="bar-text">Colleges</h2>
 </div>
 
 <!-- Dialog module for adding a new college -->
@@ -107,7 +108,7 @@
     <div *ngFor="let dean of deans" class="card">
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
-          {{dean.name.first}} {{dean.name.last}} ({{dean.username}})
+          {{dean.name?.first}} {{dean.name?.last}} ({{dean.username}})
           <button type="button" class="btn btn-danger pull-right" (click)="deleteDean(dean)">
             Remove
           </button>
@@ -147,8 +148,8 @@
       </thead>
       <tbody>
         <tr *ngFor="let dean of deans">
-          <td>{{dean.name.first}}</td>
-          <td>{{dean.name.last}}</td>
+          <td>{{dean.name?.first}}</td>
+          <td>{{dean.name?.last}}</td>
           <td>{{dean.username}}</td>
         </tr>
       </tbody>
