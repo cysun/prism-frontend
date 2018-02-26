@@ -1,16 +1,10 @@
 a {
-  text-decoration: none;
+  color: #568ba5;
+  font-weight: bold;
 }
 
 .bg-info {
   color: #FFFFFF;
-}
-
-.download-file {
-  color: #568ba5;
-  cursor: pointer;
-  font-weight: bold;
-  text-decoration: underline;
 }
 
 .file-title {

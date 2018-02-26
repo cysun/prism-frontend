@@ -118,7 +118,8 @@
 
     <tbody>
       <tr *ngFor="let template of templates; let idx = index">
-        <td><span (click)="downloadFile(template._id)" class="download-file">{{template.title}}</span></td>
+        <td><a routerLink="/document/{{template._id}}">{{template.title}}</a></td>
+        <!-- <td><span (click)="downloadFile(template._id)" class="download-file">{{template.title}}</span></td> -->
         <td>{{ template.completionEstimate }} days</td>
 
         <ng-container *ngIf="template.revisions.length > 0; else emptyDetails">
