@@ -121,11 +121,19 @@
         <td><span (click)="downloadFile(template._id)" class="download-file">{{template.title}}</span></td>
         <td>{{ template.completionEstimate }} days</td>
 
-        <ng-container *ngFor="let revision of template.revisions">
-          <td>{{ revision.message }}</td>
-          <td>{{ revision.uploader.username }}</td>
-          <td>{{ revision.dateUploaded | date: 'MM/dd/yyyy' }}</td>
+        <ng-container *ngIf="template.revisions.length > 0; else emptyDetails">
+          <ng-container *ngFor="let revision of template.revisions">
+            <td>{{ revision.message }}</td>
+            <td>{{ revision.uploader.username }}</td>
+            <td>{{ revision.dateUploaded | date: 'MM/dd/yyyy' }}</td>
+          </ng-container>
         </ng-container>
+
+        <ng-template #emptyDetails>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>Unknown</td>
+        </ng-template>
 
         <td>
           <span *ngFor="let group of template.groups; let idx = index">
@@ -133,7 +141,7 @@
           </span>
         </td>
         <td>
-          <button type="button" class="btn btn-danger" (click)="openModal(deleteTemplateModal, template._id)"><i class="fa fa-trash"></i></button>
+          <button type="button" class="btn btn-danger" (click)="openModal(deleteTemplateModal, template._id)" [disabled]=template.coreTemplate><i class="fa fa-trash"></i></button>
         </td>
       </tr>
     </tbody>
