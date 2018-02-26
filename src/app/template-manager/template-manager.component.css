@@ -1,9 +1,20 @@
+a {
+  text-decoration: none;
+}
+
 .bg-info {
   color: #FFFFFF;
 }
 
+.download-file {
+  color: #568ba5;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
 .file-title {
-  padding-bottom: 20px;
+  margin-top: 20px;
 }
 
 .label {
@@ -12,4 +23,9 @@
   padding-right: 10px;
   text-transform: uppercase;
   vertical-align: middle;
+}
+
+.modal-label {
+  font-size: 1.2em;
+  font-weight: bold;
 }

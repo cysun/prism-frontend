@@ -15,26 +15,35 @@
         </div>
 
         <div class="modal-message">
+          <div class="modal-label">
+            TEMPLATE INFO
+          </div>
+
           <div class="form-row">
             <div class="col-md-9 file-title">
               <input type="text" class="form-control"
-                     [(ngModel)]="currentTemplate.title" name="file-title"
-                     placeholder="Enter a title for the template" required>
+              [(ngModel)]="currentTemplate.title" name="file-title"
+              placeholder="Enter a title for the template" required>
               <div class="text-hints">Type in a title for the new template</div>
             </div>
 
             <div class="col-md-3 file-title">
               <input type="number" min="1" class="form-control"
-                     [(ngModel)]="currentTemplate.completionEstimate" name="completion-estimate"
-                     placeholder="Number in days" required>
+              [(ngModel)]="currentTemplate.completionEstimate" name="completion-estimate"
+              placeholder="Number in days" required>
               <div class="text-hints">Completion estimate</div>
             </div>
           </div>
 
-          <div class="custom-file file-title">
+          <div class="modal-label" style="padding-top: 50px; padding-bottom: 20px;">
+            FILE UPLOAD
+          </div>
+
+
+          <div class="custom-file">
             <input name="file" type="file" class="custom-file-input"
-                   accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                   (change)="onFileChange($event)">
+            accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            (change)="onFileChange($event)">
 
             <label class="custom-file-label">
               {{ fileName ? fileName : 'Choose a file...'}}
@@ -42,7 +51,7 @@
             <div class="text-hints">Click on browse to attach a file</div>
           </div>
 
-          <div class="file-message">
+          <div class="file-title">
             <input type="text" class="form-control"
             [(ngModel)]="message" name="file-message"
             placeholder="Enter a message about the file" required>
@@ -85,8 +94,7 @@
     <div class="blockquote-header">
       <span class="label"><i class="fa fa-icon fa-folder-open-o"></i>Template Manager
         <span class ="blockquote-btn" placement="top" ngbTooltip="Upload Template">
-          <button type="button" class="btn btn-success"
-                  (click)=openModal(uploadTemplateModal)>
+          <button type="button" class="btn btn-success" (click)=openModal(uploadTemplateModal)>
             <i class="fa fa-plus"></i>
           </button>
         </span>
@@ -94,26 +102,36 @@
     </div>
   </div>
 
-
   <!-- Display all the templates in a table -->
-  <table class="table table-hover">
+  <table class="table table-hover" *ngIf="templates && templates.length > 0; else emptyTemplates">
     <thead class="bg-info">
       <tr>
-        <th>Template Title</th>
-        <th>Groups</th>
-        <th>Estimated Completion</th>
-        <th>Delete</th>
+        <th class="align-middle">Template Title</th>
+        <th class="align-middle">Estimated Completion</th>
+        <th class="align-middle">File Message</th>
+        <th class="align-middle">Uploader</th>
+        <th class="align-middle">Date Uploaded</th>
+        <th class="align-middle">Groups</th>
+        <th class="align-middle">Delete</th>
       </tr>
     </thead>
+
     <tbody>
       <tr *ngFor="let template of templates; let idx = index">
-        <td>{{template.title}}</td>
-        <td >
+        <td><span (click)="downloadFile(template._id)" class="download-file">{{template.title}}</span></td>
+        <td>{{ template.completionEstimate }} days</td>
+
+        <ng-container *ngFor="let revision of template.revisions">
+          <td>{{ revision.message }}</td>
+          <td>{{ revision.uploader.username }}</td>
+          <td>{{ revision.dateUploaded | date: 'MM/dd/yyyy' }}</td>
+        </ng-container>
+
+        <td>
           <span *ngFor="let group of template.groups; let idx = index">
             {{ group }}{{ idx + 1 < template.groups.length ? ',' : '' }}
           </span>
         </td>
-        <td>{{ template.completionEstimate }} days</td>
         <td>
           <button type="button" class="btn btn-danger" (click)="openModal(deleteTemplateModal, template._id)"><i class="fa fa-trash"></i></button>
         </td>
@@ -121,10 +139,12 @@
     </tbody>
   </table>
 
-
-  <div style="padding-bottom: 30px;">
-    <pre>{{ templates | json }}</pre>
-  </div>
-
-
+  <!-- Info message when there are no groups -->
+  <ng-template #emptyTemplates>
+    <p>
+      <ngb-alert class="info-message" type="info" [dismissible]="false">
+        <strong> Information: </strong> There are currently no templates.
+      </ngb-alert>
+    </p>
+  </ng-template>
 </div>

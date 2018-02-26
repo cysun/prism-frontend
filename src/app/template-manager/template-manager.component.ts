@@ -34,6 +34,8 @@ export class TemplateManagerComponent implements OnInit {
 
     /* Open a basic modal passing the data of the specific template */
     openModal(content, templateId?: string) {
+      this.currentTemplate = new Document();
+
       if (templateId) {
         this.currentTemplate = this.templates.find( temp => temp._id === templateId);
         console.log('printing currentTemp: ' + JSON.stringify(this.currentTemplate))
@@ -103,6 +105,19 @@ export class TemplateManagerComponent implements OnInit {
           console.log(data)
         }, (err) => {
           console.log(err);
+        });
+      }
+
+      downloadFile(templateId: string) {
+        const findTemplateFile = this.templates.find( item => item._id === templateId);
+        const revisionIndex = findTemplateFile.revisions.length - 1;
+
+        this.documentService.downloadFile(templateId, revisionIndex).subscribe ( data => {
+          const contentDisposition = data.headers.get('content-disposition');
+          const contentType = data.headers.get('content-type');
+          const fileName = contentDisposition.slice(22, contentDisposition.length - 1);
+
+          saveAs(new Blob([data.body], { type: contentType }), fileName);
         });
       }
 
