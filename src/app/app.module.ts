@@ -37,8 +37,10 @@ import { DepartmentService } from './colleges/departments/department.service';
 import { DocumentService } from './document/document.service';
 import { GroupManagerService } from './group-manager/group-manager.service';
 import { SettingsService } from './settings/settings.service';
+import { TemplateManagerService } from './template-manager/template-manager.service';
 
 import { Globals } from './shared/app.global';
+import { TemplateManagerComponent } from './template-manager/template-manager.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +60,7 @@ import { Globals } from './shared/app.global';
     PrivateComponent,
     PublicComponent,
     ReversePipe,
+    TemplateManagerComponent,
   ],
   imports: [
     NgbModule.forRoot(),
@@ -80,6 +83,7 @@ import { Globals } from './shared/app.global';
     Globals,
     GroupManagerService,
     SettingsService,
+    TemplateManagerService,
     {
       provide: HTTP_INTERCEPTORS,
       useFactory: function(router: Router) {
