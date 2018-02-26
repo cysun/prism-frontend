@@ -119,15 +119,12 @@
     <tbody>
       <tr *ngFor="let template of templates; let idx = index">
         <td><a routerLink="/document/{{template._id}}">{{template.title}}</a></td>
-        <!-- <td><span (click)="downloadFile(template._id)" class="download-file">{{template.title}}</span></td> -->
         <td>{{ template.completionEstimate }} days</td>
 
         <ng-container *ngIf="template.revisions.length > 0; else emptyDetails">
-          <ng-container *ngFor="let revision of template.revisions">
-            <td>{{ revision.message }}</td>
-            <td>{{ revision.uploader.username }}</td>
-            <td>{{ revision.dateUploaded | date: 'MM/dd/yyyy' }}</td>
-          </ng-container>
+          <td>{{ template.revisions[template.revisions.length - 1].message }}</td>
+          <td>{{ template.revisions[template.revisions.length - 1].uploader.username }}</td>
+          <td>{{ template.revisions[template.revisions.length - 1].dateUploaded | date: 'MM/dd/yyyy' }}</td>
         </ng-container>
 
         <ng-template #emptyDetails>
