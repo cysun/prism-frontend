@@ -38,6 +38,7 @@ export class DocumentComponent implements OnInit {
   file: File;
   fileName: string;
   selectedOption: string;
+  selectedFilter: string;
   textComment = '';
   modalMessage: any;
 
@@ -60,8 +61,11 @@ export class DocumentComponent implements OnInit {
       this.document = data;
 
       if (this.document.revisions) {
-        this.selectedOption = this.document.revisions.find( item =>
+        this.selectedOption = this.document.revisions.slice(0).reverse().find( item =>
           item.message !== 'Deleted revision')._id;
+
+        this.selectedFilter = this.document.revisions.slice(0).reverse().find( item =>
+            item.message !== 'Deleted revision')._id;
       }
 
       this.documentTitle = this.document.title;
@@ -174,10 +178,14 @@ export class DocumentComponent implements OnInit {
   retrieveDocument() {
     this.documentService.retrieveDocument(this.document._id).subscribe( data => {
       this.document = data;
-      this.selectedOption = this.selectedOption = this.document.revisions.find(
-        item => item.message !== 'Deleted revision')._id;
       this.totalIndices = this.getNumOfRevisions();
       this.getLatestRevision();
+
+      this.selectedOption = this.document.revisions.slice(0).reverse().find( item =>
+        item.message !== 'Deleted revision')._id;
+
+      this.selectedFilter = this.document.revisions.slice(0).reverse().find( item =>
+        item.message !== 'Deleted revision')._id;
     })
   }
 
@@ -188,6 +196,7 @@ export class DocumentComponent implements OnInit {
         const numOfRevisions = this.getNumOfRevisions();
         this.retrieveDocument();
         this.uploadFile(numOfRevisions);
+
         this.closeModal();
       }, (err) => {
         console.log(err)
@@ -257,7 +266,10 @@ export class DocumentComponent implements OnInit {
       const findRevisionNum = this.document.revisions.findIndex(revision =>
         revision._id === this.selectedOption);
 
-      this.documentService.addComment(this.document._id, this.textComment, findRevisionNum).subscribe( data => {
+      const getFilename = this.document.revisions[findRevisionNum].originalFilename;
+
+      this.documentService.addComment(this.document._id, this.textComment,
+        findRevisionNum, getFilename).subscribe( data => {
         console.log(data);
         this.retrieveDocument();
         this.modal.close();
@@ -292,10 +304,43 @@ export class DocumentComponent implements OnInit {
     const findCommentIndex = this.document.comments.findIndex(item => item._id === commentId);
 
     this.documentService.deleteComment(this.document._id, findCommentIndex).subscribe( data => {
-      console.log('Comment deleted?: ' + data);
       this.document.comments.splice(findCommentIndex, 1);
       this.selectedComment = [];
       this.closeModal();
     })
+  }
+
+  /* Filter comments based on user's choice in the dropdown list */
+  filterComments(revisionId: string, commentsArr: any[]) {
+    const findRevisionIndex = this.document.revisions.findIndex (item => item._id === revisionId);
+
+    const filteredComments = this.document.comments.filter( data => {
+      return data.revision === findRevisionIndex;
+    });
+
+    return filteredComments;
+  }
+
+  /* Subscribe to a document */
+  subscribeToDocument() {
+    this.documentService.subscribeToDocument(this.document._id).subscribe( () => {
+      this.document.subscribers.push(this.currentUser._id);
+    })
+  }
+
+  /* Subscribe to a document */
+  unsubscribeFromDocument() {
+    this.documentService.unsubscribeFromDocument(this.document._id).subscribe( () => {
+      const findUserId = this.document.subscribers.findIndex(item => item._id === this.currentUser._id);
+      this.document.subscribers.splice(findUserId, 1);
+    })
+  }
+
+  /* Check if current user is already subscribed to the document */
+  IsSubscribed() {
+    if (this.document.subscribers) {
+      return this.document.subscribers.includes(this.currentUser._id);
+    }
+    return false;
   }
 }

@@ -73,8 +73,8 @@ export class DocumentService {
   }
 
   /* Add comment */
-  addComment(documentId: string, comment: string, revisionIndex: number) {
-    const body = JSON.stringify({'text': comment, 'revision': revisionIndex });
+  addComment(documentId: string, comment: string, revisionIndex: number, fileName: string) {
+    const body = JSON.stringify({'text': comment, 'revision': revisionIndex, 'originalFilename': fileName });
     return this.http.post('/api/document/' + documentId + '/comment', body, {
       headers: new HttpHeaders({'Content-Type': 'application/json'}),
       responseType: 'text'
@@ -93,5 +93,15 @@ export class DocumentService {
   /* Delete comment */
   deleteComment(documentId: string, commentIndex: number) {
     return this.http.delete('/api/document/' + documentId + '/comment/' + commentIndex, { responseType: 'text' });
+  }
+
+  /* Subscribe to a document */
+  subscribeToDocument(documentId: string) {
+    return this.http.post('/api/document/' + documentId + '/subscribe', null);
+  }
+
+  /* Unsubscribe to a document */
+  unsubscribeFromDocument(documentId: string) {
+    return this.http.post('/api/document/' + documentId + '/unsubscribe', null);
   }
 }
