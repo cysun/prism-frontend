@@ -94,4 +94,14 @@ export class DocumentService {
   deleteComment(documentId: string, commentIndex: number) {
     return this.http.delete('/api/document/' + documentId + '/comment/' + commentIndex, { responseType: 'text' });
   }
+
+  /* Subscribe to a document */
+  subscribeToDocument(documentId: string) {
+    return this.http.post('/api/document/' + documentId + '/subscribe', null);
+  }
+
+  /* Unsubscribe to a document */
+  unsubscribeFromDocument(documentId: string) {
+    return this.http.post('/api/document/' + documentId + '/unsubscribe', null);
+  }
 }
