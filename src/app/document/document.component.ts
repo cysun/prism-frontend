@@ -292,10 +292,32 @@ export class DocumentComponent implements OnInit {
     const findCommentIndex = this.document.comments.findIndex(item => item._id === commentId);
 
     this.documentService.deleteComment(this.document._id, findCommentIndex).subscribe( data => {
-      console.log('Comment deleted?: ' + data);
       this.document.comments.splice(findCommentIndex, 1);
       this.selectedComment = [];
       this.closeModal();
     })
+  }
+
+  /* Subscribe to a document */
+  subscribeToDocument() {
+    this.documentService.subscribeToDocument(this.document._id).subscribe( () => {
+      this.document.subscribers.push(this.currentUser._id);
+    })
+  }
+
+  /* Subscribe to a document */
+  unsubscribeFromDocument() {
+    this.documentService.unsubscribeFromDocument(this.document._id).subscribe( () => {
+      const findUserId = this.document.subscribers.findIndex(item => item._id === this.currentUser._id);
+      this.document.subscribers.splice(findUserId, 1);
+    })
+  }
+
+  /* Check if current user is already subscribed to the document */
+  IsSubscribed() {
+    if (this.document.subscribers) {
+      return this.document.subscribers.includes(this.currentUser._id);
+    }
+    return false;
   }
 }

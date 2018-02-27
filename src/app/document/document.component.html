@@ -2,7 +2,10 @@
   <div class="header-label">
     <span class="label">{{ documentTitle }}</span><button type="button" class="btn btn-dark" (click)=openModal(editDocumentNameModal)><i class="fa fa-icon fa-pencil"></i>Edit</button>
     <span class ="document-btn-right">
-      <button type="button" class="btn btn-danger"><i class="fa fa-icon fa-eye"></i>Watch</button>
+      <button type="button" class="btn btn-danger" (click)="IsSubscribed() ? unsubscribeFromDocument() : subscribeToDocument()">
+        <span *ngIf="!IsSubscribed(); else subscribable"><i class="fa fa-icon fa-eye"></i>Watch</span>
+        <ng-template #subscribable><i class="fa fa-icon fa-eye-slash"></i>Un-watch</ng-template>
+      </button>
     </span>
   </div>
 </div>
@@ -313,6 +316,7 @@
               <hr/>
 
               <div class="card-comment-body">
+                indexing: {{comment.indexOf(selectedComment._id)}}
                 <span *ngIf="(comment._id !== selectedComment._id) || performDelete; else editInput">
                   <span class="line-breaker">{{ comment.text }}</span>
                 </span>

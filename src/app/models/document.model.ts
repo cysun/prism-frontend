@@ -5,6 +5,7 @@ export class Document {
   groups: any[];
   revisions: any[];
   comments: any[];
+  subscribers: any[];
 
   template: boolean;
   coreTemplate: boolean;
