@@ -121,8 +121,8 @@
 
         <div class="form-group file-message">
           <select class="custom-select rounded-0" [(ngModel)]="selectedOption" name="document-files">
-            <option *ngFor="let option of checkDeletedRevisions(document.revisions, 'Deleted revision')" [ngValue]="option._id">
-              {{ option.message }}
+            <option *ngFor="let option of checkDeletedRevisions(document.revisions, 'Deleted revision') | reverse; let idx = index" [ngValue]="option._id">
+               {{ idx === 0 ? 'Most Recent: ' : ''}} {{ option.message }}
             </option>
           </select>
           <div class="text-hints">Select the intended revision from the dropdown list</div>
@@ -291,52 +291,76 @@
     <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
     <ng-template ngbTabContent>
       <div class="container" style="padding-top: 20px;">
-        <button type="button" class="btn btn-dark" (click)="openModal(newCommentModal)">New Comment</button>
 
-        <ng-container *ngFor="let comment of document.comments | reverse">
-          <div class="card card-container rounded-0" style="padding: 10px;">
-            <div class="card-body">
+        <div class="form-row">
+          <div class="col-md-7"><button type="button" class="btn btn-dark" (click)="openModal(newCommentModal)">New Comment</button></div>
+          <div class="form-group col-md-5" *ngIf="selectedFilter">
+            <select class="custom-select rounded-0" [(ngModel)]="selectedFilter" name="document-files">
+              <option *ngFor="let option of checkDeletedRevisions(document.revisions, 'Deleted revision') | reverse; let idx = index" [ngValue]="option._id">
+                {{ idx === 0 ? 'Most Recent: ' : ''}} {{ option.message }}
+              </option>
+            </select>
+            <div class="text-hints">Filter comments based on revisions</div>
+          </div>
+        </div>
+        <div class="text-hints"><b><i class="fa fa-icon fa-exclamation-circle"></i>Comments are displayed from most recent to oldest.</b></div>
 
-              <span *ngIf="currentUser._id === comment.author._id">
-                <div ngbDropdown placement="bottom-right">
-                  <button class="close" ngbDropdownToggle><i class="fa fa-ellipsis-v"></i></button>
-                  <div ngbDropdownMenu>
-                    <button class="dropdown-item" (click)="toggleEditButton(comment._id)"><i class="fa fa-icon fa-edit"></i>Edit</button>
-                    <button class="dropdown-item" (click)="openModal(deleteCommentModal, undefined, undefined, comment._id)"><i class="fa fa-icon fa-trash"></i>Delete</button>
+        <span *ngIf="filterComments(selectedFilter, document.comments).length > 0; else noComments">
+          <ng-container *ngFor="let comment of filterComments(selectedFilter, document.comments) | reverse">
+            <div class="card card-container rounded-0" style="padding: 10px;">
+              <div class="card-body">
+
+                <span *ngIf="currentUser._id === comment.author._id">
+                  <div ngbDropdown placement="bottom-right">
+                    <button class="close" ngbDropdownToggle><i class="fa fa-ellipsis-v"></i></button>
+                    <div ngbDropdownMenu>
+                      <button class="dropdown-item" (click)="toggleEditButton(comment._id)"><i class="fa fa-icon fa-edit"></i>Edit</button>
+                      <button class="dropdown-item" (click)="openModal(deleteCommentModal, undefined, undefined, comment._id)"><i class="fa fa-icon fa-trash"></i>Delete</button>
+                    </div>
                   </div>
-                </div>
-              </span>
-
-              <div class="card-comment-header">
-                <strong>{{ comment.author.name.first }} {{ comment.author.name.last }}</strong>
-                commented on <strong>Revision #{{ comment.revision + 1}}:</strong>
-                <div class="comment-date">{{comment.creationDate | date: 'MM/dd/yyyy hh:mm:ss'}}</div>
-              </div>
-
-              <hr/>
-
-              <div class="card-comment-body">
-                <span *ngIf="(comment._id !== selectedComment._id) || performDelete; else editInput">
-                  <span class="line-breaker">{{ comment.text }}</span>
                 </span>
 
-                <ng-template #editInput>
-                  <div style="color: #FF0000; padding-bottom: 5px;" *ngIf="!validComment">* Comment exceeds maximum 2000 characters.</div>
+                <div class="card-comment-header">
+                  <strong>{{ comment.author.name.first }} {{ comment.author.name.last }}</strong>
+                  commented on <strong>{{ comment.originalFilename }}:</strong>
+                  <div class="comment-date">
+                    <strong>Revision #{{ comment.revision + 1}}</strong> - {{comment.creationDate | date: 'MM/dd/yyyy hh:mm:ss'}}
+                  </div>
+                </div>
 
-                  <form #f="ngForm" (ngSubmit)="editComment(selectedComment._id, selectedComment.text)">
-                    <textarea class="form-control" [(ngModel)]="selectedComment.text" name="comment" required></textarea>
-                    <div class="text-hints">MAX length: {{ 2000 - selectedComment.text.length }} characters</div>
+                <hr/>
 
-                    <div style="padding-top: 20px;">
-                      <button type="submit" class="btn btn-dark" [disabled]="!f.form.valid">Save</button>
-                      <button type="button" class="btn btn-dark" (click)="toggleEditButton()">Cancel</button>
-                    </div>
-                  </form>
-                </ng-template>
+                <div class="card-comment-body">
+                  <span *ngIf="(comment._id !== selectedComment._id) || performDelete; else editInput">
+                    <span class="line-breaker">{{ comment.text }}</span>
+                  </span>
+
+                  <ng-template #editInput>
+                    <div style="color: #FF0000; padding-bottom: 5px;" *ngIf="!validComment">* Comment exceeds maximum 2000 characters.</div>
+
+                    <form #f="ngForm" (ngSubmit)="editComment(selectedComment._id, selectedComment.text)">
+                      <textarea class="form-control" [(ngModel)]="selectedComment.text" name="comment" required></textarea>
+                      <div class="text-hints">MAX length: {{ 2000 - selectedComment.text.length }} characters</div>
+
+                      <div style="padding-top: 20px;">
+                        <button type="submit" class="btn btn-dark" [disabled]="!f.form.valid">Save</button>
+                        <button type="button" class="btn btn-dark" (click)="toggleEditButton()">Cancel</button>
+                      </div>
+                    </form>
+                  </ng-template>
+                </div>
               </div>
             </div>
-          </div>
-        </ng-container>
+          </ng-container>
+        </span>
+
+        <ng-template #noComments>
+          <p style="padding-top: 20px;">
+            <ngb-alert class="info-message" type="info" [dismissible]="false">
+              <strong> Information: </strong> There are currently no comments yet for this revision.
+            </ngb-alert>
+          </p>
+        </ng-template>
 
       </div>
     </ng-template>
