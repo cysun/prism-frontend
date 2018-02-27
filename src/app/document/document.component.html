@@ -293,7 +293,7 @@
       <div class="container" style="padding-top: 20px;">
         <button type="button" class="btn btn-dark" (click)="openModal(newCommentModal)">New Comment</button>
 
-        <ng-container *ngFor="let comment of document.comments">
+        <ng-container *ngFor="let comment of document.comments | reverse">
           <div class="card card-container rounded-0" style="padding: 10px;">
             <div class="card-body">
 
@@ -316,7 +316,6 @@
               <hr/>
 
               <div class="card-comment-body">
-                indexing: {{comment.indexOf(selectedComment._id)}}
                 <span *ngIf="(comment._id !== selectedComment._id) || performDelete; else editInput">
                   <span class="line-breaker">{{ comment.text }}</span>
                 </span>
