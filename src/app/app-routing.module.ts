@@ -13,6 +13,7 @@ import { MinutesComponent } from './minutes/minutes.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { SettingsComponent } from './settings/settings.component';
+import { TemplateManagerComponent } from './template-manager/template-manager.component';
 
 import { PrivateComponent } from './layout/private/private.component';
 
@@ -38,6 +39,7 @@ const routes: Routes = [
       { path: 'minutes', component: MinutesComponent },
       { path: 'resources', component: ResourcesComponent },
       { path: 'settings', component: SettingsComponent },
+      { path: 'templates', component: TemplateManagerComponent },
       { path: '**', component: PageNotFoundComponent }
     ]
   }
