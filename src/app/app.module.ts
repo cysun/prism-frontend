@@ -21,6 +21,7 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { MinutesComponent } from './minutes/minutes.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { ReviewComponent } from './review/review.component';
+import { ReviewNodeComponent } from './review/review_node.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectizeModule } from 'ng-selectize';
@@ -59,6 +60,7 @@ import { TemplateManagerComponent } from './template-manager/template-manager.co
     PageNotFoundComponent,
     ResourcesComponent,
     ReviewComponent,
+    ReviewNodeComponent,
     SettingsComponent,
     PrivateComponent,
     PublicComponent,
