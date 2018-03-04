@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
-
+import { SettingsService } from '../settings/settings.service';
 
 @Injectable()
 export class Globals {
+
   /* Config for bootstrap's modal */
   options: NgbModalOptions = {
     backdrop : 'static',
@@ -26,4 +27,5 @@ export class Globals {
     maxItems: 20
   };
 
+  constructor(public settingsService: SettingsService) {}
 }
