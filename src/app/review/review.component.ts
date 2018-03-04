@@ -78,8 +78,4 @@ export class ReviewComponent implements OnInit {
       this.zone.run(() => {});
     });
   }
-
-  createNodeElement(node: ReviewNode): string {
-    return `<a class="nav-link" [routerLink]="['/document/${node.document}']">${node.title}</a>`;
-  }
 }
