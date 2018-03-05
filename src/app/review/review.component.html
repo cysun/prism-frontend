@@ -1,5 +1,5 @@
 <h1 class="display-4">{{review ? review.program.name : ''}} Review {{yearString}}</h1>
-<svg id="svg-canvas" width="960" height="506"></svg>
+<svg id="svg-canvas" width="100%" height="720"></svg>
 <hr />
 <prism-document #documentComponent [documentId]="documentId" *ngIf="documentId"></prism-document>
 <div class="jumbotron" *ngIf="!documentId">

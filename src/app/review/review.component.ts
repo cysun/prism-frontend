@@ -42,6 +42,7 @@ export class ReviewComponent implements OnInit {
   }
 
   renderGraph() {
+    console.log(this.review);
     // Create the input graph
     const g = new dagreD3.graphlib.Graph()
       .setGraph({})
@@ -60,7 +61,7 @@ export class ReviewComponent implements OnInit {
           added[prerequisiteId] = true;
         }
         g.setEdge(prerequisiteId, nodeId);
-        traverseNode(this.review.nodes[prerequisiteId]);
+        traverseNode(prerequisiteId);
       }
     }
 
