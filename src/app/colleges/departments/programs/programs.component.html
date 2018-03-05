@@ -1,3 +1,58 @@
-<p>
-  programs works!
-</p>
+
+  <table *ngIf="programs.length > 0; else emptyPrograms" class="table table-inverse">
+    <thead>
+      <tr>
+        <th>PROGRAMS</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let program of programs">
+        <td *ngIf="program._id === editedProgram"><input type="text" class="form-control" [(ngModel)]="program.name" value="{{program.name}}"></td>
+        <td *ngIf="program._id !== editedProgram">{{program.name | uppercase}}</td>
+        <td>
+          <span class="float-left">
+            <button *ngIf="program._id === editedProgram" (click)="updateProgram()" class="btn btn-outline-warning mb-1 btn-sm">
+              UPDATE
+            </button>
+            <button *ngIf="program._id !== editedProgram" (click)="editProgram(program)" class="btn btn-outline-warning mb-1 btn-sm">
+              EDIT
+            </button>
+            <button (click)="deleteProgram(program)" class="btn btn-outline-danger mb-1 btn-sm">
+              DELETE
+            </button>
+            <button *ngIf="program._id === editedProgram" (click)="cancelUpdate()" class="btn btn-outline-dark mb-1 btn-sm">
+              CANCEL
+            </button>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+<ng-template #emptyPrograms>
+  <ngb-alert type="info" [dismissible]="false">No programs exist for this department.</ngb-alert>
+</ng-template>
+
+<div class="row grid-space">
+  <span class="col-3">Add a Progam</span>
+  <div class="col-8 ui-fluid">
+    <span class="input-group">
+      <input type="text" class="form-control" [(ngModel)]="newProgram.name" placeholder="Enter a program name"/>
+      <span class="input-group-btn">
+        <button class="btn btn-success" (click)="addProgram()">+ Add</button>
+      </span>
+    </span>
+    <div class="text-hints">Enter a name for the new program.</div>
+  </div>
+</div>
+
+<div *ngIf="alerts">
+  <p *ngFor="let alert of alerts">
+    <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
+  </p>
+<div>
+<!--
+<p *ngFor="let alert of alerts">
+  <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
+</p> -->

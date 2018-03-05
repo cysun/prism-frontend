@@ -33,7 +33,7 @@ export class ProgramService {
   updateProgram(program: Program): Observable<Program> {
     const body = JSON.stringify({'_id': program._id, 'name': program.name, 'department': program.department});
     const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
-    return this.http.patch<Program>('/api/program/' + program._id, header);
+    return this.http.patch<Program>('/api/program/' + program._id, body, header);
   }
 
   getPrograms(): Observable<Program[]> {

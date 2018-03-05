@@ -5,6 +5,7 @@
       <button type="button" (click)="addCollegeDialog(addition)" class="btn btn-success btn-college">+ Add College</button>
     </div>
   </div>
+<!-- Colleges Header-->
   <h2 class="bar-text">Colleges</h2>
 </div>
 
@@ -144,6 +145,7 @@
           <th>First Name</th>
           <th>Last Name</th>
           <th>Username</th>
+          <th>Email</th>
         </tr>
       </thead>
       <tbody>
@@ -151,6 +153,7 @@
           <td>{{dean.name?.first}}</td>
           <td>{{dean.name?.last}}</td>
           <td>{{dean.username}}</td>
+          <td>{{dean.email}}</td>
         </tr>
       </tbody>
     </table>

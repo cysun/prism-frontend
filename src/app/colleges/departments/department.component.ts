@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -6,6 +6,8 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
 import { NgbModule, NgbModal, NgbModalRef, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+
+import { ProgramsComponent } from './programs/programs.component';
 
 import { DepartmentService } from './department.service';
 import { ProgramService } from './programs/program.service';
@@ -21,7 +23,9 @@ import { Program } from '../../models/program.model';
   styleUrls: ['./department.component.css']
 })
 export class DepartmentComponent implements OnInit {
+  @ViewChild(ProgramsComponent)
   @Input() collegeId: any;
+  programsComponent: ProgramsComponent;
   modal: NgbModalRef;
   options: NgbModalOptions = {
     backdrop : 'static',
@@ -226,7 +230,7 @@ export class DepartmentComponent implements OnInit {
 
   submitDepartment() {
     this.alerts = [];
-    this.department.college = this.collegeId;
+
     if (typeof(this.department.name) !== 'undefined' && this.department.name.trim().length > 0) {
       if (typeof(this.department.abbreviation) !== 'undefined' && this.department.abbreviation.trim().length > 0) {
         if (this.departments.find(item => item.name === this.department.name)) {
@@ -239,7 +243,6 @@ export class DepartmentComponent implements OnInit {
             }
           );
           this.department = new Department();
-          this.closeModal();
         }
       } else {
           this.invalidErrorMessage('empty abbreviation');
@@ -290,6 +293,7 @@ export class DepartmentComponent implements OnInit {
   }
 
 }
+
 export interface IAlert {
   type: string;
   message: string;

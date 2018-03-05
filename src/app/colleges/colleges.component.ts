@@ -36,8 +36,6 @@ export class CollegesComponent implements OnInit {
   dean: User = new User();
   deans: User[] = [];
   suggestedUsers: any[] = [];
-  filteredDeans: any[] = [];
-  filteredColleges: any[] = [];
   search = (text$: Observable<string>) =>
     text$
       .debounceTime(200)
@@ -48,6 +46,7 @@ export class CollegesComponent implements OnInit {
   constructor(private collegesService: CollegesService,
     private departmentService: DepartmentService, private router: Router, private modalService: NgbModal) { }
 
+  //Fetch colleges and users
   ngOnInit() {
     this.collegesService.getColleges().subscribe( data => {
       this.colleges = data;
@@ -59,6 +58,7 @@ export class CollegesComponent implements OnInit {
     });
   }
 
+  //Error Messaging
   invalidErrorMessage(message) {
     this.alerts = [];
     let detailMsg = '';
@@ -228,29 +228,7 @@ export class CollegesComponent implements OnInit {
     }
     return true;
   }
-
-  submitDepartment() {
-    if (typeof(this.department.name) !== 'undefined' && this.department.name.trim().length > 0) {
-      if (typeof(this.department.abbreviation) !== 'undefined' && this.department.abbreviation.trim().length > 0) {
-        if (typeof(this.department.college) !== 'undefined' && typeof(this.department.college._id) !== 'undefined') {
-          this.departmentService.addDepartment(this.department).subscribe(
-            data => {
-              this.departments.push(data);
-              this.departments = this.departments.slice(0);
-            }
-          );
-          this.department = new Department();
-        } else {
-          this.invalidErrorMessage('empty college');
-        }
-      } else {
-        this.invalidErrorMessage('empty abbreviation');
-      }
-    } else {
-      this.invalidErrorMessage('empty department');
-    }
-  }
-
+  
   /* Give a deans' member list of IDs and return their corresponding member objects */
   getDeansObject(deanList: any[]): any[] {
     const displayList = [];

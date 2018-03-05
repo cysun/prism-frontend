@@ -21,7 +21,7 @@ export class DepartmentService {
   }
 
   addDepartment(department: Department): Observable<Department> {
-    const body = JSON.stringify({'_id': department._id, 'name': department.name, 'abbreviation': department.abbreviation, 'college': department.college, 'chairs': department.chairs});
+    const body = JSON.stringify({'name': department.name, 'abbreviation': department.abbreviation, 'college': department.college});
     const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
     return this.http.post<Department>('/api/department', body, header);
   }
