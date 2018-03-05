@@ -9,8 +9,12 @@ export class DashboardService {
 
   constructor(private http: HttpClient) { }
 
-  getRootActionLogs(): Observable<ActionLogger[]> {
-    return this.http.get<ActionLogger[]>('/api/actions');
+  getRootActionLogs(pageNumber: number): Observable<ActionLogger[]> {
+    return this.http.get<ActionLogger[]>('/api/actions?page=' + pageNumber);
+  }
+
+  getNumberOfActions(): Observable<any> {
+    return this.http.get<any>('/api/actions?count=1');
   }
 
 }

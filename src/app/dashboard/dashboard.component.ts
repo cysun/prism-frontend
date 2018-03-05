@@ -12,22 +12,30 @@ import { DashboardService } from './dashboard.service';
 export class DashboardComponent implements OnInit {
   logHistory: ActionLogger[] = [];
   userActions: ActionLogger[] = [];
+  displayHistory: ActionLogger[] = [];
 
+  allLogs = [];
+
+  page = 1;
+  resultPage = 0;
+  itemsPerPage = 20;
+  totalLogs: number;
+
+  testIndex = 0;
   selectedOption = 'All';
 
   public filterOptions = ['All', 'College', 'Department', 'Document', 'Group',
-  'Program', 'Review', 'User'];
+  'Program', 'Review'];
 
   constructor(private dashboardService: DashboardService) { }
 
   ngOnInit() {
-    this.getActionLogs();
+    this.numberOfActions();
+    this.loadPage(0);
   }
 
   searchUserActions(username: string) {
     const filteredList = [];
-
-    console.log('selected option is: ' + this.selectedOption)
 
     if (username && (username.trim().length > 0)) {
       this.getActionLogs().then( () => {
@@ -49,10 +57,42 @@ export class DashboardComponent implements OnInit {
 
   getActionLogs() {
     return new Promise((resolve, reject) => {
-      this.dashboardService.getRootActionLogs().subscribe( data => {
+      this.dashboardService.getRootActionLogs(this.resultPage).subscribe( data => {
         this.logHistory = data;
         resolve();
       })
     });
+  }
+
+  loadPage(page: number) {
+    const beginningItem = (this.page - 1) * this.itemsPerPage; // last value of the last page
+    const endingItem = this.page * this.itemsPerPage; // last value of the current page
+
+    console.log('beginning: ' + beginningItem + ' and ending: ' + endingItem);
+
+    if (endingItem > (this.itemsPerPage * this.allLogs.length)) {
+      this.resultPage = this.allLogs.length + 1;
+
+      return new Promise((resolve, reject) => {
+        this.dashboardService.getRootActionLogs(this.resultPage - 1).subscribe( data => {
+          this.allLogs.push(data);
+          this.displayHistory = this.allLogs[this.resultPage - 1];
+          console.log(this.allLogs);
+          resolve();
+        })
+      });
+    } else {
+      this.resultPage = (beginningItem / this.itemsPerPage);
+      console.log('Calculation: ' + beginningItem + ' / ' + this.itemsPerPage + ' = Page #' + this.resultPage)
+    }
+    this.displayHistory = this.allLogs[this.resultPage];
+    console.log('current resultPage: ' + (this.resultPage));
+  }
+
+  numberOfActions() {
+    this.dashboardService.getNumberOfActions().subscribe( data => {
+      console.log('total cost: ' + data.count)
+      this.totalLogs = data.count;
+    })
   }
 }
