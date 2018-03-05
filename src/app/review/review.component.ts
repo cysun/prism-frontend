@@ -42,7 +42,6 @@ export class ReviewComponent implements OnInit {
   }
 
   renderGraph() {
-    console.log(this.review);
     // Create the input graph
     const g = new dagreD3.graphlib.Graph()
       .setGraph({})
@@ -74,7 +73,7 @@ export class ReviewComponent implements OnInit {
     g.nodes().forEach(v => {
       const node = g.node(v);
 
-      node.rx = node.ry = 5;
+      node.rx = node.ry = 10;
     });
 
     const render = new dagreD3.render();
@@ -94,7 +93,7 @@ export class ReviewComponent implements OnInit {
     });
 
     const xCenterOffset = (svg.attr('width') - g.graph().width) / 2;
-    svgGroup.attr('transform', 'translate(' + xCenterOffset + ', 20)');
+    svgGroup.attr('transform', 'translate(' + xCenterOffset + ', 30)');
     svg.attr('height', g.graph().height + 40);
     this.zone.run(() => {});
   }
