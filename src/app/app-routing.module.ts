@@ -39,7 +39,7 @@ const routes: Routes = [
       { path: 'document/:id', component: DocumentComponent },
       { path: 'minutes', component: MinutesComponent },
       { path: 'resources', component: ResourcesComponent },
-      { path: 'review', component: ReviewComponent },
+      { path: 'review/:id', component: ReviewComponent },
       { path: 'settings', component: SettingsComponent },
       { path: 'templates', component: TemplateManagerComponent },
       { path: '**', component: PageNotFoundComponent }

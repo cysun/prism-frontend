@@ -1,4 +1,8 @@
-<p>Review Component</p>
-<input [(ngModel)]="reviewId" type="text" />
-<button (click)="renderGraph()" class="btn btn-success">Render Graph</button>
+<h1 class="display-4">{{review ? review.program.name : ''}} Review {{yearString}}</h1>
 <svg id="svg-canvas" width="960" height="506"></svg>
+<hr />
+<prism-document #documentComponent [documentId]="documentId" *ngIf="documentId"></prism-document>
+<div class="jumbotron" *ngIf="!documentId">
+  <h1 class="display-4">No document selected</h1>
+  <p class="lead">Click on a document from the review to get started</p>
+</div>
