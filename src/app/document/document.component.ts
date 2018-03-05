@@ -62,7 +62,7 @@ export class DocumentComponent implements OnInit {
     this.documentService.retrieveDocument(this.documentId).subscribe( data => {
       this.document = data;
 
-      if (this.document.revisions) {
+      if (this.document.revisions && this.document.revisions.length !== 0) {
         this.selectedOption = this.document.revisions.slice(0).reverse().find( item =>
           item.message !== 'Deleted revision')._id;
 
