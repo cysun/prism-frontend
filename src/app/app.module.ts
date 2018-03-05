@@ -37,6 +37,7 @@ import { DashboardService } from './dashboard/dashboard.service';
 import { DepartmentService } from './colleges/departments/department.service';
 import { DocumentService } from './document/document.service';
 import { GroupManagerService } from './group-manager/group-manager.service';
+import { ProgramService } from './colleges/departments/programs/program.service';
 import { SettingsService } from './settings/settings.service';
 
 import { Globals } from './shared/app.global';
