@@ -21,6 +21,7 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { MinutesComponent } from './minutes/minutes.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
+import { ProgramsComponent } from './colleges/departments/programs/programs.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectizeModule } from 'ng-selectize';
 
@@ -58,6 +59,7 @@ import { Globals } from './shared/app.global';
     PrivateComponent,
     PublicComponent,
     ReversePipe,
+    ProgramsComponent,
   ],
   imports: [
     NgbModule.forRoot(),
@@ -79,6 +81,7 @@ import { Globals } from './shared/app.global';
     DepartmentService,
     Globals,
     GroupManagerService,
+    ProgramService,
     SettingsService,
     {
       provide: HTTP_INTERCEPTORS,
