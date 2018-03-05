@@ -18,7 +18,7 @@ export class DashboardComponent implements OnInit {
 
   page = 1;
   resultPage = 0;
-  itemsPerPage = 25;
+  itemsPerPage = 20;
   totalLogs: number;
 
   testIndex = 0;
@@ -68,44 +68,30 @@ export class DashboardComponent implements OnInit {
     const beginningItem = (this.page - 1) * this.itemsPerPage; // last value of the last page
     const endingItem = this.page * this.itemsPerPage; // last value of the current page
 
-    // if (endingItem > (150 * (this.resultPage + 1))) {
+    console.log('beginning: ' + beginningItem + ' and ending: ' + endingItem);
 
-    /* If we currently don't have a download of the next set of action logs */
-    if (endingItem > (150 * (this.resultPage))) {
-      this.resultPage += 1;
-      this.testIndex += 1;
+    if (endingItem > (this.itemsPerPage * this.allLogs.length)) {
+      this.resultPage = this.allLogs.length + 1;
 
       return new Promise((resolve, reject) => {
         this.dashboardService.getRootActionLogs(this.resultPage - 1).subscribe( data => {
           this.allLogs.push(data);
-
-          console.log('what is the: ' + (this.allLogs.length - 1))
-          this.displayHistory = this.allLogs[this.allLogs.length - 1].slice(beginningItem, endingItem);
+          this.displayHistory = this.allLogs[this.resultPage - 1];
           console.log(this.allLogs);
           resolve();
         })
       });
+    } else {
+      this.resultPage = (beginningItem / this.itemsPerPage);
+      console.log('Calculation: ' + beginningItem + ' / ' + this.itemsPerPage + ' = Page #' + this.resultPage)
     }
-
-    // } else if (beginningItem < (150 * this.resultPage)) {
-    //   console.log('subtracting is called')
-    //   this.testIndex -= 1;
-    //
-    //
-    //   return;
-    //
-    //
-    // } else {
-    //
-    // }
-
-    this.displayHistory = this.allLogs[this.testIndex - 1].slice(beginningItem, endingItem);
-    console.log('front page: ' + beginningItem + ' and back page: ' + endingItem);
-    console.log('current resultPage: ' + (this.resultPage - 1));
+    this.displayHistory = this.allLogs[this.resultPage];
+    console.log('current resultPage: ' + (this.resultPage));
   }
 
   numberOfActions() {
     this.dashboardService.getNumberOfActions().subscribe( data => {
+      console.log('total cost: ' + data.count)
       this.totalLogs = data.count;
     })
   }

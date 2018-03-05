@@ -43,18 +43,6 @@
           </div>
         </div>
 
-        <div class="pagination-bar">
-          <ngb-pagination class="d-flex justify-content-center"
-                          [collectionSize]="totalLogs"
-                          [pageSize]="itemsPerPage"
-                          [maxSize]="5"
-                          [(page)]="page" [rotate]="true"
-                          [ellipses]="true"
-                          [boundaryLinks]="true"
-                          (pageChange)="loadPage($event)">
-          </ngb-pagination>
-        </div>
-
         <ng-container *ngFor="let action of displayHistory; let idx = index">
           <div class="card card-container" *ngIf="action.date && action.user">
             <div class="card-body">
@@ -73,6 +61,17 @@
           </div>
         </ng-container>
 
+        <div class="pagination-bar">
+          <ngb-pagination class="d-flex justify-content-center"
+                          [collectionSize]="totalLogs"
+                          [pageSize]="itemsPerPage"
+                          [maxSize]="5"
+                          [(page)]="page" [rotate]="true"
+                          [ellipses]="true"
+                          [boundaryLinks]="true"
+                          (pageChange)="loadPage($event)">
+          </ngb-pagination>
+        </div>
       </div>
     </ng-template>
   </ngb-tab>
