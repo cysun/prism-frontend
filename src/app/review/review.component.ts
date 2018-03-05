@@ -81,7 +81,16 @@ export class ReviewComponent implements OnInit {
     const svg = d3.select('svg'),
         svgGroup = svg.append('g');
 
+    const zoom = d3.zoom().on('zoom', function() {
+      svgGroup.attr('transform', d3.event.transform);
+    });
+    svg.call(zoom);
+
     render(d3.select('svg g'), g);
+
+    const initialScale = 0.75;
+    svg.call(zoom.transform, d3.zoomIdentity.translate((svg.attr('width') - g.graph().width * initialScale) / 2, 20).scale(initialScale));
+
     const componentScope = this;
     d3.select('svg g').selectAll('g.node').each(function(nodeId) {
       this.addEventListener('click', function() {
@@ -92,8 +101,6 @@ export class ReviewComponent implements OnInit {
       });
     });
 
-    const xCenterOffset = (svg.attr('width') - g.graph().width) / 2;
-    svgGroup.attr('transform', 'translate(' + xCenterOffset + ', 30)');
     svg.attr('height', g.graph().height + 40);
     this.zone.run(() => {});
   }
