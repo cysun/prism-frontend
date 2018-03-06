@@ -50,7 +50,7 @@
       <div class="revision-details">
         <i class="fa fa-icon fa-edit"></i><strong>Revision Message:</strong> {{ currentRevision.message }}<br/>
         <i class="fa fa-icon fa-calendar"></i><strong>Date Uploaded:</strong> {{ currentRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss' }}<br/>
-        <i class="fa fa-icon fa-user"></i><strong>Uploader:</strong> {{ currentRevision.uploader.username }}<br/>
+        <i class="fa fa-icon fa-user"></i><strong>Uploader:</strong> {{ currentRevision.uploader?.username }}<br/>
         <i class="fa fa-icon fa-file-o"></i><strong>File Name:</strong> {{ currentRevision.originalFilename }}
       </div>
     </div>
@@ -187,7 +187,7 @@
               <div class="document-message">{{ mainRevision ? mainRevision.message : 'Currently no revision file'}}</div>
               <div class="document-info" *ngIf="mainRevision; else emptyRevision">
                 <div>Revision #{{ totalIndices }}</div>
-                <strong>{{mainRevision.uploader.username}}</strong> uploaded
+                <strong>{{mainRevision.uploader?.username}}</strong> uploaded
                 <strong>{{ mainRevision.originalFilename }}</strong>
                 on {{mainRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}
               </div>
@@ -233,7 +233,7 @@
                 <div class="document-message">{{revision.message}}</div>
                 <div class="document-info">
                   <div>Revision #{{ totalIndices - idx }}</div>
-                  <strong>{{revision.uploader.username}}</strong> uploaded
+                  <strong>{{revision.uploader?.username}}</strong> uploaded
                   <strong>{{ revision.originalFilename }}</strong>
                   on {{revision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}
                 </div>
