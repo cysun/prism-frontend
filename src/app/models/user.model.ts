@@ -8,21 +8,9 @@ export class User {
     last: string;
   };
 
+  groups: any[];
+
   internal: boolean;
   root: boolean;
   disabled: boolean;
-  samlType: string;
-  passwordHash: string;
-
-  config: {
-    type: {
-      email: {
-        type: {
-          documentFinalized: boolean;
-          newComment: boolean;
-          meetingChange: boolean;
-        }
-      }
-    }
-  };
 }

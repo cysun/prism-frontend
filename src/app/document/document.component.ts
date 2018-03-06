@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
+import { Comment } from '../models/comment.model';
+import { Document } from '../models/document.model';
+import { Revision } from '../models/revision.model';
 import { User } from '../models/user.model';
 import { Globals } from '../shared/app.global';
 
-import { Document } from '../models/document.model';
 import { DocumentService } from './document.service';
 
 import { saveAs } from 'file-saver';
@@ -22,9 +24,9 @@ export class DocumentComponent implements OnInit {
   alert: any;
 
   document: Document = new Document();
-  currentRevision: any[];
-  mainRevision: any[];
-  selectedComment = [];
+  currentRevision: Revision = new Revision();
+  mainRevision: Revision = new Revision();
+  selectedComment: Comment = new Comment();
 
   validComment = true;
   performDelete = false;
@@ -96,7 +98,7 @@ export class DocumentComponent implements OnInit {
       const copyText = this.document.comments.find(item => item._id === commentId);
       this.selectedComment = JSON.parse(JSON.stringify(copyText));
     } else {
-      this.selectedComment = [];
+      this.selectedComment = new Comment();
     }
   }
 
@@ -267,9 +269,11 @@ export class DocumentComponent implements OnInit {
         revision._id === this.selectedOption);
 
       const getFilename = this.document.revisions[findRevisionNum].originalFilename;
+      const insertFilename = getFilename ?
+        getFilename : this.document.revisions[findRevisionNum].message;
 
       this.documentService.addComment(this.document._id, this.textComment,
-        findRevisionNum, getFilename).subscribe( data => {
+        findRevisionNum, insertFilename).subscribe( data => {
         console.log(data);
         this.retrieveDocument();
         this.modal.close();
@@ -305,7 +309,7 @@ export class DocumentComponent implements OnInit {
 
     this.documentService.deleteComment(this.document._id, findCommentIndex).subscribe( data => {
       this.document.comments.splice(findCommentIndex, 1);
-      this.selectedComment = [];
+      this.selectedComment = new Comment();
       this.closeModal();
     })
   }
