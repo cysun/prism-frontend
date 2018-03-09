@@ -24,7 +24,8 @@ export class Globals {
     plugins: ['dropdown_direction', 'remove_button'],
     dropdownDirection: 'down',
     selectOnTab: true,
-    maxItems: 20
+    sortField: 'text',
+    maxItems: 5
   };
 
   constructor(public settingsService: SettingsService) {}
