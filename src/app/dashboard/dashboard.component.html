@@ -43,13 +43,13 @@
           </div>
         </div>
 
-        <ng-container *ngFor="let action of displayHistory; let idx = index">
+        <ng-container *ngFor="let action of displayHistory">
           <div class="card card-container" *ngIf="action.date && action.user">
             <div class="card-body">
               <div class="card-header-title">
                 <div class="card-message">
                   <a routerLink="/{{action.type}}/{{action.type !== 'group' ? action.object : ''}}">
-                    {{idx+1}}. {{action.user.name.first}} {{action.user.name.last }} {{ action.text }} {{ action.label }}
+                    {{action.user.name.first}} {{action.user.name.last }} {{ action.text }} {{ action.label }}
                   </a>
                 </div>
 

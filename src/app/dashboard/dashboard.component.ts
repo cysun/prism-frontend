@@ -34,37 +34,49 @@ export class DashboardComponent implements OnInit {
     this.loadPage(0);
   }
 
-  searchUserActions(username: string) {
+  searchUserActions(username?: string) {
     const filteredList = [];
 
+    this.numberOfActions(username);
+
     if (username && (username.trim().length > 0)) {
-      this.getActionLogs().then( () => {
-        for (let i = 0; i < this.logHistory.length; i++) {
-          if ((this.selectedOption === 'All') && (this.logHistory[i].user)) {
-            if (username.toLowerCase() === (this.logHistory[i].user.username).toLowerCase()) {
-              filteredList.push(this.logHistory[i]);
-            }
-          } else if ((this.selectedOption.toLowerCase() === this.logHistory[i].type) && (this.logHistory[i].user)) {
-            if (username.toLowerCase() === (this.logHistory[i].user.username).toLowerCase()) {
-              filteredList.push(this.logHistory[i]);
-            }
+      this.getUserActionLogs(username).then( (result: ActionLogger[]) => {
+
+        for (let i = 0; i < result.length; i++) {
+          if (this.selectedOption === 'All') {
+            filteredList.push(result[i]);
+          } else if (this.selectedOption.toLowerCase() === result[i].type) {
+            filteredList.push(result[i]);
           }
         }
-        this.logHistory = filteredList;
+        this.displayHistory = filteredList;
       })
     }
   }
 
-  getActionLogs() {
+  getUserActionLogs(username?: string) {
+    if (username) {
+      return new Promise((resolve, reject) => {
+        this.dashboardService.getUserActionLogs(username, (this.resultPage - 1)).subscribe( data => {
+          resolve(data);
+        })
+      });
+    }
     return new Promise((resolve, reject) => {
-      this.dashboardService.getRootActionLogs(this.resultPage).subscribe( data => {
-        this.logHistory = data;
+      this.dashboardService.getRootActionLogs(this.resultPage - 1).subscribe( data => {
+        this.allLogs.push(data);
+        this.displayHistory = this.allLogs[this.resultPage - 1];
+        // console.log(this.allLogs);
         resolve();
       })
     });
+
+
+
+
   }
 
-  loadPage(page: number) {
+  loadPage(page: number, ) {
     const beginningItem = (this.page - 1) * this.itemsPerPage; // last value of the last page
     const endingItem = this.page * this.itemsPerPage; // last value of the current page
 
@@ -73,14 +85,17 @@ export class DashboardComponent implements OnInit {
     if (endingItem > (this.itemsPerPage * this.allLogs.length)) {
       this.resultPage = this.allLogs.length + 1;
 
-      return new Promise((resolve, reject) => {
-        this.dashboardService.getRootActionLogs(this.resultPage - 1).subscribe( data => {
-          this.allLogs.push(data);
-          this.displayHistory = this.allLogs[this.resultPage - 1];
-          console.log(this.allLogs);
-          resolve();
-        })
-      });
+      this.getUserActionLogs();
+
+      // return new Promise((resolve, reject) => {
+      //   this.dashboardService.getRootActionLogs(this.resultPage - 1).subscribe( data => {
+      //     this.allLogs.push(data);
+      //     this.displayHistory = this.allLogs[this.resultPage - 1];
+      //     console.log(this.allLogs);
+      //     resolve();
+      //   })
+      // });
+
     } else {
       this.resultPage = (beginningItem / this.itemsPerPage);
       console.log('Calculation: ' + beginningItem + ' / ' + this.itemsPerPage + ' = Page #' + this.resultPage)
@@ -89,10 +104,15 @@ export class DashboardComponent implements OnInit {
     console.log('current resultPage: ' + (this.resultPage));
   }
 
-  numberOfActions() {
-    this.dashboardService.getNumberOfActions().subscribe( data => {
+  numberOfActions(username?: string) {
+    this.dashboardService.getNumberOfUserLogs(username).subscribe( data => {
       console.log('total cost: ' + data.count)
       this.totalLogs = data.count;
+
+      const totalNumOfPages = Math.ceil(this.totalLogs / this.itemsPerPage)
+      // this.displayHistory = new Array(totalNumOfPages);
+
+      console.log(this.displayHistory)
     })
   }
 }
