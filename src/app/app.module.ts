@@ -37,6 +37,7 @@ import { DepartmentService } from './colleges/departments/department.service';
 import { DocumentService } from './document/document.service';
 import { GroupManagerService } from './group-manager/group-manager.service';
 import { SettingsService } from './settings/settings.service';
+import { SharedService } from './shared/shared.service';
 import { TemplateManagerService } from './template-manager/template-manager.service';
 import { UserSelectorService } from './user-selector/user-selector.service';
 
@@ -86,6 +87,7 @@ import { UserSelectorComponent } from './user-selector/user-selector.component';
     Globals,
     GroupManagerService,
     SettingsService,
+    SharedService,
     TemplateManagerService,
     UserSelectorService,
     {
