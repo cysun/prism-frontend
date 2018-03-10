@@ -4,5 +4,5 @@ import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class SharedService {
-  searchUser: string;
+  searchUser: string[];
 }

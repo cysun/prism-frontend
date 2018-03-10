@@ -10,7 +10,7 @@ import { UserSelectorService } from './user-selector.service';
   styleUrls: ['./user-selector.component.css']
 })
 export class UserSelectorComponent implements OnInit {
-  filteredMembers: string;
+  filteredMembers = [];
   suggestedUsers = [];
 
   constructor(private globals: Globals,

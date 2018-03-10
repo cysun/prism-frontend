@@ -1,5 +1,6 @@
 <ng-selectize [options]="suggestedUsers"
               [config]="globals.config"
+              placeholder="Search for..."
               [(ngModel)]="filteredMembers"
               (ngModelChange)="submitUser($event)">
 </ng-selectize>
