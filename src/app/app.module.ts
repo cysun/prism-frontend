@@ -30,9 +30,7 @@ import { PublicComponent } from './layout/public/public.component';
 import { PrivateComponent } from './layout/private/private.component';
 import { CollegesService } from './colleges/colleges.service';
 import { DepartmentService } from './colleges/departments/department.service';
-import { GroupManagerService } from './group-manager/group-manager.service';
 import { ProgramService } from './colleges/departments/programs/program.service';
-import { SettingsService } from './settings/settings.service';
 
 import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
@@ -51,7 +49,6 @@ import { Globals } from './shared/app.global';
     CollegesComponent,
     CommitteeComponent,
     DashboardComponent,
-
     PageNotFoundComponent,
     SettingsComponent,
     CalendarComponent,
