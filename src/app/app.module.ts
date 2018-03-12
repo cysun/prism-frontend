@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -22,7 +23,7 @@ import { ResourcesComponent } from './resources/resources.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
 import { ProgramsComponent } from './colleges/departments/programs/programs.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AutoCompleteModule } from 'primeng/primeng';
+import { NgSelectizeModule } from 'ng-selectize';
 
 import { LoginComponent } from './login/login.component';
 import { PublicComponent } from './layout/public/public.component';
@@ -36,7 +37,12 @@ import { SettingsService } from './settings/settings.service';
 import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
 import { AuthService } from './login/auth.service';
+import { DashboardService } from './dashboard/dashboard.service';
 import { DocumentService } from './document/document.service';
+import { GroupManagerService } from './group-manager/group-manager.service';
+import { SettingsService } from './settings/settings.service';
+import { Globals } from './shared/app.global';
+
 
 @NgModule({
   declarations: [
@@ -68,13 +74,13 @@ import { DocumentService } from './document/document.service';
   ],
   imports: [
     NgbModule.forRoot(),
+    NgSelectizeModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    AutoCompleteModule,
   ],
   providers: [
     AuthGuard,
@@ -82,14 +88,20 @@ import { DocumentService } from './document/document.service';
     HttpClientModule,
     CollegesService,
     DepartmentService,
+    DashboardService,
     DocumentService,
+    Globals,
     GroupManagerService,
     ProgramService,
     SettingsService,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
+      useFactory: function(router: Router) {
+        return new AuthInterceptor(router);
+      },
+      // useClass: AuthInterceptor,
+      multi: true,
+      deps: [Router]
     }
   ],
   bootstrap: [AppComponent]
