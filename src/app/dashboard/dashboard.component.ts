@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { User } from '../models/user.model';
+
 import { ActionLogger } from '../models/action-logger.model';
 import { DashboardService } from './dashboard.service';
 import { SharedService } from '../shared/shared.service';
@@ -11,6 +13,7 @@ import { SharedService } from '../shared/shared.service';
 })
 
 export class DashboardComponent implements OnInit {
+  currentUser: User = new User();
   logHistory: ActionLogger[] = [];
   userActions: ActionLogger[] = [];
   displayHistory: ActionLogger[] = [];
@@ -32,7 +35,8 @@ export class DashboardComponent implements OnInit {
               private sharedService: SharedService) { }
 
   ngOnInit() {
-    this.numberOfActions();
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.numberOfActions(this.currentUser._id);
     this.loadPage(0);
   }
 
@@ -65,7 +69,9 @@ export class DashboardComponent implements OnInit {
     if (username) {
       return new Promise((resolve, reject) => {
         this.dashboardService.getUserActionLogs(username, (this.resultPage - 1)).subscribe( data => {
-          resolve(data);
+          this.allLogs.push(data);
+          this.displayHistory = this.allLogs[this.resultPage - 1];
+          resolve();
         })
       });
     }
@@ -89,7 +95,7 @@ export class DashboardComponent implements OnInit {
     if (endingItem > (this.itemsPerPage * this.allLogs.length)) {
       this.resultPage = this.allLogs.length + 1;
 
-      this.getUserActionLogs();
+      this.getUserActionLogs(this.currentUser._id);
 
     } else {
       this.resultPage = (beginningItem / this.itemsPerPage);
