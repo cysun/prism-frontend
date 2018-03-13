@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
   itemsPerPage = 20;
   totalLogs: number;
 
-  testIndex = 0;
+  isAdmin: boolean;
   selectedOption = 'All';
 
   public filterOptions = ['All', 'College', 'Department', 'Document', 'Group',
@@ -36,6 +36,9 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    console.log(JSON.stringify(this.currentUser.groups))
+
+    this.isAdmin = this.currentUser.groups.some( x => x.name === 'Administrators')
     this.numberOfActions(this.currentUser._id);
     this.loadPage(0);
   }
@@ -71,7 +74,7 @@ export class DashboardComponent implements OnInit {
         this.dashboardService.getUserActionLogs(username, (this.resultPage - 1)).subscribe( data => {
           this.allLogs.push(data);
           this.displayHistory = this.allLogs[this.resultPage - 1];
-          resolve();
+          resolve(data);
         })
       });
     }
