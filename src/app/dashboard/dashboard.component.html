@@ -26,8 +26,7 @@
         <div class="search-bar" *ngIf="isAdmin">
           <div class="form-row">
             <div class="form-group col-md-7">
-              <prism-user-selector></prism-user-selector>
-              <!-- <input type="text" class="form-control rounded-0" placeholder="Search for..." [(ngModel)]="user"> -->
+              <prism-user-selector [configType]="'single'"></prism-user-selector>
               <div class="text-hints">Search for a user to return all their action history.</div>
             </div>
 

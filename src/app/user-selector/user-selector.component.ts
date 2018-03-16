@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { Globals } from '../shared/app.global';
 import { SharedService } from '../shared/shared.service';
@@ -10,6 +10,8 @@ import { UserSelectorService } from './user-selector.service';
   styleUrls: ['./user-selector.component.css']
 })
 export class UserSelectorComponent implements OnInit {
+  @Input() configType: string;
+
   filteredMembers = [];
   suggestedUsers = [];
 
