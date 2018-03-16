@@ -32,7 +32,7 @@ const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'calendar', component: CalendarComponent },
-      { path: 'colleges', component: CollegesComponent },
+      { path: 'college', component: CollegesComponent },
       { path: 'group', component: CommitteeComponent },
       { path: 'document', component: DocumentComponent },
       { path: 'document/:id', component: DocumentComponent },

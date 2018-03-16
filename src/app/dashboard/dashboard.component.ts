@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { User } from '../models/user.model';
 
@@ -33,18 +34,25 @@ export class DashboardComponent implements OnInit {
   'Program', 'Review'];
 
   constructor(private dashboardService: DashboardService,
+              private router: Router,
               private sharedService: SharedService) { }
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     console.log(JSON.stringify(this.currentUser.groups))
 
-
-
     this.isAdmin = this.currentUser.groups.some( x => x.name === 'Administrators')
     this.numberOfActions(this.currentUser._id);
 
     this.loadPage(this.page);
+  }
+
+  goToLink(actionType: string, actionId: string) {
+    if (actionType === 'document' || actionType === 'review') {
+      this.router.navigate ([`${ actionType }/${actionId}`]);
+    } else {
+      this.router.navigate ([`${ actionType }`]);
+    }
   }
 
   searchUserActions(username?: string) {
