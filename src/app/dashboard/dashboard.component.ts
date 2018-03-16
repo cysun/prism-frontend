@@ -24,6 +24,7 @@ export class DashboardComponent implements OnInit {
   resultPage = 0;
   itemsPerPage = 20;
   totalLogs: number;
+  totalNumOfPages: number;
 
   isAdmin: boolean;
   selectedOption = 'All';
@@ -38,9 +39,12 @@ export class DashboardComponent implements OnInit {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     console.log(JSON.stringify(this.currentUser.groups))
 
+
+
     this.isAdmin = this.currentUser.groups.some( x => x.name === 'Administrators')
     this.numberOfActions(this.currentUser._id);
-    this.loadPage(0);
+
+    this.loadPage(this.page);
   }
 
   searchUserActions(username?: string) {
@@ -51,7 +55,6 @@ export class DashboardComponent implements OnInit {
 
     if (user) {
       this.getUserActionLogs(user).then( (result: ActionLogger[]) => {
-
         console.log('what is user: ' + user)
 
         for (let i = 0; i < result.length; i++) {
@@ -71,9 +74,11 @@ export class DashboardComponent implements OnInit {
     // return list of actions of a specific user
     if (username) {
       return new Promise((resolve, reject) => {
-        this.dashboardService.getUserActionLogs(username, (this.resultPage - 1)).subscribe( data => {
-          this.allLogs.push(data);
-          this.displayHistory = this.allLogs[this.resultPage - 1];
+        this.dashboardService.getUserActionLogs(username, (this.resultPage)).subscribe( data => {
+          this.allLogs[this.resultPage] = data;
+          this.displayHistory = this.allLogs[this.resultPage];
+
+          console.log(this.allLogs);
           resolve(data);
         })
       });
@@ -81,39 +86,41 @@ export class DashboardComponent implements OnInit {
 
     // return list of all recent actions
     return new Promise((resolve, reject) => {
-      this.dashboardService.getRootActionLogs(this.resultPage - 1).subscribe( data => {
-        this.allLogs.push(data);
-        this.displayHistory = this.allLogs[this.resultPage - 1];
+      this.dashboardService.getRootActionLogs(this.resultPage ).subscribe( data => {
+        this.allLogs[this.resultPage] = data;
+        this.displayHistory = this.allLogs[this.resultPage];
+
+        console.log(this.allLogs);
         resolve();
       })
     });
   }
 
   loadPage(page: number) {
-    const beginningItem = (this.page - 1) * this.itemsPerPage; // last value of the last page
-    const endingItem = this.page * this.itemsPerPage; // last value of the current page
-
-    console.log('beginning: ' + beginningItem + ' and ending: ' + endingItem);
-
-    if (endingItem > (this.itemsPerPage * this.allLogs.length)) {
-      this.resultPage = this.allLogs.length + 1;
-
+    if (this.allLogs[page - 1] == null) {
+      this.resultPage = page - 1;
       this.getUserActionLogs(this.currentUser._id);
 
     } else {
-      this.resultPage = (beginningItem / this.itemsPerPage);
+      this.resultPage = page - 1;
+
+      const beginningItem = (this.page) * this.itemsPerPage; // last value of the last page
+      const endingItem = this.page * this.itemsPerPage; // last value of the current page
+
       console.log('Calculation: ' + beginningItem + ' / ' + this.itemsPerPage + ' = Page #' + this.resultPage)
     }
     this.displayHistory = this.allLogs[this.resultPage];
     console.log('current resultPage: ' + (this.resultPage));
   }
 
+
   numberOfActions(username?: string) {
     this.dashboardService.getNumberOfUserLogs(username).subscribe( data => {
       console.log('total cost: ' + data.count)
       this.totalLogs = data.count;
 
-      const totalNumOfPages = Math.ceil(this.totalLogs / this.itemsPerPage)
+      this.totalNumOfPages = Math.ceil(this.totalLogs / this.itemsPerPage)
+      this.allLogs = new Array(this.totalNumOfPages).fill(null);
     })
   }
 }
