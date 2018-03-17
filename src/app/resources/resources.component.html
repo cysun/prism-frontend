@@ -1,10 +1,129 @@
-<div class="container-fluid">
-  <div class="page-header">
-    <h1 class="header-te">PRS Resources</h1>
-    <span><p>[count] item(s)</p></span>
+<!-- Add resource button-->
+<div class="page-header">
+  <div class="btn-toolbar pull-right">
+    <div class="btn-group">
+      <button type="button" (click)="downloadResources()" class="btn btn-md btn-primary vertical-space">Download All</button>
+    </div>
+    <div class="btn-group">
+      <button type="button" (click)="open(newResourceModal)" class="btn btn-md btn-success vertical-space">New</button>
+    </div>
   </div>
-  <div class="search-container">
-    <input type="text" placeholder="Search Your Resources">
-    <button><i class="fa fa-search"></i></button>
-  <div>
+  <h1 class="header-text">PRS Resources</h1>
+</div>
+<div class="container">
+  <div class="row">
+    <span class="search-container">
+      <input type="text" placeholder="Search Your Resources">
+      <button><i class="fa fa-search"></i></button>
+    </span>
+    <span class="counter"><p>[count] item(s)</p></span>
+  </div>
+</div>
+
+<!-- Modal for adding new resource -->
+<ng-template #newResourceModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Upload New Resource</h5>
+  </div>
+  <form #f="ngForm" (ngSubmit)="uploadResource()">
+    <div class="modal-body">
+      <div *ngIf="alert">
+        <ngb-alert type="danger" [dismissible]="false"><i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}</ngb-alert>
+      </div>
+      <div class="modal-message">
+
+        <div class="custom-file">
+          <input name="file" type="file" class="custom-file-input"
+          accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          (change)="onFileChange($event)">
+
+          <label class="custom-file-label">
+            {{ fileName ? fileName : 'Choose a file'}}
+          </label>
+          <div class="text-hints">Click on browse to attach a file.</div>
+        </div>
+
+        <div class="file-title">
+          <input type="text" class="form-control"
+          [(ngModel)]="title" name="file-title"
+          placeholder="Enter the title of this resource" required>
+          <div class="text-hints">Type a title for the new resource.</div>
+        </div>
+
+        <div class="file-message">
+          <input type="text" class="form-control"
+          [(ngModel)]="message" name="file-message"
+          placeholder="Enter a message about the resource" required>
+          <div class="text-hints">Type a brief message about the new resource.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success" [disabled]="!f.form.valid">Upload</button>
+      <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+    </div>
+  </form>
+</ng-template>
+
+
+<!-- Display all resources -->
+<div class="grid-space">
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th scope="col" style="width:4%"></th>
+        <th scope="col" style="width:52%">Title</th>
+        <th scope="col" style="width:8%">File Extension</th>
+        <th scope="col" style="width:26%">Uploaded By</th>
+        <th scope="col" style="width:10%">Date Uploaded</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="checkbox"></td>
+        <td>Something really long as the title to see what the table will look like</td>
+        <td>Markyyy</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox"></td>
+        <td>2</td>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox"></td>
+        <td>3</td>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox"></td>
+        <td>3</td>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox"></td>
+        <td>3</td>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox"></td>
+        <td>3</td>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+      </tr>
+
+    </tbody>
+  </table>
 </div>
