@@ -16,6 +16,10 @@ a:hover {
   padding-top: 20px;
 }
 
+.pagination-bar {
+  margin-top: 30px;
+}
+
 .search-bar {
   background: #EEE;
   padding: 20px;

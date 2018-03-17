@@ -39,7 +39,7 @@ export class DocumentService {
 
   /* Delete a revision */
   deleteRevision(documentId: string, revisionIndex: number) {
-    return this.http.delete('/api/document/' + documentId + '/revision/' + revisionIndex, this.HEADERS);
+    return this.http.delete('/api/document/' + documentId + '/revision/' + revisionIndex);
   }
 
   /* Upload a file */
@@ -59,7 +59,7 @@ export class DocumentService {
 
   /* Revert to a revision */
   revertRevision(documentId: string, revisionIndex: number) {
-    const body = JSON.stringify({ 'revert': revisionIndex })
+    const body = JSON.stringify({ 'revert': revisionIndex });
     return this.http.post('/api/document/' + documentId + '/revision', body, {
       headers: new HttpHeaders({'Content-Type': 'application/json'}),
       responseType: 'text'
@@ -70,5 +70,38 @@ export class DocumentService {
   restoreRevision(documentId: string, revisionIndex: number) {
     return this.http.post('/api/document/' + documentId + '/revision/' + revisionIndex + '/restore', null,
     { responseType: 'text' });
+  }
+
+  /* Add comment */
+  addComment(documentId: string, comment: string, revisionIndex: number, fileName: string) {
+    const body = JSON.stringify({'text': comment, 'revision': revisionIndex, 'originalFilename': fileName });
+    return this.http.post('/api/document/' + documentId + '/comment', body, {
+      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      responseType: 'text'
+    });
+  }
+
+  /* Edit comment */
+  editComment(documentId: string, commentIndex: number, comment: string) {
+    const body = JSON.stringify({'text': comment });
+    return this.http.patch('/api/document/' + documentId + '/comment/' + commentIndex, body, {
+      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      responseType: 'text'
+    });
+  }
+
+  /* Delete comment */
+  deleteComment(documentId: string, commentIndex: number) {
+    return this.http.delete('/api/document/' + documentId + '/comment/' + commentIndex, { responseType: 'text' });
+  }
+
+  /* Subscribe to a document */
+  subscribeToDocument(documentId: string) {
+    return this.http.post('/api/document/' + documentId + '/subscribe', null);
+  }
+
+  /* Unsubscribe to a document */
+  unsubscribeFromDocument(documentId: string) {
+    return this.http.post('/api/document/' + documentId + '/unsubscribe', null);
   }
 }
