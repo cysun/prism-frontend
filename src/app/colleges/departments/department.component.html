@@ -30,9 +30,9 @@
       </ng-template>
       <li class="list-group-item">
         <button type="button" class="btn btn-link" (click)="openModal(displayDeptPrograms)">{{department.name}} ({{department.abbreviation}})</button>
-        <button type="button" class="close" aria-label="Close" (click)="deleteDepartmentDialog(deletion, department)">X</button>
-        <button type="button" class="close" (click)="viewChairsDialog(displayChairs, department)"><i class="fa fa-icon fa-users"></i>&nbsp;&nbsp;</button>
-        <button type="button" class="close" (click)="manageDepartmentDialog(manager, department._id)"><i class="fa fa-icon fa-cog"></i>&nbsp;&nbsp;</button>
+        <button type="button" class="close" class="close" placement="bottom" ngbTooltip="Delete" aria-label="Close" (click)="deleteDepartmentDialog(deletion, department)">X</button>
+        <button type="button" class="close" class="close" placement="bottom" ngbTooltip="View Chairs" (click)="viewChairsDialog(displayChairs, department)"><i class="fa fa-icon fa-users"></i>&nbsp;&nbsp;</button>
+        <button type="button" class="close" class="close" placement="bottom" ngbTooltip="Manage Department" (click)="manageDepartmentDialog(manager, department._id)"><i class="fa fa-icon fa-cog"></i>&nbsp;&nbsp;</button>
       </li>
     </ul>
   </div>
