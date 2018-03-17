@@ -10,7 +10,7 @@ export class ResourceService {
   constructor(private http: HttpClient) { }
 
   getResources(): Observable<Resource[]> {
-    return this.http.get<Resource[]>('/api/resources');
+    return this.http.get<Resource[]>('/api/resource/');
   }
 
   getResource(id): Observable<Resource> {
@@ -20,7 +20,7 @@ export class ResourceService {
   addResource(resource: Resource): Observable<Resource> {
     const body = JSON.stringify({'title': resource.title, 'message': resource.message, 'uploader': resource.uploader, 'groups': resource.groups});
     const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
-    return this.http.post<Resource>('/api/resources', body, header);
+    return this.http.post<Resource>('/api/resource', body, header);
   }
 
   deleteResource(id): Observable<Resource> {
