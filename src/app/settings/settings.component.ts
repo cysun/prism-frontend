@@ -24,9 +24,8 @@ export class SettingsComponent implements OnInit {
   constructor(private settingsService: SettingsService) { }
 
   ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
-    this.settingsService.getUser(this.currentUser._id).subscribe(data => {
+    const currentUserId = JSON.parse(localStorage.getItem('currentUser'))
+    this.settingsService.getUser(currentUserId.user._id).subscribe(data => {
       console.log(data);
       this.currentUser = data;
     })
@@ -78,16 +77,13 @@ export class SettingsComponent implements OnInit {
     if (emptyFields) {
       this.settingsService.updateBasicInfo(this.currentUser).subscribe( data => {
         this.currentUser = data;
-        // this.alert = '';
+
         this.updateSettings = true;
 
         if (!passwordFields) {
           this.alert = '';
           this.updateInfo = false;
         }
-
-        //  this.updateInfo = (!passwordFields) ? false : true;
-
       }, (err) => {
         console.log(err)
         this.invalidErrorMessage('invalid email');
