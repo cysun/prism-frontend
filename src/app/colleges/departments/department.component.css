@@ -1,13 +1,12 @@
 .content-bar {
   padding: 5px;
-  background-color: black;
+  background-color: off-white;
   padding-right: 15px;
   text-align: left;
 }
 
 .bar-text {
-  color: white;
-  margin-top: 3px;
+  margin-top: 5px;
   margin-left: 7px;
   margin-bottom: 3px;
   font-family: sans-serif;
@@ -25,8 +24,8 @@
   text-align: left;
 }
 
-.btn-college {
-  width: 150px;
+.btn-department {
+  width: 175px;
   margin-top: 3px;
   margin-right: -7px;
   margin-bottom: 3px;
