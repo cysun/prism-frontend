@@ -30,11 +30,13 @@ export class CollegesComponent implements OnInit {
   alerts: IAlert[] = [];
   department: Department = new Department();
   departments: Department[] = [];
+  currentUser: User = new User();
   college: College = new College();
   colleges: College[] = [];
   users: User[] = [];
   dean: User = new User();
   deans: User[] = [];
+  isAdmin: boolean;
   suggestedUsers: any[] = [];
   search = (text$: Observable<string>) =>
     text$
@@ -48,6 +50,8 @@ export class CollegesComponent implements OnInit {
 
   //Fetch colleges and users
   ngOnInit() {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.isAdmin = this.currentUser.groups.some( x => x.name === 'Administrators')
     this.collegesService.getColleges().subscribe( data => {
       this.colleges = data;
       console.log(data);
@@ -228,7 +232,7 @@ export class CollegesComponent implements OnInit {
     }
     return true;
   }
-  
+
   /* Give a deans' member list of IDs and return their corresponding member objects */
   getDeansObject(deanList: any[]): any[] {
     const displayList = [];
