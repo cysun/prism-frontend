@@ -23,10 +23,10 @@
     <ng-template ngbTabTitle><i class="fa fa-th-list"></i> Recent Actions</ng-template>
     <ng-template ngbTabContent>
       <div class="container">
-        <div class="search-bar">
+        <div class="search-bar" *ngIf="isAdmin">
           <div class="form-row">
             <div class="form-group col-md-7">
-              <input type="text" class="form-control rounded-0" placeholder="Search for..." [(ngModel)]="user">
+              <prism-user-selector [configType]="'single'"></prism-user-selector>
               <div class="text-hints">Search for a user to return all their action history.</div>
             </div>
 
@@ -43,13 +43,13 @@
           </div>
         </div>
 
-        <ng-container *ngFor="let action of displayHistory; let idx = index">
+        <ng-container *ngFor="let action of displayHistory">
           <div class="card card-container" *ngIf="action.date && action.user">
             <div class="card-body">
               <div class="card-header-title">
                 <div class="card-message">
-                  <a routerLink="/{{action.type}}/{{action.type !== 'group' ? action.object : ''}}">
-                    {{idx+1}}. {{action.user.name.first}} {{action.user.name.last }} {{ action.text }} {{ action.label }}
+                  <a [routerLink]="" (click)="goToLink(action.type, action.object)">
+                    {{action.user.name.first}} {{action.user.name.last }} {{ action.text }} {{ action.label }}
                   </a>
                 </div>
 

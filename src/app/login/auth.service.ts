@@ -28,7 +28,7 @@ export class AuthService {
       // console.log('Is authenticated and here is the user info: ' + localStorage.getItem('currentUser'));
       return true;
     }
-    console.log('Is not authenticated');
+    // console.log('Is not authenticated');
     return false;
   }
 

@@ -14,7 +14,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ResourcesComponent } from './resources/resources.component';
 import { SettingsComponent } from './settings/settings.component';
 import { TemplateManagerComponent } from './template-manager/template-manager.component';
-
+import { UserSelectorComponent } from './user-selector/user-selector.component';
 import { PrivateComponent } from './layout/private/private.component';
 
 import { AuthGuard } from './login/auth.guard';
@@ -40,6 +40,7 @@ const routes: Routes = [
       { path: 'resources', component: ResourcesComponent },
       { path: 'settings', component: SettingsComponent },
       { path: 'templates', component: TemplateManagerComponent },
+      { path: 'selector', component: UserSelectorComponent },
       { path: '**', component: PageNotFoundComponent }
     ]
   }
