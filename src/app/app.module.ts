@@ -37,10 +37,13 @@ import { DepartmentService } from './colleges/departments/department.service';
 import { DocumentService } from './document/document.service';
 import { GroupManagerService } from './group-manager/group-manager.service';
 import { SettingsService } from './settings/settings.service';
+import { SharedService } from './shared/shared.service';
 import { TemplateManagerService } from './template-manager/template-manager.service';
+import { UserSelectorService } from './user-selector/user-selector.service';
 
 import { Globals } from './shared/app.global';
 import { TemplateManagerComponent } from './template-manager/template-manager.component';
+import { UserSelectorComponent } from './user-selector/user-selector.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +64,7 @@ import { TemplateManagerComponent } from './template-manager/template-manager.co
     PublicComponent,
     ReversePipe,
     TemplateManagerComponent,
+    UserSelectorComponent,
   ],
   imports: [
     NgbModule.forRoot(),
@@ -83,7 +87,9 @@ import { TemplateManagerComponent } from './template-manager/template-manager.co
     Globals,
     GroupManagerService,
     SettingsService,
+    SharedService,
     TemplateManagerService,
+    UserSelectorService,
     {
       provide: HTTP_INTERCEPTORS,
       useFactory: function(router: Router) {
