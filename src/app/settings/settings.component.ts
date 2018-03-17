@@ -21,6 +21,25 @@ export class SettingsComponent implements OnInit {
   newPassword: string;
   confirmPassword: string;
 
+  subscriptionList = [
+    {
+      '_id': '5aab45ed9ee6393e8c104034',
+      'title': 'Document #1'
+    },
+    {
+      '_id': '5aab45ed9ee6393e8c104034',
+      'title': 'Document #2'
+    },
+    {
+      '_id': '5aab45ed9ee6393e8c104034',
+      'title': 'Document #3'
+    },
+    {
+      '_id': '5aab45ed9ee6393e8c104034',
+      'title': 'Document #4'
+    },
+  ];
+
   constructor(private settingsService: SettingsService) { }
 
   ngOnInit() {
