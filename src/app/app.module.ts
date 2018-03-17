@@ -31,6 +31,7 @@ import { PrivateComponent } from './layout/private/private.component';
 import { CollegesService } from './colleges/colleges.service';
 import { DepartmentService } from './colleges/departments/department.service';
 import { ProgramService } from './colleges/departments/programs/program.service';
+import { ResourceService } from './resources/resource.service';
 
 import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
@@ -90,6 +91,7 @@ import { Globals } from './shared/app.global';
     Globals,
     GroupManagerService,
     ProgramService,
+    ResourceService,
     SettingsService,
     {
       provide: HTTP_INTERCEPTORS,
