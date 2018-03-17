@@ -11,8 +11,6 @@ import { AuthService } from './auth.service';
 })
 
 export class LoginComponent implements OnInit {
-  // @Output() usernameEvent = new EventEmitter<string>();
-
   username: string;
   password: string;
   wrongInfo: Boolean = false;
@@ -30,7 +28,7 @@ export class LoginComponent implements OnInit {
       const decoded = JSON.stringify(jwtDecode(data.token));
 
       localStorage.setItem('jwt_token', data.token);
-      localStorage.setItem('currentUser', decoded);
+      localStorage.setItem('currentUser', JSON.stringify(data));
 
       this.authService.sendUsername(data.user.username);
 

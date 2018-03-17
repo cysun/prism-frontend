@@ -15,5 +15,6 @@ export class ActionLogger {
 
   object: string;
   type: string;
+  label: string;
   date: Date;
 }
