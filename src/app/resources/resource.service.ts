@@ -28,4 +28,12 @@ export class ResourceService {
     return this.http.delete<Resource>('/api/resource/' + id, header);
   }
 
+  downloadAllResources() {
+    
+  }
+
+  downloadResources(ids) {
+
+  }
+
 }
