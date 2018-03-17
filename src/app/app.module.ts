@@ -28,19 +28,27 @@ import { NgSelectizeModule } from 'ng-selectize';
 import { LoginComponent } from './login/login.component';
 import { PublicComponent } from './layout/public/public.component';
 import { PrivateComponent } from './layout/private/private.component';
+<<<<<<< HEAD
 import { CollegesService } from './colleges/colleges.service';
 import { DepartmentService } from './colleges/departments/department.service';
 import { ProgramService } from './colleges/departments/programs/program.service';
+=======
+>>>>>>> cb560ca0efec8b4921c8290c06d0aa97562971ec
 
 import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
 import { AuthService } from './login/auth.service';
+import { CollegesService } from './colleges/colleges.service';
 import { DashboardService } from './dashboard/dashboard.service';
+import { DepartmentService } from './colleges/departments/department.service';
 import { DocumentService } from './document/document.service';
 import { GroupManagerService } from './group-manager/group-manager.service';
 import { SettingsService } from './settings/settings.service';
-import { Globals } from './shared/app.global';
 
+<<<<<<< HEAD
+=======
+import { Globals } from './shared/app.global';
+>>>>>>> cb560ca0efec8b4921c8290c06d0aa97562971ec
 
 @NgModule({
   declarations: [
@@ -49,23 +57,23 @@ import { Globals } from './shared/app.global';
     CollegesComponent,
     CommitteeComponent,
     DashboardComponent,
+<<<<<<< HEAD
     PageNotFoundComponent,
     SettingsComponent,
     CalendarComponent,
     CommitteeComponent,
+=======
+>>>>>>> cb560ca0efec8b4921c8290c06d0aa97562971ec
     DepartmentComponent,
     DocumentComponent,
-    MinutesComponent,
-    ResourcesComponent,
-    CommitteeComponent,
     GroupManagerComponent,
     LoginComponent,
     MinutesComponent,
     PageNotFoundComponent,
-    PrivateComponent,
-    PublicComponent,
     ResourcesComponent,
     SettingsComponent,
+    PrivateComponent,
+    PublicComponent,
     ReversePipe,
     ProgramsComponent,
   ],
@@ -84,9 +92,13 @@ import { Globals } from './shared/app.global';
     AuthService,
     HttpClientModule,
     CollegesService,
+<<<<<<< HEAD
     DepartmentService,
+=======
+>>>>>>> cb560ca0efec8b4921c8290c06d0aa97562971ec
     DashboardService,
     DocumentService,
+    DepartmentService,
     Globals,
     GroupManagerService,
     ProgramService,
