@@ -15,7 +15,7 @@ import { ResourcesComponent } from './resources/resources.component';
 import { ReviewComponent } from './review/review.component';
 import { SettingsComponent } from './settings/settings.component';
 import { TemplateManagerComponent } from './template-manager/template-manager.component';
-
+import { UserSelectorComponent } from './user-selector/user-selector.component';
 import { PrivateComponent } from './layout/private/private.component';
 
 import { AuthGuard } from './login/auth.guard';
@@ -33,7 +33,7 @@ const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'calendar', component: CalendarComponent },
-      { path: 'colleges', component: CollegesComponent },
+      { path: 'college', component: CollegesComponent },
       { path: 'group', component: CommitteeComponent },
       { path: 'document', component: DocumentComponent },
       { path: 'document/:id', component: DocumentComponent },
@@ -42,6 +42,7 @@ const routes: Routes = [
       { path: 'review/:id', component: ReviewComponent },
       { path: 'settings', component: SettingsComponent },
       { path: 'templates', component: TemplateManagerComponent },
+      { path: 'selector', component: UserSelectorComponent },
       { path: '**', component: PageNotFoundComponent }
     ]
   }

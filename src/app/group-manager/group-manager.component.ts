@@ -105,6 +105,8 @@ export class GroupManagerComponent implements OnInit {
       return new Promise((resolve, reject) => {
         this.groupManagerService.getGroups().subscribe( data => {
           this.groups = data;
+          console.log('AHHHHHHHH')
+          console.log(data);
 
           for (let i = 0; i < this.groups.length; i++) {
             const members = this.groups[i].members;

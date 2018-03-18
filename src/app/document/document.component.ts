@@ -2,10 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { User } from '../models/user.model';
+import { Comment } from '../models/comment.model';
+import { Document } from '../models/document.model';
+import { Revision } from '../models/revision.model';
+import { UserResponse } from '../models/user-response.model';
 import { Globals } from '../shared/app.global';
 
-import { Document } from '../models/document.model';
 import { DocumentService } from './document.service';
 
 import { saveAs } from 'file-saver';
@@ -17,14 +19,14 @@ import { saveAs } from 'file-saver';
 })
 
 export class DocumentComponent implements OnInit {
-  currentUser: User = new User();
+  currentUser: UserResponse = new UserResponse();
   modal: NgbModalRef;
   alert: any;
 
   document: Document = new Document();
-  currentRevision: any[];
-  mainRevision: any[];
-  selectedComment = [];
+  currentRevision: Revision = new Revision();
+  mainRevision: Revision = new Revision();
+  selectedComment: Comment = new Comment();
 
   validComment = true;
   performDelete = false;
@@ -55,9 +57,9 @@ export class DocumentComponent implements OnInit {
     }
 
     const userId = JSON.parse(localStorage.getItem('currentUser'))._id;
-    this.globals.settingsService.getUser(userId).subscribe( data => {
-      this.currentUser = data;
-    });
+
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    // console.log('this is: ' + JSON.stringify(this.currentUser))
 
     this.documentService.retrieveDocument(this.documentId).subscribe( data => {
       this.document = data;
@@ -98,7 +100,7 @@ export class DocumentComponent implements OnInit {
       const copyText = this.document.comments.find(item => item._id === commentId);
       this.selectedComment = JSON.parse(JSON.stringify(copyText));
     } else {
-      this.selectedComment = [];
+      this.selectedComment = new Comment();
     }
   }
 
@@ -268,10 +270,12 @@ export class DocumentComponent implements OnInit {
       const findRevisionNum = this.document.revisions.findIndex(revision =>
         revision._id === this.selectedOption);
 
-      const getFilename = this.document.revisions[findRevisionNum].originalFilename;
+      const getFilename = this.document.revisions[findRevisionNum].message;
+      const insertFilename = getFilename ?
+        getFilename : this.document.revisions[findRevisionNum].message;
 
       this.documentService.addComment(this.document._id, this.textComment,
-        findRevisionNum, getFilename).subscribe( data => {
+        findRevisionNum, insertFilename).subscribe( data => {
         console.log(data);
         this.retrieveDocument();
         this.modal.close();
@@ -307,7 +311,7 @@ export class DocumentComponent implements OnInit {
 
     this.documentService.deleteComment(this.document._id, findCommentIndex).subscribe( data => {
       this.document.comments.splice(findCommentIndex, 1);
-      this.selectedComment = [];
+      this.selectedComment = new Comment();
       this.closeModal();
     })
   }
@@ -326,14 +330,14 @@ export class DocumentComponent implements OnInit {
   /* Subscribe to a document */
   subscribeToDocument() {
     this.documentService.subscribeToDocument(this.document._id).subscribe( () => {
-      this.document.subscribers.push(this.currentUser._id);
+      this.document.subscribers.push(this.currentUser.user._id);
     })
   }
 
   /* Subscribe to a document */
   unsubscribeFromDocument() {
     this.documentService.unsubscribeFromDocument(this.document._id).subscribe( () => {
-      const findUserId = this.document.subscribers.findIndex(item => item._id === this.currentUser._id);
+      const findUserId = this.document.subscribers.findIndex(item => item._id === this.currentUser.user._id);
       this.document.subscribers.splice(findUserId, 1);
     })
   }
@@ -341,7 +345,7 @@ export class DocumentComponent implements OnInit {
   /* Check if current user is already subscribed to the document */
   IsSubscribed() {
     if (this.document.subscribers) {
-      return this.document.subscribers.includes(this.currentUser._id);
+      return this.document.subscribers.includes(this.currentUser.user._id);
     }
     return false;
   }
