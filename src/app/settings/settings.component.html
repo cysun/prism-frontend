@@ -83,38 +83,4 @@
       </div>
     </ng-template>
   </ngb-tab>
-
-  <ngb-tab>
-    <ng-template ngbTabTitle><i class="fa fa-icon fa-clipboard"></i>Subscriptions</ng-template>
-    <ng-template ngbTabContent>
-      <div class="container-fluid" style="padding:20px;">
-        <div class="text-hints">
-          <b><i class="fa fa-icon fa-exclamation-circle"></i>
-            Subscriptions are the list of documents you wish to receive e-mail notifications.
-          </b>
-        </div>
-
-
-        <ng-container *ngFor="let sub of subscriptionList">
-          <div class="card card-container">
-            <div class="card-body">
-              <div class="card-header-title">
-                <div class="card-message">
-                  <a routerLink="/document/{{sub._id}}">
-                    {{sub.title}}
-                  </a>
-                  <div style="float: right;">
-                    <button type="button" class="btn btn-danger">Unsubscribe</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ng-container>
-
-
-
-      </div>
-    </ng-template>
-  </ngb-tab>
 </ngb-tabset>
