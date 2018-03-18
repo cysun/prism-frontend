@@ -310,7 +310,7 @@
             <div class="card card-container rounded-0" style="padding: 10px;">
               <div class="card-body">
 
-                <span *ngIf="currentUser._id === comment.author._id">
+                <span *ngIf="currentUser.user._id === comment.author._id">
                   <div ngbDropdown placement="bottom-right">
                     <button class="close" ngbDropdownToggle><i class="fa fa-ellipsis-v"></i></button>
                     <div ngbDropdownMenu>
