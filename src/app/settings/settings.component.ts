@@ -18,12 +18,33 @@ export class SettingsComponent implements OnInit {
   alert: any;
   reasons: any[];
 
+  newPassword: string;
+  confirmPassword: string;
+
+  subscriptionList = [
+    {
+      '_id': '5aab45ed9ee6393e8c104034',
+      'title': 'Document #1'
+    },
+    {
+      '_id': '5aab45ed9ee6393e8c104034',
+      'title': 'Document #2'
+    },
+    {
+      '_id': '5aab45ed9ee6393e8c104034',
+      'title': 'Document #3'
+    },
+    {
+      '_id': '5aab45ed9ee6393e8c104034',
+      'title': 'Document #4'
+    },
+  ];
+
   constructor(private settingsService: SettingsService) { }
 
   ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
-    this.settingsService.getUser(this.currentUser._id).subscribe(data => {
+    const currentUserId = JSON.parse(localStorage.getItem('currentUser'))
+    this.settingsService.getUser(currentUserId.user._id).subscribe(data => {
       console.log(data);
       this.currentUser = data;
     })
@@ -35,6 +56,8 @@ export class SettingsComponent implements OnInit {
       this.currentUser = data;
     })
     this.alert = '';
+    this.newPassword = '';
+    this.confirmPassword = '';
     this.updateInfo = !this.updateInfo;
   }
 
@@ -48,46 +71,82 @@ export class SettingsComponent implements OnInit {
       detailMsg = 'Please fill in all required fields.';
       break;
       case 'invalid email':
-      detailMsg = 'Please input a valid e-mail.'
+      detailMsg = 'Please input a valid e-mail.';
+      break;
+      case 'password mismatch':
+      detailMsg = 'Your new password and confirmation password do not match.';
       break;
     }
     this.alert = { message: detailMsg };
   }
 
-  /* Update user's basic information only (not password) */
+  /* Update user's basic information */
   updateBasicInfo() {
-    const emptyFields = (this.currentUser.name.first.length > 0) &&
-    (this.currentUser.name.last.length > 0) &&
-    (this.currentUser.email.length > 0);
+    let validInfo = true;
+    let validPassword = true;
+
+    /* Changing name and/or email */
+    const emptyFields = (this.currentUser.name.first.trim().length > 0) &&
+    (this.currentUser.name.last.trim().length > 0) &&
+    (this.currentUser.email.trim().length > 0);
+
+    /* Changing password */
+    const passwordFields = this.newPassword && this.confirmPassword;
 
     if (emptyFields) {
       this.settingsService.updateBasicInfo(this.currentUser).subscribe( data => {
         this.currentUser = data;
-        this.updateInfo = false;
-        this.alert = '';
+
+        this.updateSettings = true;
+
+        if (!passwordFields) {
+          this.alert = '';
+          this.updateInfo = false;
+        }
       }, (err) => {
         console.log(err)
         this.invalidErrorMessage('invalid email');
       })
     } else {
       this.invalidErrorMessage('empty fields');
+      validInfo = false;
 
-      if (this.currentUser.name.first.length <= 0) {
+      if (this.currentUser.name.first.trim().length <= 0) {
         this.reasons.push('First Name');
       }
 
-      if (this.currentUser.name.last.length <= 0) {
+      if (this.currentUser.name.last.trim().length <= 0) {
         this.reasons.push('Last Name');
       }
 
-      if (this.currentUser.email.length <= 0) {
+      if (this.currentUser.email.trim().length <= 0) {
         this.reasons.push('Email')
       }
+    }
+
+    if (passwordFields && validInfo) {
+      console.log('status of safe Info: ' + validInfo)
+      if (this.newPassword !== this.confirmPassword) {
+        this.invalidErrorMessage('password mismatch');
+        validPassword = false;
+      } else {
+        this.updatePassword();
+      }
+    }
+
+    /* If there are any errors, don't close update form unless cancel button */
+    if (validInfo && validPassword) {
+      this.alert = '';
+      this.updateInfo = false;
     }
   }
 
   /* Update user's password */
-  updatePassword(currentPassword: string, newPassword: string, newPassword2: string) {
-    this.updateInfo = false;
+  updatePassword() {
+    this.settingsService.changePassword(this.currentUser._id, this.newPassword).subscribe( data => {
+      console.log(data);
+    });
+    this.newPassword = '';
+    this.confirmPassword = '';
   }
 }

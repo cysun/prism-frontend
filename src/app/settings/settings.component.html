@@ -4,7 +4,7 @@
     <ng-template ngbTabContent>
       <div class="container-fluid">
         <div *ngIf="!updateInfo" class="notification-label">
-          <span>{{currentUser.name.first}}'s Profile</span>
+          <span>{{currentUser.name?.first}}'s Profile</span>
           <button class="btn btn-outline-primary" (click)="toggleEditButton()"><i class="fa fa-icon fa-pencil"></i>Edit</button>
         </div>
 
@@ -26,7 +26,7 @@
           </tr>
           <tr>
             <td class="row-label">Name</td>
-            <td>{{currentUser.name.first}} {{currentUser.name.last}}</td>
+            <td>{{currentUser.name?.first}} {{currentUser.name?.last}}</td>
           </tr>
           <tr>
             <td class="row-label">E-mail</td>
@@ -62,13 +62,6 @@
           <div class="text-hint">Change Password</div>
 
           <div class="row">
-            <span class="col-3">Current Password</span>
-            <span class="col-6">
-              <input type="password" class="form-control" placeholder="Enter current password" [(ngModel)]="currentPassword">
-            </span>
-          </div>
-
-          <div class="row">
             <span class="col-3">New Password</span>
             <span class="col-6">
               <input type="password" class="form-control" placeholder="Enter a new password" [(ngModel)]="newPassword">
@@ -76,9 +69,9 @@
           </div>
 
           <div class="row">
-            <span class="col-3">Re-enter New Password</span>
+            <span class="col-3">Confirm New Password</span>
             <span class="col-6">
-              <input type="password" class="form-control"[(ngModel)]="newPassword2">
+              <input type="password" class="form-control"placeholder="Re-enter the new password" [(ngModel)]="confirmPassword">
             </span>
           </div>
 
@@ -91,39 +84,36 @@
     </ng-template>
   </ngb-tab>
 
-  <ngb-tab *ngIf="currentUser.config">
-    <ng-template ngbTabTitle><i class="fa fa-envelope-o"></i>E-mail Settings</ng-template>
+  <ngb-tab>
+    <ng-template ngbTabTitle><i class="fa fa-icon fa-clipboard"></i>Subscriptions</ng-template>
     <ng-template ngbTabContent>
-      <div class="notification-label">
-        <span>Current Settings</span>
-        <button class="btn btn-outline-primary" *ngIf="!updateSettings" (click)="updateSettings=true"><i class="fa fa-pencil"></i>Edit</button>
-      </div>
+      <div class="container-fluid" style="padding:20px;">
+        <div class="text-hints">
+          <b><i class="fa fa-icon fa-exclamation-circle"></i>
+            Subscriptions are the list of documents you wish to receive e-mail notifications.
+          </b>
+        </div>
 
-      <table class="table table-style" *ngIf="!updateSettings">
-        <tr>
-          <td colspan="2" class="row-label">E-mail Notifications</td>
-        </tr>
 
-        <tr>
-          <td>Document Finalized</td>
-          <td>{{currentUser.config.type.email.type.documentFinalized ? "On" : "Off" }}</td>
-        </tr>
+        <ng-container *ngFor="let sub of subscriptionList">
+          <div class="card card-container">
+            <div class="card-body">
+              <div class="card-header-title">
+                <div class="card-message">
+                  <a routerLink="/document/{{sub._id}}">
+                    {{sub.title}}
+                  </a>
+                  <div style="float: right;">
+                    <button type="button" class="btn btn-danger">Unsubscribe</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
 
-        <tr>
-          <td>New Comments</td>
-          <td>{{currentUser.config.type.email.type.newComment  ? "On" : "Off" }}</td>
-        </tr>
 
-        <tr>
-          <td>Rescheduled Meetings</td>
-          <td>{{currentUser.config.type.email.type.meetingChange  ? "On" : "Off" }}</td>
-        </tr>
-      </table>
 
-      <div *ngIf="updateSettings">
-        <div>Update Settings form shall be here</div>
-        <button class="btn btn-outline-primary" (click)="updateSettings=false"><i class="fa fa-pencil"></i>Update</button>
-        <button class="btn btn-outline-primary" (click)="toggleEditButton()">Cancel</button>
       </div>
     </ng-template>
   </ngb-tab>

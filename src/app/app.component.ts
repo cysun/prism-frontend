@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoginComponent } from './login/login.component';
 
 import { AuthService } from './login/auth.service';
+
+import { UserResponse } from './models/user-response.model';
 
 @Component({
   selector: 'prism-root',
@@ -16,7 +19,16 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     if (this.authService.isAuthenticated()) {
-      this.username = this.authService.getUser().username;
+      /* Initially get the username upon login into the system */
+      this.authService.currentUsername.subscribe( data => {
+        this.username = data;
+      })
+
+      /* After any browser refresh, retrieve the current username */
+      if (this.username.length <= 0) {
+        const user = this.authService.getUser();
+        this.username = user.user.username;
+      }
     }
   }
 

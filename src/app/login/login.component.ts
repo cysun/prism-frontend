@@ -28,7 +28,9 @@ export class LoginComponent implements OnInit {
       const decoded = JSON.stringify(jwtDecode(data.token));
 
       localStorage.setItem('jwt_token', data.token);
-      localStorage.setItem('currentUser', decoded);
+      localStorage.setItem('currentUser', JSON.stringify(data));
+
+      this.authService.sendUsername(data.user.username);
 
       console.log('Group info about User: ' + JSON.stringify(data.groups));
 

@@ -2,7 +2,10 @@
   <div class="header-label">
     <span class="label">{{ documentTitle }}</span><button type="button" class="btn btn-dark" (click)=openModal(editDocumentNameModal)><i class="fa fa-icon fa-pencil"></i>Edit</button>
     <span class ="document-btn-right">
-      <button type="button" class="btn btn-danger"><i class="fa fa-icon fa-eye"></i>Watch</button>
+      <button type="button" class="btn btn-danger" (click)="IsSubscribed() ? unsubscribeFromDocument() : subscribeToDocument()">
+        <span *ngIf="!IsSubscribed(); else subscribable"><i class="fa fa-icon fa-eye"></i>Watch</span>
+        <ng-template #subscribable><i class="fa fa-icon fa-eye-slash"></i>Un-watch</ng-template>
+      </button>
     </span>
   </div>
 </div>
@@ -47,8 +50,8 @@
       <div class="revision-details">
         <i class="fa fa-icon fa-edit"></i><strong>Revision Message:</strong> {{ currentRevision.message }}<br/>
         <i class="fa fa-icon fa-calendar"></i><strong>Date Uploaded:</strong> {{ currentRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss' }}<br/>
-        <i class="fa fa-icon fa-user"></i><strong>Uploader:</strong> {{ currentRevision.uploader.username }}<br/>
-        <i class="fa fa-icon fa-file-o"></i><strong>File Type:</strong> {{ currentRevision.fileExtension}}
+        <i class="fa fa-icon fa-user"></i><strong>Uploader:</strong> {{ currentRevision.uploader?.username }}<br/>
+        <i class="fa fa-icon fa-file-o"></i><strong>File Name:</strong> {{ currentRevision.originalFilename }}
       </div>
     </div>
   </div>
@@ -99,6 +102,65 @@
   </form>
 </ng-template>
 
+<!-- Modal for making new comments on revisions -->
+<ng-template #newCommentModal>
+  <div class="modal-header">
+    <h5 class="modal-title">New Comment</h5>
+  </div>
+  <form #f="ngForm" (ngSubmit)="postComment()">
+    <div class="modal-body">
+      <div *ngIf="alert">
+        <ngb-alert type="danger" [dismissible]="false"><i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}</ngb-alert>
+      </div>
+      <div class="modal-message">
+
+        <div>
+          <textarea class="form-control" [(ngModel)]="textComment" name="comment" required></textarea>
+          <div class="text-hints">MAX length: {{ 2000 - textComment.length }} characters</div>
+        </div>
+
+        <div class="form-group file-message">
+          <select class="custom-select rounded-0" [(ngModel)]="selectedOption" name="document-files">
+            <option *ngFor="let option of checkDeletedRevisions(document.revisions, 'Deleted revision') | reverse; let idx = index" [ngValue]="option._id">
+               {{ idx === 0 ? 'Most Recent: ' : ''}} {{ option.message }}
+            </option>
+          </select>
+          <div class="text-hints">Select the intended revision from the dropdown list</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success" [disabled]="!f.form.valid">Post</button>
+      <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+    </div>
+  </form>
+</ng-template>
+
+
+<ng-template #deleteCommentModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Deleting Comment</h5>
+  </div>
+
+  <div class="modal-body">
+    <div class="modal-message">
+      Are you sure you want to delete this comment?
+      <div class="revision-details">
+        <i class="fa fa-icon fa-user"></i><strong>User:</strong> {{ selectedComment.author.name.first}} {{ selectedComment.author.name.last}} ({{ selectedComment.author.username }})<br/>
+        <i class="fa fa-icon fa-calendar"></i><strong>Created:</strong> {{ selectedComment.creationDate | date: 'MM/dd/yyyy hh:mm:ss' }}<br/>
+        <i class="fa fa-icon fa-comment"></i><strong>Comment:</strong> "{{ selectedComment.text }}"
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-dark" type="button" (click)="deleteComment(selectedComment._id)">Delete</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+  </div>
+</ng-template>
+
+
 <!-- Tabs consisting Main Version tab, Revisions tab, and Comments tab -->
 <ngb-tabset>
   <ngb-tab>
@@ -109,8 +171,6 @@
         same document can be found in the revisions tab. <br/><br/>
 
         <strong>Frontend testing purposes only</strong> <br/>
-        (create a document, take the ID and paste it onto retrieveDocument function in ngOnInit before refreshing):
-
         <div class="input-group">
           <input type="text" class="form-control" [(ngModel)]="document.title" placeholder="Enter document title" name="document-title">
           <button type="button" class="btn btn-success" (click)="createNewDocument(document.title)">Create Document</button>
@@ -124,12 +184,18 @@
         <div class="card card-container">
           <div class="card-body">
             <div class="card-document-title">
-              <div class="document-message">{{ mainRevision ? mainRevision.message : 'Select upload button to add a revision'}}</div>
-              <div class="document-info" *ngIf="mainRevision">
-                <strong>{{mainRevision.uploader.username}}</strong> uploaded
-                <strong>Revision #{{ totalIndices }}</strong>
+              <div class="document-message">{{ mainRevision ? mainRevision.message : 'Currently no revision file'}}</div>
+              <div class="document-info" *ngIf="mainRevision; else emptyRevision">
+                <div>Revision #{{ totalIndices }}</div>
+                <strong>{{mainRevision.uploader?.username}}</strong> uploaded
+                <strong>{{ mainRevision.originalFilename }}</strong>
                 on {{mainRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}
               </div>
+
+              <ng-template class="document-info" #emptyRevision>
+                <div>Click on the upload button to upload a file</div>
+                If valid, this template box will be replaced with the newly uploaded revision
+              </ng-template>
             </div>
 
             <div class="card-action-buttons">
@@ -147,7 +213,8 @@
     </ng-template>
   </ngb-tab>
 
-  <ngb-tab>
+
+  <ngb-tab [disabled]="totalIndices <= 1">
     <ng-template ngbTabTitle><i class="fa fa-icon fa-list"></i>Revisions</ng-template>
     <ng-template ngbTabContent>
       <div class="container" style="padding-top: 20px;">
@@ -165,22 +232,26 @@
               <div class="card-document-title">
                 <div class="document-message">{{revision.message}}</div>
                 <div class="document-info">
-                  <strong>{{revision.uploader.username}}</strong> uploaded
-                  <strong>Revision #{{ totalIndices - idx }}</strong>
+                  <div>Revision #{{ totalIndices - idx }}</div>
+                  <strong>{{revision.uploader?.username}}</strong> uploaded
+                  <strong>{{ revision.originalFilename }}</strong>
                   on {{revision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss'}}
                 </div>
               </div>
 
               <div class="card-action-buttons">
                 <button class="btn btn-outline-secondary"
-                        (click)="downloadFile(totalIndices - idx - 1)" placement="top" ngbTooltip="Download Revision">
+                        (click)="downloadFile(totalIndices - idx - 1)"
+                        placement="top" ngbTooltip="Download Revision">
                         <i class="fa fa-download"></i>
                 </button>
+
                 <button class="btn btn-outline-secondary"
                         (click)="openModal(revisionModal, totalIndices - idx - 1, 'revert')"
                         placement="top" ngbTooltip="Revert as Main">
                         <i class="fa fa-exchange"></i>
                 </button>
+
                 <button class="btn btn-outline-secondary"
                         (click)="openModal(revisionModal, totalIndices - idx - 1, 'delete')"
                         placement="top" ngbTooltip="Delete">
@@ -195,27 +266,103 @@
               <div class="card-body">
                 <div class="card-document-title">
                   <div class="document-message">{{revision.message}}</div>
-                  <div class="document-info">Revision #{{totalIndices - idx}}</div>
+                  <div class="document-info">
+                    Revision #{{totalIndices - idx}}
+                    <div>Click on the restore button to restore the file</div>
+                  </div>
                 </div>
 
-                <div class="card-action-buttons">
-                  <button class="btn btn-dark"
-                          (click)="restoreRevision(totalIndices - idx - 1)" placement="top" ngbTooltip="Restore">
-                          <i class="fa fa-arrow-circle-up"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
+            <div class="card-action-buttons">
+              <button class="btn btn-dark"
+              (click)="restoreRevision(totalIndices - idx - 1)" placement="top" ngbTooltip="Restore">
+              <i class="fa fa-arrow-circle-up"></i>
+            </button>
+          </div>
+        </div>
+      </div>
           </ng-template>
         </ng-container>
       </div>
     </ng-template>
-  </ngb-tab>
+    </ngb-tab>
+
 
   <ngb-tab>
     <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
     <ng-template ngbTabContent>
-      comments tab
+      <div class="container" style="padding-top: 20px;">
+
+        <div class="form-row">
+          <div class="col-md-7"><button type="button" class="btn btn-dark" (click)="openModal(newCommentModal)">New Comment</button></div>
+          <div class="form-group col-md-5" *ngIf="selectedFilter">
+            <select class="custom-select rounded-0" [(ngModel)]="selectedFilter" name="document-files">
+              <option *ngFor="let option of checkDeletedRevisions(document.revisions, 'Deleted revision') | reverse; let idx = index" [ngValue]="option._id">
+                {{ idx === 0 ? 'Most Recent: ' : ''}} {{ option.message }}
+              </option>
+            </select>
+            <div class="text-hints">Filter comments based on revisions</div>
+          </div>
+        </div>
+        <div class="text-hints"><b><i class="fa fa-icon fa-exclamation-circle"></i>Comments are displayed from most recent to oldest.</b></div>
+
+        <span *ngIf="filterComments(selectedFilter, document.comments).length > 0; else noComments">
+          <ng-container *ngFor="let comment of filterComments(selectedFilter, document.comments) | reverse">
+            <div class="card card-container rounded-0" style="padding: 10px;">
+              <div class="card-body">
+
+                <span *ngIf="currentUser.user._id === comment.author._id">
+                  <div ngbDropdown placement="bottom-right">
+                    <button class="close" ngbDropdownToggle><i class="fa fa-ellipsis-v"></i></button>
+                    <div ngbDropdownMenu>
+                      <button class="dropdown-item" (click)="toggleEditButton(comment._id)"><i class="fa fa-icon fa-edit"></i>Edit</button>
+                      <button class="dropdown-item" (click)="openModal(deleteCommentModal, undefined, undefined, comment._id)"><i class="fa fa-icon fa-trash"></i>Delete</button>
+                    </div>
+                  </div>
+                </span>
+
+                <div class="card-comment-header">
+                  <strong>{{ comment.author.name.first }} {{ comment.author.name.last }}</strong>
+                  commented on <strong>{{ comment.originalFilename }}:</strong>
+                  <div class="comment-date">
+                    <strong>Revision #{{ comment.revision + 1}}</strong> - {{comment.creationDate | date: 'MM/dd/yyyy hh:mm:ss'}}
+                  </div>
+                </div>
+
+                <hr/>
+
+                <div class="card-comment-body">
+                  <span *ngIf="(comment._id !== selectedComment._id) || performDelete; else editInput">
+                    <span class="line-breaker">{{ comment.text }}</span>
+                  </span>
+
+                  <ng-template #editInput>
+                    <div style="color: #FF0000; padding-bottom: 5px;" *ngIf="!validComment">* Comment exceeds maximum 2000 characters.</div>
+
+                    <form #f="ngForm" (ngSubmit)="editComment(selectedComment._id, selectedComment.text)">
+                      <textarea class="form-control" [(ngModel)]="selectedComment.text" name="comment" required></textarea>
+                      <div class="text-hints">MAX length: {{ 2000 - selectedComment.text.length }} characters</div>
+
+                      <div style="padding-top: 20px;">
+                        <button type="submit" class="btn btn-dark" [disabled]="!f.form.valid">Save</button>
+                        <button type="button" class="btn btn-dark" (click)="toggleEditButton()">Cancel</button>
+                      </div>
+                    </form>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </span>
+
+        <ng-template #noComments>
+          <p style="padding-top: 20px;">
+            <ngb-alert class="info-message" type="info" [dismissible]="false">
+              <strong> Information: </strong> There are currently no comments yet for this revision.
+            </ngb-alert>
+          </p>
+        </ng-template>
+
+      </div>
     </ng-template>
   </ngb-tab>
 </ngb-tabset>

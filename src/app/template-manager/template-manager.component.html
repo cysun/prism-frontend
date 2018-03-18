@@ -1,0 +1,156 @@
+<div class="container-fluid">
+
+  <!-- Modal for creating a template -->
+  <ng-template #uploadTemplateModal>
+    <div class="modal-header">
+      <h5 class="modal-title">Upload Template</h5>
+    </div>
+
+    <form #f="ngForm" (ngSubmit)="postTemplate()">
+      <div class="modal-body">
+        <div *ngIf="alert">
+          <ngb-alert type="danger" [dismissible]="false">
+            <i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}
+          </ngb-alert>
+        </div>
+
+        <div class="modal-message">
+          <div class="modal-label">
+            TEMPLATE INFO
+          </div>
+
+          <div class="form-row">
+            <div class="col-md-9 file-title">
+              <input type="text" class="form-control"
+              [(ngModel)]="currentTemplate.title" name="file-title"
+              placeholder="Enter a title for the template" required>
+              <div class="text-hints">Type in a title for the new template</div>
+            </div>
+
+            <div class="col-md-3 file-title">
+              <input type="number" min="1" class="form-control"
+              [(ngModel)]="currentTemplate.completionEstimate" name="completion-estimate"
+              placeholder="Number in days" required>
+              <div class="text-hints">Completion estimate</div>
+            </div>
+          </div>
+
+          <div class="modal-label" style="padding-top: 50px; padding-bottom: 20px;">
+            FILE UPLOAD
+          </div>
+
+
+          <div class="custom-file">
+            <input name="file" type="file" class="custom-file-input"
+            accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            (change)="onFileChange($event)">
+
+            <label class="custom-file-label">
+              {{ fileName ? fileName : 'Choose a file...'}}
+            </label>
+            <div class="text-hints">Click on browse to attach a file</div>
+          </div>
+
+          <div class="file-title">
+            <input type="text" class="form-control"
+            [(ngModel)]="message" name="file-message"
+            placeholder="Enter a message about the file" required>
+            <div class="text-hints">Type a brief message about the new revision.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success" [disabled]="!f.form.valid">Upload</button>
+        <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+      </div>
+    </form>
+  </ng-template>
+
+  <!-- Modal for deleting a template -->
+  <ng-template #deleteTemplateModal>
+    <div class="modal-header">
+      <h5 class="modal-title">Delete Template</h5>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-message">
+
+        <div style="text-align: center; padding-bottom: 20px;">
+          <span class="modal-warning"><i class="fa fa-icon fa-exclamation-triangle"></i>Warning</span>
+        </div>
+        Are you sure you want to delete <b>{{ currentTemplate.title }}</b> template? This action cannot be undone.
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-danger" type="button" (click)=deleteTemplate()>Delete</button>
+      <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+    </div>
+  </ng-template>
+
+  <!-- Title header of the page -->
+  <div class="header-label">
+    <div class="blockquote-header">
+      <span class="label"><i class="fa fa-icon fa-folder-open-o"></i>Template Manager
+        <span class ="blockquote-btn" placement="top" ngbTooltip="Upload Template">
+          <button type="button" class="btn btn-success" (click)=openModal(uploadTemplateModal)>
+            <i class="fa fa-plus"></i>
+          </button>
+        </span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Display all the templates in a table -->
+  <table class="table table-hover" *ngIf="templates && templates.length > 0; else emptyTemplates">
+    <thead class="bg-info">
+      <tr>
+        <th class="align-middle">Template Title</th>
+        <th class="align-middle">Estimated Completion</th>
+        <th class="align-middle">File Message</th>
+        <th class="align-middle">Uploader</th>
+        <th class="align-middle">Date Uploaded</th>
+        <th class="align-middle">Groups</th>
+        <th class="align-middle">Delete</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let template of templates; let idx = index">
+        <td><a routerLink="/document/{{template._id}}">{{template.title}}</a></td>
+        <td>{{ template.completionEstimate }} days</td>
+
+        <ng-container *ngIf="template.revisions.length > 0; else emptyDetails">
+          <td>{{ template.revisions[template.revisions.length - 1].message }}</td>
+          <td>{{ template.revisions[template.revisions.length - 1].uploader.username }}</td>
+          <td>{{ template.revisions[template.revisions.length - 1].dateUploaded | date: 'MM/dd/yyyy' }}</td>
+        </ng-container>
+
+        <ng-template #emptyDetails>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>Unknown</td>
+        </ng-template>
+
+        <td>
+          <span *ngFor="let group of template.groups; let idx = index">
+            {{ group }}{{ idx + 1 < template.groups.length ? ',' : '' }}
+          </span>
+        </td>
+        <td>
+          <button type="button" class="btn btn-danger" (click)="openModal(deleteTemplateModal, template._id)" [disabled]=template.coreTemplate><i class="fa fa-trash"></i></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Info message when there are no groups -->
+  <ng-template #emptyTemplates>
+    <p>
+      <ngb-alert class="info-message" type="info" [dismissible]="false">
+        <strong> Information: </strong> There are currently no templates.
+      </ngb-alert>
+    </p>
+  </ng-template>
+</div>

@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NgbModal, NgbModalRef,  NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
+import { Comment } from '../models/comment.model';
 import { Document } from '../models/document.model';
+import { Revision } from '../models/revision.model';
+import { UserResponse } from '../models/user-response.model';
+import { Globals } from '../shared/app.global';
+
 import { DocumentService } from './document.service';
 
 import { saveAs } from 'file-saver';
@@ -12,18 +17,19 @@ import { saveAs } from 'file-saver';
   templateUrl: './document.component.html',
   styleUrls: ['./document.component.css'],
 })
-export class DocumentComponent implements OnInit {
-  modal: NgbModalRef;
-  options: NgbModalOptions = {
-    backdrop : 'static',
-    keyboard : false,
-    size: 'lg',
-  };
 
+export class DocumentComponent implements OnInit {
+  currentUser: UserResponse = new UserResponse();
+  modal: NgbModalRef;
   alert: any;
+
   document: Document = new Document();
-  currentRevision: any[];
-  mainRevision: any[];
+  currentRevision: Revision = new Revision();
+  mainRevision: Revision = new Revision();
+  selectedComment: Comment = new Comment();
+
+  validComment = true;
+  performDelete = false;
 
   revisionIndex: number;
   totalIndices: number;
@@ -33,19 +39,34 @@ export class DocumentComponent implements OnInit {
   message: string;
   file: File;
   fileName: string;
+  selectedOption: string;
+  selectedFilter: string;
+  textComment = '';
   modalMessage: any;
 
-
-  constructor(private documentService: DocumentService, private modalService: NgbModal, private route: ActivatedRoute) {
+  constructor(private documentService: DocumentService,
+              private modalService: NgbModal,
+              private route: ActivatedRoute,
+              private globals: Globals) {
     this.route.params.subscribe( params => {
       this.documentId = params.id;
     })
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    // console.log('this is: ' + JSON.stringify(this.currentUser))
   }
 
   ngOnInit() {
-    // '5a7a17879b263d9503ca14d1'
     this.documentService.retrieveDocument(this.documentId).subscribe( data => {
       this.document = data;
+
+      if (this.document.revisions) {
+        this.selectedOption = this.document.revisions.slice(0).reverse().find( item =>
+          item.message !== 'Deleted revision')._id;
+
+        this.selectedFilter = this.document.revisions.slice(0).reverse().find( item =>
+            item.message !== 'Deleted revision')._id;
+      }
+
       this.documentTitle = this.document.title;
       this.totalIndices = this.getNumOfRevisions();
       this.getLatestRevision();
@@ -65,41 +86,66 @@ export class DocumentComponent implements OnInit {
     return Object.keys(this.document.revisions).length;
   }
 
-  /* Open a basic modal passing the data of the specific revision */
-  openModal(content, revisionIndex?: number, modalType?: string) {
+  /* Allow user to edit their own (specific) comment */
+  toggleEditButton(commentId?: string) {
+    this.performDelete = false;
+    this.validComment = true;
+
+    if (commentId) {
+      const copyText = this.document.comments.find(item => item._id === commentId);
+      this.selectedComment = JSON.parse(JSON.stringify(copyText));
+    } else {
+      this.selectedComment = new Comment();
+    }
+  }
+
+  /* Return list of revision objects not marked as deleted */
+  checkDeletedRevisions(arr: any[], message: string) {
+    return arr.filter( x => x.message !== message);
+  }
+
+  /* Open a basic modal passing the data of the specific revision or comment */
+  openModal(content, revisionIndex?: number, modalType?: string, commentId?: string) {
+    /* If user wants to revert or delete a revision */
     if (revisionIndex >= 0) {
       this.currentRevision = this.document.revisions[revisionIndex];
       this.revisionIndex = revisionIndex;
+
+      console.log('current revision: ' + JSON.stringify(this.currentRevision))
+      console.log('revisionIndex: ' + this.revisionIndex);
+
+      if (modalType === 'delete') {
+        const modalMessage = 'This revision will be removed from the document and ' +
+        'can only be restored by an Administrator. Are you sure you want to delete?';
+
+        this.modalMessage = {
+          title: 'Deleting Revision',
+          message: modalMessage,
+          button: 'Delete',
+        };
+      } else if (modalType === 'revert') {
+        const modalMessage = 'This revision will become a new copy and be treated as the' +
+        ' main version of the document. Are you sure you want to revert to this revision?';
+
+        this.modalMessage = {
+          title: 'Reverting Revision',
+          message: modalMessage,
+          button: 'Revert',
+        };
+      }
+
+    } else if (commentId && commentId.length > 0) { /* If user wants to delete a comment */
+      this.selectedComment = this.document.comments.find(comm => comm._id === commentId);
+      this.performDelete = true;
     }
 
-    if (modalType === 'delete') {
-      const modalMessage = 'This revision will be removed from the document and ' +
-      'can only be restored by an Administrator. Are you sure you want to delete?';
-
-      this.modalMessage = {
-        title: 'Deleting Revision',
-        message: modalMessage,
-        button: 'Delete',
-      };
-    } else if (modalType === 'revert') {
-      const modalMessage = 'This revision will become a new copy and be treated as the' +
-      ' main version of the document. Are you sure you want to revert to this revision?';
-
-      this.modalMessage = {
-        title: 'Reverting Revision',
-        message: modalMessage,
-        button: 'Revert',
-      };
-    }
-
-    this.modal = this.modalService.open(content, this.options);
-    console.log('current revision: ' + JSON.stringify(this.currentRevision))
-    console.log('revisionIndex: ' + this.revisionIndex);
+    this.modal = this.modalService.open(content, this.globals.options);
   }
 
   /* Close a modal */
   closeModal() {
     this.alert = '';
+    this.textComment = '';
     this.message = '';
     this.file = null;
     this.fileName = '';
@@ -133,6 +179,12 @@ export class DocumentComponent implements OnInit {
       this.document = data;
       this.totalIndices = this.getNumOfRevisions();
       this.getLatestRevision();
+
+      this.selectedOption = this.document.revisions.slice(0).reverse().find( item =>
+        item.message !== 'Deleted revision')._id;
+
+      this.selectedFilter = this.document.revisions.slice(0).reverse().find( item =>
+        item.message !== 'Deleted revision')._id;
     })
   }
 
@@ -143,6 +195,7 @@ export class DocumentComponent implements OnInit {
         const numOfRevisions = this.getNumOfRevisions();
         this.retrieveDocument();
         this.uploadFile(numOfRevisions);
+
         this.closeModal();
       }, (err) => {
         console.log(err)
@@ -204,5 +257,91 @@ export class DocumentComponent implements OnInit {
     }, (err) => {
       console.log(err);
     })
+  }
+
+  /* Post a comment */
+  postComment() {
+    if (this.textComment.length <= 2000) {
+      const findRevisionNum = this.document.revisions.findIndex(revision =>
+        revision._id === this.selectedOption);
+
+      const getFilename = this.document.revisions[findRevisionNum].message;
+      const insertFilename = getFilename ?
+        getFilename : this.document.revisions[findRevisionNum].message;
+
+      this.documentService.addComment(this.document._id, this.textComment,
+        findRevisionNum, insertFilename).subscribe( data => {
+        console.log(data);
+        this.retrieveDocument();
+        this.modal.close();
+
+        this.alert = '';
+        this.textComment = '';
+      });
+    } else {
+      this.alert = { message: 'Comment exceeds maximum 2000 characters.' };
+    }
+
+  }
+
+  /* Edit a comment */
+  editComment(commentId: string, text: string) {
+    if (text.length <= 2000) {
+      this.validComment = true;
+      const findCommentIndex = this.document.comments.findIndex(item => item._id === commentId);
+
+      this.documentService.editComment(this.document._id, findCommentIndex, text).subscribe( data => {
+        console.log('Edited?: ' + data);
+        this.document.comments[findCommentIndex].text = text;
+        this.toggleEditButton();
+      })
+    } else {
+      this.validComment = false;
+    }
+  }
+
+  /* Delete a comment */
+  deleteComment(commentId: string) {
+    const findCommentIndex = this.document.comments.findIndex(item => item._id === commentId);
+
+    this.documentService.deleteComment(this.document._id, findCommentIndex).subscribe( data => {
+      this.document.comments.splice(findCommentIndex, 1);
+      this.selectedComment = new Comment();
+      this.closeModal();
+    })
+  }
+
+  /* Filter comments based on user's choice in the dropdown list */
+  filterComments(revisionId: string, commentsArr: any[]) {
+    const findRevisionIndex = this.document.revisions.findIndex (item => item._id === revisionId);
+
+    const filteredComments = this.document.comments.filter( data => {
+      return data.revision === findRevisionIndex;
+    });
+
+    return filteredComments;
+  }
+
+  /* Subscribe to a document */
+  subscribeToDocument() {
+    this.documentService.subscribeToDocument(this.document._id).subscribe( () => {
+      this.document.subscribers.push(this.currentUser.user._id);
+    })
+  }
+
+  /* Subscribe to a document */
+  unsubscribeFromDocument() {
+    this.documentService.unsubscribeFromDocument(this.document._id).subscribe( () => {
+      const findUserId = this.document.subscribers.findIndex(item => item._id === this.currentUser.user._id);
+      this.document.subscribers.splice(findUserId, 1);
+    })
+  }
+
+  /* Check if current user is already subscribed to the document */
+  IsSubscribed() {
+    if (this.document.subscribers) {
+      return this.document.subscribers.includes(this.currentUser.user._id);
+    }
+    return false;
   }
 }
