@@ -42,7 +42,6 @@ export class ReviewComponent implements OnInit {
   }
 
   renderGraph() {
-    // Create the input graph
     const g = new dagreD3.graphlib.Graph()
       .setGraph({})
       .setDefaultEdgeLabel(function() { return {}; });
@@ -92,20 +91,46 @@ export class ReviewComponent implements OnInit {
     svg.call(zoom.transform, d3.zoomIdentity.translate((svg.attr('width') - g.graph().width * initialScale) / 2, 20).scale(initialScale));
 
     const componentScope = this;
-    d3.select('svg g').selectAll('g.node').each(function(nodeId) {
-      this.addEventListener('click', function() {
-        componentScope.documentId = componentScope.review.nodes[nodeId].document;
-        if (componentScope.documentComponent) {
-          setTimeout(() => {componentScope.documentComponent.ngOnInit()}, 30);
-        }
+    d3.select('svg g').selectAll('g.node')
+      .attr('class', function(nodeId) {
+        const reviewNode: ReviewNode = componentScope.review.nodes[nodeId];
+        return d3.select(this).attr('class') + ` node-${componentScope.getNodeStatus(reviewNode)}`;
+      })
+      .each(function(nodeId) {
+        this.addEventListener('click', function() {
+          componentScope.documentId = componentScope.review.nodes[nodeId].document;
+          if (componentScope.documentComponent) {
+            setTimeout(() => {componentScope.documentComponent.ngOnInit()}, 30);
+          }
+        });
       });
-    });
 
     svg.attr('height', g.graph().height + 40);
     this.zone.run(() => {});
   }
 
   getLabel(node: ReviewNode): string {
-    return node.title;
+    let completionLabel: string;
+    if ((new Date()).getTime() - (new Date(node.finishDate)).getTime() < 0) {
+      completionLabel = 'Estimated Completion';
+    } else {
+      completionLabel = 'Completed';
+    }
+    return `${node.title}
+${completionLabel}: ${this.formatDate(node.finishDate)}`;
+  }
+
+  getNodeStatus(node: ReviewNode): string {
+    if (node.finalized) {
+      return 'finalized';
+    }
+    if (node.prerequisites.reduce((acc, prerequisiteId) => acc && this.review.nodes[prerequisiteId].finalized, true)) {
+      return 'in-progress';
+    }
+    return 'prerequisites-pending';
+  }
+
+  formatDate(date: string): string {
+    return new Date(date).toLocaleDateString();
   }
 }
