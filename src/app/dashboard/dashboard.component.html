@@ -1,23 +1,15 @@
 <ngb-tabset>
   <!-- <ngb-tab>
-  <ng-template ngbTabTitle><i class="fa fa-university"></i> Program Reviews</ng-template>
-  <ng-template ngbTabContent>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-  dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-  proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-  dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-  proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-  dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-  proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-</ng-template>
-</ngb-tab> -->
+    <ng-template ngbTabTitle>
+      <i class="fa fa-university"></i> Program Reviews
+    </ng-template>
+    <ng-template ngbTabContent>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmoa
+      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+      dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+      proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </ng-template>
+  </ngb-tab> -->
 
   <ngb-tab>
     <ng-template ngbTabTitle><i class="fa fa-th-list"></i> Recent Actions</ng-template>
@@ -27,7 +19,9 @@
           <div class="form-row">
             <div class="form-group col-md-7">
               <prism-user-selector [configType]="'single'"></prism-user-selector>
-              <div class="text-hints">Search for a user to return all their action history.</div>
+              <div class="text-hints">
+                Search for a user to return all their action history.
+              </div>
             </div>
 
             <div class="form-group col-md-3">
@@ -36,9 +30,10 @@
               </select>
             </div>
 
-
             <div class="form-group col-md-2">
-              <button class="btn btn-dark" type="button" (click)=searchUserActions(user)>Search</button>
+              <button class="btn btn-dark" type="button"
+                      (click)=searchUserActions(user)>Search
+              </button>
             </div>
           </div>
         </div>
@@ -49,12 +44,14 @@
               <div class="card-header-title">
                 <div class="card-message">
                   <a [routerLink]="" (click)="goToLink(action.type, action.object)">
-                    {{action.user.name.first}} {{action.user.name.last }} {{ action.text }} {{ action.label }}
+                    {{action.user.name.first}} {{action.user.name.last }}
+                    {{ action.text }} {{ action.label }}
                   </a>
                 </div>
 
                 <div class="card-info">
-                  <strong>{{action.user.username}}</strong> on <strong>{{ action.date | date: 'MM/dd/yyyy hh:mm:ss' }}</strong>
+                  <strong>{{action.user.username}}</strong> on
+                  <strong>{{ action.date | date: 'MM/dd/yyyy hh:mm:ss' }}</strong>
                 </div>
               </div>
             </div>
@@ -76,7 +73,7 @@
         <ng-template #emptyActions>
           <p style="padding-top: 20px;">
             <ngb-alert class="info-message" type="info" [dismissible]="false">
-              <strong> Information: </strong> There are currently no actions recorded.
+              <strong>Information:</strong> There are currently no actions recorded.
             </ngb-alert>
           </p>
         </ng-template>
