@@ -39,9 +39,6 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    console.log(JSON.stringify(this.currentUser.groups))
-
-    this.isAdmin = this.currentUser.groups.some( x => x.name === 'Administrators')
     this.numberOfActions(this.currentUser._id);
 
     this.loadPage(this.page);
@@ -56,45 +53,46 @@ export class DashboardComponent implements OnInit {
   }
 
   searchUserActions(username?: string) {
-    const filteredList = [];
-    const user = this.sharedService.searchUser[0];
-
-    this.numberOfActions(user);
+    const user = this.sharedService.searchUser;
 
     if (user) {
-      this.getUserActionLogs(user).then( (result: ActionLogger[]) => {
-        console.log('what is user: ' + user)
+      if (this.selectedOption === 'All') {
+        this.numberOfActions(user);
 
-        for (let i = 0; i < result.length; i++) {
-          if (this.selectedOption === 'All') {
-            filteredList.push(result[i]);
-          } else if (this.selectedOption.toLowerCase() === result[i].type) {
-            filteredList.push(result[i]);
-          }
-        }
-        this.displayHistory = filteredList;
-        console.log(this.displayHistory)
-      })
+        this.getUserActionLogs(user).then( (result: ActionLogger[]) => {
+          this.displayHistory = result;
+          console.log(this.displayHistory);
+
+        })
+      } else {
+        this.numberOfActions(user, this.selectedOption.toLowerCase());
+        this.getUserActionLogs(user, this.selectedOption.toLowerCase()).then(
+          (result: ActionLogger[]) => {
+            this.displayHistory = result;
+            console.log(this.displayHistory);
+        });
+      }
     }
   }
 
-  getUserActionLogs(username?: string) {
+  getUserActionLogs(username?: string, type?: string) {
     // return list of actions of a specific user
     if (username) {
       return new Promise((resolve, reject) => {
-        this.dashboardService.getUserActionLogs(username, (this.resultPage)).subscribe( data => {
-          this.allLogs[this.resultPage] = data;
-          this.displayHistory = this.allLogs[this.resultPage];
+        this.dashboardService.getUserActionLogs(username, this.resultPage, type)
+          .subscribe( data => {
+            this.allLogs[this.resultPage] = data;
+            this.displayHistory = this.allLogs[this.resultPage];
 
-          console.log(this.allLogs);
-          resolve(data);
+            console.log(this.allLogs);
+            resolve(data);
         })
       });
     }
 
     // return list of all recent actions
     return new Promise((resolve, reject) => {
-      this.dashboardService.getRootActionLogs(this.resultPage ).subscribe( data => {
+      this.dashboardService.getRootActionLogs(this.resultPage).subscribe( data => {
         this.allLogs[this.resultPage] = data;
         this.displayHistory = this.allLogs[this.resultPage];
 
@@ -122,8 +120,8 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  numberOfActions(username?: string) {
-    this.dashboardService.getNumberOfUserLogs(username).subscribe( data => {
+  numberOfActions(username?: string, type?: string) {
+    this.dashboardService.getNumberOfUserLogs(username, type).subscribe( data => {
       console.log('total cost: ' + data.count)
       this.totalLogs = data.count;
 

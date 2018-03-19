@@ -13,13 +13,20 @@ export class DashboardService {
     return this.http.get<ActionLogger[]>('/api/actions?page=' + pageNumber);
   }
 
-  getUserActionLogs(userId: string, pageNumber: number): Observable<ActionLogger[]> {
-    return this.http.get<ActionLogger[]>('/api/actions?user=' + userId + '&page=' + pageNumber);
+  getUserActionLogs(userId: string, pageNumber: number, type?: string):
+    Observable<ActionLogger[]> {
+      if (type) {
+        return this.http.get<ActionLogger[]>('/api/actions?user=' + userId +
+          '&type=' + type + '&page=' + pageNumber);
+      }
+      return this.http.get<ActionLogger[]>('/api/actions?user=' + userId +
+        '&page=' + pageNumber);
   }
 
-  getNumberOfUserLogs(userId?: string): Observable<any> {
+  getNumberOfUserLogs(userId?: string, type?: string): Observable<any> {
     if (userId) {
-      return this.http.get<any>('/api/actions?user=' + userId + '&count=1');
+      return this.http.get<any>('/api/actions?user=' + userId + (type ? '&type='
+        + type : '') + '&count=1');
     }
     return this.http.get<any>('/api/actions?count=1');
   }

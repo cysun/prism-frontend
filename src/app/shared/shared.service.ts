@@ -4,7 +4,7 @@ import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class SharedService {
-  searchUser: string[];
+  searchUser: string;
 
   isAdmin(): boolean {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));

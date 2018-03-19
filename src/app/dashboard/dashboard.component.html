@@ -23,7 +23,7 @@
     <ng-template ngbTabTitle><i class="fa fa-th-list"></i> Recent Actions</ng-template>
     <ng-template ngbTabContent>
       <div class="container">
-        <div class="search-bar" *ngIf="isAdmin">
+        <div class="search-bar" *ngIf="sharedService.isAdmin()">
           <div class="form-row">
             <div class="form-group col-md-7">
               <prism-user-selector [configType]="'single'"></prism-user-selector>
@@ -61,7 +61,7 @@
           </div>
         </ng-container>
 
-        <div class="pagination-bar">
+        <div class="pagination-bar" *ngIf="totalLogs; else emptyActions">
           <ngb-pagination class="d-flex justify-content-center"
                           [collectionSize]="totalLogs"
                           [pageSize]="itemsPerPage"
@@ -72,6 +72,14 @@
                           (pageChange)="loadPage($event)">
           </ngb-pagination>
         </div>
+
+        <ng-template #emptyActions>
+          <p style="padding-top: 20px;">
+            <ngb-alert class="info-message" type="info" [dismissible]="false">
+              <strong> Information: </strong> There are currently no actions recorded.
+            </ngb-alert>
+          </p>
+        </ng-template>
       </div>
     </ng-template>
   </ngb-tab>
