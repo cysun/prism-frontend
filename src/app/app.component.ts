@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 
 import { AuthService } from './login/auth.service';
-
+import { SharedService } from './shared/shared.service';
 import { UserResponse } from './models/user-response.model';
 
 @Component({
@@ -14,8 +14,12 @@ import { UserResponse } from './models/user-response.model';
 
 export class AppComponent implements OnInit {
   username: string;
+  isCollapsed = false;
+  isAdmin: boolean;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService,
+    private sharedService: SharedService,
+    private router: Router) { }
 
   ngOnInit() {
     if (this.authService.isAuthenticated()) {

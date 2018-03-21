@@ -1,18 +1,8 @@
 html, body {
   height: 100%;
   margin: 0;
-  min-width: 900px;
   padding: 0;
 }
-
-/* a, a:visited {
-  color: #fff;
-  text-decoration:none;
-}
-
-a:hover {
-  color: #ffd700;
-} */
 
 .app-container {
   min-height: 100%;
@@ -64,6 +54,9 @@ blockquote {
 
 .footer {
   background-color: #1A1A1A;
+  border-top-color: #FFCE00;
+  border-top-style: solid;
+  border-width: 5px;
   color: #FFF;
   height: 60px;
   margin-top: -60px;
@@ -74,7 +67,7 @@ blockquote {
 }
 
 .footer-text {
-  padding-top: 20px;
+  padding-top: 15px;
 }
 
 .navbar {
@@ -92,7 +85,7 @@ blockquote {
 
 .main {
   padding-bottom: 100px;
-  padding-top: 40px;
+  padding-top: 10px;
 }
 
 .modal {
@@ -123,6 +116,16 @@ blockquote {
   font-weight: bold;
   padding: 10px;
   text-align: center;
+}
+
+.nav-link {
+  color: #000;
+}
+
+.nav-link:hover {
+  background: #FFCE00;
+  color: #000;
+  font-weight: bold;
 }
 
 table {

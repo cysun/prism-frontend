@@ -1,27 +1,82 @@
 <div class="app-container">
-  <nav class="navbar sticky-top navbar-dark" *ngIf="authService.isAuthenticated()">
-    <a class="navbar-brand" [routerLink]="['/dashboard']" routerLinkActive="active">
-      <i class="fa fa-cubes fa-2x"></i> <span class="header-logo">PRISM</span>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top"
+       *ngIf="authService.isAuthenticated()">
+    <button type="button" class="navbar-toggler navbar-toggler-right"
+            (click)="isExpanded = !isExpanded" data-toggle="collapse">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand mx-auto" [routerLink]="['/dashboard']" routerLinkActive="active">
+      <span class="header-logo">PRISM</span>
     </a>
-
-    <div ngbDropdown placement="bottom-right" class="d-inline-block">
-      <button class="btn btn-outline-primary" ngbDropdownToggle>
-        <i class="fa fa-icon fa-user-o"></i>{{username}}
-      </button>
-
-      <div ngbDropdownMenu>
-        <button class="dropdown-item" [routerLink]="['settings']">
-          <i class="fa fa-icon fa-gear"></i>Settings
-        </button>
-
-        <div class="dropdown-divider"></div>
-        
-        <button class="dropdown-item" (click)="logout()">
-          <i class="fa fa-icon fa-sign-out"></i>Sign Out
-        </button>
-      </div>
-    </div>
   </nav>
+
+  <div class="collapse navbar-collapse sticky-top" [ngbCollapse]="!isExpanded"
+       *ngIf="authService.isAuthenticated()">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/dashboard']" style="padding: 10px;">
+          <i class="fa fa-icon fa-home"></i>Dashboard
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/calendar']" style="padding: 10px;">
+          <i class="fa fa-icon fa-calendar"></i>Calendar
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/minutes']" style="padding: 10px;">
+          <i class="fa fa-icon fa-clock-o"></i>Minutes
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/resources']" style="padding: 10px;">
+          <i class="fa fa-icon fa-folder-open-o"></i>Resources
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/group']" style="padding: 10px;">
+          <i class="fa fa-icon fa-users"></i>Committee
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a *ngIf="sharedService.isAdmin()" class="nav-link"
+           [routerLink]="['/college']" style="padding: 10px;">
+          <i class="fa fa-icon fa-graduation-cap"></i>University Hierarchy
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/document']" style="padding: 10px;">
+          <i class="fa fa-icon fa-file-o"></i>Document
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a *ngIf="sharedService.isAdmin()" class="nav-link"
+           [routerLink]="['/templates']" style="padding: 10px;">
+          <i class="fa fa-icon fa-folder"></i>Template Manager
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/settings']" style="padding: 10px;">
+          <i class="fa fa-icon fa-gear"></i>Settings
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="" (click)="logout()" style="padding: 10px;">
+          <i class="fa fa-icon fa-sign-out"></i>Sign Out
+        </a>
+      </li>
+    </ul>
+  </div>
 
   <div class="main">
     <router-outlet></router-outlet>

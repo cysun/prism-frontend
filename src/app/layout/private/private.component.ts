@@ -10,7 +10,20 @@ import { SharedService } from '../../shared/shared.service';
   styleUrls: ['./private.component.css']
 })
 export class PrivateComponent implements OnInit {
-  constructor(private sharedService: SharedService, private router: Router) { }
+  username: string;
 
-  ngOnInit() { }
+  constructor(private sharedService: SharedService,
+    private authService: AuthService,
+     private router: Router) { }
+
+  ngOnInit() {
+    const user = this.authService.getUser();
+    this.username = user.user.username;
+  }
+
+  logout() {
+    this.authService.logout();
+    this.username = '';
+    this.router.navigate(['login']);
+  }
 }
