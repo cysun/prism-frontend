@@ -42,8 +42,13 @@ import { DocumentService } from './document/document.service';
 import { GroupManagerService } from './group-manager/group-manager.service';
 import { ProgramService } from './colleges/departments/programs/program.service';
 import { SettingsService } from './settings/settings.service';
+import { SharedService } from './shared/shared.service';
+import { TemplateManagerService } from './template-manager/template-manager.service';
+import { UserSelectorService } from './user-selector/user-selector.service';
 
 import { Globals } from './shared/app.global';
+import { TemplateManagerComponent } from './template-manager/template-manager.component';
+import { UserSelectorComponent } from './user-selector/user-selector.component';
 
 @NgModule({
   declarations: [
@@ -58,12 +63,14 @@ import { Globals } from './shared/app.global';
     LoginComponent,
     MinutesComponent,
     PageNotFoundComponent,
+    ProgramsComponent,
     ResourcesComponent,
     SettingsComponent,
+    TemplateManagerComponent,
+    UserSelectorComponent,
     PrivateComponent,
     PublicComponent,
     ReversePipe,
-    ProgramsComponent,
   ],
   imports: [
     NgbModule.forRoot(),
@@ -87,12 +94,14 @@ import { Globals } from './shared/app.global';
     GroupManagerService,
     ProgramService,
     SettingsService,
+    SharedService,
+    TemplateManagerService,
+    UserSelectorService,
     {
       provide: HTTP_INTERCEPTORS,
       useFactory: function(router: Router) {
         return new AuthInterceptor(router);
       },
-      // useClass: AuthInterceptor,
       multi: true,
       deps: [Router]
     }

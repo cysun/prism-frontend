@@ -4,7 +4,8 @@
 
 .card-action-buttons {
   float: right;
-  margin-top: 5px;
+  margin-top: 17px;
+  padding-right: 10px;
 }
 
 .card-container {
@@ -14,6 +15,11 @@
 .card-document-title {
   float: left;
   padding-left: 10px;
+}
+
+.comment-date {
+  color: #808080;
+  font-size: 14px;
 }
 
 .deleted-revisions {
@@ -37,6 +43,10 @@
 .document-message {
   font-size: 1.3em;
   font-weight: bold;
+}
+
+.dropdown-toggle::after {
+  display: none;
 }
 
 .file-message {
@@ -65,8 +75,8 @@
   vertical-align: middle;
 }
 
-.modal-message {
-  padding: 20px;
+.line-breaker {
+  white-space: pre-line;
 }
 
 .revision-details {

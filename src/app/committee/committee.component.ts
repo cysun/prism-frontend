@@ -13,11 +13,15 @@ import { GroupManagerService } from '../group-manager/group-manager.service';
 export class CommitteeComponent implements OnInit {
   prs: any[] = [];
   currentUser: User = new User();
+  isAdmin: boolean;
 
   constructor(private groupManagerService: GroupManagerService) { }
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    console.log(JSON.stringify(this.currentUser.groups));
+
+    this.isAdmin = this.currentUser.groups.some( x => x.name === 'Administrators');
 
     this.groupManagerService.getPrs().subscribe( data => {
       const members = data.members;
