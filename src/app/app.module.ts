@@ -46,6 +46,7 @@ import { UserSelectorService } from './user-selector/user-selector.service';
 import { Globals } from './shared/app.global';
 import { TemplateManagerComponent } from './template-manager/template-manager.component';
 import { UserSelectorComponent } from './user-selector/user-selector.component';
+import { ReviewListComponent } from './review-list/review-list.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { UserSelectorComponent } from './user-selector/user-selector.component';
     ReversePipe,
     TemplateManagerComponent,
     UserSelectorComponent,
+    ReviewListComponent,
   ],
   imports: [
     NgbModule.forRoot(),
