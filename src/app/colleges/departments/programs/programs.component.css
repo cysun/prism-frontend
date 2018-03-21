@@ -1,0 +1,15 @@
+ul {
+  list-style: none;
+}
+
+.text-hints {
+  color: #808080;
+  font-size: 14px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+.grid-space {
+  padding-top: 20px;
+}
