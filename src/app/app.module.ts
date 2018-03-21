@@ -20,6 +20,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { MinutesComponent } from './minutes/minutes.component';
 import { ResourcesComponent } from './resources/resources.component';
+import { ReviewComponent } from './review/review.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectizeModule } from 'ng-selectize';
@@ -36,6 +37,7 @@ import { DashboardService } from './dashboard/dashboard.service';
 import { DepartmentService } from './colleges/departments/department.service';
 import { DocumentService } from './document/document.service';
 import { GroupManagerService } from './group-manager/group-manager.service';
+import { ReviewService } from './review/review.service';
 import { SettingsService } from './settings/settings.service';
 import { SharedService } from './shared/shared.service';
 import { TemplateManagerService } from './template-manager/template-manager.service';
@@ -59,6 +61,7 @@ import { UserSelectorComponent } from './user-selector/user-selector.component';
     MinutesComponent,
     PageNotFoundComponent,
     ResourcesComponent,
+    ReviewComponent,
     SettingsComponent,
     PrivateComponent,
     PublicComponent,
@@ -86,6 +89,7 @@ import { UserSelectorComponent } from './user-selector/user-selector.component';
     DepartmentService,
     Globals,
     GroupManagerService,
+    ReviewService,
     SettingsService,
     SharedService,
     TemplateManagerService,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
@@ -35,7 +35,7 @@ export class DocumentComponent implements OnInit {
   totalIndices: number;
 
   documentTitle: string;
-  documentId: string;
+  @Input() documentId: string;
   message: string;
   file: File;
   fileName: string;
@@ -47,19 +47,24 @@ export class DocumentComponent implements OnInit {
   constructor(private documentService: DocumentService,
               private modalService: NgbModal,
               private route: ActivatedRoute,
-              private globals: Globals) {
-    this.route.params.subscribe( params => {
-      this.documentId = params.id;
-    })
+              private globals: Globals) { }
+
+  public ngOnInit() {
+    if (!this.documentId) {
+      this.route.params.subscribe( params => {
+        this.documentId = params.id;
+      });
+    }
+
+    const userId = JSON.parse(localStorage.getItem('currentUser'))._id;
+
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     // console.log('this is: ' + JSON.stringify(this.currentUser))
-  }
 
-  ngOnInit() {
     this.documentService.retrieveDocument(this.documentId).subscribe( data => {
       this.document = data;
 
-      if (this.document.revisions) {
+      if (this.document.revisions && this.document.revisions.length !== 0) {
         this.selectedOption = this.document.revisions.slice(0).reverse().find( item =>
           item.message !== 'Deleted revision')._id;
 
@@ -70,7 +75,7 @@ export class DocumentComponent implements OnInit {
       this.documentTitle = this.document.title;
       this.totalIndices = this.getNumOfRevisions();
       this.getLatestRevision();
-    })
+    });
   }
 
   /* Set file variable to the file the user has chosen */
