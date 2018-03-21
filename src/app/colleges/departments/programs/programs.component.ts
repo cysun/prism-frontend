@@ -48,7 +48,7 @@ export class ProgramsComponent implements OnInit {
   }
 
   cancelUpdate() {
-    this.editedProgram = "";
+    this.editedProgram = '';
   }
 
   closeAlert(alert: IAlert) {
@@ -75,14 +75,15 @@ export class ProgramsComponent implements OnInit {
     this.alerts = [];
     if (this.program.name.trim().length > 0) {
       if (this.programs.some(existingProgram =>
-        existingProgram.name.toLowerCase() === this.program.name.toLowerCase() && existingProgram._id != this.program._id)) {
+        existingProgram.name.toLowerCase() === this.program.name.toLowerCase()
+          && existingProgram._id !== this.program._id)) {
           this.invalidErrorMessage('existing program');
       } else {
         this.programService.updateProgram(this.program).subscribe( updatedProgram => {
           const index = this.programs.findIndex(item => item._id === this.program._id);
           this.programs[index] = updatedProgram;
           this.program = updatedProgram;
-          this.editedProgram = "";
+          this.editedProgram = '';
         });
       }
     } else {

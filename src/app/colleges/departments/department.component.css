@@ -1,15 +1,15 @@
 .content-bar {
-  padding: 5px;
   background-color: off-white;
+  padding: 5px;
   padding-right: 15px;
   text-align: left;
 }
 
 .bar-text {
-  margin-top: 5px;
-  margin-left: 7px;
-  margin-bottom: 3px;
   font-family: sans-serif;
+  margin-bottom: 3px;
+  margin-left: 7px;
+  margin-top: 5px;
 }
 
 .grid-space {
@@ -19,14 +19,14 @@
 .text-hints {
   color: #808080;
   font-size: 14px;
-  margin-top: 6px;
   margin-bottom: 6px;
+  margin-top: 6px;
   text-align: left;
 }
 
 .btn-department {
-  width: 175px;
-  margin-top: 3px;
-  margin-right: -7px;
   margin-bottom: 3px;
+  margin-right: -7px;
+  margin-top: 3px;
+  width: 175px;
 }
