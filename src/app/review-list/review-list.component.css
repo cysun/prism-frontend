@@ -1,0 +1,19 @@
+.card-container {
+  border-left: #2E8B57;
+  border-style: solid;
+}
+
+.card-body {
+  padding: 10px;
+}
+
+.card-details {
+  font-size: 0.9em;
+  padding-left: 20px;
+}
+
+.card-message {
+  background-color: #EEE;
+  border-radius: 5px;
+  padding: 15px;
+}
