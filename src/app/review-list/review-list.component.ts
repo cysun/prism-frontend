@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
+import { College } from '../models/college.model';
 import { Department } from '../models/department.model';
 import { Program } from '../models/program.model';
 import { Review } from '../models/review.model';
 
+import { CollegesService } from '../colleges/colleges.service';
 import { DepartmentService } from '../colleges/departments/department.service';
 import { ProgramService } from '../colleges/departments/programs/program.service';
 import { ReviewService } from '../review/review.service';
@@ -17,7 +19,8 @@ import { ReviewService } from '../review/review.service';
 export class ReviewListComponent implements OnInit {
   reviewsList: Review[] = [];
 
-  constructor(private departmentService: DepartmentService,
+  constructor(private collegeService: CollegesService,
+    private departmentService: DepartmentService,
     private programService: ProgramService,
     private reviewService: ReviewService) { }
 
@@ -33,6 +36,15 @@ export class ReviewListComponent implements OnInit {
             const dept: Department = data;
             program.department = JSON.parse(JSON.stringify(dept));
             this.reviewsList[i].program = JSON.parse(JSON.stringify(program));
+          }).then(() => {
+            const dept: Department = JSON.parse(JSON.stringify(program.department));
+
+            this.getCollegeData(dept.college).then((data: College) => {
+              const college: College = data;
+              dept.college = JSON.parse(JSON.stringify(college));
+              program.department = JSON.parse(JSON.stringify(dept));
+              this.reviewsList[i].program = JSON.parse(JSON.stringify(program));
+            })
           })
         })
       }
@@ -63,4 +75,17 @@ export class ReviewListComponent implements OnInit {
       });
     });
   }
+
+  getCollegeData(collegeId: string) {
+    return new Promise((resolve, reject) => {
+      this.collegeService.getCollege(collegeId).subscribe( data => {
+        resolve(data);
+      });
+    });
   }
+
+  yearString(startDate: Date) {
+    const startYear: number = (new Date(startDate)).getFullYear();
+    return startYear + '-' + (startYear + 1);
+  }
+}

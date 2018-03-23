@@ -1,15 +1,17 @@
 .card-container {
-  border-left: #2E8B57;
+  border-left: #FFCE00;
   border-style: solid;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }
 
 .card-body {
-  padding: 10px;
+  padding: 0;
 }
 
 .card-details {
   font-size: 0.9em;
-  padding-left: 20px;
+  padding-top: 10px;
 }
 
 .card-message {

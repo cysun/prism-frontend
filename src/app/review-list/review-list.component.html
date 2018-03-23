@@ -1,25 +1,26 @@
 <div class="container-fluid" style="padding:20px;">
   <ng-container *ngFor="let review of reviewsList">
-      <span class="card card-container">
-        <div class="card-body">
-          <div class="card-header-title">
-            <div class="card-message">
-              <a routerLink="/review/{{review._id}}">
-                {{ review.program?.name}} {{ review.startDate | date: 'yyyy' }} >
-              </a>
-              <div class="card-info">
-                <strong>Department: </strong> {{review.program?.department?.name}}
-              </div>
+
+    <span class="card card-container" style="width: 30rem;">
+      <div class="card-body">
+        <div class="card-header-title container-fluid">
+          <div class="card-message">
+            <a routerLink="/review/{{review._id}}">
+              {{ review.program?.name}} {{ yearString(review.startDate)}} >>
+            </a>
+            <div class="card-info">
+              <i style="font-weight: lighter;">{{review.program?.department?.name}}</i><br/>
+              {{review.program?.department?.college?.name}}
             </div>
           </div>
-        </div>
 
-        <div class="card-details">
-          <strong>Lead Reviewers:</strong> John Doe<br/>
-          <strong>Start Date:</strong> {{ review.startDate | date: 'MM/dd/yyyy' }}
+          <div class="card-details">
+            <strong>Lead Reviewer(s):</strong> John Doe<br/>
+          </div>
         </div>
-      </span>
-    </ng-container>
+      </div>
+    </span>
+  </ng-container>
 </div>
 
 <pre>{{ reviewsList | json }}</pre>
