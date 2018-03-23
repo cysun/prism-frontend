@@ -1,8 +1,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="sidebar">
-      <!-- <div class="nav-side-menu" [ngbCollapse]="true">  -->
-      <div class="nav-side-menu">
+      <div class="nav-side-menu" [ngbCollapse]="isCollapsed" (window:resize)="onResize($event)">
         <div class="menu-list">
           <div class="nav-greeting">Welcome, <strong>{{ username }}</strong>!</div>
           <hr/>

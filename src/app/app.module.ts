@@ -109,7 +109,8 @@ import { ReviewListComponent } from './review-list/review-list.component';
       },
       multi: true,
       deps: [Router]
-    }
+    },
+    { provide: 'Window', useValue: window },
   ],
   bootstrap: [AppComponent]
 })
