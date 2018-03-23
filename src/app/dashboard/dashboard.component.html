@@ -6,14 +6,14 @@
       <i class="fa fa-university"></i> Active Reviews
     </ng-template>
     <ng-template ngbTabContent>
-      <prism-review-list></prism-review-list>
+      <prism-review-list *ngIf="sharedService.isAdmin()"></prism-review-list>
     </ng-template>
   </ngb-tab>
 
   <ngb-tab>
     <ng-template ngbTabTitle><i class="fa fa-th-list"></i> Recent Actions</ng-template>
     <ng-template ngbTabContent>
-      <div class="container">
+      <div class="container-fluid container-fluid-content">
         <div class="search-bar" *ngIf="sharedService.isAdmin()">
           <div class="form-row">
             <div class="form-group col-md-7">

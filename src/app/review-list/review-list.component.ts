@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { User } from '../models/user.model';
 import { College } from '../models/college.model';
 import { Department } from '../models/department.model';
 import { Program } from '../models/program.model';
@@ -7,9 +8,9 @@ import { Review } from '../models/review.model';
 
 import { CollegesService } from '../colleges/colleges.service';
 import { DepartmentService } from '../colleges/departments/department.service';
+import { GroupManagerService } from '../group-manager/group-manager.service';
 import { ProgramService } from '../colleges/departments/programs/program.service';
 import { ReviewService } from '../review/review.service';
-
 
 @Component({
   selector: 'prism-review-list',
@@ -21,6 +22,7 @@ export class ReviewListComponent implements OnInit {
 
   constructor(private collegeService: CollegesService,
     private departmentService: DepartmentService,
+    private groupManagerService: GroupManagerService,
     private programService: ProgramService,
     private reviewService: ReviewService) { }
 
@@ -46,6 +48,15 @@ export class ReviewListComponent implements OnInit {
               this.reviewsList[i].program = JSON.parse(JSON.stringify(program));
             })
           })
+        }).then(() => {
+          const leadReviewers: User[] = [];
+          for (let j = 0; j < this.reviewsList[i].leadReviewers.length; j++) {
+            this.getLeadReviewerData(this.reviewsList[i].leadReviewers[j])
+            .then( (data: User) => {
+              leadReviewers.push(data);
+              this.reviewsList[i].leadReviewers = JSON.parse(JSON.stringify(leadReviewers));
+            })
+          }
         })
       }
     })
@@ -57,6 +68,14 @@ export class ReviewListComponent implements OnInit {
         this.reviewsList = data;
         resolve();
       })
+    });
+  }
+
+  getLeadReviewerData(userId: string) {
+    return new Promise((resolve, reject) => {
+      this.groupManagerService.getUser(userId).subscribe( (data: User) => {
+        resolve(data);
+      });
     });
   }
 

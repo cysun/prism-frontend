@@ -1,26 +1,35 @@
-<div class="container-fluid" style="padding:20px;">
-  <ng-container *ngFor="let review of reviewsList">
-
-    <span class="card card-container" style="width: 30rem;">
-      <div class="card-body">
-        <div class="card-header-title container-fluid">
-          <div class="card-message">
-            <a routerLink="/review/{{review._id}}">
-              {{ review.program?.name}} {{ yearString(review.startDate)}} >>
-            </a>
-            <div class="card-info">
-              <i style="font-weight: lighter;">{{review.program?.department?.name}}</i><br/>
-              {{review.program?.department?.college?.name}}
+<div class="container-fluid container-fluid-content">
+  <div class="row">
+    <ng-container *ngFor="let review of reviewsList">
+      <div class="col-sm-6">
+        <div class="card card-container">
+          <div class="card-body">
+            <div class="card-header-title container-fluid">
+              <div class="card-message">
+                <a routerLink="/review/{{review._id}}">
+                  {{ review.program?.name}} {{ yearString(review.startDate)}}
+                  <i class="fa fa-chevron-right"></i>
+                </a>
+                <div class="card-info">
+                  <i style="font-weight: lighter;">
+                    {{review.program?.department?.name}}
+                  </i><br/>
+                  {{review.program?.department?.college?.name}}
+                </div>
+              </div>
+              <div class="card-details">
+                <strong>Start Date:</strong> {{review.startDate | date: 'MM/dd/yyyy'}}<br/>
+                <strong>Lead Reviewer(s):</strong>
+                <ng-container *ngFor="let leadReviewer of review.leadReviewers; let idx = index;">
+                  {{leadReviewer.name?.first}} {{leadReviewer.name?.last}}{{ idx + 1 < review.leadReviewers.length ? ',' : '' }}
+                </ng-container>
+              </div>
             </div>
-          </div>
-
-          <div class="card-details">
-            <strong>Lead Reviewer(s):</strong> John Doe<br/>
           </div>
         </div>
       </div>
-    </span>
-  </ng-container>
+    </ng-container>
+  </div>
 </div>
 
-<pre>{{ reviewsList | json }}</pre>
+<!-- <pre>{{ reviewsList | json }}</pre> -->
