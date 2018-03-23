@@ -1,11 +1,11 @@
 <div class="container-fluid">
   <div class="row">
     <div class="sidebar">
-      <div class="nav-side-menu" [ngbCollapse]="isCollapsed">
+      <!-- <div class="nav-side-menu" [ngbCollapse]="true">  -->
+      <div class="nav-side-menu">
         <div class="menu-list">
           <div class="nav-greeting">Welcome, <strong>{{ username }}</strong>!</div>
           <hr/>
-
           <a class="nav-link" [routerLink]="['/dashboard']">
             <i class="fa fa-home"></i> Dashboard
           </a>
@@ -26,6 +26,9 @@
           </a>
           <a class="nav-link" [routerLink]="['/document']">
             <i class="fa fa-file-o"></i> Document
+          </a>
+          <a class="nav-link" [routerLink]="['/review']">
+            Review <strong>Visualization Testing</strong>
           </a>
           <a *ngIf="sharedService.isAdmin()" class="nav-link" [routerLink]="['/templates']">
             <i class="fa fa-folder"></i> Template Manager
