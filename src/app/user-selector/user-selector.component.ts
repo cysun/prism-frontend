@@ -11,8 +11,11 @@ import { UserSelectorService } from './user-selector.service';
 })
 export class UserSelectorComponent implements OnInit {
   @Input() configType: string;
+  @Input() suggestedMembers: string[];
 
-  filteredMembers = [];
+  filteredUser: string;
+  filteredMembers: string[];
+  usersList = [];
   suggestedUsers = [];
 
   constructor(private globals: Globals,
@@ -21,11 +24,15 @@ export class UserSelectorComponent implements OnInit {
 
   ngOnInit() {
     this.userSelectorService.getUsers().subscribe( data => {
-      this.suggestedUsers = data;
+      this.usersList = data;
     })
   }
 
   submitUser() {
-    this.sharedService.searchUser = this.filteredMembers;
+    this.sharedService.searchUser = this.filteredUser;
+  }
+
+  submitUsersList() {
+    this.sharedService.filteredUsers = this.filteredMembers;
   }
 }
