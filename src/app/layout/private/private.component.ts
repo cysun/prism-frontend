@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../login/auth.service';
@@ -11,14 +11,26 @@ import { SharedService } from '../../shared/shared.service';
 })
 export class PrivateComponent implements OnInit {
   username: string;
+  isCollapsed: boolean;
 
-  constructor(private sharedService: SharedService,
+  constructor(@Inject('Window') private window: Window,
     private authService: AuthService,
-     private router: Router) { }
+    private router: Router,
+    private sharedService: SharedService) { }
 
   ngOnInit() {
     const user = this.authService.getUser();
     this.username = user.user.username;
+    this.isCollapsed = window.innerWidth < 990 ? true : false;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    if (event.target.innerWidth < 990) {
+      this.isCollapsed = true;
+    } else {
+      this.isCollapsed = false;
+    }
   }
 
   logout() {
