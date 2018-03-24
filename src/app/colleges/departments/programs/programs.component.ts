@@ -107,6 +107,8 @@ export class ProgramsComponent implements OnInit {
       case 'existing program':
         detailMsg = 'Name of program already exists.'
         break;
+      case 'empty date':
+        detailMsg = "Pleae input a review date.";
     }
     this.alerts.push({type: 'warning', message: detailMsg });
   }
