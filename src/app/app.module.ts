@@ -28,9 +28,6 @@ import { NgSelectizeModule } from 'ng-selectize';
 import { LoginComponent } from './login/login.component';
 import { PublicComponent } from './layout/public/public.component';
 import { PrivateComponent } from './layout/private/private.component';
-import { CollegesService } from './colleges/colleges.service';
-import { DepartmentService } from './colleges/departments/department.service';
-import { ProgramService } from './colleges/departments/programs/program.service';
 
 import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
