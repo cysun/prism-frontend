@@ -5,7 +5,6 @@ import { NgbModal, NgbModalRef,  NgbModalOptions } from '@ng-bootstrap/ng-bootst
 import { Resource } from '../models/resource.model';
 import { ResourceService } from './resource.service'
 
-
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -25,9 +24,7 @@ export class ResourcesComponent implements OnInit {
   resource: Resource = new Resource();
   resources: Resource[] = [];
 
-  title: string;
-  id: string;
-  message: string;
+  fileName: string;
   file: File;
 
   constructor(private resourceService: ResourceService, private modalService: NgbModal, private route: ActivatedRoute) { }
@@ -45,17 +42,18 @@ export class ResourcesComponent implements OnInit {
   }
 
   downloadResource(resourceId) {
-    
+
   }
 
   downloadResources() {
 
   }
 
-  // Set file variable to the file the user has chosen
+  /* Set file variable to the file the user has chosen */
   onFileChange(event) {
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
+      this.fileName = event.target.files[0].name;
     }
   }
 
@@ -63,17 +61,37 @@ export class ResourcesComponent implements OnInit {
     this.modal = this.modalService.open(content, this.options);
   }
 
-  uploadResource() {
-    if (this.file && this.message && this.title) {
-      this.resourceService.addResource(this.resource).subscribe( data => {
-        this.closeModal();
-      }, (err) => {
-        console.log(err)
-      });
-    } else if (!this.file) {
-      this.alert = { message: 'Please attach a file.' };
-    }
+  postNewResource() {
+    if (this.file) {
+      this.resourceService.createResource(this.resource.title).subscribe( data => {
+          this.resources.push(data);
+          this.uploadFile(data._id);
+          this.closeModal();
+        }, (err) => {
+          console.log(err)
+        });
+      } else {
+        this.alert = { message: 'Please attach a file.' };
+      }
   }
+
+  /* Upload the file along with the revision message */
+  uploadFile(resourceId: string) {
+    this.resourceService.uploadFile(resourceId, this.file).subscribe( data => {
+      //this.listTemplates();
+      console.log(data)
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
+  /* Get resources */
+  listResources() {
+    // this.resourceManagerService.listAllTemplates().subscribe( data => {
+    //   this.resources = data;
+    // })
+  }
+
 }
 
 /* Required Resource Fields:

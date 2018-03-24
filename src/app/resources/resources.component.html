@@ -25,7 +25,7 @@
   <div class="modal-header">
     <h5 class="modal-title">Upload New Resource</h5>
   </div>
-  <form #f="ngForm" (ngSubmit)="uploadResource()">
+  <form #f="ngForm" (ngSubmit)="postNewResource()">
     <div class="modal-body">
       <div *ngIf="alert">
         <ngb-alert type="danger" [dismissible]="false"><i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}</ngb-alert>
@@ -34,8 +34,7 @@
 
         <div class="custom-file">
           <input name="file" type="file" class="custom-file-input"
-          accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-          (change)="onFileChange($event)">
+           accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" (change)="onFileChange($event)">
 
           <label class="custom-file-label">
             {{ fileName ? fileName : 'Choose a file'}}
@@ -45,17 +44,11 @@
 
         <div class="file-title">
           <input type="text" class="form-control"
-          [(ngModel)]="title" name="file-title"
+          [(ngModel)]="resource.title" name="file-title"
           placeholder="Enter the title of this resource" required>
           <div class="text-hints">Type a title for the new resource.</div>
         </div>
 
-        <div class="file-message">
-          <input type="text" class="form-control"
-          [(ngModel)]="message" name="file-message"
-          placeholder="Enter a message about the resource" required>
-          <div class="text-hints">Type a brief message about the new resource.</div>
-        </div>
       </div>
 
     </div>
@@ -131,7 +124,7 @@
   <div class="col">
     <div ngbDropdown class="d-inline-block">
       <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Toggle dropdown</button>
-      <div ngbDropdownMenu [placement]="top-left" aria-labelledby="dropdownBasic1">
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
         <button class="dropdown-item">Action - 1</button>
         <button class="dropdown-item">Another Action</button>
         <button class="dropdown-item">Something else is here</button>

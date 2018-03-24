@@ -17,10 +17,9 @@ export class ResourceService {
     return this.http.get<Resource>('/api/resource/' + id);
   }
 
-  addResource(resource: Resource): Observable<Resource> {
-    const body = JSON.stringify({'title': resource.title, 'message': resource.message, 'uploader': resource.uploader, 'groups': resource.groups});
-    const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
-    return this.http.post<Resource>('/api/resource', body, header);
+  createResource(title: string): Observable<Resource> {
+    const body = JSON.stringify({'title': title});
+    return this.http.post<Resource>('/api/resource', body, { headers: new HttpHeaders({ 'Content-Type': 'application/json'},  { responseType: 'text' })});
   }
 
   deleteResource(id): Observable<Resource> {
@@ -29,11 +28,19 @@ export class ResourceService {
   }
 
   downloadAllResources() {
-    
+
   }
 
   downloadResources(ids) {
 
+  }
+
+  uploadFile(resourceId: string, file: File) {
+    const fileUpload = new FormData();
+    fileUpload.append('file', file);
+
+    return this.http.post('/api/resource/' + resourceId + '/file',
+    fileUpload, { responseType: 'text' });
   }
 
 }
