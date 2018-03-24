@@ -25,6 +25,7 @@ import { Program } from '../../models/program.model';
 export class DepartmentComponent implements OnInit {
   @ViewChild(ProgramsComponent)
   @Input() collegeId: any;
+  currentCollege: string;
   programsComponent: ProgramsComponent;
   modal: NgbModalRef;
   options: NgbModalOptions = {
@@ -57,6 +58,7 @@ export class DepartmentComponent implements OnInit {
       this.departments = data;
       console.log(data);
     });
+    this.currentCollege = this.collegeId;
     this.departmentService.getUsers().subscribe( data => {
       this.users = data;
       console.log(data);
@@ -120,7 +122,7 @@ export class DepartmentComponent implements OnInit {
       this.departments = this.departments.slice(0);
     });
     this.department = new Department();
-    this.modal.close();
+    this.closeModal();
   }
 
   deleteDepartmentDialog(content, department) {
@@ -161,7 +163,7 @@ export class DepartmentComponent implements OnInit {
   getDepartmentsAt(collegeId) {
     this.departmentService.getDepartmentsAt(collegeId).subscribe( data => {
       this.departments = data;
-    })
+    });
   }
 
   /* Function that returns a list of suggested users based on user's current field input */
@@ -227,13 +229,12 @@ export class DepartmentComponent implements OnInit {
   }
 
   openModal(content) {
-    this.modalService.open(content, this.options);
-    console.log('hewwo: ' + this.collegeId);
+    this.modal = this.modalService.open(content, this.options);
   }
 
   submitDepartment() {
     this.alerts = [];
-
+    this.department.college = this.currentCollege;
     if (typeof(this.department.name) !== 'undefined' && this.department.name.trim().length > 0) {
       if (typeof(this.department.abbreviation) !== 'undefined' && this.department.abbreviation.trim().length > 0) {
         if (this.departments.find(item => item.name === this.department.name)) {
@@ -246,6 +247,7 @@ export class DepartmentComponent implements OnInit {
             }
           );
           this.department = new Department();
+          this.closeModal();
         }
       } else {
           this.invalidErrorMessage('empty abbreviation');
