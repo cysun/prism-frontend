@@ -1,0 +1,44 @@
+.search-container {
+  display: inline-flex;
+  float: left;
+  max-height: 36px;
+}
+
+input[type=text] {
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 17px;
+  border: solid;
+}
+
+.search-container button {
+  max-height: 36px;
+  float: right;
+  margin-top: 8px;
+  margin-right: 16px;
+  background: #ddd;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+}
+
+.counter {
+  max-height: 36px;
+  margin-top: 8px;
+}
+
+.grid-space {
+  padding-top: 10px;
+}
+
+.text-hints {
+  color: #808080;
+  font-size: 14px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+.btn-group {
+  margin-left: 16px;
+}
