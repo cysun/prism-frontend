@@ -13,13 +13,10 @@ export class ResourceService {
     return this.http.get<Resource[]>('/api/resource/');
   }
 
-  getResource(id): Observable<Resource> {
-    return this.http.get<Resource>('/api/resource/' + id);
-  }
-
   createResource(title: string): Observable<Resource> {
+    const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
     const body = JSON.stringify({'title': title});
-    return this.http.post<Resource>('/api/resource', body, { headers: new HttpHeaders({ 'Content-Type': 'application/json'},  { responseType: 'text' })});
+    return this.http.post<Resource>('/api/resource', body, header);
   }
 
   deleteResource(id): Observable<Resource> {

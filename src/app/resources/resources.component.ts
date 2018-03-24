@@ -78,7 +78,7 @@ export class ResourcesComponent implements OnInit {
   /* Upload the file along with the revision message */
   uploadFile(resourceId: string) {
     this.resourceService.uploadFile(resourceId, this.file).subscribe( data => {
-      //this.listTemplates();
+      // this.listTemplates();
       console.log(data)
     }, (err) => {
       console.log(err);
