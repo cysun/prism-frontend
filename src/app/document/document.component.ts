@@ -19,7 +19,7 @@ import { saveAs } from 'file-saver';
 })
 
 export class DocumentComponent implements OnInit {
-  currentUser: UserResponse = new UserResponse();
+  currentUser: UserResponse;
   modal: NgbModalRef;
   alert: any;
 
@@ -36,6 +36,8 @@ export class DocumentComponent implements OnInit {
 
   documentTitle: string;
   @Input() documentId: string;
+  @Input() reviewId: string;
+  @Input() nodeId: string;
   message: string;
   file: File;
   fileName: string;
@@ -58,7 +60,8 @@ export class DocumentComponent implements OnInit {
 
     const userId = JSON.parse(localStorage.getItem('currentUser'))._id;
 
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const castedUser: UserResponse = JSON.parse(localStorage.getItem('currentUser'));
+    this.currentUser = new UserResponse(castedUser.user, castedUser.groups, castedUser.token);
     // console.log('this is: ' + JSON.stringify(this.currentUser))
 
     this.documentService.retrieveDocument(this.documentId).subscribe( data => {

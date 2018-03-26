@@ -20,6 +20,7 @@ export class ReviewComponent implements OnInit {
   public documentId: string;
   public review: Review;
   public yearString: string;
+  public nodeId: string;
 
   reviewId: string;
 
@@ -99,6 +100,7 @@ export class ReviewComponent implements OnInit {
       .each(function(nodeId) {
         this.addEventListener('click', function() {
           componentScope.documentId = componentScope.review.nodes[nodeId].document;
+          componentScope.nodeId = nodeId;
           if (componentScope.documentComponent) {
             setTimeout(() => {componentScope.documentComponent.ngOnInit()}, 30);
           }
