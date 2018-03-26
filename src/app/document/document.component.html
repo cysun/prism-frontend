@@ -2,7 +2,7 @@
   <div class="header-label">
     <span class="label">{{ documentTitle }}</span>
     <button type="button" class="btn btn-dark" (click)=openModal(editDocumentNameModal)><i class="fa fa-icon fa-pencil"></i>Edit</button>
-    <button *ngIf="reviewId && currentUser.isRootOrAdmin()" type="button" class="btn btn-danger" (click)=openModal(finalizeNode)><i class="fa fa-icon fa-exclamation-triangle"></i>Finalize</button>
+    <button *ngIf="reviewId && currentUser.isRootOrAdmin()" type="button" class="btn btn-danger" (click)=openModal(finalizeNodeModal)><i class="fa fa-icon fa-exclamation-triangle"></i>Finalize</button>
     <span class ="document-btn-right">
       <button type="button" class="btn btn-danger" (click)="IsSubscribed() ? unsubscribeFromDocument() : subscribeToDocument()">
         <span *ngIf="!IsSubscribed(); else subscribable"><i class="fa fa-icon fa-eye"></i>Watch</span>
@@ -161,6 +161,24 @@
     <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
   </div>
 </ng-template>
+
+<ng-template #finalizeNodeModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Finalize Document</h5>
+  </div>
+
+  <div class="modal-body">
+    <div class="modal-message">
+      If you finalize this document, no new revisions may be created.
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" (click)="finalizeNode()">Finalize</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+  </div>
+</ng-template>
+
 
 
 <!-- Tabs consisting Main Version tab, Revisions tab, and Comments tab -->

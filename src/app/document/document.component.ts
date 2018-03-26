@@ -9,6 +9,7 @@ import { UserResponse } from '../models/user-response.model';
 import { Globals } from '../shared/app.global';
 
 import { DocumentService } from './document.service';
+import { ReviewService } from '../review/review.service';
 
 import { saveAs } from 'file-saver';
 
@@ -47,6 +48,7 @@ export class DocumentComponent implements OnInit {
   modalMessage: any;
 
   constructor(private documentService: DocumentService,
+              private reviewService: ReviewService,
               private modalService: NgbModal,
               private route: ActivatedRoute,
               private globals: Globals) { }
@@ -351,5 +353,11 @@ export class DocumentComponent implements OnInit {
       return this.document.subscribers.includes(this.currentUser.user._id);
     }
     return false;
+  }
+
+  finalizeNode() {
+    this.reviewService.finalizeNode(this.reviewId, this.nodeId).subscribe(() => {
+      this.closeModal();
+    });
   }
 }
