@@ -8,7 +8,7 @@
 </div>
 
 <div *ngIf="configType === 'multiple'">
-  <ng-selectize [options]="suggestedMembers"
+  <ng-selectize [options]="suggestedUsers"
                 [config]="globals.multipleConfig"
                 placeholder="Search for..."
                 [(ngModel)]="filteredMembers"
