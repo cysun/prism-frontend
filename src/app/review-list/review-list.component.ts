@@ -1,16 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { User } from '../models/user.model';
 import { College } from '../models/college.model';
 import { Department } from '../models/department.model';
+import { Globals } from '../shared/app.global';
 import { Program } from '../models/program.model';
 import { Review } from '../models/review.model';
+import { User } from '../models/user.model';
 
 import { CollegesService } from '../colleges/colleges.service';
 import { DepartmentService } from '../colleges/departments/department.service';
 import { GroupManagerService } from '../group-manager/group-manager.service';
 import { ProgramService } from '../colleges/departments/programs/program.service';
 import { ReviewService } from '../review/review.service';
+import { SharedService } from '../shared/shared.service';
 
 @Component({
   selector: 'prism-review-list',
@@ -18,15 +21,31 @@ import { ReviewService } from '../review/review.service';
   styleUrls: ['./review-list.component.css']
 })
 export class ReviewListComponent implements OnInit {
+  modal: NgbModalRef;
   reviewsList: Review[] = [];
 
+  programsList: Program[] = [];
+  selectedOption: string;
+  suggestedUsers: string[];
+
+  alert: any;
+
   constructor(private collegeService: CollegesService,
-    private departmentService: DepartmentService,
-    private groupManagerService: GroupManagerService,
-    private programService: ProgramService,
-    private reviewService: ReviewService) { }
+              private departmentService: DepartmentService,
+              private globals: Globals,
+              private groupManagerService: GroupManagerService,
+              private modalService: NgbModal,
+              private programService: ProgramService,
+              private reviewService: ReviewService,
+              private sharedService: SharedService) { }
 
   ngOnInit() {
+
+    this.programService.getPrograms().subscribe( data => {
+      this.programsList = data;
+      this.selectedOption = this.programsList[0]._id;
+    })
+
     this.getAllReviews().then ( () => {
       for (let i = 0; i < this.reviewsList.length; i++) {
         this.getProgramData(this.reviewsList[i].program).then( (data: Program) => {
@@ -106,5 +125,48 @@ export class ReviewListComponent implements OnInit {
   yearString(startDate: Date) {
     const startYear: number = (new Date(startDate)).getFullYear();
     return startYear + '-' + (startYear + 1);
+  }
+
+
+  submitReview() {
+    const leadReviewers = this.sharedService.filteredUsers;
+
+    if (leadReviewers) {
+      this.createReview().then( (data: Review) => {
+        this.addLeadReviewers(data._id, data.program, leadReviewers);
+      })
+      this.alert = '';
+      this.closeModal();
+    } else {
+      this.alert = { message: 'Please select at least one lead reviewer.' };
+    }
+  }
+
+  createReview() {
+    return new Promise((resolve, reject) => {
+      this.reviewService.createReview(this.selectedOption).subscribe( data => {
+        resolve(data);
+      }, (err) => {
+        console.log(err);
+        reject();
+      });
+    });
+  }
+
+  addLeadReviewers(reviewId: string, programId: string, leadReviewers: string[]) {
+    const body = { program: programId, leadReviewers: leadReviewers };
+    this.reviewService.patchReview(reviewId, body).subscribe( data => {
+    }, (err) => {
+      console.log(err);
+    })
+  }
+
+  openModal(content) {
+    this.modal = this.modalService.open(content, this.globals.options);
+  }
+
+  closeModal() {
+    this.alert = '';
+    this.modal.close();
   }
 }

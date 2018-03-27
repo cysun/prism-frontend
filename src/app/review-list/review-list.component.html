@@ -1,4 +1,62 @@
+<!-- Modal for creating a review -->
+<ng-template #createReviewModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Create Review</h5>
+  </div>
+  <form #f="ngForm" (ngSubmit)="submitReview()">
+    <div class="modal-body">
+      <div *ngIf="alert">
+        <ngb-alert type="danger" [dismissible]="false">
+          <strong>Invalid Review:</strong> {{ alert.message }}
+        </ngb-alert>
+      </div>
+
+      <div class="form-row">
+        <span class="col-3 group-label">Program</span>
+        <div class="form-group col-8">
+          <select class="custom-select" [(ngModel)]="selectedOption" name="program-list">
+            <option *ngFor="let program of programsList" [ngValue]="program._id">
+              {{program.name}}
+            </option>
+          </select>
+
+          <div class="text-hints">
+            Select a program to initiate a review.
+          </div>
+        </div>
+
+      </div>
+
+      <div class ="row grid-space">
+        <span class="col-3 group-label">Add Lead Reviewers</span>
+        <span class="col-8 ui-fluid">
+          <prism-user-selector [configType]="'multiple'"
+                               [filterType]="'prs'"
+                               [suggestedMembers]="suggestedUsers">
+        </prism-user-selector>
+        <div class="text-hints">
+          Type in a username to get a list of possible users to add as a lead reviewer.
+        </div>
+      </span>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-success" type="submit">Submit</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+  </div>
+
+</form>
+</ng-template>
+
+
 <div class="container-fluid container-fluid-content">
+  <div class="container-fluid" style="text-align: right; padding: 0;">
+    <button class="btn btn-info" (click)="openModal(createReviewModal)">
+      <i class="fa fa-icon fa-plus"></i>Create Review
+    </button>
+  </div>
+
   <div class="row">
     <ng-container *ngFor="let review of reviewsList">
       <div class="col-sm-6">
