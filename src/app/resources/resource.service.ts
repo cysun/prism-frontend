@@ -9,16 +9,31 @@ export class ResourceService {
 
   constructor(private http: HttpClient) { }
 
+  /* Get all resources */
   getResources(): Observable<Resource[]> {
-    return this.http.get<Resource[]>('/api/resource/');
+    return this.http.get<Resource[]>('/api/resources/');
   }
 
+  /* Get specified resource */
+  getResource(resourceId): Observable<Resource> {
+    return this.http.get<Resource>('/api/resource/' + resourceId);
+  }
+
+  /* Create a file for a specific resource */
+  createFile(resourceId: string) {
+    const message = JSON.stringify({message: ''});
+    const header = { headers: new HttpHeaders({'Content-Type': 'application/json'}), responseType: 'text', body: message};
+    return this.http.post('/api/resource/' + resourceId + '/files', header);
+  }
+
+  /* Create new resource */
   createResource(title: string): Observable<Resource> {
     const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
     const body = JSON.stringify({'title': title});
     return this.http.post<Resource>('/api/resource', body, header);
   }
 
+  /* Delete a resource */
   deleteResource(id): Observable<Resource> {
     const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
     return this.http.delete<Resource>('/api/resource/' + id, header);
