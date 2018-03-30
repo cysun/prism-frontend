@@ -23,6 +23,7 @@ import { SharedService } from '../shared/shared.service';
 export class ReviewListComponent implements OnInit {
   modal: NgbModalRef;
   reviewsList: Review[] = [];
+  currentReview: Review;
 
   programsList: Program[] = [];
   selectedOption: string;
@@ -40,7 +41,6 @@ export class ReviewListComponent implements OnInit {
               private sharedService: SharedService) { }
 
   ngOnInit() {
-
     this.programService.getPrograms().subscribe( data => {
       this.programsList = data;
       this.selectedOption = this.programsList[0]._id;
@@ -79,6 +79,29 @@ export class ReviewListComponent implements OnInit {
         })
       }
     })
+  }
+
+  editLeadReviewers() {
+    console.log('testing edit lead reviewers');
+  }
+
+  deleteLeadReviewer(userId: string) {
+     const leadReviewers: User[] = JSON.parse(JSON.stringify(this.currentReview.leadReviewers));
+
+     if (leadReviewers.length > 1) {
+       const removeLeadReviewer = leadReviewers.findIndex( user => user._id === userId);
+       leadReviewers.splice(removeLeadReviewer, 1);
+
+       this.currentReview.leadReviewers = JSON.parse(JSON.stringify(leadReviewers));
+
+       const editLeadReviewerId = this.reviewsList.findIndex(review => review._id === this.currentReview._id);
+       this.reviewsList[editLeadReviewerId].leadReviewers = this.currentReview.leadReviewers;
+
+       const ids = leadReviewers.map( user => user._id);
+       this.addLeadReviewers(this.currentReview._id, this.currentReview.program, ids);
+     } else {
+       this.alert = { message: 'Please allow at least one lead reviewer.' };
+     }
   }
 
   getAllReviews() {
@@ -127,7 +150,6 @@ export class ReviewListComponent implements OnInit {
     return startYear + '-' + (startYear + 1);
   }
 
-
   submitReview() {
     const leadReviewers = this.sharedService.filteredUsers;
 
@@ -153,20 +175,50 @@ export class ReviewListComponent implements OnInit {
     });
   }
 
+  getReview(reviewId: string) {
+    return new Promise((resolve, reject) => {
+      this.reviewService.getReview(reviewId).subscribe( data => {
+        this.currentReview = data;
+        resolve(data);
+      }, (err) => {
+        console.log(err);
+        reject();
+      });
+    });
+  }
+
   addLeadReviewers(reviewId: string, programId: string, leadReviewers: string[]) {
     const body = { program: programId, leadReviewers: leadReviewers };
     this.reviewService.patchReview(reviewId, body).subscribe( data => {
+      console.log(data);
     }, (err) => {
       console.log(err);
     })
   }
 
-  openModal(content) {
+  openModal(content, reviewId?: string) {
+    if (reviewId) {
+        this.getReview(reviewId).then( (data: Review) => {
+          this.currentReview = data;
+        }).then( () => {
+          const leadReviewers: User[] = [];
+          for (let i = 0; i < this.currentReview.leadReviewers.length; i++) {
+            this.getLeadReviewerData(this.currentReview.leadReviewers[i])
+            .then( (userData: User) => {
+              leadReviewers.push(userData);
+            }).then( () => {
+              this.currentReview.leadReviewers = JSON.parse(JSON.stringify(leadReviewers));
+            })
+          }
+        })
+    }
+
     this.modal = this.modalService.open(content, this.globals.options);
   }
 
   closeModal() {
     this.alert = '';
+    this.currentReview = new Review();
     this.modal.close();
   }
 }

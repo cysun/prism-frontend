@@ -38,12 +38,6 @@ export class UserSelectorComponent implements OnInit {
     } else {
       this.suggestedUsers = this.suggestedMembers;
     }
-
-
-    this.userSelectorService.getPrsUsers().subscribe(data => {
-      console.log('wiiiii');
-      console.log(data.members);
-    })
   }
 
   submitUser() {

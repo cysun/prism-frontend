@@ -49,10 +49,73 @@
 </form>
 </ng-template>
 
+<!-- Modal for editing lead reviewers -->
+<ng-template #editLeadReviewersModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Edit Lead Reviewers</h5>
+  </div>
+
+
+  <div class="modal-body" *ngIf="currentReview">
+    <div *ngIf="alert">
+      <ngb-alert type="danger" [dismissible]="false">
+        <strong>Invalid Review:</strong> {{ alert.message }}
+      </ngb-alert>
+    </div>
+
+    <div class="form-row" *ngIf="currentReview.leadReviewers">
+      <table class="table table-hover">
+        <thead class="bg-info">
+          <tr>
+            <th class="align-middle">Username</th>
+            <th class="align-middle">Full Name</th>
+            <th class="align-middle">Email</th>
+            <th class="align-middle">Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let leadReviewer of currentReview.leadReviewers">
+            <td>{{leadReviewer.username}}</td>
+            <td>{{leadReviewer.name?.first}} {{leadReviewer.name?.last}}</td>
+            <td style="word-wrap: break-word;">{{leadReviewer.email}}</td>
+            <td>
+              <button class="btn btn-info" (click)="deleteLeadReviewer(leadReviewer._id)">
+                <i class="fa fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <form #f="ngForm" (ngSubmit)="editLeadReviewers()">
+    <div class ="row grid-space">
+      <span class="container-fluid" style="padding:30px;">
+        <prism-user-selector [configType]="'multiple'"
+                             [filterType]="'prs'"
+                             [suggestedMembers]="suggestedUsers">
+        </prism-user-selector>
+
+        <div class="text-hints">
+          Type in a username to get a list of possible users to add as a lead reviewer.
+        </div>
+      </span>
+    </div>
+
+    <!-- <div><pre>{{ currentReview | json }}</pre></div> -->
+
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="submit">Save</button>
+      <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+    </div>
+  </form>
+</ng-template>
+
 
 <div class="container-fluid container-fluid-content">
   <div class="container-fluid" style="text-align: right; padding: 0;">
-    <button class="btn btn-info" (click)="openModal(createReviewModal)">
+    <button class="btn btn-primary" (click)="openModal(createReviewModal)">
       <i class="fa fa-icon fa-plus"></i>Create Review
     </button>
   </div>
@@ -81,6 +144,10 @@
                 <ng-container *ngFor="let leadReviewer of review.leadReviewers; let idx = index;">
                   {{leadReviewer.name?.first}} {{leadReviewer.name?.last}}{{ idx + 1 < review.leadReviewers.length ? ',' : '' }}
                 </ng-container>
+
+                <div class="edit-reviewers" (click)="openModal(editLeadReviewersModal, review._id)">
+                  <i class="fa fa-icon fa-pencil"></i>Edit Lead Reviewers
+                </div>
               </div>
             </div>
           </div>
@@ -90,4 +157,4 @@
   </div>
 </div>
 
-<!-- <pre>{{ reviewsList | json }}</pre> -->
+<pre>{{ reviewsList | json }}</pre>
