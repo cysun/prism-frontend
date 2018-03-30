@@ -75,7 +75,9 @@
     </thead>
     <tbody>
       <tr *ngFor="let resource of resources">
-        <td><input type="checkbox"></td>
+        <td> <input type="checkbox" name="selected"
+          [checked]="isSelected(resource._id)"
+          (click)="updateSelection($event, resource._id)"></td>
         <td>{{resource.title}}</td>
         <td>{{resource.files[0].uploader.username}}</td>
         <td>{{resource.files[0].dateUploaded | date: 'yyyy-MM-dd'}}</td>
@@ -86,12 +88,11 @@
 
 <div class="row">
   <div class="col">
-    <div ngbDropdown class="d-inline-block">
-      <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Toggle dropdown</button>
+    <div ngbDropdown placement="top-right" class="d-inline-block">
+      <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Action on {{selected.length}} selected</button>
       <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-        <button class="dropdown-item">Action - 1</button>
-        <button class="dropdown-item">Another Action</button>
-        <button class="dropdown-item">Something else is here</button>
+        <button class="dropdown-item" (click)="downloadSelected()">Download</button>
+        <button class="dropdown-item" (click)="deleteSelected()">Delete</button>
       </div>
     </div>
   </div>

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbModalRef,  NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
-
 import { Resource } from '../models/resource.model';
 import { ResourceService } from './resource.service'
 
@@ -24,6 +23,7 @@ export class ResourcesComponent implements OnInit {
   alert: any;
   resource: Resource = new Resource();
   resources: Resource[] = [];
+  selected: string[] = [];
 
   fileName: string;
   file: File;
@@ -31,16 +31,10 @@ export class ResourcesComponent implements OnInit {
   constructor(private resourceService: ResourceService, private modalService: NgbModal, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    // Get all resources
-    this.resourceService.getResources().subscribe(data => {
-        this.resources = data;
-        console.log(data);
-    }, (err) => {
-      console.log(err)
-    });
+    this.getResources();
   }
 
-  closeModal() {
+  closeModal(): void {
     this.modal.close();
   }
 
@@ -54,27 +48,51 @@ export class ResourcesComponent implements OnInit {
     });
   }
 
-  downloadResource(resourceId) {
+  deleteSelected(): void {
+    this.selected.forEach((id) => {
+      this.resourceService.deleteResource(id).subscribe(data => {
+        console.log('Deleted resource ' + id);
+      });
+    });
+    this.selected = [];
+    this.getResources();
+  }
+
+  downloadSelected(): void {
 
   }
 
-  downloadAll() {
+  downloadAll(): void {
 
+  }
+
+  /* Get all resources */
+  getResources() {
+    this.resourceService.getResources().subscribe(data => {
+        this.resources = data;
+        console.log(data);
+    }, (err) => {
+      console.log(err)
+    });
+  }
+
+  isSelected(resourceId: string): boolean {
+    return this.selected.indexOf(resourceId) >= 0;
   }
 
   /* Set file variable to the file the user has chosen */
-  onFileChange(event) {
+  onFileChange(event: any): void {
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
       this.fileName = event.target.files[0].name;
     }
   }
 
-  open(content) {
+  open(content): void {
     this.modal = this.modalService.open(content, this.options);
   }
 
-  postNewResource() {
+  postNewResource(): void {
     if (this.file) {
       this.resourceService.createResource(this.resource.title).subscribe(resourceData => {
         this.resourceService.createFile(resourceData._id).subscribe(data => {
@@ -84,20 +102,21 @@ export class ResourcesComponent implements OnInit {
         });
       })
     }
-}
+  }
 
-  /* Get resources */
-  listResources() {
-    // this.resourceManagerService.listAllTemplates().subscribe( data => {
-    //   this.resources = data;
-    // })
+  updateSelected(action: string, resourceId: string): void {
+    if (action === 'add' && this.selected.indexOf(resourceId) === -1) {
+      this.selected.push(resourceId);
+    }
+    if (action === 'remove' && this.selected.indexOf(resourceId) !== -1) {
+      this.selected.splice(this.selected.indexOf(resourceId), 1);
+    }
+  }
+
+  updateSelection(event: any, id: string): void {
+   const checkbox = event.target;
+   const action = (checkbox.checked ? 'add' : 'remove');
+   this.updateSelected(action, id)
   }
 
 }
-
-/* Required Resource Fields:
-title: string
-message: string
-uploader: Id
-goups: Id
-*/

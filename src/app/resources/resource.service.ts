@@ -36,9 +36,11 @@ export class ResourceService {
   }
 
   /* Delete a resource */
-  deleteResource(id): Observable<Resource> {
-    const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
-    return this.http.delete<Resource>('/api/resource/' + id, header);
+  deleteResource(id) {
+    return this.http.delete('/api/resource/' + id, {
+      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      responseType: 'text'
+    });
   }
 
   downloadAllResources() {
