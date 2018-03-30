@@ -21,9 +21,11 @@ export class ResourceService {
 
   /* Create a file for a specific resource */
   createFile(resourceId: string) {
-    const message = JSON.stringify({message: ''});
-    const header = { headers: new HttpHeaders({'Content-Type': 'application/json'}), responseType: 'text', body: message};
-    return this.http.post('/api/resource/' + resourceId + '/files', header);
+    const body = JSON.stringify({message: 'PRS resource'});
+    return this.http.post('/api/resource/' + resourceId + '/files', body, {
+      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      responseType: 'text'
+    });
   }
 
   /* Create new resource */
@@ -47,12 +49,12 @@ export class ResourceService {
 
   }
 
-  uploadFile(resourceId: string, file: File) {
+  uploadFile(resourceId: string, fileId: string, file: File) {
     const fileUpload = new FormData();
     fileUpload.append('file', file);
 
-    return this.http.post('/api/resource/' + resourceId + '/file',
-    fileUpload, { responseType: 'text' });
+    return this.http.post('/api/resource/' + resourceId + '/files/' + fileId + '/file',
+      fileUpload, { responseType: 'text' });
   }
 
 }
