@@ -1,9 +1,11 @@
-<!-- Add resource button-->
+<!-- Page Header -->
 <div class="page-header">
   <div class="btn-toolbar pull-right">
+    <!-- Download all button -->
     <div class="btn-group">
-      <button type="button" (click)="downloadResources()" class="btn btn-md btn-primary vertical-space">Download All</button>
+      <button type="button" (click)="downloadAll()" class="btn btn-md btn-primary vertical-space">Download All</button>
     </div>
+    <!-- Add resource button -->
     <div class="btn-group">
       <button type="button" (click)="open(newResourceModal)" class="btn btn-md btn-success vertical-space">New</button>
     </div>
@@ -16,7 +18,7 @@
       <input type="text" placeholder="Search Your Resources">
       <button><i class="fa fa-search"></i></button>
     </span>
-    <span class="counter"><p>[count] item(s)</p></span>
+    <span class="counter"><p>{{resources.length}} item(s)</p></span>
   </div>
 </div>
 
@@ -65,16 +67,19 @@
   <table class="table table-sm">
     <thead>
       <tr>
-        <th scope="col" style="width:4%"></th>
-        <th scope="col" style="width:52%">Title</th>
-        <th scope="col" style="width:8%">File Extension</th>
-        <th scope="col" style="width:26%">Uploaded By</th>
-        <th scope="col" style="width:10%">Date Uploaded</th>
+        <th scope="col" style="width:2%"></th>
+        <th scope="col" style="width:50%">Title</th>
+        <th scope="col" style="width:30%">Uploaded By</th>
+        <th scope="col" style="width:18%">Date Uploaded</th>
       </tr>
     </thead>
     <tbody>
-      
-
+      <tr *ngFor="let resource of resources">
+        <td><input type="checkbox"></td>
+        <td>{{resource.title}}</td>
+        <td>{{resource.files[0].uploader.username}}</td>
+        <td>{{resource.files[0].dateUploaded | date: 'yyyy-MM-dd'}}</td>
+      </tr>
     </tbody>
   </table>
 </div>

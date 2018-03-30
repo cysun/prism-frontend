@@ -1,10 +1,14 @@
 export class Resource {
   _id: string;
   title: string;
-  message: string;
-  filename: string;
-  fileExtention: string;
-  dateUploaded: Date;
-  uploader: string;
-  groups: string;
+  files: [{
+    _id: string;
+    message: string;
+    filename: string;
+    uploader: {
+      _id: string;
+      username: string;
+    };
+    dateUploaded: Date;
+  }];
 }

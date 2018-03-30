@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbModalRef,  NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
+
 import { Resource } from '../models/resource.model';
 import { ResourceService } from './resource.service'
 
@@ -34,6 +35,8 @@ export class ResourcesComponent implements OnInit {
     this.resourceService.getResources().subscribe(data => {
         this.resources = data;
         console.log(data);
+    }, (err) => {
+      console.log(err)
     });
   }
 
@@ -41,11 +44,21 @@ export class ResourcesComponent implements OnInit {
     this.modal.close();
   }
 
+  createFile(resourceId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.resourceService.createFile(resourceId).subscribe(data => {
+          resolve();
+      }, err => {
+          reject();
+      });
+    });
+  }
+
   downloadResource(resourceId) {
 
   }
 
-  downloadResources() {
+  downloadAll() {
 
   }
 
@@ -63,27 +76,15 @@ export class ResourcesComponent implements OnInit {
 
   postNewResource() {
     if (this.file) {
-      this.resourceService.createResource(this.resource.title).subscribe( data => {
-          this.resources.push(data);
-          this.uploadFile(data._id);
-          this.closeModal();
-        }, (err) => {
-          console.log(err)
+      this.resourceService.createResource(this.resource.title).subscribe(resourceData => {
+        this.resourceService.createFile(resourceData._id).subscribe(data => {
+            this.resourceService.uploadFile(resourceData._id, this.resource.files[0]._id, this.file).subscribe(empty => {
+              console.log('sucessfully created file');
+            });
         });
-      } else {
-        this.alert = { message: 'Please attach a file.' };
-      }
-  }
-
-  /* Upload the file along with the revision message */
-  uploadFile(resourceId: string) {
-    this.resourceService.uploadFile(resourceId, this.file).subscribe( data => {
-      // this.listTemplates();
-      console.log(data)
-    }, (err) => {
-      console.log(err);
-    });
-  }
+      })
+    }
+}
 
   /* Get resources */
   listResources() {

@@ -9,16 +9,33 @@ export class ResourceService {
 
   constructor(private http: HttpClient) { }
 
+  /* Get all resources */
   getResources(): Observable<Resource[]> {
-    return this.http.get<Resource[]>('/api/resource/');
+    return this.http.get<Resource[]>('/api/resources/');
   }
 
+  /* Get specified resource */
+  getResource(resourceId): Observable<Resource> {
+    return this.http.get<Resource>('/api/resource/' + resourceId);
+  }
+
+  /* Create a file for a specific resource */
+  createFile(resourceId: string) {
+    const body = JSON.stringify({message: 'PRS resource'});
+    return this.http.post('/api/resource/' + resourceId + '/files', body, {
+      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      responseType: 'text'
+    });
+  }
+
+  /* Create new resource */
   createResource(title: string): Observable<Resource> {
     const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
     const body = JSON.stringify({'title': title});
     return this.http.post<Resource>('/api/resource', body, header);
   }
 
+  /* Delete a resource */
   deleteResource(id): Observable<Resource> {
     const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
     return this.http.delete<Resource>('/api/resource/' + id, header);
@@ -32,12 +49,12 @@ export class ResourceService {
 
   }
 
-  uploadFile(resourceId: string, file: File) {
+  uploadFile(resourceId: string, fileId: string, file: File) {
     const fileUpload = new FormData();
     fileUpload.append('file', file);
 
-    return this.http.post('/api/resource/' + resourceId + '/file',
-    fileUpload, { responseType: 'text' });
+    return this.http.post('/api/resource/' + resourceId + '/files/' + fileId + '/file',
+      fileUpload, { responseType: 'text' });
   }
 
 }
