@@ -41,13 +41,16 @@ export class ResourcesComponent implements OnInit {
   createFile(resourceId: string): Promise<void> {
     return new Promise((resolve, reject) => {
       this.resourceService.createFile(resourceId).subscribe(data => {
-          resolve();
-      }, err => {
-          reject();
+        console.log('file created sucessfully.');
+        resolve();
+      }, (err) => {
+        reject();
+        console.log(err);
       });
     });
   }
 
+  /* Delete the specified resource(s) */
   deleteSelected(): void {
     this.selected.forEach((id) => {
       this.resourceService.deleteResource(id).subscribe(data => {
@@ -58,8 +61,29 @@ export class ResourcesComponent implements OnInit {
     this.getResources();
   }
 
-  downloadSelected(): void {
+  /* Delete all resources */
+  deleteAll(): void {
+    this.resources.forEach((resource) => {
+      this.resourceService.deleteResource(resource._id).subscribe(() => {
+        console.log('Deleted resource ' + resource._id);
+      });
+    });
+    this.getResources();
+  }
 
+  /* Download specified resource(s) */
+  downloadSelected(): void {
+    const filename = 'download';
+    this.selected.forEach((id) => {
+      this.resourceService.getResource(id).subscribe(data => {
+        this.resourceService.downloadFile(data._id, data.files[0]._id).subscribe(fileData => {
+          const contentType = fileData.headers.get('content-type');
+          saveAs(new Blob([fileData.body], { type: contentType }), filename);
+        }, (err) => {
+          console.log(err);
+        });
+      });
+    });
   }
 
   downloadAll(): void {
@@ -76,6 +100,7 @@ export class ResourcesComponent implements OnInit {
     });
   }
 
+  /* Check for resource in selected list */
   isSelected(resourceId: string): boolean {
     return this.selected.indexOf(resourceId) >= 0;
   }
@@ -95,10 +120,17 @@ export class ResourcesComponent implements OnInit {
   postNewResource(): void {
     if (this.file) {
       this.resourceService.createResource(this.resource.title).subscribe(resourceData => {
-        this.resourceService.createFile(resourceData._id).subscribe(data => {
+        this.createFile(resourceData._id).then(() => {
+          this.resourceService.getResource(resourceData._id).subscribe((data) => {
+            this.resource = data;
             this.resourceService.uploadFile(resourceData._id, this.resource.files[0]._id, this.file).subscribe(empty => {
               console.log('sucessfully created file');
+            }, (err) => {
+              console.log(err);
             });
+          });
+        }).catch((err) => {
+          console.log(err);
         });
       })
     }
