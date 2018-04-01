@@ -120,7 +120,7 @@ export class ReviewComponent implements OnInit {
 
   getLabel(node: ReviewNode): string {
     let completionLabel: string;
-    if ((new Date()).getTime() - (new Date(node.finishDate)).getTime() < 0) {
+    if ((new Date()).getTime() - (new Date(node.finishDate)).getTime() < 0 && !node.finalized) {
       completionLabel = 'Estimated Completion';
     } else {
       completionLabel = 'Completed';
