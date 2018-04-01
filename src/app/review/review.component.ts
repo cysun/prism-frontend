@@ -30,7 +30,14 @@ export class ReviewComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.reviewId = params.id;
     });
+    this.updateReview();
+  }
 
+  public handleDocumentUpdate() {
+    this.updateReview();
+  }
+
+  updateReview() {
     this.reviewService.getReview(this.reviewId).subscribe(review => {
       if (!review) {
         return;

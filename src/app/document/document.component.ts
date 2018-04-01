@@ -39,6 +39,7 @@ export class DocumentComponent implements OnInit {
   @Input() documentId: string;
   @Input() reviewId: string;
   @Input() nodeId: string;
+  @Input() updateReviewComponent: () => void;
   message: string;
   file: File;
   fileName: string;
@@ -46,6 +47,7 @@ export class DocumentComponent implements OnInit {
   selectedFilter: string;
   textComment = '';
   modalMessage: any;
+  newCompletionDate: Date;
 
   constructor(private documentService: DocumentService,
               private reviewService: ReviewService,
@@ -355,8 +357,18 @@ export class DocumentComponent implements OnInit {
     return false;
   }
 
+  /* Make the request to finalize the node of this document in the review */
   finalizeNode() {
     this.reviewService.finalizeNode(this.reviewId, this.nodeId).subscribe(() => {
+      this.updateReviewComponent();
+      this.closeModal();
+    });
+  }
+
+  /* Change the completion date of the node of this document in the review */
+  changeCompletionDate(newDate: string) {
+    this.reviewService.setNodeFinishDate(this.reviewId, this.nodeId, newDate).subscribe(() => {
+      this.updateReviewComponent();
       this.closeModal();
     });
   }
