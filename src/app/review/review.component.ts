@@ -1,8 +1,10 @@
 import { Component, Directive, OnInit, NgZone, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { DocumentComponent } from '../document/document.component';
+import { Globals } from '../shared/app.global';
 import { Review } from '../models/review.model';
 import { ReviewNode } from '../models/review_node.model';
 import { ReviewService } from './review.service';
@@ -22,9 +24,18 @@ export class ReviewComponent implements OnInit {
   public yearString: string;
   public nodeId: string;
 
+  newNode: ReviewNode;
   reviewId: string;
+  modal: NgbModalRef;
 
-  constructor(private router: Router, private reviewService: ReviewService, private zone: NgZone, private route: ActivatedRoute) { }
+  constructor(private router: Router,
+      private reviewService: ReviewService,
+      private zone: NgZone,
+      private route: ActivatedRoute,
+      private modalService: NgbModal,
+      private globals: Globals) {
+    this.newNode = new ReviewNode();
+  }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -141,5 +152,18 @@ ${completionLabel}: ${this.formatDate(node.finishDate)}`;
 
   formatDate(date: string): string {
     return new Date(date).toLocaleDateString();
+  }
+
+  openModal(modal: NgbModalRef): void {
+    this.modal = this.modalService.open(modal, this.globals.options);
+  }
+
+  addNode(node: ReviewNode): void {
+    this.reviewService.createNode(this.reviewId, node.title,
+        ['Administrators', 'Program Review Subcommittee'], node.completionEstimate).subscribe(() => {
+      this.newNode = new ReviewNode();
+      this.updateReview();
+      this.modal.close();
+    });
   }
 }
