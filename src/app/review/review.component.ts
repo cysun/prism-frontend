@@ -1,8 +1,10 @@
 import { Component, Directive, OnInit, NgZone, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { DocumentComponent } from '../document/document.component';
+import { Globals } from '../shared/app.global';
 import { Review } from '../models/review.model';
 import { ReviewNode } from '../models/review_node.model';
 import { ReviewService } from './review.service';
@@ -20,16 +22,33 @@ export class ReviewComponent implements OnInit {
   public documentId: string;
   public review: Review;
   public yearString: string;
+  public nodeId: string;
 
+  newNode: ReviewNode;
   reviewId: string;
+  modal: NgbModalRef;
 
-  constructor(private router: Router, private reviewService: ReviewService, private zone: NgZone, private route: ActivatedRoute) { }
+  constructor(private router: Router,
+      private reviewService: ReviewService,
+      private zone: NgZone,
+      private route: ActivatedRoute,
+      private modalService: NgbModal,
+      private globals: Globals) {
+    this.newNode = new ReviewNode();
+  }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.reviewId = params.id;
     });
+    this.updateReview();
+  }
 
+  public handleDocumentUpdate() {
+    this.updateReview();
+  }
+
+  updateReview() {
     this.reviewService.getReview(this.reviewId).subscribe(review => {
       if (!review) {
         return;
@@ -99,6 +118,7 @@ export class ReviewComponent implements OnInit {
       .each(function(nodeId) {
         this.addEventListener('click', function() {
           componentScope.documentId = componentScope.review.nodes[nodeId].document;
+          componentScope.nodeId = nodeId;
           if (componentScope.documentComponent) {
             setTimeout(() => {componentScope.documentComponent.ngOnInit()}, 30);
           }
@@ -111,7 +131,7 @@ export class ReviewComponent implements OnInit {
 
   getLabel(node: ReviewNode): string {
     let completionLabel: string;
-    if ((new Date()).getTime() - (new Date(node.finishDate)).getTime() < 0) {
+    if ((new Date()).getTime() - (new Date(node.finishDate)).getTime() < 0 && !node.finalized) {
       completionLabel = 'Estimated Completion';
     } else {
       completionLabel = 'Completed';
@@ -132,5 +152,18 @@ ${completionLabel}: ${this.formatDate(node.finishDate)}`;
 
   formatDate(date: string): string {
     return new Date(date).toLocaleDateString();
+  }
+
+  openModal(modal: NgbModalRef): void {
+    this.modal = this.modalService.open(modal, this.globals.options);
+  }
+
+  addNode(node: ReviewNode): void {
+    this.reviewService.createNode(this.reviewId, node.title,
+        ['Administrators', 'Program Review Subcommittee'], node.completionEstimate).subscribe(() => {
+      this.newNode = new ReviewNode();
+      this.updateReview();
+      this.modal.close();
+    });
   }
 }

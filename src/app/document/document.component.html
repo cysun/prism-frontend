@@ -1,6 +1,9 @@
 <div class="container-fluid document-header">
   <div class="header-label">
-    <span class="label">{{ documentTitle }}</span><button type="button" class="btn btn-dark" (click)=openModal(editDocumentNameModal)><i class="fa fa-icon fa-pencil"></i>Edit</button>
+    <span class="label">{{ documentTitle }}</span>
+    <button type="button" class="btn btn-dark" (click)=openModal(editDocumentNameModal)><i class="fa fa-icon fa-pencil"></i>Edit</button>
+    <button *ngIf="reviewId" type="button" class="btn btn-success" (click)=openModal(finishDateModal)><i class="fa fa-icon fa-clock-o"></i>Change Estimated Completion</button>
+    <button *ngIf="reviewId && currentUser.isRootOrAdmin()" type="button" class="btn btn-danger" (click)=openModal(finalizeNodeModal)><i class="fa fa-icon fa-exclamation-triangle"></i>Finalize</button>
     <span class ="document-btn-right">
       <button type="button" class="btn btn-danger" (click)="IsSubscribed() ? unsubscribeFromDocument() : subscribeToDocument()">
         <span *ngIf="!IsSubscribed(); else subscribable"><i class="fa fa-icon fa-eye"></i>Watch</span>
@@ -160,6 +163,48 @@
   </div>
 </ng-template>
 
+<ng-template #finalizeNodeModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Finalize Document</h5>
+  </div>
+
+  <div class="modal-body">
+    <div class="modal-message">
+      If you finalize this document, no new revisions may be created.
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" (click)="finalizeNode()">Finalize</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+  </div>
+</ng-template>
+
+<ng-template #finishDateModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Edit Estimated Completion Date</h5>
+  </div>
+
+  <div class="modal-body">
+    <div *ngIf="alert">
+      <ngb-alert type="danger" [dismissible]="false"><i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}</ngb-alert>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Estimated Completion Date</span>
+      </div>
+      <input type="date" class="form-control" name="node-date" [(ngModel)]="newCompletionDate">
+    </div>
+
+    <div class="text-hints">This date is an estimate of when the document will be completed.</div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-dark" type="button" (click)="changeCompletionDate(newCompletionDate)">Save</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+  </div>
+</ng-template>
 
 <!-- Tabs consisting Main Version tab, Revisions tab, and Comments tab -->
 <ngb-tabset>
