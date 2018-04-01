@@ -81,8 +81,13 @@ export class ReviewListComponent implements OnInit {
     })
   }
 
-  editLeadReviewers() {
-    console.log('testing edit lead reviewers');
+  editLeadReviewers(reviewId: string, programId: string, leadReviewers: User[]) {
+    let chosenReviewers = this.sharedService.filteredUsers;
+    const currentReviewers = leadReviewers.map( reviewer => reviewer._id);
+
+    chosenReviewers = chosenReviewers.concat(currentReviewers);
+    this.addLeadReviewers(reviewId, programId, chosenReviewers);
+    this.closeModal();
   }
 
   deleteLeadReviewer(userId: string) {
@@ -190,7 +195,7 @@ export class ReviewListComponent implements OnInit {
   addLeadReviewers(reviewId: string, programId: string, leadReviewers: string[]) {
     const body = { program: programId, leadReviewers: leadReviewers };
     this.reviewService.patchReview(reviewId, body).subscribe( data => {
-      console.log(data);
+      // console.log(data);
     }, (err) => {
       console.log(err);
     })
@@ -200,6 +205,26 @@ export class ReviewListComponent implements OnInit {
     if (reviewId) {
         this.getReview(reviewId).then( (data: Review) => {
           this.currentReview = data;
+
+          // const filteredMembers = this.sharedService.filteredUsers;
+
+
+        //   console.log(this.currentReview.leadReviewers);
+
+
+          // for (let i = 0; i < this.currentReview.leadReviewers.length; i++) {
+          //   if()
+          // }
+
+          // const filteredMembers = this.suggestedUsers.filter((mem) => {
+          //   const programId: Review = JSON.parse(JSON.stringify(mem));
+          //   return !this.currentReview.leadReviewers.includes(programId.program);
+          // });
+
+        //  console.log(this.suggestedUsers);
+
+
+
         }).then( () => {
           const leadReviewers: User[] = [];
           for (let i = 0; i < this.currentReview.leadReviewers.length; i++) {

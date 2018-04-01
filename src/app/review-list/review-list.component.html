@@ -89,7 +89,7 @@
     </div>
   </div>
 
-  <form #f="ngForm" (ngSubmit)="editLeadReviewers()">
+  <form #f="ngForm" (ngSubmit)="editLeadReviewers(currentReview._id, currentReview.program._id, currentReview.leadReviewers)">
     <div class ="row grid-space">
       <span class="container-fluid" style="padding:30px;">
         <prism-user-selector [configType]="'multiple'"

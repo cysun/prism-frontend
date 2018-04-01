@@ -7,6 +7,8 @@ export class SharedService {
   searchUser: string;
   filteredUsers: string[];
 
+  prsMembersList: string[];
+
   isAdmin(): boolean {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const isAdmin = currentUser.groups.some( user => user.name === 'Administrators');

@@ -28,6 +28,7 @@ export class UserSelectorComponent implements OnInit {
       if (this.filterType === 'prs') {
         this.userSelectorService.getPrsUsers().subscribe( data => {
           this.suggestedUsers = data.members;
+          this.sharedService.prsMembersList = this.suggestedUsers;
         })
       } else {
         this.userSelectorService.getUsers().subscribe( data => {
