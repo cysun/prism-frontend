@@ -19,8 +19,7 @@
 <div class="container">
   <div class="row">
     <span class="search-container">
-      <input type="text" placeholder="Search Your Resources">
-      <button><i class="fa fa-search"></i></button>
+      <input [(ngModel)]="searchText" type="text" placeholder="Search Your Resources">
     </span>
     <span class="counter"><p>{{resources.length}} item(s)</p></span>
   </div>
@@ -78,7 +77,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let resource of resources">
+      <tr *ngFor="let resource of resources | filter: searchText">
         <td> <input type="checkbox" name="selected"
           [checked]="isSelected(resource._id)"
           (click)="updateSelection($event, resource._id)"></td>
