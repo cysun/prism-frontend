@@ -122,6 +122,7 @@ blockquote {
 
 .modal-message {
   padding: 20px;
+  text-align: center;
 }
 
 .modal-warning {

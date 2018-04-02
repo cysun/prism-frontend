@@ -113,6 +113,34 @@
 </ng-template>
 
 
+<ng-template #deleteReviewModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Delete Review</h5>
+  </div>
+
+  <div class="modal-body" *ngIf="currentReview">
+    <div class="modal-message">
+      <div style="text-align: center; padding-bottom: 20px;">
+        <span class="modal-warning">
+          <i class="fa fa-icon fa-exclamation-triangle"></i>Warning
+        </span>
+      </div>
+      Are you sure you want to delete
+      <strong>
+        {{currentReview.program?.name}} {{yearString(currentReview.startDate)}}
+      </strong> review?
+    </div>
+  </div>
+
+    <!-- <div><pre>{{ currentReview | json }}</pre></div> -->
+
+    <div class="modal-footer">
+      <button class="btn btn-danger" type="button" (click)="deleteReview()">Delete</button>
+      <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+    </div>
+</ng-template>
+
+<!-- Display review list content -->
 <div class="container-fluid container-fluid-content">
   <div class="container-fluid" style="text-align: right; padding: 0;">
     <button class="btn btn-primary" (click)="openModal(createReviewModal)">
@@ -145,8 +173,12 @@
                   {{leadReviewer.name?.first}} {{leadReviewer.name?.last}}{{ idx + 1 < review.leadReviewers.length ? ',' : '' }}
                 </ng-container>
 
-                <div class="edit-reviewers" (click)="openModal(editLeadReviewersModal, review._id)">
+                <div class="review-actions" (click)="openModal(editLeadReviewersModal, review._id)">
                   <i class="fa fa-icon fa-pencil"></i>Edit Lead Reviewers
+                </div>
+
+                <div class="review-actions" (click)="openModal(deleteReviewModal, review._id)">
+                  <i class="fa fa-icon fa-trash"></i>Delete Review
                 </div>
               </div>
             </div>
@@ -157,4 +189,4 @@
   </div>
 </div>
 
-<pre>{{ reviewsList | json }}</pre>
+<!-- <pre>{{ reviewsList | json }}</pre> -->

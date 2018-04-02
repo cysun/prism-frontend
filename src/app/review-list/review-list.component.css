@@ -25,11 +25,11 @@
   padding: 15px;
 }
 
-.edit-reviewers {
+.review-actions {
   cursor: pointer;
   margin-top: 15px;
 }
 
-.edit-reviewers:hover {
+.review-actions:hover {
   text-decoration: underline;
 }
