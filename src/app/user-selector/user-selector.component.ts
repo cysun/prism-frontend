@@ -11,7 +11,8 @@ import { UserSelectorService } from './user-selector.service';
 })
 export class UserSelectorComponent implements OnInit {
   @Input() configType: string;
-  @Input() suggestedMembers: string[];
+  @Input() filterType: string;
+  @Input() suggestedMembers: any[];
 
   filteredUser: string;
   filteredMembers: string[];
@@ -23,9 +24,21 @@ export class UserSelectorComponent implements OnInit {
               private sharedService: SharedService) { }
 
   ngOnInit() {
-    this.userSelectorService.getUsers().subscribe( data => {
-      this.usersList = data;
-    })
+    if (this.suggestedMembers === undefined) {
+      if (this.filterType === 'prs') {
+        this.userSelectorService.getPrsUsers().subscribe( data => {
+          this.suggestedUsers = data.members;
+          this.sharedService.prsMembersList = this.suggestedUsers;
+        })
+      } else {
+        this.userSelectorService.getUsers().subscribe( data => {
+          this.usersList = data;
+          if (this.configType === 'multiple') { this.suggestedUsers = data; }
+        })
+      }
+    } else {
+      this.suggestedUsers = this.suggestedMembers;
+    }
   }
 
   submitUser() {
