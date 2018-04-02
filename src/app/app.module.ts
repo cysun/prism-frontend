@@ -47,6 +47,7 @@ import { SharedService } from './shared/shared.service';
 import { TemplateManagerService } from './template-manager/template-manager.service';
 import { UserSelectorService } from './user-selector/user-selector.service';
 
+import { FilterPipe } from './shared/filter.pipe';
 import { Globals } from './shared/app.global';
 import { TemplateManagerComponent } from './template-manager/template-manager.component';
 import { UserSelectorComponent } from './user-selector/user-selector.component';
@@ -61,6 +62,7 @@ import { ReviewListComponent } from './review-list/review-list.component';
     DashboardComponent,
     DepartmentComponent,
     DocumentComponent,
+    FilterPipe,
     GroupManagerComponent,
     LoginComponent,
     MinutesComponent,
