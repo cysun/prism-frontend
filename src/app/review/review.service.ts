@@ -31,17 +31,17 @@ export class ReviewService {
   }
 
   finalizeNode(reviewId: string, nodeId: string) {
-    return this.http.post(`/api/document/${reviewId}/node/${nodeId}`, '');
+    return this.http.post(`/api/review/${reviewId}/node/${nodeId}/finalize`, '');
   }
 
   setNodeFinishDate(reviewId: string, nodeId: string, finishDate: string) {
-    return this.http.patch(`/api/document/${reviewId}/node/${nodeId}`, {
+    return this.http.patch(`/api/review/${reviewId}/node/${nodeId}`, {
       'finishDate': finishDate
     });
   }
 
   createNode(id: string, title: string, groups: string[], completionEstimate: number) {
-    return this.http.post(`/api/document/${id}/node`, {
+    return this.http.post(`/api/review/${id}/node`, {
       'title': title,
       'groups': groups,
       'completionEstimate': completionEstimate
