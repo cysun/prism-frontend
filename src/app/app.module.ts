@@ -19,7 +19,6 @@ import { DocumentComponent } from './document/document.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SettingsComponent } from './settings/settings.component';
 import { CalendarComponent } from './calendar/calendar.component';
-import { MinutesComponent } from './minutes/minutes.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { ReviewComponent } from './review/review.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
@@ -64,7 +63,6 @@ import { ReviewListComponent } from './review-list/review-list.component';
     DocumentComponent,
     GroupManagerComponent,
     LoginComponent,
-    MinutesComponent,
     PageNotFoundComponent,
     ProgramsComponent,
     ResourcesComponent,
