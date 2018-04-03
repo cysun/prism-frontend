@@ -5,6 +5,7 @@ import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common
 import { Router } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CalendarModule } from 'angular-calendar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -77,6 +78,7 @@ import { ReviewListComponent } from './review-list/review-list.component';
     ReversePipe,
   ],
   imports: [
+    CalendarModule.forRoot(),
     NgbModule.forRoot(),
     NgSelectizeModule,
     BrowserModule,

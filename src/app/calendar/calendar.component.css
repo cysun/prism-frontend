@@ -1,0 +1,13 @@
+.month-year-display {
+  align-items: center;
+  display: flex;
+  font-size: 2em;
+  font-weight: bold;
+  justify-content: center;
+  padding-bottom: 20px;
+}
+
+.month-year-text {
+  padding-left: 20px;
+  padding-right: 20px;
+}

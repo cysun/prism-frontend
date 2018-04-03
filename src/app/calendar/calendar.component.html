@@ -1,3 +1,14 @@
-<p>
-  calendar works!
-</p>
+<div class="month-year-display">
+  <button mwlCalendarPreviousView class="btn btn-primary" [(viewDate)]="viewDate"  [view]="view">
+    <i class="fa fa-chevron-left"></i>
+  </button>
+
+  <span class="month-year-text">{{ viewDate | date:'MMMM yyyy' }}</span>
+
+  <button mwlCalendarNextView class="btn btn-primary" [(viewDate)]="viewDate"  [view]="view">
+    <i class="fa fa-chevron-right"></i>
+  </button>
+</div>
+
+<mwl-calendar-month-view [viewDate]="viewDate" [events]="events">
+</mwl-calendar-month-view>
