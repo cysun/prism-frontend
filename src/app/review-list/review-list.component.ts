@@ -289,11 +289,9 @@ export class ReviewListComponent implements OnInit {
   }
 
   percentComplete(review: Review): number {
-    console.log(review);
     let totalDaysPassed = 0;
     let totalDaysForCompletion = 0;
     for (const nodeId of Object.keys(review.nodes)) {
-      console.log(nodeId, review.nodes[nodeId]);
       if (review.nodes[nodeId].finalized) {
         totalDaysPassed += review.nodes[nodeId].completionEstimate;
       } else {
