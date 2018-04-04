@@ -10,4 +10,5 @@ export class Review {
     [key: string]: ReviewNode;
   };
   deleted: boolean;
+  percentComplete: number;
 }

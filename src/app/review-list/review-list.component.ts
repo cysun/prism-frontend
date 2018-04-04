@@ -48,6 +48,7 @@ export class ReviewListComponent implements OnInit {
 
     this.getAllReviews().then ( () => {
       for (let i = 0; i < this.reviewsList.length; i++) {
+        this.reviewsList[i].percentComplete = this.percentComplete(this.reviewsList[i]);
         this.getProgramData().then( (data: Program[]) => {
           const matchingProgramIndex = data.findIndex(x => x._id === this.reviewsList[i].program);
           this.reviewsList[i].program = JSON.parse(JSON.stringify(data[matchingProgramIndex]));
@@ -285,5 +286,21 @@ export class ReviewListComponent implements OnInit {
     this.alert = '';
     this.currentReview = new Review();
     this.modal.close();
+  }
+
+  percentComplete(review: Review): number {
+    let totalDaysPassed = 0;
+    let totalDaysForCompletion = 0;
+    for (const nodeId of Object.keys(review.nodes)) {
+      if (review.nodes[nodeId].finalized) {
+        totalDaysPassed += review.nodes[nodeId].completionEstimate;
+      } else {
+        const msPassed = ((new Date()).getTime() - (new Date(review.nodes[nodeId].startDate)).getTime());
+        // 86400000ms in one day
+        totalDaysPassed += (msPassed > 0 ? msPassed : 0) / 86400000;
+      }
+      totalDaysForCompletion += review.nodes[nodeId].completionEstimate;
+    }
+    return Math.floor(100 * totalDaysPassed / totalDaysForCompletion);
   }
 }
