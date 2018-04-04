@@ -20,6 +20,7 @@ export class ProgramsComponent implements OnInit {
   program: Program = new Program();
   programs: Program[] = [];
   newProgram: Program = new Program;
+  nextReviewDate: object;
   editedProgram: string;
   alerts: IAlert[] = [];
 
@@ -40,10 +41,10 @@ export class ProgramsComponent implements OnInit {
       this.invalidErrorMessage('empty program')
     } else if (this.programs.find(item => item.name.toLowerCase() === this.newProgram.name.trim().toLowerCase())) {
         this.invalidErrorMessage('existing program');
-      } else if (typeof(this.newProgram.nextReviewDate) === 'undefined') {
+      } else if (!this.nextReviewDate) {
           this.invalidErrorMessage('empty date');
         } else {
-          this.programService.addProgram(this.newProgram).subscribe( data => {
+          this.programService.addProgram(this.newProgram, this.nextReviewDate).subscribe( data => {
             this.programs.push(data);
             this.programs = this.programs.slice(0);
           });
@@ -106,6 +107,9 @@ export class ProgramsComponent implements OnInit {
         break;
       case 'existing program':
         detailMsg = 'Name of program already exists.'
+        break;
+      case 'empty date':
+        detailMsg = 'Please input the next date the program must be reviewed';
         break;
     }
     this.alerts.push({type: 'warning', message: detailMsg });
