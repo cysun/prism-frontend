@@ -167,7 +167,8 @@
                 </div>
               </div>
               <div class="card-details">
-                <strong>Start Date:</strong> {{review.startDate | date: 'MM/dd/yyyy'}}<br/>
+                <strong>Start Date:</strong> {{review.startDate | date: 'MM/dd/yyyy'}} &#8212; <strong>{{review.percentComplete}}% complete</strong>
+                <br />
                 <strong>Lead Reviewer(s):</strong>
                 <ng-container *ngFor="let leadReviewer of review.leadReviewers; let idx = index;">
                   {{leadReviewer.name?.first}} {{leadReviewer.name?.last}}{{ idx + 1 < review.leadReviewers.length ? ',' : '' }}
