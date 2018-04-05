@@ -21,7 +21,7 @@
     <h5 class="modal-title">New Event</h5>
   </div>
 
-  <form #f="ngForm" (ngSubmit)="submitEvent(newEvent.date)">
+  <form #f="ngForm" (ngSubmit)="modalData?.action === 'Edit' ? submitEvent('Edit') : submitEvent('Submit')">
     <div class="modal-body">
       <div *ngIf="alert">
         <ngb-alert type="danger" [dismissible]="false"><strong>Invalid Event:</strong> {{ alert.message }}</ngb-alert>
@@ -46,22 +46,22 @@
           </div>
 
           <input class="form-control" placeholder="yyyy-mm-dd" name="d2" #c2="ngModel"
-          [(ngModel)]="newEvent.date" ngbDatepicker #d2="ngbDatepicker">
+                 [(ngModel)]="date" ngbDatepicker #d2="ngbDatepicker">
         </div>
 
         <div class="text-hints">Click on the calendar icon to select a date.</div>
       </div>
 
       <div class="col-4" style="margin-top:-18px;">
-        <ngb-timepicker [(ngModel)]="time" [meridian]="meridian" [minuteStep]="15" name="time-picker"></ngb-timepicker>
-        <div><pre>{{ time | json}}</pre></div>
+        <ngb-timepicker [(ngModel)]="time" [meridian]="true" [minuteStep]="15" name="time-picker"></ngb-timepicker>
       </div>
     </div>
-    {{ newEvent | json }}
   </div>
 
+  <pre>{{ modalData | json}}</pre>
+
   <div class="modal-footer">
-    <button class="btn btn-primary" [disabled]="!f.form.valid" type="submit">Add</button>
+    <button class="btn btn-primary" [disabled]="!f.form.valid" type="submit">Save</button>
     <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
   </div>
 </form>

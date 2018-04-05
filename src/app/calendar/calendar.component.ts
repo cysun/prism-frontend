@@ -3,11 +3,13 @@ import { Component, OnInit, ViewChild, ViewEncapsulation, TemplateRef } from '@a
 import {
   NgbModal,
   NgbModalRef,
+  NgbDateStruct,
   NgbTimeStruct,
   NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 
 import { Subject } from 'rxjs/Subject';
 
+import { CustomEventTitleFormatter } from './custom-event-title-formatter.provider';
 import { Event } from '../models/event.model';
 import { CalendarService } from './calendar.service';
 import { Globals } from '../shared/app.global';
@@ -19,7 +21,6 @@ import {
   CalendarEventTimesChangedEvent
 } from 'angular-calendar';
 
-import { CustomEventTitleFormatter } from './custom-event-title-formatter.provider';
 
 import { isSameDay, isSameMonth } from 'date-fns';
 
@@ -38,6 +39,8 @@ import { isSameDay, isSameMonth } from 'date-fns';
 
 export class CalendarComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
+  @ViewChild('addNewEventModal') addNewEventModal: TemplateRef<any>;
+
   colors: any = {
     red: {
       primary: '#ad2121',
@@ -54,13 +57,13 @@ export class CalendarComponent implements OnInit {
   };
 
   activeDayIsOpen = false;
-  newEvent: Event;
+  newEvent: Event = new Event();
   view = 'month';
   viewDate: Date = new Date();
 
   alert: any;
+  date: NgbDateStruct;
   events: CalendarEvent[] = [];
-  meridian = true;
   modal: NgbModalRef;
   refresh: Subject<any> = new Subject();
   time: NgbTimeStruct;
@@ -74,7 +77,7 @@ export class CalendarComponent implements OnInit {
     {
       label: '<i class="fa fa-fw fa-pencil"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
+        this.handleEvent('Edit', event);
       }
     },
     {
@@ -84,11 +87,12 @@ export class CalendarComponent implements OnInit {
         this.calendarService.deleteEvent(event.id).subscribe( () => {
           const deleteEventIndex = this.events.findIndex(
             deleteEvent => deleteEvent.id === event.id);
-        });
-      //  this.handleEvent('Deleted', event);
+            this.events.splice(deleteEventIndex, 1);
+          });
+          //  this.handleEvent('Deleted', event);
+        }
       }
-    }
-  ];
+    ];
 
   constructor(private calendarService: CalendarService,
               private dateParser: NgbDateParserFormatter,
@@ -96,10 +100,10 @@ export class CalendarComponent implements OnInit {
               private modalService: NgbModal) {}
 
   ngOnInit() {
-    this.time = { hour: 13, minute: 0, second: 0 };
+    this.time = { hour: 9, minute: 0, second: 0 };
     this.calendarService.getAllEvents().subscribe( data => {
       for (let i = 0; i < data.length; i++) {
-        this.addEvent(data[i]);
+        this.addEventToCalendar(data[i]);
       }
     })
   }
@@ -126,31 +130,51 @@ export class CalendarComponent implements OnInit {
 
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
-    this.modal = this.modalService.open(this.modalContent, this.globals.options);
+    if (action === 'Edit') {
+      this.openModal(this.addNewEventModal, event.meta._id);
+    } else {
+      this.modal = this.modalService.open(this.modalContent, this.globals.options);
+    }
   }
 
   /* Add new event to the database and calendar */
-  submitEvent(newEventDate) {
-    if (newEventDate) {
-      this.newEvent.date = new Date(newEventDate.year, newEventDate.month - 1,
-        newEventDate.day, this.time.hour, this.time.minute, this.time.second);
+  submitEvent(action: string) {
+    if (this.date) {
+      this.newEvent.date = new Date(
+        this.date.year,
+        this.date.month - 1,
+        this.date.day,
+        this.time.hour,
+        this.time.minute,
+        this.time.second);
 
-      this.calendarService.addEvent(this.newEvent.title, this.newEvent.date).subscribe( data => {
-        this.addEvent(data);
-        this.closeModal();
-      })
+      if (action === 'Submit') {
+        this.calendarService.addEvent(this.newEvent.title, this.newEvent.date)
+        .subscribe( data => {
+          this.addEventToCalendar(data);
+        })
+      } else if ( action === 'Edit') {
+        this.calendarService.updateEvent(
+        this.newEvent._id, this.newEvent.title, this.newEvent.date).subscribe( data => {
+          const updateEventIndex = this.events.findIndex( currEvent =>
+            currEvent.id === this.modalData.event.id);
+          this.events[updateEventIndex].start = new Date(data.date);
+          this.events[updateEventIndex].meta = data;
+        })
+      }
+      this.closeModal();
     } else {
       this.alert = { message: 'Please select a valid date for the event.'};
     }
   }
 
   /* Add event to the actual calendar */
-  addEvent(newEvent: Event): void {
+  addEventToCalendar(newEvent: Event): void {
     this.events.push({
       id: newEvent._id,
       start: new Date(newEvent.date),
       title: newEvent.title,
-      color: this.colors.red,
+      color: this.colors.yellow,
       actions: this.actions,
       meta: newEvent,
     });
@@ -158,15 +182,35 @@ export class CalendarComponent implements OnInit {
   }
 
   /* Open modal */
-  openModal(content) {
-    this.newEvent = new Event();
+  openModal(content, eventId?: string) {
+    if (eventId) {
+      this.calendarService.getEvent(eventId).subscribe( data => {
+        this.newEvent = data;
+        const convertedDate = new Date(this.newEvent.date);
+
+        this.date = {
+          year: convertedDate.getFullYear(),
+          month: convertedDate.getMonth() + 1,
+          day: convertedDate.getDate()
+        }
+
+        this.time = {
+          hour: convertedDate.getHours(),
+          minute: convertedDate.getMinutes(),
+          second: convertedDate.getSeconds()
+        };
+      })
+    } else {
+      this.newEvent = new Event();
+    }
     this.modal = this.modalService.open(content, this.globals.options);
   }
 
   /* Closes the current open modal */
   closeModal() {
     this.alert = '';
-    this.time = { hour: 13, minute: 0, second: 0 };
+    this.date = null;
+    this.time = { hour: 9, minute: 0, second: 0 };
     this.modal.close();
   }
 }

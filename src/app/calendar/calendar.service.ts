@@ -14,6 +14,10 @@ export class CalendarService {
     return this.http.get<Event[]>(`/api/events`);
   }
 
+  getEvent(eventId: string): Observable<Event> {
+    return this.http.get<Event>(`api/event/${eventId}`);
+  }
+
   addEvent(title: string, date: Date): Observable<Event> {
     const body = { 'title': title, 'date': date };
     return this.http.post<Event>(`/api/event`, body, this.HEADERS);
