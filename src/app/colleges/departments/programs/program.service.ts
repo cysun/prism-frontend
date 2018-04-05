@@ -20,7 +20,7 @@ export class ProgramService {
   }
 
   addProgram(program: Program, nextReviewDate): Observable<Program> {
-    const date = nextReviewDate.year + '-' + (nextReviewDate.month === 12 ? 1 : nextReviewDate.month + 1)  + '-' + nextReviewDate.day;
+    const date = nextReviewDate.year + '-' + nextReviewDate.month + '-' + nextReviewDate.day;
     const body = JSON.stringify({'_id': program._id, 'name': program.name, 'department': program.department, 'nextReviewDate': date});
     const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
     return this.http.post<Program>('/api/program', body, header);
