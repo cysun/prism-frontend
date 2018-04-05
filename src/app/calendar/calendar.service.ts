@@ -24,8 +24,7 @@ export class CalendarService {
     return this.http.patch<Event>(`/api/event/${eventId}`, body, this.HEADERS);
   }
 
-  deleteEvent(eventId: string) {
+  deleteEvent(eventId) {
     return this.http.delete(`/api/event/${eventId}`);
   }
-
 }

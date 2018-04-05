@@ -30,6 +30,7 @@ import { LoginComponent } from './login/login.component';
 import { PublicComponent } from './layout/public/public.component';
 import { PrivateComponent } from './layout/private/private.component';
 
+import { CalendarService } from './calendar/calendar.service';
 import { CollegesService } from './colleges/colleges.service';
 import { DashboardService } from './dashboard/dashboard.service';
 import { DocumentService } from './document/document.service';
@@ -90,6 +91,7 @@ import { ReviewListComponent } from './review-list/review-list.component';
     AuthGuard,
     AuthService,
     HttpClientModule,
+    CalendarService,
     CollegesService,
     DashboardService,
     DocumentService,

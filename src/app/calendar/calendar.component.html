@@ -1,3 +1,72 @@
+<ng-template #modalContent>
+  <div class="modal-header">
+    <h5 class="modal-title">Event</h5>
+
+  </div>
+  <div class="modal-body">
+    <div>
+      Event:
+      <pre>{{ modalData?.event | json }}</pre>
+    <div><strong>Start Time:</strong> {{ modalData?.event.start | date: 'MMM dd, yyyy hh:mm a'}}</div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">OK</button>
+  </div>
+</ng-template>
+
+
+<ng-template #addNewEventModal>
+  <div class="modal-header">
+    <h5 class="modal-title">New Event</h5>
+  </div>
+
+  <form #f="ngForm" (ngSubmit)="submitEvent(newEvent.date)">
+    <div class="modal-body">
+      <div *ngIf="alert">
+        <ngb-alert type="danger" [dismissible]="false"><strong>Invalid Event:</strong> {{ alert.message }}</ngb-alert>
+      </div>
+
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><i class="fa fa-info-circle"></i></span>
+      </div>
+      <input type="text" class="form-control" placeholder="Enter an event title" name="event-name" [(ngModel)]="newEvent.title" required>
+    </div>
+
+    <div class="text-hints">Enter a name for the new event.</div>
+
+    <div class="row">
+      <div class="col-8">
+        <div class="input-group grid-space">
+          <div class="input-group-prepend">
+            <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
+              <i class="fa fa-calendar"></i>
+            </button>
+          </div>
+
+          <input class="form-control" placeholder="yyyy-mm-dd" name="d2" #c2="ngModel"
+          [(ngModel)]="newEvent.date" ngbDatepicker #d2="ngbDatepicker">
+        </div>
+
+        <div class="text-hints">Click on the calendar icon to select a date.</div>
+      </div>
+
+      <div class="col-4" style="margin-top:-18px;">
+        <ngb-timepicker [(ngModel)]="time" [meridian]="meridian" [minuteStep]="15" name="time-picker"></ngb-timepicker>
+        <div><pre>{{ time | json}}</pre></div>
+      </div>
+    </div>
+    {{ newEvent | json }}
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-primary" [disabled]="!f.form.valid" type="submit">Add</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+  </div>
+</form>
+</ng-template>
+
 <div class="month-year-display">
   <button mwlCalendarPreviousView class="btn btn-primary" [(viewDate)]="viewDate"  [view]="view">
     <i class="fa fa-chevron-left"></i>
@@ -10,5 +79,16 @@
   </button>
 </div>
 
-<mwl-calendar-month-view [viewDate]="viewDate" [events]="events">
+<mwl-calendar-month-view
+  [viewDate]="viewDate"
+  [events]="events"
+  [refresh]="refresh"
+  [activeDayIsOpen]="activeDayIsOpen"
+  (dayClicked)="dayClicked($event.day)"
+  (eventClicked)="handleEvent('Clicked', $event.event)"
+  (eventTimesChanged)="eventTimesChanged($event)">
 </mwl-calendar-month-view>
+
+<div style="padding-top: 20px;">
+  <button class="btn btn-info" (click)="openModal(addNewEventModal)">New Event</button>
+</div>
