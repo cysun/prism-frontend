@@ -1,17 +1,27 @@
 <ng-template #modalContent>
   <div class="modal-header">
     <h5 class="modal-title">Event</h5>
-
   </div>
+
   <div class="modal-body">
-    <div>
-      Event:
-      <pre>{{ modalData?.event | json }}</pre>
-    <div><strong>Start Time:</strong> {{ modalData?.event.start | date: 'MMM dd, yyyy hh:mm a'}}</div>
+    <div *ngIf="alert">
+      <ngb-alert type="danger" [dismissible]="false">
+        <strong>Warning:</strong> {{ alert.message }}
+      </ngb-alert>
     </div>
+    <strong>Title:</strong> {{ modalData?.event.title }} <br/>
+    <strong>Start:</strong> {{ modalData?.event.start | date: 'MMM dd, yyyy hh:mm a'}}
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">OK</button>
+    <div *ngIf="modalData?.action === 'Delete'; else viewEvent">
+      <button type="button" class="btn btn-danger" (click)="deleteEvent(modalData.event)">Delete</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Cancel</button>
+    </div>
+
+    <ng-template #viewEvent>
+      <button type="button" class="btn btn-danger" (click)="cancelEvent()">Cancel Event</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Close</button>
+    </ng-template>
   </div>
 </ng-template>
 
@@ -58,8 +68,6 @@
     </div>
   </div>
 
-  <pre>{{ modalData | json}}</pre>
-
   <div class="modal-footer">
     <button class="btn btn-primary" [disabled]="!f.form.valid" type="submit">Save</button>
     <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
@@ -85,8 +93,7 @@
   [refresh]="refresh"
   [activeDayIsOpen]="activeDayIsOpen"
   (dayClicked)="dayClicked($event.day)"
-  (eventClicked)="handleEvent('Clicked', $event.event)"
-  (eventTimesChanged)="eventTimesChanged($event)">
+  (eventClicked)="handleEvent('Clicked', $event.event)">
 </mwl-calendar-month-view>
 
 <div style="padding-top: 20px;">

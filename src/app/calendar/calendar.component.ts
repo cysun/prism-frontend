@@ -21,7 +21,6 @@ import {
   CalendarEventTimesChangedEvent
 } from 'angular-calendar';
 
-
 import { isSameDay, isSameMonth } from 'date-fns';
 
 @Component({
@@ -83,13 +82,7 @@ export class CalendarComponent implements OnInit {
     {
       label: '<i class="fa fa-fw fa-times"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter(iEvent => iEvent !== event);
-        this.calendarService.deleteEvent(event.id).subscribe( () => {
-          const deleteEventIndex = this.events.findIndex(
-            deleteEvent => deleteEvent.id === event.id);
-            this.events.splice(deleteEventIndex, 1);
-          });
-          //  this.handleEvent('Deleted', event);
+          this.handleEvent('Delete', event);
         }
       }
     ];
@@ -121,23 +114,18 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  eventTimesChanged({ event, newStart, newEnd }: CalendarEventTimesChangedEvent): void {
-    event.start = newStart;
-    event.end = newEnd;
-    this.handleEvent('Dropped or resized', event);
-    this.refresh.next();
-  }
-
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
     if (action === 'Edit') {
       this.openModal(this.addNewEventModal, event.meta._id);
-    } else {
-      this.modal = this.modalService.open(this.modalContent, this.globals.options);
+      return;
+    } else if (action === 'Delete') {
+      this.alert = { message: 'Are you sure you want to delete this event?'};
     }
+    this.modal = this.modalService.open(this.modalContent, this.globals.options);
   }
 
-  /* Add new event to the database and calendar */
+  /* Add new event or update an event to the database and calendar */
   submitEvent(action: string) {
     if (this.date) {
       this.newEvent.date = new Date(
@@ -162,6 +150,7 @@ export class CalendarComponent implements OnInit {
           this.events[updateEventIndex].meta = data;
         })
       }
+      this.activeDayIsOpen = false;
       this.closeModal();
     } else {
       this.alert = { message: 'Please select a valid date for the event.'};
@@ -173,12 +162,34 @@ export class CalendarComponent implements OnInit {
     this.events.push({
       id: newEvent._id,
       start: new Date(newEvent.date),
-      title: newEvent.title,
-      color: this.colors.yellow,
+      title: newEvent.title + (newEvent.canceled ? ' (Canceled)' : ''),
+      color: (newEvent.canceled ? this.colors.red : this.colors.yellow),
       actions: this.actions,
       meta: newEvent,
     });
     this.refresh.next();
+  }
+
+  /* Mark an event as canceled */
+  cancelEvent() {
+    this.calendarService.cancelEvent(this.modalData.event.meta._id).subscribe(() => {
+      const findEventIndex = this.events.findIndex( currEvent =>
+        currEvent.id === this.modalData.event.id);
+
+      this.events[findEventIndex].title += ' (Canceled)';
+      this.events[findEventIndex].meta.canceled = true;
+      this.events[findEventIndex].color = this.colors.red;
+    })
+    this.closeModal();
+  }
+
+  /* Delete event from database and calendar */
+  deleteEvent(event: CalendarEvent) {
+    this.calendarService.deleteEvent(event.id).subscribe( () => {
+      this.events = this.events.filter(iEvent => iEvent !== event);
+    });
+    this.activeDayIsOpen = false;
+    this.closeModal();
   }
 
   /* Open modal */

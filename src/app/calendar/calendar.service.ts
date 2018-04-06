@@ -28,6 +28,11 @@ export class CalendarService {
     return this.http.patch<Event>(`/api/event/${eventId}`, body, this.HEADERS);
   }
 
+  cancelEvent(eventId: string) {
+    return this.http.post(`/api/event/${eventId}/cancel`, null,
+      { responseType: 'text' });
+  }
+
   deleteEvent(eventId) {
     return this.http.delete(`/api/event/${eventId}`);
   }
