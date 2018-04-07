@@ -8,11 +8,11 @@
     </thead>
     <tbody>
       <tr *ngFor="let program of programs">
-        <td *ngIf="program._id === editedProgram"><input type="text" class="form-control" (ngModel)="program.name" value="{{program.name}}"></td>
+        <td *ngIf="program._id === editedProgram"><input type="text" class="form-control" [(ngModel)]="program.name" value="{{program.name}}"></td>
         <td *ngIf="program._id !== editedProgram">{{program.name | uppercase}}</td>
         <td *ngIf="program._id === editedProgram">
           <div class="input-group">
-            <input class="form-control" value="{{program.nextReviewDate | date:'yyyy-MM-dd'}}"
+            <input class="form-control" [(ngModel)]="dateModel"
                  name="dp" ngbDatepicker #d="ngbDatepicker">
             <div class="input-group-append">
               <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
@@ -61,7 +61,7 @@
   <span class="col-3">Set Review Date</span>
   <div class="col-8 ui-fluid">
     <div class="input-group">
-      <input class="form-control" placeholder="yyyy-mm-dd"
+      <input class="form-control" placeholder="yyyy-mm-dd" placement="top"
              name="dp" [(ngModel)]="newProgram.nextReviewDate" ngbDatepicker #d="ngbDatepicker">
       <div class="input-group-append">
         <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">

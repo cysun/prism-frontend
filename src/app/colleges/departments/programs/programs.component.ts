@@ -16,7 +16,9 @@ import { Program } from '../../../models/program.model';
 export class ProgramsComponent implements OnInit {
   @Input() departmentId: any;
   @Input() modal: NgbModalRef;
+  dateModel: any = { year: '', month: '', day: ''};
   currentDepartment: string;
+  editedProgramName: string;
   program: Program = new Program();
   programs: Program[] = [];
   newProgram: Program = new Program;
@@ -40,7 +42,7 @@ export class ProgramsComponent implements OnInit {
       this.invalidErrorMessage('empty program')
     } else if (this.programs.find(item => item.name.toLowerCase() === this.newProgram.name.trim().toLowerCase())) {
         this.invalidErrorMessage('existing program');
-      } else if (typeof(this.newProgram.nextReviewDate) === 'undefined'){
+      } else if (typeof(this.newProgram.nextReviewDate) === 'undefined') {
           this.invalidErrorMessage('empty date');
         } else {
           this.programService.addProgram(this.newProgram).subscribe( data => {
@@ -52,7 +54,9 @@ export class ProgramsComponent implements OnInit {
     }
 
   cancelUpdate() {
-    this.editedProgram = "";
+    this.program.name = this.editedProgramName;
+    this.dateModel = { year: '', month: '', day: ''}
+    this.editedProgram = '';
   }
 
   closeAlert(alert: IAlert) {
@@ -76,22 +80,31 @@ export class ProgramsComponent implements OnInit {
 
   editProgram(program) {
     this.editedProgram = program._id;
+    this.editedProgramName = program.name;
+    const dateObj = new Date(program.nextReviewDate);
+    this.dateModel.year = dateObj.getFullYear();
+    this.dateModel.month = dateObj.getMonth() + 1;
+    this.dateModel.day = dateObj.getDate();
     this.program = program;
   }
 
   updateProgram() {
     this.alerts = [];
     if (this.program.name.trim().length === 0) {
-      this.cancelUpdate();
+      this.invalidErrorMessage('empty program');
     } else if (this.programs.some(existingProgram =>
-        existingProgram.name.toLowerCase() === this.program.name.toLowerCase() && existingProgram._id != this.program._id)) {
+        existingProgram.name.toLowerCase() === this.program.name.toLowerCase() && existingProgram._id !== this.program._id)) {
           this.invalidErrorMessage('existing program');
     } else {
+        const newDate = this.dateModel.month + '/' + this.dateModel.day + '/' + this.dateModel.year;
+        this.program.nextReviewDate = newDate;
         this.programService.updateProgram(this.program).subscribe( updatedProgram => {
           const index = this.programs.findIndex(item => item._id === this.program._id);
           this.programs[index] = updatedProgram;
           this.program = updatedProgram;
-          this.editedProgram = "";
+          this.editedProgram = '';
+          this.dateModel = {year: '', month: '', day: ''};
+          console.log('updated successfully');
         });
       }
   }
@@ -108,7 +121,7 @@ export class ProgramsComponent implements OnInit {
         detailMsg = 'Name of program already exists.'
         break;
       case 'empty date':
-        detailMsg = "Pleae input a review date.";
+        detailMsg = 'Pleae input a review date.';
     }
     this.alerts.push({type: 'warning', message: detailMsg });
   }
