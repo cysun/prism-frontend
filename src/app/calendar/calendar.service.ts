@@ -25,7 +25,7 @@ export class CalendarService {
   }
 
   attachDocumentToEvent(eventId: string, title: string): Observable<Document> {
-    return this.http.post<Document>(`/api/${eventId}/document`, { title : title },
+    return this.http.post<Document>(`/api/event/${eventId}/document`, { title : title },
       this.HEADERS);
   }
 

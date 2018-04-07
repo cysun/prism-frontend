@@ -14,6 +14,7 @@ import { Event } from '../models/event.model';
 import { Group } from '../models/group.model';
 import { User } from '../models/user.model';
 import { CalendarService } from './calendar.service';
+import { DocumentService } from '../document/document.service';
 import { SharedService } from '../shared/shared.service';
 import { Globals } from '../shared/app.global';
 
@@ -69,6 +70,11 @@ export class CalendarComponent implements OnInit {
   modal: NgbModalRef;
   refresh: Subject<any> = new Subject();
   time: NgbTimeStruct;
+
+  message: string;
+  file: File;
+  fileName: string;
+
   suggestedGroups: Group[];
   suggestedUsers: User[];
 
@@ -96,6 +102,7 @@ export class CalendarComponent implements OnInit {
               private dateParser: NgbDateParserFormatter,
               private globals: Globals,
               private modalService: NgbModal,
+              private documentService: DocumentService,
               private sharedService: SharedService) {}
 
   ngOnInit() {
@@ -151,6 +158,7 @@ export class CalendarComponent implements OnInit {
         .subscribe( data => {
           this.addEventToCalendar(data);
           this.inviteToEvent(data._id);
+          this.uploadAttachment(data._id);
         })
       } else if ( action === 'Edit') {
         const body = { title: this.newEvent.title, date: this.newEvent.date };
@@ -161,6 +169,7 @@ export class CalendarComponent implements OnInit {
           this.events[updateEventIndex].start = new Date(data.date);
           this.events[updateEventIndex].meta = data;
           this.inviteToEvent(this.newEvent._id);
+          this.uploadAttachment(this.newEvent._id);
         })
       }
       this.activeDayIsOpen = false;
@@ -257,10 +266,33 @@ export class CalendarComponent implements OnInit {
 
   /* Closes the current open modal */
   closeModal() {
-    this.alert = '';
-    this.date = null;
-    this.modalData = null;
     this.time = { hour: 9, minute: 0, second: 0 };
     this.modal.close();
+  }
+
+  /* Set file variable to the file the user has chosen */
+  onFileChange(event) {
+    if (event.target.files.length > 0) {
+      this.file = event.target.files[0];
+      this.fileName = event.target.files[0].name;
+    }
+  }
+
+  /* Upload revision message and the file being sent */
+  uploadAttachment(eventId: string) {
+    if (this.file && this.message) {
+      this.calendarService.attachDocumentToEvent(eventId, this.message).subscribe( data => {
+        const updateEventIndex = this.events.findIndex( currEvent => currEvent.id === eventId);
+        this.events[updateEventIndex].meta.documents = data._id;
+
+        this.documentService.postRevision(data._id, this.message).subscribe( () => {
+          this.documentService.uploadFile(data._id, 0, this.file).subscribe( () => {
+            this.message = '';
+            this.file = null;
+            this.fileName = '';
+          });
+        })
+      });
+    }
   }
 }

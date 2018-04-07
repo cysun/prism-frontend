@@ -10,10 +10,8 @@
       </ngb-alert>
     </div>
 
-    <pre>{{ modalData | json }}</pre>
     <strong>Title:</strong> {{ modalData?.event.title }} <br/>
     <strong>Start:</strong> {{ modalData?.event.start | date: 'MMM dd, yyyy hh:mm a'}}<br/>
-    <strong>People:</strong> Pending
   </div>
 
   <div class="modal-footer">
@@ -23,7 +21,9 @@
     </div>
 
     <ng-template #viewEvent>
-      <button type="button" class="btn btn-danger" (click)="cancelEvent()">Cancel Event</button>
+      <div *ngIf="!modalData?.event.meta.canceled">
+        <button type="button" class="btn btn-danger" (click)="cancelEvent()">Cancel Event</button>
+      </div>
       <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Close</button>
     </ng-template>
   </div>
@@ -73,7 +73,7 @@
       </div>
 
       <div class ="col-12">
-        <h5>Notifications</h5>
+        <h5 class="grid-space">Notifications</h5>
         <prism-user-selector [configType]="'groups'" [suggestedMembers]="suggestedGroups">
         </prism-user-selector>
 
@@ -91,11 +91,31 @@
           Type in a username to notify the person of the event.
         </div>
       </div>
+
+      <div class="col-12 grid-space">
+        <h5 class="grid-space">Attach File (Optional)</h5>
+        <div class="custom-file">
+          <input name="file" type="file" class="custom-file-input"
+          accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          (change)="onFileChange($event)">
+
+          <label class="custom-file-label">
+            {{ fileName ? fileName : 'Choose a file'}}
+          </label>
+          <div class="text-hints">Click on browse to attach a file.</div>
+        </div>
+
+        <div class="file-message grid-space">
+          <input type="text" class="form-control" [(ngModel)]="message" name="file-message"
+                 placeholder="Enter a tile for the file">
+          <div class="text-hints">Give a title to the attached file.</div>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="modal-footer">
-    <button class="btn btn-primary" [disabled]="!f.form.valid" type="submit">Save</button>
+    <button class="btn btn-primary" [disabled]="!f.form.valid" type="submit">Confirm</button>
     <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
   </div>
 </form>
