@@ -44,8 +44,8 @@ export class ResourceService {
   }
 
   /* Download a file */
-  downloadFile(resourceId: string, fileId: string): any {
-    return this.http.get('/api/resource/' + resourceId + '/files/' + fileId + '/file',
+  downloadFile(resourceId: string): any {
+    return this.http.get('/api/resource/' + resourceId + '/files/0/file',
     { responseType: 'blob', observe: 'response'});
   }
 

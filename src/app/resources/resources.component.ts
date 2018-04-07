@@ -73,21 +73,27 @@ export class ResourcesComponent implements OnInit {
 
   /* Download specified resource(s) */
   downloadSelected(): void {
-    const filename = 'download';
     this.selected.forEach((id) => {
-      this.resourceService.getResource(id).subscribe(data => {
-        this.resourceService.downloadFile(data._id, data.files[0]._id).subscribe(fileData => {
-          const contentType = fileData.headers.get('content-type');
-          saveAs(new Blob([fileData.body], { type: contentType }), filename);
-        }, (err) => {
-          console.log(err);
-        });
+      this.resourceService.downloadFile(id).subscribe(fileData => {
+        const contentDisposition = fileData.headers.get('content-disposition');
+        const contentType = fileData.headers.get('content-type');
+        const fileName = contentDisposition.slice(22, contentDisposition.length - 1);
+        saveAs(new Blob([fileData.body], { type: contentType }), fileName);
       });
     });
+    this.selected = [];
   }
 
   downloadAll(): void {
-
+    this.resources.forEach((resource) => {
+      this.resourceService.downloadFile(resource._id).subscribe(fileData => {
+        const contentDisposition = fileData.headers.get('content-disposition');
+        const contentType = fileData.headers.get('content-type');
+        const fileName = contentDisposition.slice(22, contentDisposition.length - 1);
+        saveAs(new Blob([fileData.body], { type: contentType }), fileName);
+      });
+    });
+    this.selected = [];
   }
 
   /* Get all resources */
