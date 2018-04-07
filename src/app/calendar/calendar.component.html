@@ -9,9 +9,13 @@
         <strong>Warning:</strong> {{ alert.message }}
       </ngb-alert>
     </div>
+
+    <pre>{{ modalData | json }}</pre>
     <strong>Title:</strong> {{ modalData?.event.title }} <br/>
-    <strong>Start:</strong> {{ modalData?.event.start | date: 'MMM dd, yyyy hh:mm a'}}
+    <strong>Start:</strong> {{ modalData?.event.start | date: 'MMM dd, yyyy hh:mm a'}}<br/>
+    <strong>People:</strong> Pending
   </div>
+
   <div class="modal-footer">
     <div *ngIf="modalData?.action === 'Delete'; else viewEvent">
       <button type="button" class="btn btn-danger" (click)="deleteEvent(modalData.event)">Delete</button>
@@ -28,7 +32,9 @@
 
 <ng-template #addNewEventModal>
   <div class="modal-header">
-    <h5 class="modal-title">New Event</h5>
+    <h5 class="modal-title">
+      {{modalData?.action === 'Edit' ? 'Edit Event' : 'New Event'}}
+    </h5>
   </div>
 
   <form #f="ngForm" (ngSubmit)="modalData?.action === 'Edit' ? submitEvent('Edit') : submitEvent('Submit')">
@@ -36,7 +42,7 @@
       <div *ngIf="alert">
         <ngb-alert type="danger" [dismissible]="false"><strong>Invalid Event:</strong> {{ alert.message }}</ngb-alert>
       </div>
-
+      <h5>Event Details</h5>
     <div class="input-group">
       <div class="input-group-prepend">
         <span class="input-group-text"><i class="fa fa-info-circle"></i></span>
@@ -64,6 +70,26 @@
 
       <div class="col-4" style="margin-top:-18px;">
         <ngb-timepicker [(ngModel)]="time" [meridian]="true" [minuteStep]="15" name="time-picker"></ngb-timepicker>
+      </div>
+
+      <div class ="col-12">
+        <h5>Notifications</h5>
+        <prism-user-selector [configType]="'groups'" [suggestedMembers]="suggestedGroups">
+        </prism-user-selector>
+
+        <div class="text-hints">
+          Type in a group name to notify the members of the event.
+        </div>
+      </div>
+
+      <div class ="col-12 grid-space">
+        <prism-user-selector [configType]="'multiple'"
+                             [suggestedMembers]="suggestedUsers">
+        </prism-user-selector>
+
+        <div class="text-hints">
+          Type in a username to notify the person of the event.
+        </div>
       </div>
     </div>
   </div>

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 
 import { Event } from '../models/event.model';
+import { Document } from '../models/document.model';
 
 @Injectable()
 export class CalendarService {
@@ -15,7 +16,7 @@ export class CalendarService {
   }
 
   getEvent(eventId: string): Observable<Event> {
-    return this.http.get<Event>(`api/event/${eventId}`);
+    return this.http.get<Event>(`/api/event/${eventId}`);
   }
 
   addEvent(title: string, date: Date): Observable<Event> {
@@ -23,9 +24,17 @@ export class CalendarService {
     return this.http.post<Event>(`/api/event`, body, this.HEADERS);
   }
 
-  updateEvent(eventId: string, title: string, date: Date): Observable<Event> {
-    const body = { 'title': title, 'date': date };
-    return this.http.patch<Event>(`/api/event/${eventId}`, body, this.HEADERS);
+  attachDocumentToEvent(eventId: string, title: string): Observable<Document> {
+    return this.http.post<Document>(`/api/${eventId}/document`, { title : title },
+      this.HEADERS);
+  }
+
+  removeDocumentFromEvent(eventId: string, documentIndex: number) {
+    return this.http.delete(`/api/${eventId}/document/${documentIndex}`);
+  }
+
+  updateEvent(eventId: string, changes): Observable<Event> {
+    return this.http.patch<Event>(`/api/event/${eventId}`, changes, this.HEADERS);
   }
 
   cancelEvent(eventId: string) {

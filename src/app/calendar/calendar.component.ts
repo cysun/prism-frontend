@@ -11,7 +11,10 @@ import { Subject } from 'rxjs/Subject';
 
 import { CustomEventTitleFormatter } from './custom-event-title-formatter.provider';
 import { Event } from '../models/event.model';
+import { Group } from '../models/group.model';
+import { User } from '../models/user.model';
 import { CalendarService } from './calendar.service';
+import { SharedService } from '../shared/shared.service';
 import { Globals } from '../shared/app.global';
 
 import {
@@ -66,6 +69,8 @@ export class CalendarComponent implements OnInit {
   modal: NgbModalRef;
   refresh: Subject<any> = new Subject();
   time: NgbTimeStruct;
+  suggestedGroups: Group[];
+  suggestedUsers: User[];
 
   modalData: {
     action: string;
@@ -90,7 +95,8 @@ export class CalendarComponent implements OnInit {
   constructor(private calendarService: CalendarService,
               private dateParser: NgbDateParserFormatter,
               private globals: Globals,
-              private modalService: NgbModal) {}
+              private modalService: NgbModal,
+              private sharedService: SharedService) {}
 
   ngOnInit() {
     this.time = { hour: 9, minute: 0, second: 0 };
@@ -127,7 +133,11 @@ export class CalendarComponent implements OnInit {
 
   /* Add new event or update an event to the database and calendar */
   submitEvent(action: string) {
-    if (this.date) {
+    const addGroups = this.sharedService.filteredGroups;
+    const addPeople = this.sharedService.filteredUsers;
+
+    if (this.date && ((addPeople && addPeople.length > 0) ||
+      (addGroups && addGroups.length > 0))) {
       this.newEvent.date = new Date(
         this.date.year,
         this.date.month - 1,
@@ -140,20 +150,25 @@ export class CalendarComponent implements OnInit {
         this.calendarService.addEvent(this.newEvent.title, this.newEvent.date)
         .subscribe( data => {
           this.addEventToCalendar(data);
+          this.inviteToEvent(data._id);
         })
       } else if ( action === 'Edit') {
-        this.calendarService.updateEvent(
-        this.newEvent._id, this.newEvent.title, this.newEvent.date).subscribe( data => {
+        const body = { title: this.newEvent.title, date: this.newEvent.date };
+        this.calendarService.updateEvent(this.newEvent._id, body).subscribe( data => {
           const updateEventIndex = this.events.findIndex( currEvent =>
-            currEvent.id === this.modalData.event.id);
+            currEvent.id === this.newEvent._id);
+          this.events[updateEventIndex].title = data.title;
           this.events[updateEventIndex].start = new Date(data.date);
           this.events[updateEventIndex].meta = data;
+          this.inviteToEvent(this.newEvent._id);
         })
       }
       this.activeDayIsOpen = false;
       this.closeModal();
     } else {
-      this.alert = { message: 'Please select a valid date for the event.'};
+      this.alert = {
+        message: 'Please select a valid date and/or notify at least one user/group about the event.'
+      };
     }
   }
 
@@ -170,18 +185,38 @@ export class CalendarComponent implements OnInit {
     this.refresh.next();
   }
 
+  /* Add people to event */
+  inviteToEvent(eventId: string) {
+    const addGroups = this.sharedService.filteredGroups;
+    const addPeople = this.sharedService.filteredUsers;
+
+    const body: {[key: string]: string[]} = {};
+
+    if (addGroups) { body.groups = addGroups; }
+    if (addPeople) { body.people = addPeople; }
+
+    this.calendarService.updateEvent(eventId, body).subscribe( data => {
+      const updateEventIndex = this.events.findIndex( currEvent =>
+        currEvent.id === eventId);
+      this.events[updateEventIndex].meta = data;
+      this.sharedService.filteredGroups = null;
+      this.sharedService.filteredUsers = null;
+    })
+  }
+
   /* Mark an event as canceled */
   cancelEvent() {
-    this.calendarService.cancelEvent(this.modalData.event.meta._id).subscribe(() => {
+    const eventId = this.modalData.event.meta._id;
+    this.calendarService.cancelEvent(eventId).subscribe(() => {
       const findEventIndex = this.events.findIndex( currEvent =>
-        currEvent.id === this.modalData.event.id);
+        currEvent.id === eventId);
 
-      this.events[findEventIndex].title += ' (Canceled)';
-      this.events[findEventIndex].meta.canceled = true;
-      this.events[findEventIndex].color = this.colors.red;
-    })
-    this.closeModal();
-  }
+        this.events[findEventIndex].title += ' (Canceled)';
+        this.events[findEventIndex].meta.canceled = true;
+        this.events[findEventIndex].color = this.colors.red;
+      })
+      this.closeModal();
+    }
 
   /* Delete event from database and calendar */
   deleteEvent(event: CalendarEvent) {
@@ -210,9 +245,12 @@ export class CalendarComponent implements OnInit {
           minute: convertedDate.getMinutes(),
           second: convertedDate.getSeconds()
         };
+        this.suggestedGroups = this.newEvent.groups;
+        this.suggestedUsers = this.newEvent.people;
       })
     } else {
       this.newEvent = new Event();
+      this.suggestedGroups = [];
     }
     this.modal = this.modalService.open(content, this.globals.options);
   }
@@ -221,6 +259,7 @@ export class CalendarComponent implements OnInit {
   closeModal() {
     this.alert = '';
     this.date = null;
+    this.modalData = null;
     this.time = { hour: 9, minute: 0, second: 0 };
     this.modal.close();
   }
