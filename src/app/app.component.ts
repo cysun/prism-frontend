@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 
 import { AuthService } from './login/auth.service';
+import { SharedService } from './shared/shared.service';
+import { UserResponse } from './models/user-response.model';
 
 @Component({
   selector: 'prism-root',
@@ -12,8 +14,12 @@ import { AuthService } from './login/auth.service';
 
 export class AppComponent implements OnInit {
   username: string;
+  isCollapsed = false;
+  isAdmin: boolean;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService,
+    private sharedService: SharedService,
+    private router: Router) { }
 
   ngOnInit() {
     if (this.authService.isAuthenticated()) {
@@ -24,7 +30,8 @@ export class AppComponent implements OnInit {
 
       /* After any browser refresh, retrieve the current username */
       if (this.username.length <= 0) {
-        this.username = this.authService.getUser().username;
+        const user = this.authService.getUser();
+        this.username = user.user.username;
       }
     }
   }

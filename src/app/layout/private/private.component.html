@@ -1,24 +1,50 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-3 menu-grid">
-      <div class="row">
-        <div class="col-12 menu-label">Action Menu</div>
+    <div class="sidebar">
+      <div class="nav-side-menu" [ngbCollapse]="isCollapsed" (window:resize)="onResize($event)">
+        <div class="menu-list">
+          <div class="nav-greeting">Welcome, <strong>{{ username }}</strong>!</div>
+          <hr/>
+          <a class="nav-link" [routerLink]="['/dashboard']">
+            <i class="fa fa-home"></i> Dashboard
+          </a>
+          <a class="nav-link" [routerLink]="['/calendar']">
+            <i class="fa fa-calendar"></i> Calendar
+          </a>
+          <a class="nav-link" [routerLink]="['/minutes']">
+            <i class="fa fa-clock-o"></i> Minutes
+          </a>
+          <a *ngIf="sharedService.isAdmin()" class="nav-link" [routerLink]="['/college']">
+            <i class="fa fa-graduation-cap"></i> University Hierarchy
+          </a>
+          <a class="nav-link" [routerLink]="['/resources']">
+            <i class="fa fa-folder-open-o"></i> Resources
+          </a>
+          <a class="nav-link" [routerLink]="['/group']">
+            <i class="fa fa-users"></i> Committee
+          </a>
+          <a class="nav-link" [routerLink]="['/document']">
+            <i class="fa fa-file-o"></i> Document
+          </a>
+          <a class="nav-link" [routerLink]="['/review']">
+            Review <strong>Visualization Testing</strong>
+          </a>
+          <a *ngIf="sharedService.isAdmin()" class="nav-link" [routerLink]="['/templates']">
+            <i class="fa fa-folder"></i> Template Manager
+          </a>
 
-        <div class="vertical-menu">
-          <a class="nav-link" [routerLink]="['/dashboard']"><i class="fa fa-home"></i> Dashboard</a>
-          <a class="nav-link" [routerLink]="['/calendar']"><i class="fa fa-calendar"></i> Calendar</a>
-          <a class="nav-link" [routerLink]="['/minutes']"><i class="fa fa-clock-o"></i> Minutes</a>
-          <a class="nav-link" [routerLink]="['/colleges']"><i class="fa fa-graduation-cap"></i> University Hierarchy</a>
-          <a class="nav-link" [routerLink]="['/resources']"><i class="fa fa-folder-open-o"></i> Resources</a>
-          <a class="nav-link" [routerLink]="['/group']"><i class="fa fa-users"></i> Committee</a>
-          <a class="nav-link" [routerLink]="['/document']"><i class="fa fa-file-o"></i> Document</a>
-          <a class="nav-link" [routerLink]="['/templates']"><i class="fa fa-folder"></i> Template Manager</a>
-          <a class="nav-link" [routerLink]="['/selector']"><i class="fa fa-folder"></i> User Selector</a>
+          <hr/>
+
+          <a class="nav-link" [routerLink]="['/settings']">
+            <i class="fa fa-icon fa-gear"></i>Settings
+          </a>
+          <a class="nav-link" [routerLink]="" (click)="logout()">
+            <i class="fa fa-icon fa-sign-out"></i>Sign Out
+          </a>
         </div>
       </div>
     </div>
-
-    <div class="col-9 tab-grid">
+    <div class="col-sm-12 main">
       <router-outlet></router-outlet>
     </div>
   </div>

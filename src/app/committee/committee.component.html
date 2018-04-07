@@ -1,4 +1,4 @@
-<div *ngIf="currentUser.root; else nonAdmin">
+<div *ngIf="isAdmin; else nonAdmin">
   <prism-group-manager></prism-group-manager>
 </div>
 

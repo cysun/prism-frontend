@@ -1,0 +1,35 @@
+.bg-info {
+  color: #FFFFFF;
+}
+
+.card-container {
+  border-left: #FFCE00;
+  border-style: solid;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.card-body {
+  padding: 0;
+}
+
+.card-details {
+  color: #606060;
+  font-size: 0.9em;
+  padding-top: 10px;
+}
+
+.card-message {
+  background-color: #EEE;
+  border-radius: 5px;
+  padding: 15px;
+}
+
+.review-actions {
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.review-actions:hover {
+  text-decoration: underline;
+}
