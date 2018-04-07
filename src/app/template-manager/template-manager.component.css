@@ -1,0 +1,25 @@
+a {
+  color: #568ba5;
+  font-weight: bold;
+}
+
+.bg-info {
+  color: #FFFFFF;
+}
+
+.file-title {
+  margin-top: 20px;
+}
+
+.label {
+  font-size: 2em;
+  font-weight: bold;
+  padding-right: 10px;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.modal-label {
+  font-size: 1.2em;
+  font-weight: bold;
+}
