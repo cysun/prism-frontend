@@ -8,6 +8,7 @@ import { User } from '../models/user.model';
 
 import { Globals } from '../shared/app.global';
 import { GroupManagerService } from './group-manager.service';
+import { SharedService } from '../shared/shared.service';
 
 @Component({
   selector: 'prism-group-manager',
@@ -24,16 +25,15 @@ export class GroupManagerComponent implements OnInit {
 
   groups: Group[] = [];
   users: User[] = [];
-  memberList: User[] = [];
 
-  filteredMembers: any[] = [];
   suggestedUsers = [];
   alert: any;
 
-  constructor(private groupManagerService: GroupManagerService,
+  constructor(private globals: Globals,
+    private groupManagerService: GroupManagerService,
     private modalService: NgbModal,
     private router: Router,
-    private globals: Globals) { }
+    private sharedService: SharedService) { }
 
     ngOnInit() {
       this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
@@ -69,8 +69,6 @@ export class GroupManagerComponent implements OnInit {
 
     /* Open a modal with purpose of manipulating data */
     editModal(content, groupId: string, memberId?: string) {
-      this.filteredMembers = [];
-
       if (this.modal) { this.modal.close(); }
 
       this.getUserList().then( () => {
@@ -105,6 +103,7 @@ export class GroupManagerComponent implements OnInit {
       return new Promise((resolve, reject) => {
         this.groupManagerService.getGroups().subscribe( data => {
           this.groups = data;
+          console.log(data);
 
           for (let i = 0; i < this.groups.length; i++) {
             const members = this.groups[i].members;
@@ -143,62 +142,62 @@ export class GroupManagerComponent implements OnInit {
             this.groupManagerService.addGroup(this.group).subscribe( data => {
               this.groups.push(data);
               this.groups = this.groups.slice(0);
-            }
-          );
-          this.closeModal();
+            });
+            this.closeModal();
+          } else {
+            this.invalidErrorMessage('existing group');
+          }
         } else {
-          this.invalidErrorMessage('existing group');
+          this.invalidErrorMessage('empty group');
         }
       } else {
         this.invalidErrorMessage('empty group');
       }
-    } else {
-      this.invalidErrorMessage('empty group');
     }
-  }
 
-  /* Function to delete an existing group */
-  deleteGroup(id: string) {
-    this.groupManagerService.deleteGroup(id).subscribe( () => {
-      for (let i = 0; i < this.groups.length; i++) {
-        if (this.groups[i]._id === id) {
-          this.groups.splice(i, 1);
-          break;
+    /* Function to delete an existing group */
+    deleteGroup(id: string) {
+      this.groupManagerService.deleteGroup(id).subscribe( () => {
+        for (let i = 0; i < this.groups.length; i++) {
+          if (this.groups[i]._id === id) {
+            this.groups.splice(i, 1);
+            break;
+          }
         }
-      }
-    });
-    this.closeModal();
-  }
+      });
+      this.closeModal();
+    }
 
-  /* Function to update a group's name and members */
-  updateGroup() {
-    /* Checks to see if there is a name change */
-    const findGroup = this.groups.find( item => item._id === this.group._id);
-    const nameChange = findGroup.name === this.group.name ? false : true;
+    /* Function to update a group's name and members */
+    updateGroup() {
+      /* Checks to see if there is a name change */
+      const findGroup = this.groups.find( item => item._id === this.group._id);
+      const nameChange = findGroup.name === this.group.name ? false : true;
 
-    /* Updating the group's name */
-    if (this.group.name.trim().length > 0 && nameChange) {
-      /* Checks if there is already a group with the given name */
-      if (this.groups.some(existingGroupName =>
-        existingGroupName.name.toLowerCase() === this.group.name.toLowerCase())) {
-          this.invalidErrorMessage('existing group');
+      /* Updating the group's name */
+      if (this.group.name.trim().length > 0 && nameChange) {
+        /* Checks if there is already a group with the given name */
+        if (this.groups.some(existingGroupName =>
+          existingGroupName.name.toLowerCase() === this.group.name.toLowerCase())) {
+            this.invalidErrorMessage('existing group');
+          } else {
+            this.groupManagerService.updateGroup(this.group).subscribe( updatedGroup => {
+              const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
+              updatedGroup.members = this.getMembersObject(updatedGroup.members);
+              this.groups[index] = updatedGroup;
+              this.modal.close();
+            });
+          }
         } else {
-          this.groupManagerService.updateGroup(this.group).subscribe( updatedGroup => {
-            const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
-            updatedGroup.members = this.getMembersObject(updatedGroup.members);
-            this.groups[index] = updatedGroup;
-            this.modal.close();
-          });
-        }
-      } else {
         if (!nameChange) { this.modal.close(); } else { this.invalidErrorMessage('empty group'); }
       }
 
       /* Adding members to the group */
-      if (this.filteredMembers.length > 0) {
-        for (let i = 0; i < this.filteredMembers.length; i++) {
-          this.groupManagerService.addMember(this.filteredMembers[i], this.group._id).subscribe( () => {
-            const newMember = this.getMembersObject([this.filteredMembers[i]]);
+      const filteredMembers = this.sharedService.filteredUsers;
+      if (filteredMembers.length > 0) {
+        for (let i = 0; i < filteredMembers.length; i++) {
+          this.groupManagerService.addMember(filteredMembers[i], this.group._id).subscribe( () => {
+            const newMember = this.getMembersObject([filteredMembers[i]]);
             const groupIndex = this.groups.findIndex(getGroup => getGroup._id === this.group._id);
             this.groups[groupIndex].members.push(newMember[0]);
           })
@@ -248,4 +247,4 @@ export class GroupManagerComponent implements OnInit {
       }
       return 0;
     }
-  }
+}

@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
-import { SettingsService } from '../settings/settings.service';
-
 @Injectable()
 export class Globals {
 
@@ -24,7 +22,10 @@ export class Globals {
     plugins: ['dropdown_direction', 'remove_button'],
     dropdownDirection: 'down',
     selectOnTab: true,
-    sortField: 'text',
+    sortField: {
+      field: 'username',
+      direction: 'asc'
+    },
     maxItems: 1
   };
 
@@ -39,9 +40,10 @@ export class Globals {
     plugins: ['dropdown_direction', 'remove_button'],
     dropdownDirection: 'down',
     selectOnTab: true,
-    sortField: 'text',
+    sortField: {
+      field: 'username',
+      direction: 'asc'
+    },
     maxItems: 15
   };
-
-  constructor(public settingsService: SettingsService) {}
 }

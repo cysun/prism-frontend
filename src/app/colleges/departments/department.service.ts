@@ -32,7 +32,9 @@ export class DepartmentService {
   }
 
   updateDepartment(department: Department): Observable<Department> {
-    const body = JSON.stringify({'_id': department._id, 'name': department.name, 'abbreviation': department.abbreviation, 'college': department.college, 'chairs': department.chairs});
+    const body = JSON.stringify({'_id': department._id, 'name': department.name,
+      'abbreviation': department.abbreviation, 'college': department.college,
+      'chairs': department.chairs});
     const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
     return this.http.patch<Department>('/api/department/' + department._id, body, header);
   }

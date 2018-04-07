@@ -1,0 +1,52 @@
+<ng-template #addNodeModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Add a New Document</h5>
+  </div>
+
+  <div class="modal-body">
+    <div *ngIf="alert">
+      <ngb-alert type="danger" [dismissible]="false"><i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}</ngb-alert>
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Title</span>
+      </div>
+      <input type="text" class="form-control" name="node-title" [(ngModel)]="newNode.title">
+    </div>
+
+    <br />
+
+    <div class="input-group">
+      <label> Functionality for adding groups has not been completed.</label>
+    </div>
+
+    <br />
+
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Completion Estimate</span>
+      </div>
+      <input type="number" class="form-control" name="node-completion-estimate" [(ngModel)]="newNode.completionEstimate">
+    </div>
+
+    <div class="text-hints">This is the number of days the document should take to be completed.</div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-dark" type="button" (click)="addNode(newNode)">Save</button>
+    <button class="btn btn-dark" type="button" (click)="modal.close()">Cancel</button>
+  </div>
+</ng-template>
+
+<h1 class="display-4">{{review && review.program && review.program.name ? review.program.name : ''}} Review {{yearString}}</h1>
+<svg id="svg-canvas" width="1280" height="200"></svg>
+<hr />
+<button class="btn btn-primary" (click)="openModal(addNodeModal)">Add Document</button>
+<br />
+<br />
+<prism-document #documentComponent [documentId]="documentId" [nodeId]="nodeId" [reviewId]="review._id" [updateReviewComponent]="handleDocumentUpdate.bind(this)" *ngIf="documentId"></prism-document>
+<div class="jumbotron" *ngIf="!documentId">
+  <h1 class="display-4">No document selected</h1>
+  <p class="lead">Click on a document from the review to get started</p>
+</div>

@@ -32,7 +32,7 @@ export class AuthService {
     return false;
   }
 
-  getUser() {
+  getUser(): UserResponse {
     const user = JSON.parse(localStorage.getItem('currentUser'))
     return user;
   }

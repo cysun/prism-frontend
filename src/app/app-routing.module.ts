@@ -12,6 +12,7 @@ import { LoginComponent } from './login/login.component';
 import { MinutesComponent } from './minutes/minutes.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ResourcesComponent } from './resources/resources.component';
+import { ReviewComponent } from './review/review.component';
 import { SettingsComponent } from './settings/settings.component';
 import { TemplateManagerComponent } from './template-manager/template-manager.component';
 import { UserSelectorComponent } from './user-selector/user-selector.component';
@@ -38,6 +39,7 @@ const routes: Routes = [
       { path: 'document/:id', component: DocumentComponent },
       { path: 'minutes', component: MinutesComponent },
       { path: 'resources', component: ResourcesComponent },
+      { path: 'review/:id', component: ReviewComponent },
       { path: 'settings', component: SettingsComponent },
       { path: 'templates', component: TemplateManagerComponent },
       { path: 'selector', component: UserSelectorComponent },

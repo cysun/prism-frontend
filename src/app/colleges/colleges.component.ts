@@ -48,7 +48,7 @@ export class CollegesComponent implements OnInit {
   constructor(private collegesService: CollegesService,
     private departmentService: DepartmentService, private router: Router, private modalService: NgbModal) { }
 
-  //Fetch colleges and users
+  // Fetch colleges and users
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.isAdmin = this.currentUser.groups.some( x => x.name === 'Administrators')
@@ -62,7 +62,7 @@ export class CollegesComponent implements OnInit {
     });
   }
 
-  //Error Messaging
+  // Error Messaging
   invalidErrorMessage(message) {
     this.alerts = [];
     let detailMsg = '';
@@ -92,13 +92,13 @@ export class CollegesComponent implements OnInit {
     this.alerts.splice(index, 1);
   }
 
-  addCollegeDialog(content){
+  addCollegeDialog(content) {
     this.alerts = [];
     this.modal = this.modalService.open(content, this.options);
     this.college = new College();
   }
 
-  deleteCollegeDialog(content, college){
+  deleteCollegeDialog(content, college) {
     this.departmentService.getDepartmentsAt(college._id).subscribe( data => {
       this.departments = data;
     })
@@ -106,7 +106,7 @@ export class CollegesComponent implements OnInit {
     this.modal = this.modalService.open(content, this.options);
   }
 
-  viewDeansDialog(content, college: any){
+  viewDeansDialog(content, college: any) {
     this.deans = college.deans;
     this.collegesService.getCollege(college._id).subscribe( data => {
       this.college = data;
@@ -165,12 +165,14 @@ export class CollegesComponent implements OnInit {
   updateCollege() {
     this.alerts = [];
     const collegeTarget = this.colleges.find(item => item._id === this.college._id);
-    const changed = collegeTarget.name != this.college.name || collegeTarget.abbreviation != this.college.abbreviation || !this.arraysEqual(collegeTarget.deans, this.college.deans) ? true : false;
+    const changed = collegeTarget.name !== this.college.name ||
+      collegeTarget.abbreviation !== this.college.abbreviation ||
+      !this.arraysEqual(collegeTarget.deans, this.college.deans) ? true : false;
 
     if (changed) {
       if (this.college.name.trim().length > 0) {
         if (this.colleges.some(existingCollege =>
-          existingCollege.name.toLowerCase() === this.college.name.toLowerCase() && existingCollege._id != this.college._id)) {
+          existingCollege.name.toLowerCase() === this.college.name.toLowerCase() && existingCollege._id !== this.college._id)) {
             this.invalidErrorMessage('existing college');
           } else {
             if (this.college.abbreviation.trim().length > 0) {
@@ -211,24 +213,24 @@ export class CollegesComponent implements OnInit {
     this.alerts.push({type: 'warning', message: `${dean.username} was removed from the dean list`});
     const index = this.deans.indexOf(dean);
     this.deans.splice(index, 1);
-    const deanIds = this.deans.map(dean => dean._id);
+    const deanIds = this.deans.map(deanUser => deanUser._id);
     this.college.deans = deanIds;
     this.collegesService.updateCollege(this.college).subscribe( updatedCollege => {
-      const index = this.colleges.findIndex(oldCollege => oldCollege._id === updatedCollege._id);
-      this.colleges[index] = updatedCollege;
+      const idx = this.colleges.findIndex(oldCollege => oldCollege._id === updatedCollege._id);
+      this.colleges[idx] = updatedCollege;
     });
   }
 
   arraysEqual(a: any[] , b: any[]) {
-    if (a === b) return true;
-    if (a == null || b == null) return false;
-    if (a.length != b.length) return false;
+    if (a === b) { return true; }
+    if (a == null || b == null) { return false; }
+    if (a.length !== b.length) { return false; }
 
     a.sort();
     b.sort();
 
-    for (var i = 0; i < a.length; ++i) {
-      if (a[i] != b[i]) return false;
+    for (let i = 0; i < a.length; ++i) {
+      if (a[i] !== b[i]) { return false; }
     }
     return true;
   }
