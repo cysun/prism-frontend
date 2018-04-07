@@ -121,13 +121,12 @@ export class ResourcesComponent implements OnInit {
     if (this.file) {
       this.resourceService.createResource(this.resource.title).subscribe(resourceData => {
         this.createFile(resourceData._id).then(() => {
-          this.resourceService.getResource(resourceData._id).subscribe((data) => {
-            this.resource = data;
-            this.resourceService.uploadFile(resourceData._id, this.resource.files[0]._id, this.file).subscribe(empty => {
-              console.log('sucessfully created file');
-            }, (err) => {
-              console.log(err);
-            });
+          this.resourceService.uploadFile(resourceData._id, this.file).subscribe(empty => {
+            this.getResources();
+            this.closeModal();
+            console.log('sucessfully created file');
+          }, (err) => {
+            console.log(err);
           });
         }).catch((err) => {
           console.log(err);

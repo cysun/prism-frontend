@@ -50,11 +50,11 @@ export class ResourceService {
   }
 
   /* Upload a file */
-  uploadFile(resourceId: string, fileId: string, file: File): any {
+  uploadFile(resourceId: string, file: File): any {
     const fileUpload = new FormData();
     fileUpload.append('file', file);
 
-    return this.http.post('/api/resource/' + resourceId + '/files/' + fileId + '/file',
+    return this.http.post('/api/resource/' + resourceId + '/files/0/file',
       fileUpload, { responseType: 'text' });
   }
 }
