@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid container-fluid-content">
   <div class="header-label">
     <div class="blockquote-header">
       <span class="label"><i class="fa fa-icon fa-users"></i>Group Manager
@@ -79,14 +79,18 @@
 
     <div class="modal-body">
       <div *ngIf="alert">
-        <ngb-alert type="danger" [dismissible]="false"><strong>Invalid Group:</strong> {{ alert.message }}</ngb-alert>
+        <ngb-alert type="danger" [dismissible]="false">
+          <strong>Invalid Group:</strong> {{ alert.message }}
+        </ngb-alert>
       </div>
 
       <div class="row">
         <span class="col-3 group-label">Group Name</span>
         <span class="col-8">
           <div class="ui-inputgroup">
-            <input type="text" class="form-control" placeholder="Enter a new group name" [(ngModel)]="group.name" name="group-name">
+            <input type="text" class="form-control"
+                   placeholder="Enter a new group name" [(ngModel)]="group.name"
+                   name="group-name">
           </div>
           <div class="text-hints">Enter a new name for the group.</div>
         </span>
@@ -95,25 +99,34 @@
       <div class ="row grid-space">
         <span class="col-3 group-label">Add Members</span>
         <span class="col-8 ui-fluid">
-          <ng-selectize [options]="suggestedUsers" [config]="globals.multipleConfig" [(ngModel)]="filteredMembers"></ng-selectize>
-        <div class="text-hints">Type in a username to get a list of possible users to add in the group.</div>
-      </span>
+          <prism-user-selector [configType]="'multiple'"
+                               [suggestedMembers]="suggestedUsers">
+          </prism-user-selector>
+          <div class="text-hints">
+            Type in a username to get a list of possible users to add in the group.
+          </div>
+        </span>
+      </div>
+
+      <div class="row grid-space">
+        <span class="col-3 group-label">Deleting Group</span>
+        <span class="col-8">
+          <button type="button" class="btn btn-danger delete-btn"
+                  (click)="editModal(deleteGroupModal, group._id)">
+            Delete Group
+          </button>
+          <div class="text-hints">
+            If the group is deleted, all its members will lose their given access.
+          </div>
+        </span>
+      </div>
     </div>
 
-    <div class="row grid-space">
-      <span class="col-3 group-label">Deleting Group</span>
-      <span class="col-8">
-        <button type="button" class="btn btn-danger delete-btn" (click)="editModal(deleteGroupModal, group._id)">Delete Group</button>
-        <div class="text-hints">If the group is deleted, all its members will lose their given access.</div>
-      </span>
+    <div class="modal-footer">
+      <button class="btn btn-dark" type="button" (click)="updateGroup(value)">Save</button>
+      <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
     </div>
-  </div>
-
-  <div class="modal-footer">
-    <button class="btn btn-dark" type="button" (click)="updateGroup(value)">Save</button>
-    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
-  </div>
-</ng-template>
+  </ng-template>
 
 <!-- Displays the current groups and their members -->
 <ng-container *ngIf="groups.length > 0; else emptyGroup">
@@ -125,7 +138,10 @@
             <div class="header-panel">
               {{group.name}}
               <div class="panel-buttons">
-                <button type="button" class="btn btn-dark" (click)="editModal(updateGroupModal, group._id)"><i class="fa fa-gear"></i></button>
+                <button type="button" class="btn btn-dark"
+                        (click)="editModal(updateGroupModal, group._id)">
+                  <i class="fa fa-gear"></i>
+                </button>
               </div>
             </div>
           </div>
@@ -149,7 +165,12 @@
                     <td>{{ member.username }}</td>
                     <td>{{ member.name.first }} {{ member.name.last }}</td>
                     <td>{{ member.email }}
-                      <td><button type="button" class="btn btn-dark" (click)="editModal(deleteMemberModal, group._id, member._id)"><i class="fa fa-trash"></i></button></td>
+                    <td>
+                      <button type="button" class="btn btn-dark"
+                              (click)="editModal(deleteMemberModal, group._id, member._id)">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </td>
                     </tr>
                   </ng-template>
                 </tbody>

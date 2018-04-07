@@ -22,7 +22,10 @@ export class Globals {
     plugins: ['dropdown_direction', 'remove_button'],
     dropdownDirection: 'down',
     selectOnTab: true,
-    sortField: 'text',
+    sortField: {
+      field: 'username',
+      direction: 'asc'
+    },
     maxItems: 1
   };
 
@@ -37,7 +40,10 @@ export class Globals {
     plugins: ['dropdown_direction', 'remove_button'],
     dropdownDirection: 'down',
     selectOnTab: true,
-    sortField: 'text',
+    sortField: {
+      field: 'username',
+      direction: 'asc'
+    },
     maxItems: 15
   };
 }

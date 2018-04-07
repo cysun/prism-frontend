@@ -1,20 +1,19 @@
+<h1 style="font-family: Helvetica Neue; padding-bottom: 10px;">Dashboard</h1>
+
 <ngb-tabset>
-  <!-- <ngb-tab>
+  <ngb-tab>
     <ng-template ngbTabTitle>
-      <i class="fa fa-university"></i> Program Reviews
+      <i class="fa fa-university"></i> Active Reviews
     </ng-template>
     <ng-template ngbTabContent>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmoa
-      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-      dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-      proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <prism-review-list *ngIf="sharedService.isAdmin()"></prism-review-list>
     </ng-template>
-  </ngb-tab> -->
+  </ngb-tab>
 
   <ngb-tab>
     <ng-template ngbTabTitle><i class="fa fa-th-list"></i> Recent Actions</ng-template>
     <ng-template ngbTabContent>
-      <div class="container">
+      <div class="container-fluid container-fluid-content">
         <div class="search-bar" *ngIf="sharedService.isAdmin()">
           <div class="form-row">
             <div class="form-group col-md-7">

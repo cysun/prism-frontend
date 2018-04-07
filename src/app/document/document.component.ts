@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
@@ -9,6 +9,7 @@ import { UserResponse } from '../models/user-response.model';
 import { Globals } from '../shared/app.global';
 
 import { DocumentService } from './document.service';
+import { ReviewService } from '../review/review.service';
 
 import { saveAs } from 'file-saver';
 
@@ -19,7 +20,7 @@ import { saveAs } from 'file-saver';
 })
 
 export class DocumentComponent implements OnInit {
-  currentUser: UserResponse = new UserResponse();
+  currentUser: UserResponse;
   modal: NgbModalRef;
   alert: any;
 
@@ -35,7 +36,10 @@ export class DocumentComponent implements OnInit {
   totalIndices: number;
 
   documentTitle: string;
-  documentId: string;
+  @Input() documentId: string;
+  @Input() reviewId: string;
+  @Input() nodeId: string;
+  @Input() updateReviewComponent: () => void;
   message: string;
   file: File;
   fileName: string;
@@ -43,23 +47,31 @@ export class DocumentComponent implements OnInit {
   selectedFilter: string;
   textComment = '';
   modalMessage: any;
+  newCompletionDate: Date;
 
   constructor(private documentService: DocumentService,
+              private reviewService: ReviewService,
               private modalService: NgbModal,
               private route: ActivatedRoute,
-              private globals: Globals) {
-    this.route.params.subscribe( params => {
-      this.documentId = params.id;
-    })
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    // console.log('this is: ' + JSON.stringify(this.currentUser))
-  }
+              private globals: Globals) { }
 
-  ngOnInit() {
+  public ngOnInit() {
+    if (!this.documentId) {
+      this.route.params.subscribe( params => {
+        this.documentId = params.id;
+      });
+    }
+
+    const userId = JSON.parse(localStorage.getItem('currentUser'))._id;
+
+    const castedUser: UserResponse = JSON.parse(localStorage.getItem('currentUser'));
+    this.currentUser = new UserResponse(castedUser.user, castedUser.groups, castedUser.token);
+    // console.log('this is: ' + JSON.stringify(this.currentUser))
+
     this.documentService.retrieveDocument(this.documentId).subscribe( data => {
       this.document = data;
 
-      if (this.document.revisions) {
+      if (this.document.revisions && this.document.revisions.length !== 0) {
         this.selectedOption = this.document.revisions.slice(0).reverse().find( item =>
           item.message !== 'Deleted revision')._id;
 
@@ -70,7 +82,7 @@ export class DocumentComponent implements OnInit {
       this.documentTitle = this.document.title;
       this.totalIndices = this.getNumOfRevisions();
       this.getLatestRevision();
-    })
+    });
   }
 
   /* Set file variable to the file the user has chosen */
@@ -343,5 +355,21 @@ export class DocumentComponent implements OnInit {
       return this.document.subscribers.includes(this.currentUser.user._id);
     }
     return false;
+  }
+
+  /* Make the request to finalize the node of this document in the review */
+  finalizeNode() {
+    this.reviewService.finalizeNode(this.reviewId, this.nodeId).subscribe(() => {
+      this.updateReviewComponent();
+      this.closeModal();
+    });
+  }
+
+  /* Change the completion date of the node of this document in the review */
+  changeCompletionDate(newDate: string) {
+    this.reviewService.setNodeFinishDate(this.reviewId, this.nodeId, newDate).subscribe(() => {
+      this.updateReviewComponent();
+      this.closeModal();
+    });
   }
 }

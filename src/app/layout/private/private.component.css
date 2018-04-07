@@ -21,19 +21,19 @@
   background-color: #EEE;
   bottom: 0;
   height: 100%;
+  overflow: auto;
   position: fixed;
   width: 275px;
-  z-index: 2;
 }
 
 .sidebar {
-    display: block;
-    position: fixed;
-    width: 250px;
-    z-index: 2;
+  display: block;
+  position: fixed;
+  width: 250px;
+  z-index: 1;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 990px) {
   .main {
     padding-left: 300px; /* 250 + 50 */
     padding-right: 50px;

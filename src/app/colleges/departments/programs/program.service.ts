@@ -19,8 +19,8 @@ export class ProgramService {
     return this.http.get<Program>('/api/program/' + programId, header);
   }
 
-  addProgram(program: Program): Observable<Program> {
-    let date = program.nextReviewDate.year + "-" + (program.nextReviewDate.month + 1) + "-" + program.nextReviewDate.day;
+  addProgram(program: Program, nextReviewDate): Observable<Program> {
+    const date = nextReviewDate.year + '-' + nextReviewDate.month + '-' + nextReviewDate.day;
     const body = JSON.stringify({'_id': program._id, 'name': program.name, 'department': program.department, 'nextReviewDate': date});
     const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
     return this.http.post<Program>('/api/program', body, header);
@@ -32,8 +32,12 @@ export class ProgramService {
   }
 
   updateProgram(program: Program): Observable<Program> {
-    const body = JSON.stringify({'_id': program._id, 'name': program.name, 'department': program.department,
-     'nextReviewDate': program.nextReviewDate});
+    const body = JSON.stringify({
+      '_id': program._id,
+      'name': program.name,
+      'department': program.department,
+      'nextReviewDate': program.nextReviewDate
+    });
     const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
     return this.http.patch<Program>('/api/program/' + program._id, body, header);
   }
