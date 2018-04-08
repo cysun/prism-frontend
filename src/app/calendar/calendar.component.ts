@@ -135,7 +135,7 @@ export class CalendarComponent implements OnInit {
     } else if (action === 'Delete') {
       this.alert = { message: 'Are you sure you want to delete this event?'};
     }
-    this.modal = this.modalService.open(this.modalContent, this.globals.options);
+    this.openModal(this.modalContent, event.meta._id);
   }
 
   /* Add new event or update an event to the database and calendar */
@@ -169,7 +169,10 @@ export class CalendarComponent implements OnInit {
           this.events[updateEventIndex].start = new Date(data.date);
           this.events[updateEventIndex].meta = data;
           this.inviteToEvent(this.newEvent._id);
-          this.uploadAttachment(this.newEvent._id);
+
+          let docId = '';
+          if (this.newEvent.documents[0]) { docId = this.newEvent.documents[0]._id; }
+          this.uploadAttachment(this.newEvent._id, docId);
         })
       }
       this.activeDayIsOpen = false;
@@ -279,20 +282,31 @@ export class CalendarComponent implements OnInit {
   }
 
   /* Upload revision message and the file being sent */
-  uploadAttachment(eventId: string) {
+  uploadAttachment(eventId: string, documentId?: string) {
     if (this.file && this.message) {
-      this.calendarService.attachDocumentToEvent(eventId, this.message).subscribe( data => {
-        const updateEventIndex = this.events.findIndex( currEvent => currEvent.id === eventId);
-        this.events[updateEventIndex].meta.documents = data._id;
-
-        this.documentService.postRevision(data._id, this.message).subscribe( () => {
-          this.documentService.uploadFile(data._id, 0, this.file).subscribe( () => {
+      if (documentId.length > 0) {
+        this.documentService.postRevision(documentId, this.message).subscribe( () => {
+          const numOfRevisions = Object.keys(this.newEvent.documents[0].revisions).length;
+          this.documentService.uploadFile(documentId, numOfRevisions, this.file).subscribe( () => {
             this.message = '';
             this.file = null;
             this.fileName = '';
           });
         })
-      });
+      } else {
+        this.calendarService.attachDocumentToEvent(eventId, this.message).subscribe( data => {
+          const updateEventIndex = this.events.findIndex( currEvent => currEvent.id === eventId);
+          this.events[updateEventIndex].meta.documents = data._id;
+
+          this.documentService.postRevision(data._id, this.message).subscribe( () => {
+            this.documentService.uploadFile(data._id, 0, this.file).subscribe( () => {
+              this.message = '';
+              this.file = null;
+              this.fileName = '';
+            });
+          })
+        });
+      }
     }
   }
 }
