@@ -1,3 +1,238 @@
-<p>
-  calendar works!
-</p>
+<ng-template #modalContent>
+  <div class="modal-header">
+    <h5 class="modal-title">Event</h5>
+  </div>
+
+  <div class="modal-body">
+    <div *ngIf="alert">
+      <ngb-alert type="danger" [dismissible]="false">
+        <strong>Warning:</strong> {{ alert.message }}
+      </ngb-alert>
+    </div>
+    <h5>Event Details</h5>
+    <strong>Title:</strong> {{ modalData?.event.title }} <br/>
+    <strong>Start:</strong> {{ modalData?.event.start | date: 'MMM dd, yyyy hh:mm a'}}<br/>
+
+    <!-- <pre *ngIf="newEvent">{{ newEvent | json }}</pre> -->
+
+    <div *ngIf="modalData?.event.meta.documents.length > 0">
+      <h5 class="grid-space">File Attachment</h5>
+      <div class="card card-container">
+        <div class="card-body" *ngIf="newEvent?.documents">
+          <div class="card-document-title" *ngIf="newEvent?.documents[0]">
+            <div class="document-message">
+              {{ newEvent?.documents[0].revisions[
+                getNumOfRevisions(newEvent?.documents[0].revisions) - 1].message }}
+            </div>
+            <div class="document-info">Uploaded by
+              {{ newEvent?.documents[0].revisions[
+                getNumOfRevisions(newEvent?.documents[0].revisions) - 1].uploader.username }}</div>
+          </div>
+
+          <div class="card-action-buttons">
+            <button class="btn btn-outline-secondary"
+                    (click)="downloadFile(newEvent?.documents[0]._id,
+                             getNumOfRevisions(newEvent?.documents[0].revisions) - 1)"
+                    placement="top" ngbTooltip="Download Attachment">
+              <i class="fa fa-download"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <div *ngIf="modalData?.action === 'Delete'; else viewEvent">
+      <button type="button" class="btn btn-danger" (click)="deleteEvent(modalData.event)">Delete</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Cancel</button>
+    </div>
+
+    <ng-template #viewEvent>
+      <div *ngIf="!modalData?.event.meta.canceled">
+        <button type="button" class="btn btn-danger" (click)="cancelEvent()">Cancel Event</button>
+      </div>
+      <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Close</button>
+    </ng-template>
+  </div>
+</ng-template>
+
+
+<ng-template #addNewEventModal>
+  <div class="modal-header">
+    <h5 class="modal-title">
+      {{modalData?.action === 'Edit' ? 'Edit Event' : 'New Event'}}
+    </h5>
+  </div>
+
+  <form #f="ngForm" (ngSubmit)="modalData?.action === 'Edit' ? submitEvent('Edit') : submitEvent('Submit')">
+    <div class="modal-body">
+      <div *ngIf="alert">
+        <ngb-alert type="danger" [dismissible]="false"><strong>Invalid Event:</strong> {{ alert.message }}</ngb-alert>
+      </div>
+      <h5>Event Details</h5>
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><i class="fa fa-info-circle"></i></span>
+      </div>
+      <input type="text" class="form-control" placeholder="Enter an event title" name="event-name" [(ngModel)]="newEvent.title" required>
+    </div>
+
+    <div class="text-hints">Enter a name for the new event.</div>
+
+    <div class="row">
+      <div class="col-8">
+        <div class="input-group grid-space">
+          <div class="input-group-prepend">
+            <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
+              <i class="fa fa-calendar"></i>
+            </button>
+          </div>
+
+          <input class="form-control" placeholder="yyyy-mm-dd" name="d2" #c2="ngModel"
+                 [(ngModel)]="date" ngbDatepicker #d2="ngbDatepicker">
+        </div>
+
+        <div class="text-hints">Click on the calendar icon to select a date.</div>
+      </div>
+
+      <div class="col-4" style="margin-top:-18px;">
+        <ngb-timepicker [(ngModel)]="time" [meridian]="true" [minuteStep]="15" name="time-picker"></ngb-timepicker>
+      </div>
+
+      <div class ="col-12">
+        <h5 class="grid-space">Notifications</h5>
+        <prism-user-selector [configType]="'groups'" [suggestedMembers]="suggestedGroups">
+        </prism-user-selector>
+
+        <div class="text-hints">
+          Type in a group name to notify the members of the event.
+        </div>
+      </div>
+
+      <div class ="col-12 grid-space">
+        <prism-user-selector [configType]="'multiple'"
+                             [suggestedMembers]="suggestedUsers">
+        </prism-user-selector>
+
+        <div class="text-hints">
+          Type in a username to notify the person of the event.
+        </div>
+      </div>
+
+      <div class="col-12 grid-space">
+        <h5 class="grid-space">Attach File (Optional)</h5>
+        <div class="custom-file">
+          <input name="file" type="file" class="custom-file-input"
+          accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          (change)="onFileChange($event)">
+
+          <label class="custom-file-label">
+            {{ fileName ? fileName : 'Choose a file'}}
+          </label>
+          <div class="text-hints">Click on browse to attach a file.</div>
+        </div>
+
+        <div class="file-message grid-space">
+          <input type="text" class="form-control" [(ngModel)]="message" name="file-message"
+                 placeholder="Enter a tile for the file">
+          <div class="text-hints">Give a title to the attached file.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-primary" [disabled]="!f.form.valid" type="submit">Confirm</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+  </div>
+</form>
+</ng-template>
+
+<div class="row text-center">
+  <div class="col-md-4">
+    <div class="btn-group">
+      <div
+        class="btn btn-primary"
+        mwlCalendarPreviousView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="activeDayIsOpen = false">
+        Previous
+      </div>
+      <div
+        class="btn btn-outline-secondary"
+        mwlCalendarToday
+        [(viewDate)]="viewDate">
+        Today
+      </div>
+      <div
+        class="btn btn-primary"
+        mwlCalendarNextView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="activeDayIsOpen = false">
+        Next
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <h2>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h2>
+  </div>
+  <div class="col-md-4">
+    <div class="btn-group">
+      <div
+        class="btn btn-primary"
+        (click)="view = 'month'"
+        [class.active]="view === 'month'">
+        Month
+      </div>
+      <div
+        class="btn btn-primary"
+        (click)="view = 'week'"
+        [class.active]="view === 'week'">
+        Week
+      </div>
+      <div
+        class="btn btn-primary"
+        (click)="view = 'day'"
+        [class.active]="view === 'day'">
+        Day
+      </div>
+    </div>
+  </div>
+</div>
+
+<div [ngSwitch]="view" class="grid-space">
+  <mwl-calendar-month-view
+    *ngSwitchCase="'month'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    [activeDayIsOpen]="activeDayIsOpen"
+    (dayClicked)="dayClicked($event.day)"
+    (eventClicked)="handleEvent('Clicked', $event.event)">
+  </mwl-calendar-month-view>
+
+  <mwl-calendar-week-view
+    *ngSwitchCase="'week'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    (eventClicked)="handleEvent('Clicked', $event.event)">
+  </mwl-calendar-week-view>
+
+  <mwl-calendar-day-view
+    *ngSwitchCase="'day'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    (eventClicked)="handleEvent('Clicked', $event.event)">
+  </mwl-calendar-day-view>
+</div>
+
+<div style="padding-top: 20px;">
+  <button class="btn btn-primary" (click)="openModal(addNewEventModal)">
+    <i class="fa fa-icon fa-calendar"></i>New Event
+  </button>
+</div>

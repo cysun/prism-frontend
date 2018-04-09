@@ -9,6 +9,7 @@ import { UserResponse } from '../models/user-response.model';
 import { Globals } from '../shared/app.global';
 
 import { DocumentService } from './document.service';
+import { ReviewService } from '../review/review.service';
 
 import { saveAs } from 'file-saver';
 
@@ -19,7 +20,7 @@ import { saveAs } from 'file-saver';
 })
 
 export class DocumentComponent implements OnInit {
-  currentUser: UserResponse = new UserResponse();
+  currentUser: UserResponse;
   modal: NgbModalRef;
   alert: any;
 
@@ -36,6 +37,9 @@ export class DocumentComponent implements OnInit {
 
   documentTitle: string;
   @Input() documentId: string;
+  @Input() reviewId: string;
+  @Input() nodeId: string;
+  @Input() updateReviewComponent: () => void;
   message: string;
   file: File;
   fileName: string;
@@ -43,8 +47,10 @@ export class DocumentComponent implements OnInit {
   selectedFilter: string;
   textComment = '';
   modalMessage: any;
+  newCompletionDate: Date;
 
   constructor(private documentService: DocumentService,
+              private reviewService: ReviewService,
               private modalService: NgbModal,
               private route: ActivatedRoute,
               private globals: Globals) { }
@@ -58,7 +64,8 @@ export class DocumentComponent implements OnInit {
 
     const userId = JSON.parse(localStorage.getItem('currentUser'))._id;
 
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const castedUser: UserResponse = JSON.parse(localStorage.getItem('currentUser'));
+    this.currentUser = new UserResponse(castedUser.user, castedUser.groups, castedUser.token);
     // console.log('this is: ' + JSON.stringify(this.currentUser))
 
     this.documentService.retrieveDocument(this.documentId).subscribe( data => {
@@ -348,5 +355,21 @@ export class DocumentComponent implements OnInit {
       return this.document.subscribers.includes(this.currentUser.user._id);
     }
     return false;
+  }
+
+  /* Make the request to finalize the node of this document in the review */
+  finalizeNode() {
+    this.reviewService.finalizeNode(this.reviewId, this.nodeId).subscribe(() => {
+      this.updateReviewComponent();
+      this.closeModal();
+    });
+  }
+
+  /* Change the completion date of the node of this document in the review */
+  changeCompletionDate(newDate: string) {
+    this.reviewService.setNodeFinishDate(this.reviewId, this.nodeId, newDate).subscribe(() => {
+      this.updateReviewComponent();
+      this.closeModal();
+    });
   }
 }
