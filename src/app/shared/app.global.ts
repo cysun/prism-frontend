@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
-import { SettingsService } from '../settings/settings.service';
-
 @Injectable()
 export class Globals {
 
@@ -42,6 +40,4 @@ export class Globals {
     sortField: 'text',
     maxItems: 15
   };
-
-  constructor(public settingsService: SettingsService) {}
 }

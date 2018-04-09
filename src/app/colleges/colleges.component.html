@@ -178,7 +178,7 @@
           <span *ngIf="isAdmin"><button type="button" class="close" placement="bottom" ngbTooltip="Manage College"(click)="manageCollegeDialog(manager, college._id)"><i class="fa fa-icon fa-cog"></i>&nbsp;&nbsp;</button></span>
         </ng-template>
         <ng-template ngbPanelContent>
-          <prism-departments [collegeId]="college._id"></prism-departments>
+          <prism-departments *ngIf="college" [collegeId]="college._id"></prism-departments>
         </ng-template>
       </ngb-panel>
     </div>

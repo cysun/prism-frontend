@@ -1,12 +1,7 @@
+import { User } from './user.model';
+
 export class UserResponse {
-  user: {
-    _id: string,
-    username: string,
-    name: {
-      first: string,
-      last: string
-    }
-  };
+  user: User;
 
   groups: [{
     name: string,
