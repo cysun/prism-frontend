@@ -38,6 +38,20 @@ export class ResourcesComponent implements OnInit {
     this.modal.close();
   }
 
+  compareTitles(resource1: Resource, resource2: Resource): number {
+    const title1 = resource1.title;
+    const title2 = resource2.title;
+
+    if (title1 < title2) {
+      return -1;
+    }
+    if (title1 > title2) {
+      return 1;
+    }
+    // title1 must be equal to title2
+    return 0;
+}
+
   createFile(resourceId: string): Promise<void> {
     return new Promise((resolve, reject) => {
       this.resourceService.createFile(resourceId).subscribe(data => {
@@ -68,38 +82,62 @@ export class ResourcesComponent implements OnInit {
         console.log('Deleted resource ' + resource._id);
       });
     });
+    this.selected = [];
     this.getResources();
   }
 
   /* Download specified resource(s) */
-  downloadSelected(): void {
-    this.selected.forEach((id) => {
-      this.resourceService.downloadFile(id).subscribe(fileData => {
-        const contentDisposition = fileData.headers.get('content-disposition');
-        const contentType = fileData.headers.get('content-type');
-        const fileName = contentDisposition.slice(22, contentDisposition.length - 1);
-        saveAs(new Blob([fileData.body], { type: contentType }), fileName);
-      });
+  async downloadSelected() {
+    let downloaded = false;
+    let index = this.selected.length - 1;
+    this.download(this.selected[index]).then(() => {
+      downloaded = true;
+    }).catch((err) => {
+      console.log(err);
     });
-    this.selected = [];
+    const id = setInterval(() => {
+      if (index === 0) {
+        this.selected = [];
+        console.log('sucessfully downloaded selected files');
+        clearInterval(id);
+      } else if (downloaded) {
+        this.download(this.selected[--index]).then(() => {
+          downloaded = true;
+        }).catch((err) => {
+          console.log(err);
+        });
+      } else {
+        downloaded = false;
+      }
+    }, 100);
   }
 
-  downloadAll(): void {
-    this.resources.forEach((resource) => {
-      this.resourceService.downloadFile(resource._id).subscribe(fileData => {
+  async downloadAll() {
+    for (const resource of this.resources) {
+      await this.download(resource._id);
+    }
+  }
+
+  download(resourceId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.resourceService.downloadFile(resourceId).subscribe(fileData => {
         const contentDisposition = fileData.headers.get('content-disposition');
         const contentType = fileData.headers.get('content-type');
         const fileName = contentDisposition.slice(22, contentDisposition.length - 1);
         saveAs(new Blob([fileData.body], { type: contentType }), fileName);
+        resolve();
+      }, err => {
+        console.log(err);
+        reject();
       });
-    });
-    this.selected = [];
+    })
   }
 
   /* Get all resources */
   getResources() {
     this.resourceService.getResources().subscribe(data => {
         this.resources = data;
+        this.resources.sort(this.compareTitles);
         console.log(data);
     }, (err) => {
       console.log(err)
@@ -128,6 +166,9 @@ export class ResourcesComponent implements OnInit {
       this.resourceService.createResource(this.resource.title).subscribe(resourceData => {
         this.createFile(resourceData._id).then(() => {
           this.resourceService.uploadFile(resourceData._id, this.file).subscribe(empty => {
+            this.file = null;
+            this.fileName = '';
+            this.resource = new Resource();
             this.getResources();
             this.closeModal();
             console.log('sucessfully created file');
