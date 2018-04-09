@@ -46,4 +46,22 @@ export class Globals {
     },
     maxItems: 15
   };
+
+  /* Config for ng-selectize's component for multiple inputs for groups */
+  multipleGroupConfig = {
+    labelField: 'name',
+    valueField: '_id',
+    highlight: true,
+    create: false,
+    openOnFocus: false,
+    searchField: ['name'],
+    plugins: ['dropdown_direction', 'remove_button'],
+    dropdownDirection: 'down',
+    selectOnTab: true,
+    sortField: {
+      field: 'name',
+      direction: 'asc'
+    },
+    maxItems: 15
+  };
 }

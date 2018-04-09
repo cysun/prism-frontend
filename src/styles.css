@@ -86,6 +86,10 @@ blockquote {
   padding-top: 15px;
 }
 
+.grid-space {
+  padding-top: 20px;
+}
+
 .navbar {
   background: #1A1A1A;
   height: 70px;

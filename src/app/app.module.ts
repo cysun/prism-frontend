@@ -5,6 +5,7 @@ import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common
 import { Router } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CalendarModule } from 'angular-calendar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,7 +19,6 @@ import { DocumentComponent } from './document/document.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SettingsComponent } from './settings/settings.component';
 import { CalendarComponent } from './calendar/calendar.component';
-import { MinutesComponent } from './minutes/minutes.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { ReviewComponent } from './review/review.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
@@ -30,6 +30,7 @@ import { LoginComponent } from './login/login.component';
 import { PublicComponent } from './layout/public/public.component';
 import { PrivateComponent } from './layout/private/private.component';
 
+import { CalendarService } from './calendar/calendar.service';
 import { CollegesService } from './colleges/colleges.service';
 import { DashboardService } from './dashboard/dashboard.service';
 import { DocumentService } from './document/document.service';
@@ -63,7 +64,6 @@ import { ReviewListComponent } from './review-list/review-list.component';
     DocumentComponent,
     GroupManagerComponent,
     LoginComponent,
-    MinutesComponent,
     PageNotFoundComponent,
     ProgramsComponent,
     ResourcesComponent,
@@ -77,6 +77,7 @@ import { ReviewListComponent } from './review-list/review-list.component';
     ReversePipe,
   ],
   imports: [
+    CalendarModule.forRoot(),
     NgbModule.forRoot(),
     NgSelectizeModule,
     BrowserModule,
@@ -90,6 +91,7 @@ import { ReviewListComponent } from './review-list/review-list.component';
     AuthGuard,
     AuthService,
     HttpClientModule,
+    CalendarService,
     CollegesService,
     DashboardService,
     DocumentService,
