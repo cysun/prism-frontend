@@ -8,6 +8,34 @@
 	box-shadow: none;
 }
 
+.card-body {
+  padding: 10px;
+}
+
+.card-action-buttons {
+  float: right;
+  padding-right: 10px;
+}
+
+.card-container {
+  margin-top: 15px;
+}
+
+.card-document-title {
+  float: left;
+  padding-left: 10px;
+}
+
+.document-info {
+  color: #808080;
+  font-size: .8em;
+}
+
+.document-message {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
 .month-year-display {
   align-items: center;
   display: flex;

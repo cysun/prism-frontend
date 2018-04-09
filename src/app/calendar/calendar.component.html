@@ -9,9 +9,37 @@
         <strong>Warning:</strong> {{ alert.message }}
       </ngb-alert>
     </div>
-
+    <h5>Event Details</h5>
     <strong>Title:</strong> {{ modalData?.event.title }} <br/>
     <strong>Start:</strong> {{ modalData?.event.start | date: 'MMM dd, yyyy hh:mm a'}}<br/>
+
+    <!-- <pre *ngIf="newEvent">{{ newEvent | json }}</pre> -->
+
+    <div *ngIf="modalData?.event.meta.documents.length > 0">
+      <h5 class="grid-space">File Attachment</h5>
+      <div class="card card-container">
+        <div class="card-body" *ngIf="newEvent?.documents">
+          <div class="card-document-title">
+            <div class="document-message">
+              {{ newEvent?.documents[0].revisions[
+                getNumOfRevisions(newEvent?.documents[0].revisions) - 1].message }}
+            </div>
+            <div class="document-info">Uploaded by
+              {{ newEvent?.documents[0].revisions[
+                getNumOfRevisions(newEvent?.documents[0].revisions) - 1].uploader.username }}</div>
+          </div>
+
+          <div class="card-action-buttons">
+            <button class="btn btn-outline-secondary"
+                    (click)="downloadFile(newEvent?.documents[0]._id,
+                             getNumOfRevisions(newEvent?.documents[0].revisions) - 1)"
+                    placement="top" ngbTooltip="Download Revision">
+              <i class="fa fa-download"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="modal-footer">

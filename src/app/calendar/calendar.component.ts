@@ -26,6 +26,7 @@ import {
 } from 'angular-calendar';
 
 import { isSameDay, isSameMonth } from 'date-fns';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'prism-calendar',
@@ -93,10 +94,10 @@ export class CalendarComponent implements OnInit {
     {
       label: '<i class="fa fa-fw fa-times"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-          this.handleEvent('Delete', event);
-        }
+        this.handleEvent('Delete', event);
       }
-    ];
+    }
+  ];
 
   constructor(private calendarService: CalendarService,
               private dateParser: NgbDateParserFormatter,
@@ -308,5 +309,19 @@ export class CalendarComponent implements OnInit {
         });
       }
     }
+  }
+
+  getNumOfRevisions(revisionsArr) {
+    return Object.keys(revisionsArr).length;
+  }
+
+  downloadFile(documentId: string, revisionIndex: number) {
+    this.documentService.downloadFile(documentId, revisionIndex).subscribe ( data => {
+      const contentDisposition = data.headers.get('content-disposition');
+      const contentType = data.headers.get('content-type');
+      const fileName = contentDisposition.slice(22, contentDisposition.length - 1);
+
+      saveAs(new Blob([data.body], { type: contentType }), fileName);
+    });
   }
 }
