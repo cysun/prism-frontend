@@ -104,8 +104,10 @@ export class ReviewListComponent implements OnInit {
     let chosenReviewers = this.sharedService.filteredUsers;
     const currentReviewers = leadReviewers.map( reviewer => reviewer._id);
 
-    chosenReviewers = chosenReviewers.concat(currentReviewers);
-    this.addLeadReviewers(reviewId, programId, chosenReviewers);
+    if (chosenReviewers && chosenReviewers.length > 0) {
+      chosenReviewers = chosenReviewers.concat(currentReviewers);
+      this.addLeadReviewers(reviewId, programId, chosenReviewers);
+    }
     this.closeModal();
   }
 
