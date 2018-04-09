@@ -30,24 +30,25 @@ import { LoginComponent } from './login/login.component';
 import { PublicComponent } from './layout/public/public.component';
 import { PrivateComponent } from './layout/private/private.component';
 
-import { CalendarService } from './calendar/calendar.service';
-import { CollegesService } from './colleges/colleges.service';
-import { DashboardService } from './dashboard/dashboard.service';
-import { DocumentService } from './document/document.service';
-import { DepartmentService } from './colleges/departments/department.service';
-import { GroupManagerService } from './group-manager/group-manager.service';
-import { ProgramService } from './colleges/departments/programs/program.service';
-import { ReviewService } from './review/review.service';
-
 import { AuthInterceptor } from './login/auth.interceptor';
 import { AuthGuard } from './login/auth.guard';
 import { AuthService } from './login/auth.service';
 
+import { CalendarService } from './calendar/calendar.service';
+import { CollegesService } from './colleges/colleges.service';
+import { DashboardService } from './dashboard/dashboard.service';
+import { DepartmentService } from './colleges/departments/department.service';
+import { DocumentService } from './document/document.service';
+import { GroupManagerService } from './group-manager/group-manager.service';
+import { ProgramService } from './colleges/departments/programs/program.service'
+import { ResourceService } from './resources/resource.service';
+import { ReviewService } from './review/review.service';
 import { SettingsService } from './settings/settings.service';
 import { SharedService } from './shared/shared.service';
 import { TemplateManagerService } from './template-manager/template-manager.service';
 import { UserSelectorService } from './user-selector/user-selector.service';
 
+import { FilterPipe } from './shared/filter.pipe';
 import { Globals } from './shared/app.global';
 import { TemplateManagerComponent } from './template-manager/template-manager.component';
 import { UserSelectorComponent } from './user-selector/user-selector.component';
@@ -62,6 +63,7 @@ import { ReviewListComponent } from './review-list/review-list.component';
     DashboardComponent,
     DepartmentComponent,
     DocumentComponent,
+    FilterPipe,
     GroupManagerComponent,
     LoginComponent,
     PageNotFoundComponent,
@@ -73,6 +75,7 @@ import { ReviewListComponent } from './review-list/review-list.component';
     TemplateManagerComponent,
     UserSelectorComponent,
     PrivateComponent,
+    ProgramsComponent,
     PublicComponent,
     ReversePipe,
   ],
@@ -100,6 +103,7 @@ import { ReviewListComponent } from './review-list/review-list.component';
     GroupManagerService,
     ReviewService,
     ProgramService,
+    ResourceService,
     SettingsService,
     SharedService,
     TemplateManagerService,
