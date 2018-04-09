@@ -19,7 +19,7 @@
       <h5 class="grid-space">File Attachment</h5>
       <div class="card card-container">
         <div class="card-body" *ngIf="newEvent?.documents">
-          <div class="card-document-title">
+          <div class="card-document-title" *ngIf="newEvent?.documents[0]">
             <div class="document-message">
               {{ newEvent?.documents[0].revisions[
                 getNumOfRevisions(newEvent?.documents[0].revisions) - 1].message }}
@@ -33,7 +33,7 @@
             <button class="btn btn-outline-secondary"
                     (click)="downloadFile(newEvent?.documents[0]._id,
                              getNumOfRevisions(newEvent?.documents[0].revisions) - 1)"
-                    placement="top" ngbTooltip="Download Revision">
+                    placement="top" ngbTooltip="Download Attachment">
               <i class="fa fa-download"></i>
             </button>
           </div>
@@ -232,5 +232,7 @@
 </div>
 
 <div style="padding-top: 20px;">
-  <button class="btn btn-info" (click)="openModal(addNewEventModal)">New Event</button>
+  <button class="btn btn-primary" (click)="openModal(addNewEventModal)">
+    <i class="fa fa-icon fa-calendar"></i>New Event
+  </button>
 </div>

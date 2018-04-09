@@ -14,6 +14,7 @@
 
 .card-action-buttons {
   float: right;
+  margin-top: 5px;
   padding-right: 10px;
 }
 

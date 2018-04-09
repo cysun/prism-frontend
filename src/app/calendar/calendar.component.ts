@@ -276,6 +276,9 @@ export class CalendarComponent implements OnInit {
 
   /* Closes the current open modal */
   closeModal() {
+    this.alert = '';
+    this.date = null;
+    this.modalData = null;
     this.time = { hour: 9, minute: 0, second: 0 };
     this.modal.close();
   }
@@ -291,7 +294,7 @@ export class CalendarComponent implements OnInit {
   /* Upload revision message and the file being sent */
   uploadAttachment(eventId: string, documentId?: string) {
     if (this.file && this.message) {
-      if (documentId.length > 0) {
+      if (documentId && documentId.length > 0) {
         this.documentService.postRevision(documentId, this.message).subscribe( () => {
           const numOfRevisions = Object.keys(this.newEvent.documents[0].revisions).length;
           this.documentService.uploadFile(documentId, numOfRevisions, this.file).subscribe( () => {
