@@ -7,15 +7,18 @@ import { User } from '../models/user.model';
 
 @Injectable()
 export class UserSelectorService {
-
   constructor(private http: HttpClient) { }
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>('/api/users');
+    return this.http.get<User[]>(`/api/users`);
   }
 
   getPrsUsers(): Observable<Group> {
-    return this.http.get<Group>('api/prs');
+    return this.http.get<Group>(`/api/prs`);
+  }
+
+  getGroups(): Observable<Group[]> {
+    return this.http.get<Group[]>('/api/groups');
   }
 
 }

@@ -9,7 +9,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { GroupManagerComponent } from './group-manager/group-manager.component';
 import { DocumentComponent } from './document/document.component';
 import { LoginComponent } from './login/login.component';
-import { MinutesComponent } from './minutes/minutes.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { ReviewComponent } from './review/review.component';
@@ -37,7 +36,6 @@ const routes: Routes = [
       { path: 'group', component: CommitteeComponent },
       { path: 'document', component: DocumentComponent },
       { path: 'document/:id', component: DocumentComponent },
-      { path: 'minutes', component: MinutesComponent },
       { path: 'resources', component: ResourcesComponent },
       { path: 'review/:id', component: ReviewComponent },
       { path: 'settings', component: SettingsComponent },
