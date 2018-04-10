@@ -43,7 +43,10 @@ export class ReviewListComponent implements OnInit {
   ngOnInit() {
     this.programService.getPrograms().subscribe( data => {
       this.programsList = data;
-      this.selectedOption = this.programsList[0]._id;
+
+      if (this.programsList && this.programsList.length > 0) {
+        this.selectedOption = this.programsList[0]._id;
+      }
     })
 
     this.getAllReviews().then ( () => {
@@ -82,10 +85,10 @@ export class ReviewListComponent implements OnInit {
     })
   }
 
-
   addLeadReviewers(reviewId: string, programId: string, leadReviewers: string[]) {
     const body = { program: programId, leadReviewers: leadReviewers };
     this.reviewService.patchReview(reviewId, body).subscribe( data => {
+
       const leadReviewersData: User[] = [];
       const findReviewId = this.reviewsList.findIndex( x => x._id === reviewId);
 
@@ -104,8 +107,10 @@ export class ReviewListComponent implements OnInit {
     let chosenReviewers = this.sharedService.filteredUsers;
     const currentReviewers = leadReviewers.map( reviewer => reviewer._id);
 
-    chosenReviewers = chosenReviewers.concat(currentReviewers);
-    this.addLeadReviewers(reviewId, programId, chosenReviewers);
+    if (chosenReviewers && chosenReviewers.length > 0) {
+      chosenReviewers = chosenReviewers.concat(currentReviewers);
+      this.addLeadReviewers(reviewId, programId, chosenReviewers);
+    }
     this.closeModal();
   }
 
@@ -196,22 +201,26 @@ export class ReviewListComponent implements OnInit {
   }
 
   getReviewData(review: Review) {
-    this.getProgramData(review.program).then ( (program: Program) =>
-    review.program = JSON.parse(JSON.stringify(program))).then( () => {
-      const currentProgram: Program = JSON.parse(JSON.stringify(review.program));
+    return new Promise((resolve, reject) => {
+      this.getProgramData(review.program).then ( (program: Program) =>
+      review.program = JSON.parse(JSON.stringify(program))).then( () => {
+        const currentProgram: Program = JSON.parse(JSON.stringify(review.program));
 
-      this.getDepartmentData(currentProgram.department).then ( (department: Department) => {
-        currentProgram.department = JSON.parse(JSON.stringify(department));
-      }).then ( () => {
-        const currentDepartment: Department = JSON.parse(JSON.stringify(currentProgram.department));
-        this.getCollegeData(currentDepartment.college).then( (college: College) => {
-          currentDepartment.college = JSON.parse(JSON.stringify(college));
-          currentProgram.department = JSON.parse(JSON.stringify(currentDepartment));
-          review.program = JSON.parse(JSON.stringify(currentProgram));
-          this.reviewsList.push(review);
-        })
+        this.getDepartmentData(currentProgram.department).then ( (department: Department) => {
+          currentProgram.department = JSON.parse(JSON.stringify(department));
+        }).then ( () => {
+          const currentDepartment: Department = JSON.parse(JSON.stringify(currentProgram.department));
+          this.getCollegeData(currentDepartment.college).then( (college: College) => {
+            currentDepartment.college = JSON.parse(JSON.stringify(college));
+            currentProgram.department = JSON.parse(JSON.stringify(currentDepartment));
+            review.program = JSON.parse(JSON.stringify(currentProgram));
+            this.reviewsList.push(review);
+
+            resolve();
+          });
+        });
       });
-    })
+    });
   }
 
   getReview(reviewId: string) {
@@ -230,13 +239,14 @@ export class ReviewListComponent implements OnInit {
     const leadReviewers = this.sharedService.filteredUsers;
 
     if (leadReviewers) {
-      this.createReview().then( (data: Review) => {
-        const newReview: Review = data;
-        this.getReviewData(data);
-        this.addLeadReviewers(data._id, data.program, leadReviewers);
+      this.reviewService.createReview(this.selectedOption).subscribe( data => {
+        this.getReviewData(data).then( () => {
+          this.addLeadReviewers(data._id, data.program, leadReviewers);
+          this.sharedService.filteredUsers = null;
+          this.alert = '';
+          this.closeModal();
+        });
       })
-      this.alert = '';
-      this.closeModal();
     } else {
       this.alert = { message: 'Please select at least one lead reviewer.' };
     }
@@ -244,7 +254,7 @@ export class ReviewListComponent implements OnInit {
 
   createReview() {
     return new Promise((resolve, reject) => {
-      this.reviewService.createReview(this.selectedOption).subscribe( data => {
+      this.reviewService.createReview(this.selectedOption).subscribe( (data: Review) => {
         resolve(data);
       }, (err) => {
         console.log(err);
@@ -265,16 +275,33 @@ export class ReviewListComponent implements OnInit {
 
   openModal(content, reviewId?: string) {
     if (reviewId) {
+      this.sharedService.filteredUsers = null;
+
       this.getReview(reviewId).then( (data: Review) => {
         this.currentReview = data;
       }).then( () => {
         const leadReviewers: User[] = [];
+
         for (let i = 0; i < this.currentReview.leadReviewers.length; i++) {
           this.getLeadReviewerData(this.currentReview.leadReviewers[i])
           .then( (userData: User) => {
             leadReviewers.push(userData);
           }).then( () => {
             this.currentReview.leadReviewers = JSON.parse(JSON.stringify(leadReviewers));
+
+            if (this.sharedService.prsMembersList) {
+              const currentLeadReviewers: User[] =  JSON.parse(JSON.stringify(this.currentReview.leadReviewers));
+              const originalPrsList: User[] = JSON.parse(JSON.stringify(this.sharedService.prsMembersList));
+
+              for (let j = 0; j < originalPrsList.length; j++) {
+                for (let k = 0; k < currentLeadReviewers.length; k++) {
+                  if (originalPrsList[j]._id === currentLeadReviewers[k]._id) {
+                    this.sharedService.prsMembersList.splice(j, 1);
+                  }
+                }
+              }
+              this.suggestedUsers = this.sharedService.prsMembersList;
+            }
           })
         }
       })
