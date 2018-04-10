@@ -43,7 +43,10 @@ export class ReviewListComponent implements OnInit {
   ngOnInit() {
     this.programService.getPrograms().subscribe( data => {
       this.programsList = data;
-      this.selectedOption = this.programsList[0]._id;
+
+      if (this.programsList && this.programsList.length > 0) {
+        this.selectedOption = this.programsList[0]._id;
+      }
     })
 
     this.getAllReviews().then ( () => {

@@ -148,7 +148,7 @@
     </button>
   </div>
 
-  <div class="row">
+  <div class="row" *ngIf="reviewsList.length > 0; else emptyReviews">
     <ng-container *ngFor="let review of reviewsList">
       <div class="col-sm-6">
         <div class="card card-container">
@@ -189,3 +189,11 @@
     </ng-container>
   </div>
 </div>
+
+<ng-template #emptyReviews>
+  <p style="padding-top: 20px;">
+    <ngb-alert class="info-message" type="info" [dismissible]="false">
+      <strong> Information: </strong> There are currently no reviews.
+    </ngb-alert>
+  </p>
+</ng-template>
