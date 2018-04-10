@@ -275,16 +275,33 @@ export class ReviewListComponent implements OnInit {
 
   openModal(content, reviewId?: string) {
     if (reviewId) {
+      this.sharedService.filteredUsers = null;
+
       this.getReview(reviewId).then( (data: Review) => {
         this.currentReview = data;
       }).then( () => {
         const leadReviewers: User[] = [];
+
         for (let i = 0; i < this.currentReview.leadReviewers.length; i++) {
           this.getLeadReviewerData(this.currentReview.leadReviewers[i])
           .then( (userData: User) => {
             leadReviewers.push(userData);
           }).then( () => {
             this.currentReview.leadReviewers = JSON.parse(JSON.stringify(leadReviewers));
+
+            if (this.sharedService.prsMembersList) {
+              const currentLeadReviewers: User[] =  JSON.parse(JSON.stringify(this.currentReview.leadReviewers));
+              const originalPrsList: User[] = JSON.parse(JSON.stringify(this.sharedService.prsMembersList));
+
+              for (let j = 0; j < originalPrsList.length; j++) {
+                for (let k = 0; k < currentLeadReviewers.length; k++) {
+                  if (originalPrsList[j]._id === currentLeadReviewers[k]._id) {
+                    this.sharedService.prsMembersList.splice(j, 1);
+                  }
+                }
+              }
+              this.suggestedUsers = this.sharedService.prsMembersList;
+            }
           })
         }
       })
