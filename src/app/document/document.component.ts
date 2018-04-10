@@ -5,6 +5,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Comment } from '../models/comment.model';
 import { Document } from '../models/document.model';
 import { Revision } from '../models/revision.model';
+import { User } from '../models/user.model';
 import { UserResponse } from '../models/user-response.model';
 import { Globals } from '../shared/app.global';
 
@@ -21,6 +22,7 @@ import { saveAs } from 'file-saver';
 
 export class DocumentComponent implements OnInit {
   currentUser: UserResponse;
+  externalReviewer: User = new User();
   modal: NgbModalRef;
   alert: any;
 
@@ -45,6 +47,7 @@ export class DocumentComponent implements OnInit {
   fileName: string;
   selectedOption: string;
   selectedFilter: string;
+  externalMessage = '';
   textComment = '';
   modalMessage: any;
   newCompletionDate: Date;
@@ -145,6 +148,8 @@ export class DocumentComponent implements OnInit {
       this.performDelete = true;
     }
 
+    this.externalReviewer = new User();
+    this.externalReviewer.name = {'first': '', 'last': ''};
     this.modal = this.modalService.open(content, this.globals.options);
   }
 
@@ -338,7 +343,7 @@ export class DocumentComponent implements OnInit {
   }
 
   /* Check if current user is already subscribed to the document */
-  IsSubscribed() {
+  isSubscribed() {
     if (this.document.subscribers) {
       return this.document.subscribers.includes(this.currentUser.user._id);
     }
@@ -359,5 +364,9 @@ export class DocumentComponent implements OnInit {
       this.updateReviewComponent();
       this.closeModal();
     });
+  }
+
+  createExternalUpload() {
+    // TODO: Write code for external upload
   }
 }
