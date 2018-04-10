@@ -82,10 +82,10 @@ export class ReviewListComponent implements OnInit {
     })
   }
 
-
   addLeadReviewers(reviewId: string, programId: string, leadReviewers: string[]) {
     const body = { program: programId, leadReviewers: leadReviewers };
     this.reviewService.patchReview(reviewId, body).subscribe( data => {
+
       const leadReviewersData: User[] = [];
       const findReviewId = this.reviewsList.findIndex( x => x._id === reviewId);
 
@@ -198,22 +198,26 @@ export class ReviewListComponent implements OnInit {
   }
 
   getReviewData(review: Review) {
-    this.getProgramData(review.program).then ( (program: Program) =>
-    review.program = JSON.parse(JSON.stringify(program))).then( () => {
-      const currentProgram: Program = JSON.parse(JSON.stringify(review.program));
+    return new Promise((resolve, reject) => {
+      this.getProgramData(review.program).then ( (program: Program) =>
+      review.program = JSON.parse(JSON.stringify(program))).then( () => {
+        const currentProgram: Program = JSON.parse(JSON.stringify(review.program));
 
-      this.getDepartmentData(currentProgram.department).then ( (department: Department) => {
-        currentProgram.department = JSON.parse(JSON.stringify(department));
-      }).then ( () => {
-        const currentDepartment: Department = JSON.parse(JSON.stringify(currentProgram.department));
-        this.getCollegeData(currentDepartment.college).then( (college: College) => {
-          currentDepartment.college = JSON.parse(JSON.stringify(college));
-          currentProgram.department = JSON.parse(JSON.stringify(currentDepartment));
-          review.program = JSON.parse(JSON.stringify(currentProgram));
-          this.reviewsList.push(review);
-        })
+        this.getDepartmentData(currentProgram.department).then ( (department: Department) => {
+          currentProgram.department = JSON.parse(JSON.stringify(department));
+        }).then ( () => {
+          const currentDepartment: Department = JSON.parse(JSON.stringify(currentProgram.department));
+          this.getCollegeData(currentDepartment.college).then( (college: College) => {
+            currentDepartment.college = JSON.parse(JSON.stringify(college));
+            currentProgram.department = JSON.parse(JSON.stringify(currentDepartment));
+            review.program = JSON.parse(JSON.stringify(currentProgram));
+            this.reviewsList.push(review);
+
+            resolve();
+          });
+        });
       });
-    })
+    });
   }
 
   getReview(reviewId: string) {
@@ -232,13 +236,14 @@ export class ReviewListComponent implements OnInit {
     const leadReviewers = this.sharedService.filteredUsers;
 
     if (leadReviewers) {
-      this.createReview().then( (data: Review) => {
-        const newReview: Review = data;
-        this.getReviewData(data);
-        this.addLeadReviewers(data._id, data.program, leadReviewers);
+      this.reviewService.createReview(this.selectedOption).subscribe( data => {
+        this.getReviewData(data).then( () => {
+          this.addLeadReviewers(data._id, data.program, leadReviewers);
+          this.sharedService.filteredUsers = null;
+          this.alert = '';
+          this.closeModal();
+        });
       })
-      this.alert = '';
-      this.closeModal();
     } else {
       this.alert = { message: 'Please select at least one lead reviewer.' };
     }
@@ -246,7 +251,7 @@ export class ReviewListComponent implements OnInit {
 
   createReview() {
     return new Promise((resolve, reject) => {
-      this.reviewService.createReview(this.selectedOption).subscribe( data => {
+      this.reviewService.createReview(this.selectedOption).subscribe( (data: Review) => {
         resolve(data);
       }, (err) => {
         console.log(err);
