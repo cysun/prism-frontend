@@ -83,7 +83,7 @@
           (change)="onFileChange($event)">
 
           <label class="custom-file-label">
-            {{ fileName ? fileName : 'Choose a file'}}
+            <div style="text-align:left;">{{ fileName ? fileName : 'Choose a file'}}</div>
           </label>
           <div class="text-hints">Click on browse to attach a file.</div>
         </div>
@@ -212,14 +212,8 @@
     <ng-template ngbTabTitle><i class="fa fa-icon fa-file-text-o"></i>Main Version</ng-template>
     <ng-template ngbTabContent>
       <div class="container-fluid container-fluid-content">
-        This tab holds the current version of the document. Revisions of the
+        This tab holds the current version of the document. Previous versions of the
         same document can be found in the revisions tab. <br/><br/>
-
-        <strong>Frontend testing purposes only</strong> <br/>
-        <div class="input-group">
-          <input type="text" class="form-control" [(ngModel)]="document.title" placeholder="Enter document title" name="document-title">
-          <button type="button" class="btn btn-success" (click)="createNewDocument(document.title)">Create Document</button>
-        </div>
 
         <div class="header-container">
           Current Version
@@ -244,23 +238,21 @@
             </div>
 
             <div class="card-action-buttons">
-              <button class="btn btn-outline-secondary" (click)="openModal(uploadRevisionModal)" placement="top" ngbTooltip="Upload Revision"><i class="fa fa-upload"></i></button>
               <button class="btn btn-outline-secondary" *ngIf="mainRevision" (click)="downloadFile(totalIndices - 1)" placement="top" ngbTooltip="Download Revision"><i class="fa fa-download"></i></button>
             </div>
           </div>
         </div>
 
-        <div style="margin-top: 20px;">
-          <button type="button" class="btn btn-outline-primary" (click)="isCollapsed = !isCollapsed">Toggle</button>
-        </div>
-        <div [ngbCollapse]="isCollapsed"><pre><p>Document file: {{ document | json}}</p></pre></div>
+      <div style="padding-top:20px">
+        <button class="btn btn-outline-secondary" (click)="openModal(uploadRevisionModal)"><i class="fa fa-upload"></i> Upload New Revision</button>
+      </div>
       </div>
     </ng-template>
   </ngb-tab>
 
 
   <ngb-tab [disabled]="totalIndices <= 1">
-    <ng-template ngbTabTitle><i class="fa fa-icon fa-list"></i>Revisions</ng-template>
+    <ng-template ngbTabTitle><i class="fa fa-icon fa-list"></i>Previous Revisions</ng-template>
     <ng-template ngbTabContent>
       <div class="container-fluid container-fluid-content">
         This tab holds previous revisions of the document for archiving purposes. Only the

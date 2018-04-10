@@ -62,11 +62,8 @@ export class DocumentComponent implements OnInit {
       });
     }
 
-    const userId = JSON.parse(localStorage.getItem('currentUser'))._id;
-
     const castedUser: UserResponse = JSON.parse(localStorage.getItem('currentUser'));
     this.currentUser = new UserResponse(castedUser.user, castedUser.groups, castedUser.token);
-    // console.log('this is: ' + JSON.stringify(this.currentUser))
 
     this.documentService.retrieveDocument(this.documentId).subscribe( data => {
       this.document = data;
@@ -123,9 +120,6 @@ export class DocumentComponent implements OnInit {
       this.currentRevision = this.document.revisions[revisionIndex];
       this.revisionIndex = revisionIndex;
 
-      console.log('current revision: ' + JSON.stringify(this.currentRevision))
-      console.log('revisionIndex: ' + this.revisionIndex);
-
       if (modalType === 'delete') {
         const modalMessage = 'This revision will be removed from the document and ' +
         'can only be restored by an Administrator. Are you sure you want to delete?';
@@ -168,7 +162,6 @@ export class DocumentComponent implements OnInit {
   createNewDocument(documentTitle: string) {
     this.documentService.createDocument(documentTitle).subscribe( data => {
       this.document = data;
-      console.log(data);
     })
   }
 
@@ -224,8 +217,7 @@ export class DocumentComponent implements OnInit {
 
   /* Upload the file along with the revision message */
   uploadFile(revisionIndex: number) {
-    this.documentService.uploadFile(this.document._id, revisionIndex, this.file).subscribe( data => {
-      console.log(data)
+    this.documentService.uploadFile(this.document._id, revisionIndex, this.file).subscribe( () => {
       this.retrieveDocument();
     }, (err) => {
       console.log(err);
@@ -252,8 +244,7 @@ export class DocumentComponent implements OnInit {
 
   /* Revert to a previous revision */
   revertRevision() {
-    this.documentService.revertRevision(this.document._id, this.revisionIndex).subscribe( data => {
-      console.log(data);
+    this.documentService.revertRevision(this.document._id, this.revisionIndex).subscribe( () => {
       this.retrieveDocument();
       this.closeModal();
     }, (err) => {
@@ -263,8 +254,7 @@ export class DocumentComponent implements OnInit {
 
   /* Restore a revision */
   restoreRevision(revisionIndex: number) {
-    this.documentService.restoreRevision(this.document._id, revisionIndex).subscribe( data => {
-      console.log(data);
+    this.documentService.restoreRevision(this.document._id, revisionIndex).subscribe( () => {
       this.retrieveDocument();
     }, (err) => {
       console.log(err);
@@ -283,7 +273,6 @@ export class DocumentComponent implements OnInit {
 
       this.documentService.addComment(this.document._id, this.textComment,
         findRevisionNum, insertFilename).subscribe( data => {
-        console.log(data);
         this.retrieveDocument();
         this.modal.close();
 
@@ -303,7 +292,6 @@ export class DocumentComponent implements OnInit {
       const findCommentIndex = this.document.comments.findIndex(item => item._id === commentId);
 
       this.documentService.editComment(this.document._id, findCommentIndex, text).subscribe( data => {
-        console.log('Edited?: ' + data);
         this.document.comments[findCommentIndex].text = text;
         this.toggleEditButton();
       })
