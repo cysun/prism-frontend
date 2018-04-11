@@ -5,5 +5,6 @@ export class ExternalUpload {
   _id: string;
   document: Document;
   user: User;
+  message: string;
   token: string;
 }

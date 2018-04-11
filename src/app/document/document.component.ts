@@ -47,7 +47,6 @@ export class DocumentComponent implements OnInit {
   fileName: string;
   selectedOption: string;
   selectedFilter: string;
-  externalMessage = '';
   textComment = '';
   modalMessage: any;
   newCompletionDate: Date;
@@ -156,6 +155,7 @@ export class DocumentComponent implements OnInit {
   /* Close a modal */
   closeModal() {
     this.alert = '';
+    // this.externalMessage = '';
     this.textComment = '';
     this.message = '';
     this.file = null;
@@ -367,6 +367,12 @@ export class DocumentComponent implements OnInit {
   }
 
   createExternalUpload() {
-    // TODO: Write code for external upload
+    this.documentService.createExternalUpload(this.document._id, this.externalReviewer).subscribe (
+      data => {
+        this.closeModal();
+      }, (err) => {
+        this.alert = { 'message': 'Username already exists. Please use a unique username.' };
+      }
+    )
   }
 }
