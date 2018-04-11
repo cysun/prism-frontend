@@ -36,6 +36,11 @@
   width: 100%;
 }
 
+.input-group-text {
+  text-align: center;
+  width: 40px;
+}
+
 .validation-error {
   color: #FF0000;
 }
