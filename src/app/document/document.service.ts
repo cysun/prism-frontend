@@ -113,18 +113,4 @@ export class DocumentService {
     return this.http.post<ExternalUpload>(`/api/document/${documentId}/external-upload`,
       { user: externalReviewer }, this.HEADERS);
   }
-
-  /* Get external upload */
-  getExternalUpload(token: string): Observable<ExternalUpload> {
-    return this.http.get<ExternalUpload>(`/api/external-upload/${token}`);
-  }
-
-  /* Upload a file from external reviewer */
-  uploadExternalDocument(token: string, file: File) {
-    const fileUpload = new FormData();
-    fileUpload.append('file', file);
-
-    return this.http.post(`/api/external-upload/${token}`, fileUpload,
-      { responseType: 'text' });
-  }
 }
