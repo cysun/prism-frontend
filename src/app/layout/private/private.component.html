@@ -20,9 +20,6 @@
           <a class="nav-link" [routerLink]="['/group']">
             <i class="fa fa-users"></i> Committee
           </a>
-          <a class="nav-link" [routerLink]="['/review']">
-            Review <strong>Visualization Testing</strong>
-          </a>
           <a *ngIf="sharedService.isAdmin()" class="nav-link" [routerLink]="['/templates']">
             <i class="fa fa-folder"></i> Template Manager
           </a>
