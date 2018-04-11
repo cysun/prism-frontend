@@ -24,6 +24,7 @@ const routes: Routes = [
   { path: '',
     children: [
       { path: 'login', component: LoginComponent },
+      { path: 'external-upload/:token', component: ExternalUploadComponent },
     ]
   },
   { path: '',
@@ -33,7 +34,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'calendar', component: CalendarComponent },
       { path: 'college', component: CollegesComponent },
-      { path: 'external-upload/:id', component: ExternalUploadComponent },
+
       { path: 'group', component: CommitteeComponent },
       { path: 'document/:id', component: DocumentComponent },
       { path: 'resources', component: ResourcesComponent },

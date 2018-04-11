@@ -7,4 +7,5 @@ export class ExternalUpload {
   user: User;
   message: string;
   token: string;
+  completed: boolean;
 }

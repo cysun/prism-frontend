@@ -1,3 +1,53 @@
-<p>
-  external-upload works!
-</p>
+<div class="col-8" style="margin: auto; padding-top: 20px;">
+  <div class="card">
+    <div class="card-header">
+      <div class="logo-symbol"><i class="fa fa-3x fa-diamond"></i></div>
+      P R I S M
+      <h5>California State University of Los Angeles</h5>
+    </div>
+    <div class="card-body login-module col-10" *ngIf="externalReport">
+
+      <h2>Upload {{ externalReport.document?.title }}</h2>
+
+      <hr/>
+
+      <div class="text-hints" style="text-align: center;">
+        <i class="fa fa-icon fa-info-circle"></i>Please note that once submitted
+        you may not re-upload another document. <br/>
+        Contact the administrator for any questions or re-submission.
+      </div>
+
+      <div style="padding-top: 20px;">
+        <h5>User Info</h5>
+        {{externalReport.user?.name?.first}} {{externalReport.user?.name?.last}}
+        (@{{externalReport.user?.username}}) <br/>
+        <i class="fa fa-icon fa-envelope"></i>{{externalReport.user?.email}}
+      </div>
+
+      <div class="grid-space" *ngIf="!externalReport.completed">
+        <div class="custom-file">
+          <input name="file" type="file" class="custom-file-input"
+                 accept="application/pdf, application/msword,
+                         application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                 (change)="onFileChange($event)">
+
+          <label class="custom-file-label">
+            <div style="text-align:left;">{{ fileName ? fileName : 'Choose a file'}}</div>
+          </label>
+          <div class="text-hints">Click on browse to attach a file.</div>
+        </div>
+
+        <div class="grid-space">
+          <button class="btn btn-primary" (click)="submitExternalUpload()">Submit</button>
+        </div>
+      </div>
+
+      <div *ngIf="externalReport.completed">
+        <div class="grid-space">
+          <i style="color: #008000;" class="fa fa-3x fa-check-circle"></i>
+          <div><strong>{{ externalReport.document?.title }} has been submitted.</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

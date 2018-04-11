@@ -155,7 +155,6 @@ export class DocumentComponent implements OnInit {
   /* Close a modal */
   closeModal() {
     this.alert = '';
-    // this.externalMessage = '';
     this.textComment = '';
     this.message = '';
     this.file = null;
