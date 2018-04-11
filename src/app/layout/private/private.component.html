@@ -23,9 +23,6 @@
           <a class="nav-link" [routerLink]="['/document']">
             <i class="fa fa-file-o"></i> Document
           </a>
-          <a class="nav-link" [routerLink]="['/review']">
-            Review <strong>Visualization Testing</strong>
-          </a>
           <a *ngIf="sharedService.isAdmin()" class="nav-link" [routerLink]="['/templates']">
             <i class="fa fa-folder"></i> Template Manager
           </a>
