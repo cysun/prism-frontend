@@ -37,10 +37,13 @@ export class ExternalUploadComponent implements OnInit {
     }
   }
 
+  /* Submit file to the database */
   submitExternalUpload() {
-    this.externalUploadService.uploadExternalDocument(this.externalReport.token,
-      this.file).subscribe( () => {
-        this.externalReport.completed = true;
-    })
+    if (this.file && this.fileName) {
+      this.externalUploadService.uploadExternalDocument(this.externalReport.token,
+        this.file).subscribe( () => {
+          this.externalReport.completed = true;
+      })
+    }
   }
 }

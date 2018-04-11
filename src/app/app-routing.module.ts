@@ -17,11 +17,14 @@ import { SettingsComponent } from './settings/settings.component';
 import { TemplateManagerComponent } from './template-manager/template-manager.component';
 
 import { PrivateComponent } from './layout/private/private.component';
+import { PublicComponent } from './layout/public/public.component';
+
 import { AuthGuard } from './login/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full'},
   { path: '',
+    component: PublicComponent,
     children: [
       { path: 'login', component: LoginComponent },
       { path: 'external-upload/:token', component: ExternalUploadComponent },
@@ -34,7 +37,6 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'calendar', component: CalendarComponent },
       { path: 'college', component: CollegesComponent },
-
       { path: 'group', component: CommitteeComponent },
       { path: 'document/:id', component: DocumentComponent },
       { path: 'resources', component: ResourcesComponent },
