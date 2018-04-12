@@ -18,8 +18,8 @@
 </div>
 <div class="container">
   <div class="row">
-    <span class="search-container">
-      <input [(ngModel)]="searchText" type="text" placeholder="Search Your Resources">
+    <span class="search-container col-6">
+      <input [(ngModel)]="searchText" class="form-control" type="text" placeholder="Search Your Resources">
     </span>
     <span class="counter"><p>{{resources.length}} item(s)</p></span>
   </div>
@@ -37,7 +37,7 @@
       </div>
       <div class="modal-message">
 
-        <div class="custom-file">
+        <div class="custom-file" style="text-align: left;">
           <input name="file" type="file" class="custom-file-input"
            accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" (change)="onFileChange($event)">
 
@@ -47,7 +47,7 @@
           <div class="text-hints">Click on browse to attach a file.</div>
         </div>
 
-        <div class="file-title">
+        <div class="file-title grid-space">
           <input type="text" class="form-control"
           [(ngModel)]="resource.title" name="file-title"
           placeholder="Enter the title of this resource" required>
@@ -67,23 +67,25 @@
 
 <!-- Display all resources -->
 <div class="grid-space">
-  <table class="table table-sm">
-    <thead>
+  <table class="table table-hover">
+    <thead class="table-header">
       <tr>
-        <th scope="col" style="width:2%"></th>
-        <th scope="col" style="width:50%">Title</th>
-        <th scope="col" style="width:30%">Uploaded By</th>
-        <th scope="col" style="width:18%">Date Uploaded</th>
+        <th class="align-middle" scope="col" style="width:5%"></th>
+        <th class="align-middle" scope="col" style="width:50%">Title</th>
+        <th class="align-middle" scope="col" style="width:30%">Uploaded By</th>
+        <th class="align-middle" scope="col" style="width:15%">Date Uploaded</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let resource of resources | filter: searchText">
-        <td> <input type="checkbox" name="selected"
-          [checked]="isSelected(resource._id)"
-          (click)="updateSelection($event, resource._id)"></td>
-        <td>{{resource.title}}</td>
-        <td>{{resource.files[0].uploader.username}}</td>
-        <td>{{resource.files[0].dateUploaded | date: 'yyyy-MM-dd'}}</td>
+        <td class="align-middle">
+          <input type="checkbox" name="selected" class="checkbox-size"
+                 [checked]="isSelected(resource._id)"
+                 (click)="updateSelection($event, resource._id)">
+        </td>
+        <td class="align-middle">{{resource.title}}</td>
+        <td class="align-middle">{{resource.files[0].uploader.username}}</td>
+        <td class="align-middle">{{resource.files[0].dateUploaded | date: 'yyyy-MM-dd'}}</td>
       </tr>
     </tbody>
   </table>

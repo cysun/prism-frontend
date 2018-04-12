@@ -1,9 +1,9 @@
 <div class="container-fluid container-fluid-content">
   <div class="header-label">
     <div class="blockquote-header">
-      <span class="label"><i class="fa fa-icon fa-users"></i>Group Manager
+      <span class="label"><i class="fa fa-icon fa-users"></i> Group Manager
         <span class ="blockquote-btn">
-          <button type="button" class="btn btn-success" (click)=openModal(addGroupModal)><i class="fa fa-plus"></i></button>
+          <button type="button" class="btn btn-dark" (click)=openModal(addGroupModal)><i class="fa fa-plus"></i></button>
         </span>
       </span>
     </div>
@@ -166,7 +166,7 @@
                     <td>{{ member.name.first }} {{ member.name.last }}</td>
                     <td>{{ member.email }}
                     <td>
-                      <button type="button" class="btn btn-dark"
+                      <button type="button" class="btn btn-danger"
                               (click)="editModal(deleteMemberModal, group._id, member._id)">
                         <i class="fa fa-trash"></i>
                       </button>

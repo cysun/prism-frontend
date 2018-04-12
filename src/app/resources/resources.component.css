@@ -1,45 +1,20 @@
-.search-container {
-  display: inline-flex;
-  margin-right: 12px;
-  float: left;
-  max-height: 36px;
+.btn-group {
+  margin-left: 16px;
 }
 
-input[type=text] {
-  padding: 6px;
-  margin-top: 8px;
-  font-size: 17px;
-  border: solid;
-}
-
-.search-container button {
-  max-height: 36px;
-  float: right;
-  margin-top: 8px;
-  margin-right: 16px;
-  background: #ddd;
-  font-size: 17px;
-  border: none;
-  cursor: pointer;
+.checkbox-size {
+  height: 20px;
+  width: 20px;
 }
 
 .counter {
-  max-height: 36px;
   margin-top: 8px;
+  max-height: 36px;
 }
 
-.grid-space {
-  padding-top: 10px;
-}
-
-.text-hints {
-  color: #808080;
-  font-size: 14px;
-  margin-top: 6px;
-  margin-bottom: 6px;
-  text-align: left;
-}
-
-.btn-group {
-  margin-left: 16px;
+.search-container {
+  display: inline-flex;
+  float: left;
+  margin-right: 12px;
+  max-height: 36px;
 }

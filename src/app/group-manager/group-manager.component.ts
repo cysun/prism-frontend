@@ -20,7 +20,6 @@ export class GroupManagerComponent implements OnInit {
   modal: NgbModalRef;
 
   member: string;
-  currentUser: User = new User();
   group: Group = new Group();
 
   groups: Group[] = [];
@@ -36,8 +35,6 @@ export class GroupManagerComponent implements OnInit {
     private sharedService: SharedService) { }
 
     ngOnInit() {
-      this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
-
       this.groupManagerService.getUsers().subscribe( data => {
         this.users = data;
         this.suggestedUsers = data;
@@ -103,13 +100,11 @@ export class GroupManagerComponent implements OnInit {
       return new Promise((resolve, reject) => {
         this.groupManagerService.getGroups().subscribe( data => {
           this.groups = data;
-          console.log(data);
 
           for (let i = 0; i < this.groups.length; i++) {
             const members = this.groups[i].members;
             this.groups[i].members = this.getMembersObject(members);
           }
-          console.log(this.groups)
           resolve();
         }, err => {
           console.log(err);
