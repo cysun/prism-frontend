@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Group } from '../models/group.model';
-import { User } from '../models/user.model';
+import { UserResponse } from '../models/user-response.model';
 
 import { GroupManagerService } from '../group-manager/group-manager.service';
 
@@ -12,16 +12,13 @@ import { GroupManagerService } from '../group-manager/group-manager.service';
 })
 export class CommitteeComponent implements OnInit {
   prs: any[] = [];
-  currentUser: User = new User();
-  isAdmin: boolean;
+  currentUser: UserResponse;
 
   constructor(private groupManagerService: GroupManagerService) { }
 
   ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
-    console.log(JSON.stringify(this.currentUser.groups));
-
-    this.isAdmin = this.currentUser.groups.some( x => x.name === 'Administrators');
+    const castedUser: UserResponse = JSON.parse(localStorage.getItem('currentUser'));
+    this.currentUser = new UserResponse(castedUser.user, castedUser.groups, castedUser.token);
 
     this.groupManagerService.getPrs().subscribe( data => {
       const members = data.members;

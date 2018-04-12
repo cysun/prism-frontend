@@ -152,18 +152,17 @@ blockquote {
 table {
   table-layout: fixed;
   text-align: center;
+  word-wrap: break-word;
 }
 
 .table-label {
   background: #1A1A1A;
   color: #FFF;
   padding: 20px;
-  text-transform: uppercase;
 }
 
 .table-header {
-  background: #737b8c;
-  color: #FFF;
+  background: #FFCC5C;
 }
 
 .text-hints {
