@@ -270,6 +270,7 @@ export class CalendarComponent implements OnInit {
     } else {
       this.newEvent = new Event();
       this.suggestedGroups = [];
+      this.suggestedUsers = [];
     }
     this.modal = this.modalService.open(content, this.globals.options);
   }
