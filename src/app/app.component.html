@@ -46,12 +46,6 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/document']" style="padding: 10px;">
-          <i class="fa fa-icon fa-file-o"></i>Document
-        </a>
-      </li>
-
-      <li class="nav-item">
         <a *ngIf="sharedService.isAdmin()" class="nav-link"
            [routerLink]="['/templates']" style="padding: 10px;">
           <i class="fa fa-icon fa-folder"></i>Template Manager

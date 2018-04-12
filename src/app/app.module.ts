@@ -54,7 +54,6 @@ import { ReviewService } from './review/review.service';
 import { SettingsService } from './settings/settings.service';
 import { SharedService } from './shared/shared.service';
 import { TemplateManagerService } from './template-manager/template-manager.service';
-import { UserSelectorService } from './user-selector/user-selector.service';
 
 @NgModule({
   declarations: [
@@ -110,7 +109,6 @@ import { UserSelectorService } from './user-selector/user-selector.service';
     SettingsService,
     SharedService,
     TemplateManagerService,
-    UserSelectorService,
     {
       provide: HTTP_INTERCEPTORS,
       useFactory: function(router: Router) {
