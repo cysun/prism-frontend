@@ -16,6 +16,10 @@
     <i class="fa fa-icon fa-envelope"></i>{{externalReport.user?.email}}
   </div>
 
+  <div class="grid-space" style="text-align:left;">
+    <strong>Message from Administrator: </strong> {{externalReport.message}}
+  </div>
+
   <div class="grid-space" *ngIf="!externalReport.completed">
     <div class="custom-file">
       <input name="file" type="file" class="custom-file-input"

@@ -109,8 +109,9 @@ export class DocumentService {
   }
 
   /* Create an external account for external reviewer */
-  createExternalUpload(documentId: string, externalReviewer: User): Observable<ExternalUpload> {
+  createExternalUpload(documentId: string, externalReviewer: User, externalMessage: string):
+    Observable<ExternalUpload> {
     return this.http.post<ExternalUpload>(`/api/document/${documentId}/external-upload`,
-      { user: externalReviewer }, this.HEADERS);
+      { user: externalReviewer, message: externalMessage }, this.HEADERS);
   }
 }

@@ -48,6 +48,7 @@ export class DocumentComponent implements OnInit {
   selectedOption: string;
   selectedFilter: string;
   textComment = '';
+  externalMessage = '';
   modalMessage: any;
   newCompletionDate: Date;
 
@@ -156,6 +157,7 @@ export class DocumentComponent implements OnInit {
   closeModal() {
     this.alert = '';
     this.textComment = '';
+    this.externalMessage = '';
     this.message = '';
     this.file = null;
     this.fileName = '';
@@ -366,7 +368,8 @@ export class DocumentComponent implements OnInit {
   }
 
   createExternalUpload() {
-    this.documentService.createExternalUpload(this.document._id, this.externalReviewer).subscribe (
+    console.log(this.externalReviewer);
+    this.documentService.createExternalUpload(this.document._id, this.externalReviewer, this.externalMessage).subscribe (
       data => {
         this.closeModal();
       }, (err) => {
