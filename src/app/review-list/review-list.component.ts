@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { College } from '../models/college.model';
@@ -21,6 +21,8 @@ import { SharedService } from '../shared/shared.service';
   styleUrls: ['./review-list.component.css']
 })
 export class ReviewListComponent implements OnInit {
+  @Input() reviewFilter: string;
+
   modal: NgbModalRef;
   reviewsList: Review[] = [];
   currentReview: Review;
@@ -51,36 +53,37 @@ export class ReviewListComponent implements OnInit {
 
     this.getAllReviews().then ( () => {
       for (let i = 0; i < this.reviewsList.length; i++) {
-        this.reviewsList[i].percentComplete = this.percentComplete(this.reviewsList[i]);
-        this.getProgramData().then( (data: Program[]) => {
-          const matchingProgramIndex = data.findIndex(x => x._id === this.reviewsList[i].program);
-          this.reviewsList[i].program = JSON.parse(JSON.stringify(data[matchingProgramIndex]));
-        })
-        .then( () => {
-          const currentProgram: Program = JSON.parse(JSON.stringify(this.reviewsList[i].program));
-          this.getDepartmentData().then( (data: Department[]) => {
-            const matchingDepartmentIndex = data.findIndex( x => x._id === currentProgram.department);
-            currentProgram.department = JSON.parse(JSON.stringify(data[matchingDepartmentIndex]));
+          this.reviewsList[i].percentComplete = this.percentComplete(this.reviewsList[i]);
+          this.getProgramData().then( (data: Program[]) => {
+            const matchingProgramIndex = data.findIndex(x => x._id === this.reviewsList[i].program);
+            this.reviewsList[i].program = JSON.parse(JSON.stringify(data[matchingProgramIndex]));
           })
           .then( () => {
-            this.getCollegeData().then( (data: College[]) => {
-              const currentDepartment: Department = JSON.parse(JSON.stringify(currentProgram.department));
-              const matchingCollegeIndex = data.findIndex(x => x._id === currentDepartment.college);
-              currentDepartment.college = JSON.parse(JSON.stringify(data[matchingCollegeIndex]));
-              currentProgram.department = JSON.parse(JSON.stringify(currentDepartment));
-              this.reviewsList[i].program = JSON.parse(JSON.stringify(currentProgram));
+            const currentProgram: Program = JSON.parse(JSON.stringify(this.reviewsList[i].program));
+            this.getDepartmentData().then( (data: Department[]) => {
+              const matchingDepartmentIndex = data.findIndex( x => x._id === currentProgram.department);
+              currentProgram.department = JSON.parse(JSON.stringify(data[matchingDepartmentIndex]));
             })
+            .then( () => {
+              this.getCollegeData().then( (data: College[]) => {
+                const currentDepartment: Department = JSON.parse(JSON.stringify(currentProgram.department));
+                const matchingCollegeIndex = data.findIndex(x => x._id === currentDepartment.college);
+                currentDepartment.college = JSON.parse(JSON.stringify(data[matchingCollegeIndex]));
+                currentProgram.department = JSON.parse(JSON.stringify(currentDepartment));
+                this.reviewsList[i].program = JSON.parse(JSON.stringify(currentProgram));
+              })
+            })
+          }).then(() => {
+            const leadReviewers: User[] = [];
+            for (let j = 0; j < this.reviewsList[i].leadReviewers.length; j++) {
+              this.getLeadReviewerData(this.reviewsList[i].leadReviewers[j])
+              .then( (data: User) => {
+                leadReviewers.push(data);
+                this.reviewsList[i].leadReviewers = JSON.parse(JSON.stringify(leadReviewers));
+              })
+            }
           })
-        }).then(() => {
-          const leadReviewers: User[] = [];
-          for (let j = 0; j < this.reviewsList[i].leadReviewers.length; j++) {
-            this.getLeadReviewerData(this.reviewsList[i].leadReviewers[j])
-            .then( (data: User) => {
-              leadReviewers.push(data);
-              this.reviewsList[i].leadReviewers = JSON.parse(JSON.stringify(leadReviewers));
-            })
-          }
-        })
+
       }
     })
   }
@@ -134,9 +137,26 @@ export class ReviewListComponent implements OnInit {
   }
 
   getAllReviews() {
+    if (this.reviewFilter === 'archive') {
+      return new Promise((resolve, reject) => {
+        this.reviewService.getReviews().subscribe( data => {
+          for (let i = 0; i < data.length; i++) {
+            if (!data[i].deleted && this.comparingDates(data[i].finishDate)) {
+              this.reviewsList.push(data[i]);
+            }
+          }
+          resolve();
+        })
+      });
+    }
+
     return new Promise((resolve, reject) => {
       this.reviewService.getReviews().subscribe( data => {
-        this.reviewsList = data;
+        for (let i = 0; i < data.length; i++) {
+          if (!data[i].deleted && (!this.comparingDates(data[i].finishDate))) {
+            this.reviewsList.push(data[i]);
+          }
+        }
         resolve();
       })
     });
@@ -329,5 +349,15 @@ export class ReviewListComponent implements OnInit {
       totalDaysForCompletion += review.nodes[nodeId].completionEstimate;
     }
     return Math.floor(100 * totalDaysPassed / totalDaysForCompletion);
+  }
+
+  comparingDates(reviewFinishDate: string) {
+    const dateNow = new Date(Date.now());
+    const compareDate = new Date(reviewFinishDate);
+
+    /* Check if today's date is earlier than the review's finish date */
+    if (dateNow < compareDate) { return false; }
+
+    return true;
   }
 }
