@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { College } from '../models/college.model';
@@ -21,6 +21,8 @@ import { SharedService } from '../shared/shared.service';
   styleUrls: ['./review-list.component.css']
 })
 export class ReviewListComponent implements OnInit {
+  @Input() reviewFilter: string;
+
   modal: NgbModalRef;
   reviewsList: Review[] = [];
   currentReview: Review;
@@ -135,10 +137,23 @@ export class ReviewListComponent implements OnInit {
   }
 
   getAllReviews() {
+    if (this.reviewFilter === 'archive') {
+      return new Promise((resolve, reject) => {
+        this.reviewService.getReviews().subscribe( data => {
+          for (let i = 0; i < data.length; i++) {
+            if (!data[i].deleted && this.comparingDates(data[i].finishDate)) {
+              this.reviewsList.push(data[i]);
+            }
+          }
+          resolve();
+        })
+      });
+    }
+
     return new Promise((resolve, reject) => {
       this.reviewService.getReviews().subscribe( data => {
         for (let i = 0; i < data.length; i++) {
-          if (!data[i].deleted && !this.comparingDates(data[i].finishDate)) {
+          if (!data[i].deleted && (!this.comparingDates(data[i].finishDate))) {
             this.reviewsList.push(data[i]);
           }
         }
