@@ -1,13 +1,14 @@
-<div class="app-container">
-  <nav class="navbar navbar-expand-lg navbar-dark sticky-top"
-       *ngIf="authService.isAuthenticated()" style="background-color: #1A1A1A;">
+<div class="app-container" *ngIf="authService.isAuthenticated()">
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: #1A1A1A;">
     <button type="button" class="navbar-toggler navbar-toggler-right"
             (click)="isExpanded = !isExpanded" data-toggle="collapse">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <a class="navbar-brand mx-auto" [routerLink]="['/dashboard']" routerLinkActive="active">
-      <span class="header-logo">PRISM</span>
+      <span class="header-logo">
+        <img style="height:65px; width: 65px;" src="./../../../assets/prism-logo-512x512.png"/>
+      </span>
     </a>
   </nav>
 
@@ -66,6 +67,12 @@
     </ul>
   </div>
 
+  <div class="main">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<div class="app-public-container" *ngIf="!authService.isAuthenticated()">
   <div class="main">
     <router-outlet></router-outlet>
   </div>
