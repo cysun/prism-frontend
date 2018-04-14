@@ -18,7 +18,8 @@
             <i class="fa fa-folder-open-o"></i> Resources
           </a>
           <a class="nav-link" [routerLink]="['/group']">
-            <i class="fa fa-users"></i> Committee
+            <i class="fa fa-users"></i>
+            {{ sharedService.isAdmin() ? 'Group Manager' : 'Committee' }}
           </a>
           <a *ngIf="sharedService.isAdmin()" class="nav-link" [routerLink]="['/templates']">
             <i class="fa fa-folder"></i> Template Manager

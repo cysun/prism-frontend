@@ -32,12 +32,8 @@ export class LoginComponent implements OnInit {
 
       this.authService.sendUsername(data.user.username);
 
-      console.log('Group info about User: ' + JSON.stringify(data.groups));
-
       const decodedParsed = JSON.parse(decoded);
       const date = new Date(parseInt(decodedParsed.iat, 10) * 1000 )
-
-      console.log('converted iat: ' + date)
 
       this.router.navigate(['dashboard']);
       this.wrongInfo = false;

@@ -54,11 +54,9 @@ export class CollegesComponent implements OnInit {
     this.isAdmin = this.currentUser.groups.some( x => x.name === 'Administrators')
     this.collegesService.getColleges().subscribe( data => {
       this.colleges = data;
-      console.log(data);
     });
     this.collegesService.getUsers().subscribe( data => {
       this.users = data;
-      console.log(data);
     });
   }
 

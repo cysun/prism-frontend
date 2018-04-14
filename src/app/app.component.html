@@ -35,7 +35,8 @@
 
       <li class="nav-item">
         <a class="nav-link" [routerLink]="['/group']" style="padding: 10px;">
-          <i class="fa fa-icon fa-users"></i>Committee
+          <i class="fa fa-icon fa-users"></i>
+          {{ currentUser.isRootOrAdmin() ? 'Group Manager' : 'Committee' }}
         </a>
       </li>
 

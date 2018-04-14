@@ -55,7 +55,6 @@ export class ResourcesComponent implements OnInit {
   createFile(resourceId: string): Promise<void> {
     return new Promise((resolve, reject) => {
       this.resourceService.createFile(resourceId).subscribe(data => {
-        console.log('file created sucessfully.');
         resolve();
       }, (err) => {
         reject();
@@ -68,7 +67,6 @@ export class ResourcesComponent implements OnInit {
   deleteSelected(): void {
     this.selected.forEach((id) => {
       this.resourceService.deleteResource(id).subscribe(data => {
-        console.log('Deleted resource ' + id);
       });
     });
     this.selected = [];
@@ -79,7 +77,6 @@ export class ResourcesComponent implements OnInit {
   deleteAll(): void {
     this.resources.forEach((resource) => {
       this.resourceService.deleteResource(resource._id).subscribe(() => {
-        console.log('Deleted resource ' + resource._id);
       });
     });
     this.selected = [];
@@ -98,7 +95,6 @@ export class ResourcesComponent implements OnInit {
     const id = setInterval(() => {
       if (index === 0) {
         this.selected = [];
-        console.log('sucessfully downloaded selected files');
         clearInterval(id);
       } else if (downloaded) {
         this.download(this.selected[--index]).then(() => {
@@ -138,7 +134,6 @@ export class ResourcesComponent implements OnInit {
     this.resourceService.getResources().subscribe(data => {
         this.resources = data;
         this.resources.sort(this.compareTitles);
-        console.log(data);
     }, (err) => {
       console.log(err)
     });
@@ -171,7 +166,6 @@ export class ResourcesComponent implements OnInit {
             this.resource = new Resource();
             this.getResources();
             this.closeModal();
-            console.log('sucessfully created file');
           }, (err) => {
             console.log(err);
           });

@@ -32,7 +32,6 @@ export class ProgramsComponent implements OnInit {
     this.currentDepartment = this.departmentId;
     this.programService.getProgramsAt(this.currentDepartment).subscribe(data => {
       this.programs = data;
-      console.log(data);
     });
   }
 
@@ -70,7 +69,6 @@ export class ProgramsComponent implements OnInit {
   }
 
   deleteProgram(program) {
-    console.log(program._id);
     this.programService.deleteProgram(program._id).subscribe(() => {
       const index = this.programs.indexOf(program);
       this.programs.splice(index, 1);
@@ -105,7 +103,6 @@ export class ProgramsComponent implements OnInit {
           this.program = updatedProgram;
           this.editedProgram = '';
           this.dateModel = {year: '', month: '', day: ''};
-          console.log('updated successfully');
         });
       }
   }
