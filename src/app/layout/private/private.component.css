@@ -2,6 +2,12 @@
   padding-right: 5px;
 }
 
+hr {
+  display:block;
+  height: 5px;
+  width: 100%;
+}
+
 .menu-list {
   padding-top: 80px;
 }

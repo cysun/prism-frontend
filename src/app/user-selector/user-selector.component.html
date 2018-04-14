@@ -1,5 +1,5 @@
 <div *ngIf="configType === 'single'">
-  <ng-selectize [options]="usersList"
+  <ng-selectize [options]="suggestedUsers"
                 [config]="globals.singleConfig"
                 placeholder="Search for..."
                 [(ngModel)]="filteredUser"
@@ -13,5 +13,14 @@
                 placeholder="Search for..."
                 [(ngModel)]="filteredMembers"
                 (ngModelChange)="submitUsersList($event)">
+  </ng-selectize>
+</div>
+
+<div *ngIf="configType === 'groups'">
+  <ng-selectize [options]="suggestedGroups"
+                [config]="globals.multipleGroupConfig"
+                placeholder="Search for..."
+                [(ngModel)]="filteredGroups"
+                (ngModelChange)="submitGroupsList($event)">
   </ng-selectize>
 </div>

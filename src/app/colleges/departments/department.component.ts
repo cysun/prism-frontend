@@ -56,12 +56,10 @@ export class DepartmentComponent implements OnInit {
   ngOnInit() {
     this.departmentService.getDepartmentsAt(this.collegeId).subscribe(data => {
       this.departments = data;
-      console.log(data);
     });
     this.currentCollege = this.collegeId;
     this.departmentService.getUsers().subscribe( data => {
       this.users = data;
-      console.log(data);
     });
   }
 

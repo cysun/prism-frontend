@@ -1,17 +1,85 @@
 <div class="container-fluid document-header">
   <div class="header-label">
     <span class="label">{{ documentTitle }}</span>
-    <button type="button" class="btn btn-dark" (click)=openModal(editDocumentNameModal)><i class="fa fa-icon fa-pencil"></i>Edit</button>
+
+    <button *ngIf="documentTitle === 'External Review Report'" type="button" class="btn btn-dark" (click)=openModal(createExternalUploadModal)><i class="fa fa-icon fa-plus"></i>Create External Account</button>
+    <button *ngIf="documentTitle !== 'External Review Report'" type="button" class="btn btn-dark" (click)=openModal(editDocumentNameModal)><i class="fa fa-icon fa-pencil"></i>Edit</button>
     <button *ngIf="reviewId" type="button" class="btn btn-success" (click)=openModal(finishDateModal)><i class="fa fa-icon fa-clock-o"></i>Change Estimated Completion</button>
     <button *ngIf="reviewId && currentUser.isRootOrAdmin()" type="button" class="btn btn-danger" (click)=openModal(finalizeNodeModal)><i class="fa fa-icon fa-exclamation-triangle"></i>Finalize</button>
     <span class ="document-btn-right">
-      <button type="button" class="btn btn-danger" (click)="IsSubscribed() ? unsubscribeFromDocument() : subscribeToDocument()">
-        <span *ngIf="!IsSubscribed(); else subscribable"><i class="fa fa-icon fa-eye"></i>Watch</span>
+      <button type="button" class="btn btn-danger" (click)="isSubscribed() ? unsubscribeFromDocument() : subscribeToDocument()">
+        <span *ngIf="!isSubscribed(); else subscribable"><i class="fa fa-icon fa-eye"></i>Watch</span>
         <ng-template #subscribable><i class="fa fa-icon fa-eye-slash"></i>Un-watch</ng-template>
       </button>
     </span>
   </div>
 </div>
+
+<!-- Modal to create an account for the external reviewer -->
+<ng-template #createExternalUploadModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Create External Upload for External Reviewer</h5>
+  </div>
+  <form #f="ngForm" (ngSubmit)="createExternalUpload()">
+    <div class="modal-body" *ngIf="externalReviewer">
+      <div *ngIf="alert">
+        <ngb-alert type="danger" [dismissible]="false">
+          <i class="fa fa-icon fa-exclamation-circle"></i>
+          <strong>Error:</strong> {{ alert.message }}
+        </ngb-alert>
+      </div>
+      <div class="modal-message">
+        <div class="text-hints">
+          <i class="fa fa-exclamation-circle"></i> This will create a
+          unique account for the external reviewer to upload their report for
+          the given review. Once the account is created, they shall receive an
+          email with a link to this document.
+        </div>
+
+        <div class="form-row grid-space">
+          <div class="col">
+            <input type="text" class="form-control" [(ngModel)]="externalReviewer.name.first" name="external-firstname" placeholder="First name" required>
+          </div>
+
+          <div class="col">
+            <input type="text" class="form-control" [(ngModel)]="externalReviewer.name.last" name="external-lastname" placeholder="Last name" required>
+          </div>
+        </div>
+
+        <div class="text-hints">Enter their first and last name</div>
+
+        <div class="input-group grid-space">
+          <div class="input-group-prepend">
+            <div class="input-group-text"><i class="fa fa-at"></i></div>
+          </div>
+          <input type="text" class="form-control" [(ngModel)]="externalReviewer.username" name="external-username" placeholder="Enter a username" required>
+        </div>
+
+        <div class="text-hints">Create a unique username for the external reviewer </div>
+
+        <div class="input-group grid-space">
+          <div class="input-group-prepend">
+            <div class="input-group-text"><i class="fa fa-envelope"></i></div>
+          </div>
+          <input type="email" class="form-control" [(ngModel)]="externalReviewer.email" name="external-email" placeholder="email@example.com" required>
+        </div>
+
+        <div class="text-hints">Enter an email</div>
+
+        <div class="input-group grid-space">
+          <textarea class="form-control" [(ngModel)]="externalMessage" name="external-message" required></textarea>
+        </div>
+
+        <div class="text-hints">Input a message to send to the external reviewer</div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success" [disabled]="!f.form.valid">Create</button>
+      <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+    </div>
+  </form>
+</ng-template>
 
 <!-- Modal to edit the overall document's title -->
 <ng-template #editDocumentNameModal>
@@ -83,7 +151,7 @@
           (change)="onFileChange($event)">
 
           <label class="custom-file-label">
-            {{ fileName ? fileName : 'Choose a file'}}
+            <div style="text-align:left;">{{ fileName ? fileName : 'Choose a file'}}</div>
           </label>
           <div class="text-hints">Click on browse to attach a file.</div>
         </div>
@@ -139,7 +207,6 @@
     </div>
   </form>
 </ng-template>
-
 
 <ng-template #deleteCommentModal>
   <div class="modal-header">
@@ -212,14 +279,8 @@
     <ng-template ngbTabTitle><i class="fa fa-icon fa-file-text-o"></i>Main Version</ng-template>
     <ng-template ngbTabContent>
       <div class="container-fluid container-fluid-content">
-        This tab holds the current version of the document. Revisions of the
+        This tab holds the current version of the document. Previous versions of the
         same document can be found in the revisions tab. <br/><br/>
-
-        <strong>Frontend testing purposes only</strong> <br/>
-        <div class="input-group">
-          <input type="text" class="form-control" [(ngModel)]="document.title" placeholder="Enter document title" name="document-title">
-          <button type="button" class="btn btn-success" (click)="createNewDocument(document.title)">Create Document</button>
-        </div>
 
         <div class="header-container">
           Current Version
@@ -244,23 +305,20 @@
             </div>
 
             <div class="card-action-buttons">
-              <button class="btn btn-outline-secondary" (click)="openModal(uploadRevisionModal)" placement="top" ngbTooltip="Upload Revision"><i class="fa fa-upload"></i></button>
               <button class="btn btn-outline-secondary" *ngIf="mainRevision" (click)="downloadFile(totalIndices - 1)" placement="top" ngbTooltip="Download Revision"><i class="fa fa-download"></i></button>
             </div>
           </div>
         </div>
 
-        <div style="margin-top: 20px;">
-          <button type="button" class="btn btn-outline-primary" (click)="isCollapsed = !isCollapsed">Toggle</button>
-        </div>
-        <div [ngbCollapse]="isCollapsed"><pre><p>Document file: {{ document | json}}</p></pre></div>
+      <div style="padding-top:20px">
+        <button class="btn btn-outline-secondary" (click)="openModal(uploadRevisionModal)"><i class="fa fa-upload"></i> Upload New Revision</button>
+      </div>
       </div>
     </ng-template>
   </ngb-tab>
 
-
   <ngb-tab [disabled]="totalIndices <= 1">
-    <ng-template ngbTabTitle><i class="fa fa-icon fa-list"></i>Revisions</ng-template>
+    <ng-template ngbTabTitle><i class="fa fa-icon fa-list"></i>Previous Revisions</ng-template>
     <ng-template ngbTabContent>
       <div class="container-fluid container-fluid-content">
         This tab holds previous revisions of the document for archiving purposes. Only the
@@ -330,7 +388,6 @@
       </div>
     </ng-template>
     </ngb-tab>
-
 
   <ngb-tab [disabled]="totalIndices < 1">
     <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>

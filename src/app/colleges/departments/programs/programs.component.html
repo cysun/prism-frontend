@@ -8,12 +8,12 @@
     </thead>
     <tbody>
       <tr *ngFor="let program of programs">
-        <td *ngIf="program._id === editedProgram"><input type="text" class="form-control" (ngModel)="program.name" value="{{program.name}}"></td>
+        <td *ngIf="program._id === editedProgram"><input type="text" class="form-control" [(ngModel)]="program.name" value="{{program.name}}"></td>
         <td *ngIf="program._id !== editedProgram">{{program.name | uppercase}}</td>
         <td *ngIf="program._id === editedProgram">
           <div class="input-group">
-            <input class="form-control" placeholder="{{program.nextReviewDate | date:'yyyy-MM-dd'}}"
-                 name="dp" (ngModel)="program.nextReviewDate" ngbDatepicker #d="ngbDatepicker">
+            <input class="form-control" [(ngModel)]="dateModel"
+                 name="dp" ngbDatepicker #d="ngbDatepicker">
             <div class="input-group-append">
               <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                 <span><i class="fa fa-calendar"></i></span>
@@ -23,6 +23,7 @@
         </td>
         <td *ngIf="program._id !== editedProgram">{{program.nextReviewDate | date: 'yyyy-MM-dd'}}</td>
         <td>
+          <!-- ACTION BUTTONS -->
           <span class="float-left">
             <button *ngIf="program._id === editedProgram" (click)="updateProgram()" class="btn btn-outline-warning mb-1 btn-sm">
               UPDATE
@@ -46,6 +47,7 @@
   <ngb-alert type="info" [dismissible]="false">No programs exist for this department.</ngb-alert>
 </ng-template>
 
+<!-- NEW PROGRAM FORM -->
 <div class="row grid-space">
   <span class="col-3">Add a Progam</span>
   <div class="col-8 ui-fluid">
@@ -77,6 +79,7 @@
   </p>
 <div>
 
+<!-- MODAL BUTTONS -->
 <span class="input-group-btn pull-right grid-space">
   <button class="btn btn-success" (click)="addProgram()">+ Add</button>
   <button class="btn btn-dark" type="button" (click)="closeModal()">Close</button>

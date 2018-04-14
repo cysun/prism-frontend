@@ -1,3 +1,103 @@
-<p>
-  resources works!
-</p>
+<!-- Page Header -->
+<div class="page-header">
+  <div class="btn-toolbar pull-right">
+    <!-- Delete all button -->
+    <div class="btn-group">
+      <button type="button" (click)="deleteAll()" class="btn btn-md btn-danger vertical-space">Delete All</button>
+    </div>
+    <!-- Download all button -->
+    <div class="btn-group">
+      <button type="button" (click)="downloadAll()" class="btn btn-md btn-primary vertical-space">Download All</button>
+    </div>
+    <!-- Add resource button -->
+    <div class="btn-group">
+      <button type="button" (click)="open(newResourceModal)" class="btn btn-md btn-success vertical-space">New</button>
+    </div>
+  </div>
+  <h1 class="header-text">PRS Resources</h1>
+</div>
+<div class="container">
+  <div class="row">
+    <span class="search-container col-6">
+      <input [(ngModel)]="searchText" class="form-control" type="text" placeholder="Search Your Resources">
+    </span>
+    <span class="counter"><p>{{resources.length}} item(s)</p></span>
+  </div>
+</div>
+
+<!-- Modal for adding new resource -->
+<ng-template #newResourceModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Upload New Resource</h5>
+  </div>
+  <form #f="ngForm" (ngSubmit)="postNewResource()">
+    <div class="modal-body">
+      <div *ngIf="alert">
+        <ngb-alert type="danger" [dismissible]="false"><i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}</ngb-alert>
+      </div>
+      <div class="modal-message">
+
+        <div class="custom-file" style="text-align: left;">
+          <input name="file" type="file" class="custom-file-input"
+           accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" (change)="onFileChange($event)">
+
+          <label class="custom-file-label">
+            {{ fileName ? fileName : 'Choose a file'}}
+          </label>
+          <div class="text-hints">Click on browse to attach a file.</div>
+        </div>
+
+        <div class="file-title grid-space">
+          <input type="text" class="form-control"
+          [(ngModel)]="resource.title" name="file-title"
+          placeholder="Enter the title of this resource" required>
+          <div class="text-hints">Type a title for the new resource.</div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success" [disabled]="!f.form.valid">Upload</button>
+      <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- Display all resources -->
+<div class="grid-space">
+  <table class="table table-hover">
+    <thead class="table-header">
+      <tr>
+        <th class="align-middle" scope="col" style="width:5%"></th>
+        <th class="align-middle" scope="col" style="width:50%">Title</th>
+        <th class="align-middle" scope="col" style="width:30%">Uploaded By</th>
+        <th class="align-middle" scope="col" style="width:15%">Date Uploaded</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let resource of resources | filter: searchText">
+        <td class="align-middle">
+          <input type="checkbox" name="selected" class="checkbox-size"
+                 [checked]="isSelected(resource._id)"
+                 (click)="updateSelection($event, resource._id)">
+        </td>
+        <td class="align-middle">{{resource.title}}</td>
+        <td class="align-middle">{{resource.files[0].uploader.username}}</td>
+        <td class="align-middle">{{resource.files[0].dateUploaded | date: 'yyyy-MM-dd'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="row">
+  <div class="col">
+    <div ngbDropdown placement="top-right" class="d-inline-block">
+      <button class="btn btn-outline-primary" [disabled]="selected.length === 0" id="dropdownBasic1" ngbDropdownToggle>Action on {{selected.length}} selected</button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <button class="dropdown-item" (click)="downloadSelected()">Download</button>
+        <button class="dropdown-item" (click)="deleteSelected()">Delete</button>
+      </div>
+    </div>
+  </div>

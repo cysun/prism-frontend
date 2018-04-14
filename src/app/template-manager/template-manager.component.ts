@@ -38,7 +38,6 @@ export class TemplateManagerComponent implements OnInit {
 
       if (templateId) {
         this.currentTemplate = this.templates.find( temp => temp._id === templateId);
-        console.log('printing currentTemp: ' + JSON.stringify(this.currentTemplate))
       }
       this.modal = this.modalService.open(content, this.globals.options);
     }
@@ -102,7 +101,6 @@ export class TemplateManagerComponent implements OnInit {
       uploadFile(templateId: string, templateIndex: number) {
         this.documentService.uploadFile(templateId, templateIndex, this.file).subscribe( data => {
           this.listTemplates();
-          console.log(data)
         }, (err) => {
           console.log(err);
         });
@@ -131,7 +129,6 @@ export class TemplateManagerComponent implements OnInit {
       /* Delete template from the list */
       deleteTemplate() {
         this.templateManagerService.deleteTemplate(this.currentTemplate._id).subscribe( () => {
-          console.log('Template deleted')
           const findTemplateIndex = this.templates.findIndex( temp => temp._id === this.currentTemplate._id);
           this.templates.splice(findTemplateIndex, 1);
           this.modal.close();

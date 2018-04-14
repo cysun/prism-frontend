@@ -6,8 +6,10 @@ import { Subject } from 'rxjs/Subject';
 export class SharedService {
   searchUser: string;
   filteredUsers: string[];
+  filteredGroups: string[];
 
   prsMembersList: string[];
+  groupsList: string[];
 
   isAdmin(): boolean {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));

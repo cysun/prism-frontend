@@ -1,0 +1,20 @@
+.btn-group {
+  margin-left: 16px;
+}
+
+.checkbox-size {
+  height: 20px;
+  width: 20px;
+}
+
+.counter {
+  margin-top: 8px;
+  max-height: 36px;
+}
+
+.search-container {
+  display: inline-flex;
+  float: left;
+  margin-right: 12px;
+  max-height: 36px;
+}

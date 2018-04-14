@@ -5,6 +5,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Comment } from '../models/comment.model';
 import { Document } from '../models/document.model';
 import { Revision } from '../models/revision.model';
+import { User } from '../models/user.model';
 import { UserResponse } from '../models/user-response.model';
 import { Globals } from '../shared/app.global';
 
@@ -21,6 +22,7 @@ import { saveAs } from 'file-saver';
 
 export class DocumentComponent implements OnInit {
   currentUser: UserResponse;
+  externalReviewer: User = new User();
   modal: NgbModalRef;
   alert: any;
 
@@ -46,6 +48,7 @@ export class DocumentComponent implements OnInit {
   selectedOption: string;
   selectedFilter: string;
   textComment = '';
+  externalMessage = '';
   modalMessage: any;
   newCompletionDate: Date;
 
@@ -62,11 +65,8 @@ export class DocumentComponent implements OnInit {
       });
     }
 
-    const userId = JSON.parse(localStorage.getItem('currentUser'))._id;
-
     const castedUser: UserResponse = JSON.parse(localStorage.getItem('currentUser'));
     this.currentUser = new UserResponse(castedUser.user, castedUser.groups, castedUser.token);
-    // console.log('this is: ' + JSON.stringify(this.currentUser))
 
     this.documentService.retrieveDocument(this.documentId).subscribe( data => {
       this.document = data;
@@ -123,9 +123,6 @@ export class DocumentComponent implements OnInit {
       this.currentRevision = this.document.revisions[revisionIndex];
       this.revisionIndex = revisionIndex;
 
-      console.log('current revision: ' + JSON.stringify(this.currentRevision))
-      console.log('revisionIndex: ' + this.revisionIndex);
-
       if (modalType === 'delete') {
         const modalMessage = 'This revision will be removed from the document and ' +
         'can only be restored by an Administrator. Are you sure you want to delete?';
@@ -151,6 +148,8 @@ export class DocumentComponent implements OnInit {
       this.performDelete = true;
     }
 
+    this.externalReviewer = new User();
+    this.externalReviewer.name = {'first': '', 'last': ''};
     this.modal = this.modalService.open(content, this.globals.options);
   }
 
@@ -158,6 +157,7 @@ export class DocumentComponent implements OnInit {
   closeModal() {
     this.alert = '';
     this.textComment = '';
+    this.externalMessage = '';
     this.message = '';
     this.file = null;
     this.fileName = '';
@@ -168,7 +168,6 @@ export class DocumentComponent implements OnInit {
   createNewDocument(documentTitle: string) {
     this.documentService.createDocument(documentTitle).subscribe( data => {
       this.document = data;
-      console.log(data);
     })
   }
 
@@ -224,8 +223,7 @@ export class DocumentComponent implements OnInit {
 
   /* Upload the file along with the revision message */
   uploadFile(revisionIndex: number) {
-    this.documentService.uploadFile(this.document._id, revisionIndex, this.file).subscribe( data => {
-      console.log(data)
+    this.documentService.uploadFile(this.document._id, revisionIndex, this.file).subscribe( () => {
       this.retrieveDocument();
     }, (err) => {
       console.log(err);
@@ -252,8 +250,7 @@ export class DocumentComponent implements OnInit {
 
   /* Revert to a previous revision */
   revertRevision() {
-    this.documentService.revertRevision(this.document._id, this.revisionIndex).subscribe( data => {
-      console.log(data);
+    this.documentService.revertRevision(this.document._id, this.revisionIndex).subscribe( () => {
       this.retrieveDocument();
       this.closeModal();
     }, (err) => {
@@ -263,8 +260,7 @@ export class DocumentComponent implements OnInit {
 
   /* Restore a revision */
   restoreRevision(revisionIndex: number) {
-    this.documentService.restoreRevision(this.document._id, revisionIndex).subscribe( data => {
-      console.log(data);
+    this.documentService.restoreRevision(this.document._id, revisionIndex).subscribe( () => {
       this.retrieveDocument();
     }, (err) => {
       console.log(err);
@@ -283,7 +279,6 @@ export class DocumentComponent implements OnInit {
 
       this.documentService.addComment(this.document._id, this.textComment,
         findRevisionNum, insertFilename).subscribe( data => {
-        console.log(data);
         this.retrieveDocument();
         this.modal.close();
 
@@ -303,7 +298,6 @@ export class DocumentComponent implements OnInit {
       const findCommentIndex = this.document.comments.findIndex(item => item._id === commentId);
 
       this.documentService.editComment(this.document._id, findCommentIndex, text).subscribe( data => {
-        console.log('Edited?: ' + data);
         this.document.comments[findCommentIndex].text = text;
         this.toggleEditButton();
       })
@@ -350,7 +344,7 @@ export class DocumentComponent implements OnInit {
   }
 
   /* Check if current user is already subscribed to the document */
-  IsSubscribed() {
+  isSubscribed() {
     if (this.document.subscribers) {
       return this.document.subscribers.includes(this.currentUser.user._id);
     }
@@ -371,5 +365,16 @@ export class DocumentComponent implements OnInit {
       this.updateReviewComponent();
       this.closeModal();
     });
+  }
+
+  createExternalUpload() {
+    console.log(this.externalReviewer);
+    this.documentService.createExternalUpload(this.document._id, this.externalReviewer, this.externalMessage).subscribe (
+      data => {
+        this.closeModal();
+      }, (err) => {
+        this.alert = { 'message': 'Username already exists. Please use a unique username.' };
+      }
+    )
   }
 }
