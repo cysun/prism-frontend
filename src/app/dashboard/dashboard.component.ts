@@ -78,8 +78,6 @@ export class DashboardComponent implements OnInit {
           .subscribe( data => {
             this.allLogs[this.resultPage] = data;
             this.displayHistory = this.allLogs[this.resultPage];
-
-            console.log(this.allLogs);
             resolve(data);
         })
       });
@@ -90,8 +88,6 @@ export class DashboardComponent implements OnInit {
       this.dashboardService.getRootActionLogs(this.resultPage).subscribe( data => {
         this.allLogs[this.resultPage] = data;
         this.displayHistory = this.allLogs[this.resultPage];
-
-        console.log(this.allLogs);
         resolve();
       })
     });
@@ -111,18 +107,13 @@ export class DashboardComponent implements OnInit {
 
       const beginningItem = (this.page) * this.itemsPerPage;
       const endingItem = this.page * this.itemsPerPage;
-
-      console.log('Calculation: ' + beginningItem + ' / ' + this.itemsPerPage +
-        ' = Page #' + this.resultPage)
     }
     this.displayHistory = this.allLogs[this.resultPage];
-    console.log('current resultPage: ' + (this.resultPage));
   }
 
 
   numberOfActions(username?: string, type?: string) {
     this.dashboardService.getNumberOfUserLogs(username, type).subscribe( data => {
-      console.log('total cost: ' + data.count);
       this.totalLogs = data.count;
 
       this.totalNumOfPages = Math.ceil(this.totalLogs / this.itemsPerPage);

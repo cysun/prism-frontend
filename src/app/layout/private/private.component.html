@@ -11,9 +11,6 @@
           <a class="nav-link" [routerLink]="['/calendar']">
             <i class="fa fa-calendar"></i> Calendar
           </a>
-          <a class="nav-link" [routerLink]="['/minutes']">
-            <i class="fa fa-clock-o"></i> Minutes
-          </a>
           <a *ngIf="sharedService.isAdmin()" class="nav-link" [routerLink]="['/college']">
             <i class="fa fa-graduation-cap"></i> University Hierarchy
           </a>
@@ -21,13 +18,8 @@
             <i class="fa fa-folder-open-o"></i> Resources
           </a>
           <a class="nav-link" [routerLink]="['/group']">
-            <i class="fa fa-users"></i> Committee
-          </a>
-          <a class="nav-link" [routerLink]="['/document']">
-            <i class="fa fa-file-o"></i> Document
-          </a>
-          <a class="nav-link" [routerLink]="['/review']">
-            Review <strong>Visualization Testing</strong>
+            <i class="fa fa-users"></i>
+            {{ sharedService.isAdmin() ? 'Group Manager' : 'Committee' }}
           </a>
           <a *ngIf="sharedService.isAdmin()" class="nav-link" [routerLink]="['/templates']">
             <i class="fa fa-folder"></i> Template Manager

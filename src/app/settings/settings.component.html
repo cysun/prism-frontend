@@ -19,17 +19,17 @@
           </ngb-alert>
         </div>
 
-        <table *ngIf="!updateInfo" class="table-style">
+        <table *ngIf="!updateInfo" class="table table-hover">
           <tr>
-            <td class="row-label">Username</td>
+            <td>Username</td>
             <td>{{currentUser.username}}</td>
           </tr>
           <tr>
-            <td class="row-label">Name</td>
+            <td>Name</td>
             <td>{{currentUser.name?.first}} {{currentUser.name?.last}}</td>
           </tr>
           <tr>
-            <td class="row-label">E-mail</td>
+            <td>E-mail</td>
             <td>{{currentUser.email}}</td>
           </tr>
         </table>

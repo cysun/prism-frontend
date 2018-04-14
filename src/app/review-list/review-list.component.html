@@ -142,16 +142,18 @@
 
 <!-- Display review list content -->
 <div class="container-fluid container-fluid-content">
-  <div class="container-fluid" style="text-align: right; padding: 0;">
+  <div class="container-fluid" style="text-align: right; padding: 0;" *ngIf="reviewFilter !== 'archive'">
     <button class="btn btn-primary" (click)="openModal(createReviewModal)">
       <i class="fa fa-icon fa-plus"></i>Create Review
     </button>
   </div>
 
-  <div class="row">
+  <div class="row" *ngIf="reviewsList.length > 0; else emptyReviews">
     <ng-container *ngFor="let review of reviewsList">
       <div class="col-sm-6">
-        <div class="card card-container">
+        <div class="card card-container"
+             [ngStyle]="(reviewFilter !== 'archive') && {'border-left': '#FFCE00',
+                       'border-style': 'solid'} || {'border-left': '#008000', 'border-style': 'solid'}">
           <div class="card-body">
             <div class="card-header-title container-fluid">
               <div class="card-message">
@@ -167,19 +169,22 @@
                 </div>
               </div>
               <div class="card-details">
-                <strong>Start Date:</strong> {{review.startDate | date: 'MM/dd/yyyy'}} &#8212; <strong>{{review.percentComplete}}% complete</strong>
+                <strong>Start Date:</strong> {{review.startDate | date: 'MM/dd/yyyy'}} &#8212; <strong>{{review.percentComplete}}% complete</strong><br/>
+                <strong>Finish Date:</strong> {{review.finishDate | date: 'MM/dd/yyyy'}}
                 <br />
                 <strong>Lead Reviewer(s):</strong>
                 <ng-container *ngFor="let leadReviewer of review.leadReviewers; let idx = index;">
                   {{leadReviewer.name?.first}} {{leadReviewer.name?.last}}{{ idx + 1 < review.leadReviewers.length ? ',' : '' }}
                 </ng-container>
 
-                <div class="review-actions" (click)="openModal(editLeadReviewersModal, review._id)">
-                  <i class="fa fa-icon fa-pencil"></i>Edit Lead Reviewers
-                </div>
+                <div *ngIf="this.reviewFilter !== 'archive'">
+                  <div class="review-actions" (click)="openModal(editLeadReviewersModal, review._id)">
+                    <i class="fa fa-icon fa-pencil"></i>Edit Lead Reviewers
+                  </div>
 
-                <div class="review-actions" (click)="openModal(deleteReviewModal, review._id)">
-                  <i class="fa fa-icon fa-trash"></i>Delete Review
+                  <div class="review-actions" (click)="openModal(deleteReviewModal, review._id)">
+                    <i class="fa fa-icon fa-trash"></i>Delete Review
+                  </div>
                 </div>
               </div>
             </div>
@@ -190,4 +195,10 @@
   </div>
 </div>
 
-<!-- <pre>{{ reviewsList | json }}</pre> -->
+<ng-template #emptyReviews>
+  <p style="padding-top: 20px;">
+    <ngb-alert class="info-message" type="info" [dismissible]="false">
+      <strong> Information: </strong> There are currently no reviews.
+    </ngb-alert>
+  </p>
+</ng-template>

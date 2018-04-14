@@ -26,7 +26,6 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
     const currentUserId = JSON.parse(localStorage.getItem('currentUser'))
     this.settingsService.getUser(currentUserId.user._id).subscribe(data => {
-      console.log(data);
       this.currentUser = data;
     })
   }
@@ -106,7 +105,6 @@ export class SettingsComponent implements OnInit {
     }
 
     if (passwordFields && validInfo) {
-      console.log('status of safe Info: ' + validInfo)
       if (this.newPassword !== this.confirmPassword) {
         this.invalidErrorMessage('password mismatch');
         validPassword = false;
@@ -125,7 +123,6 @@ export class SettingsComponent implements OnInit {
   /* Update user's password */
   updatePassword() {
     this.settingsService.changePassword(this.currentUser._id, this.newPassword).subscribe( data => {
-      console.log(data);
     });
     this.newPassword = '';
     this.confirmPassword = '';

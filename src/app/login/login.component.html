@@ -1,42 +1,32 @@
-<div class="tab-grid col-6">
-  <div class="card">
-    <div class="card-header">
-      <div class="logo-symbol"><i class="fa fa-3x fa-diamond"></i></div>
-      PRISM
+<p class="card-text">
+  Please enter your CalStateLA credentials to log into the system.
+</p>
+
+<form #f="ngForm" (ngSubmit)="login()">
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text"><i class="fa fa-id-badge"></i></span>
     </div>
-    <div class="card-body login-module">
-      <p class="card-text">
-        Please enter your CalStateLA credentials to log into the system.
-      </p>
-
-      <form #f="ngForm" (ngSubmit)="login()">
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fa fa-id-badge"></i></span>
-            </div>
-            <input type="text" class="form-control" [(ngModel)]="username"
-                   placeholder="Username" name="username" required>
-          </div>
-
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fa fa-key"></i></span>
-            </div>
-            <input type="password" class="form-control" [(ngModel)]="password"
-                   placeholder="Password" name="password" required>
-          </div>
-
-          <div class="validation-error" *ngIf="wrongInfo === true">
-            The username and/or password are incorrect.<br>
-            Please try again.
-          </div>
-
-          <div class="col-12 footer-buttons">
-            <button class="btn btn-dark" type="submit"
-                    [disabled]="!f.form.valid">Sign In
-            </button>
-          </div>
-      </form>
-    </div>
+    <input type="text" class="form-control" [(ngModel)]="username"
+           placeholder="Username" name="username" required>
   </div>
-</div>
+
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text"><i class="fa fa-key"></i></span>
+    </div>
+    <input type="password" class="form-control" [(ngModel)]="password"
+           placeholder="Password" name="password" required>
+  </div>
+
+  <div class="validation-error" *ngIf="wrongInfo === true">
+    The username and/or password are incorrect.<br>
+    Please try again.
+  </div>
+
+  <div class="col-12 footer-buttons">
+    <button class="btn btn-dark" type="submit" [disabled]="!f.form.valid">
+      Sign In
+    </button>
+  </div>
+</form>
