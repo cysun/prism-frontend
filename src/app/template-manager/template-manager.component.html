@@ -93,7 +93,7 @@
     <div class="blockquote-header">
       <span class="label"><i class="fa fa-icon fa-folder-open-o"></i>Template Manager
         <span class ="blockquote-btn" placement="top" ngbTooltip="Upload Template">
-          <button type="button" class="btn btn-success" (click)=openModal(uploadTemplateModal)>
+          <button type="button" class="btn btn-dark" (click)=openModal(uploadTemplateModal)>
             <i class="fa fa-plus"></i>
           </button>
         </span>
@@ -103,7 +103,7 @@
 
   <!-- Display all the templates in a table -->
   <table class="table table-hover" *ngIf="templates && templates.length > 0; else emptyTemplates">
-    <thead class="bg-info">
+    <thead style="background-color: #ffcc5c;">
       <tr>
         <th class="align-middle">Template Title</th>
         <th class="align-middle">Estimated Completion</th>
@@ -117,27 +117,27 @@
 
     <tbody>
       <tr *ngFor="let template of templates; let idx = index">
-        <td><a routerLink="/document/{{template._id}}">{{template.title}}</a></td>
-        <td>{{ template.completionEstimate }} days</td>
+        <td class="align-middle"><a routerLink="/document/{{template._id}}">{{template.title}}</a></td>
+        <td class="align-middle">{{ template.completionEstimate }} days</td>
 
         <ng-container *ngIf="template.revisions.length > 0; else emptyDetails">
-          <td>{{ template.revisions[template.revisions.length - 1].message }}</td>
-          <td>{{ template.revisions[template.revisions.length - 1].uploader.username }}</td>
-          <td>{{ template.revisions[template.revisions.length - 1].dateUploaded | date: 'MM/dd/yyyy' }}</td>
+          <td class="align-middle">{{ template.revisions[template.revisions.length - 1].message }}</td>
+          <td class="align-middle">{{ template.revisions[template.revisions.length - 1].uploader.username }}</td>
+          <td class="align-middle">{{ template.revisions[template.revisions.length - 1].dateUploaded | date: 'MM/dd/yyyy' }}</td>
         </ng-container>
 
         <ng-template #emptyDetails>
-          <td>N/A</td>
-          <td>N/A</td>
-          <td>Unknown</td>
+          <td class="align-middle">N/A</td>
+          <td class="align-middle">N/A</td>
+          <td class="align-middle">Unknown</td>
         </ng-template>
 
-        <td>
+        <td class="align-middle">
           <span *ngFor="let group of template.groups; let idx = index">
             {{ group }}{{ idx + 1 < template.groups.length ? ',' : '' }}
           </span>
         </td>
-        <td>
+        <td class="align-middle">
           <button type="button" class="btn btn-danger" (click)="openModal(deleteTemplateModal, template._id)" [disabled]=template.coreTemplate><i class="fa fa-trash"></i></button>
         </td>
       </tr>

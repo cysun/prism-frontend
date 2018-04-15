@@ -1,12 +1,13 @@
 import { User } from './user.model';
 
 export class UserResponse {
-  user: User;
+  constructor(public user: User,
+    public groups: [{name: string, _id: string}],
+    public token: string) {}
 
-  groups: [{
-    name: string,
-    _id: string;
-  }];
-
-  token: string;
+  public isRootOrAdmin(): boolean {
+    return this.user.root || this.groups.reduce((admin, group) => {
+      return admin || group.name === 'Administrators';
+    }, false);
+  }
 }

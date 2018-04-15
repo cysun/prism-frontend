@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MinutesComponent } from './minutes.component';
+import { ExternalUploadComponent } from './external-upload.component';
 
-describe('MinutesComponent', () => {
-  let component: MinutesComponent;
-  let fixture: ComponentFixture<MinutesComponent>;
+describe('ExternalUploadComponent', () => {
+  let component: ExternalUploadComponent;
+  let fixture: ComponentFixture<ExternalUploadComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MinutesComponent ]
+      declarations: [ ExternalUploadComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MinutesComponent);
+    fixture = TestBed.createComponent(ExternalUploadComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

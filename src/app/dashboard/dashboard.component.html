@@ -11,6 +11,16 @@
   </ngb-tab>
 
   <ngb-tab>
+    <ng-template ngbTabTitle>
+      <i class="fa fa-graduation-cap"></i> Review Archive
+    </ng-template>
+    <ng-template ngbTabContent>
+      <prism-review-list *ngIf="sharedService.isAdmin()" [reviewFilter]="'archive'">
+      </prism-review-list>
+    </ng-template>
+  </ngb-tab>
+
+  <ngb-tab>
     <ng-template ngbTabTitle><i class="fa fa-th-list"></i> Recent Actions</ng-template>
     <ng-template ngbTabContent>
       <div class="container-fluid container-fluid-content">
@@ -70,7 +80,7 @@
         </div>
 
         <ng-template #emptyActions>
-          <p style="padding-top: 20px;">
+          <p class="grid-space">
             <ngb-alert class="info-message" type="info" [dismissible]="false">
               <strong>Information:</strong> There are currently no actions recorded.
             </ngb-alert>

@@ -24,6 +24,18 @@ blockquote {
   margin-top: -3px;
 }
 
+.btn-primary {
+    background-color: #FFCE00 !important;
+    border-color: #C9A100 !important;
+    color: #000 !important;
+}
+
+.btn-primary:active,
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #FFB940 !important;
+}
+
 .card-container {
   margin-top: 15px;
 }
@@ -74,6 +86,10 @@ blockquote {
   padding-top: 15px;
 }
 
+.grid-space {
+  padding-top: 20px;
+}
+
 .navbar {
   background: #1A1A1A;
   height: 70px;
@@ -110,6 +126,7 @@ blockquote {
 
 .modal-message {
   padding: 20px;
+  text-align: center;
 }
 
 .modal-warning {
@@ -135,18 +152,17 @@ blockquote {
 table {
   table-layout: fixed;
   text-align: center;
+  word-wrap: break-word;
 }
 
 .table-label {
   background: #1A1A1A;
   color: #FFF;
   padding: 20px;
-  text-transform: uppercase;
 }
 
 .table-header {
-  background: #737b8c;
-  color: #FFF;
+  background: #FFCC5C;
 }
 
 .text-hints {

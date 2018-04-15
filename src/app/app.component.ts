@@ -15,6 +15,7 @@ import { UserResponse } from './models/user-response.model';
 export class AppComponent implements OnInit {
   username: string;
   isCollapsed = false;
+  currentUser: UserResponse;
   isAdmin: boolean;
 
   constructor(private authService: AuthService,
@@ -23,6 +24,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     if (this.authService.isAuthenticated()) {
+      const castedUser: UserResponse = JSON.parse(localStorage.getItem('currentUser'));
+      this.currentUser = new UserResponse(castedUser.user, castedUser.groups, castedUser.token);
+
       /* Initially get the username upon login into the system */
       this.authService.currentUsername.subscribe( data => {
         this.username = data;

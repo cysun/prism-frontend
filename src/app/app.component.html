@@ -1,17 +1,18 @@
-<div class="app-container">
-  <nav class="navbar navbar-expand-lg navbar-dark sticky-top"
-       *ngIf="authService.isAuthenticated()" style="background-color: #1A1A1A;">
+<div class="app-container" *ngIf="authService.isAuthenticated()">
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: #1A1A1A;">
     <button type="button" class="navbar-toggler navbar-toggler-right"
             (click)="isExpanded = !isExpanded" data-toggle="collapse">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <a class="navbar-brand mx-auto" [routerLink]="['/dashboard']" routerLinkActive="active">
-      <span class="header-logo">PRISM</span>
+      <span class="header-logo">
+        <img style="height:65px; width: 65px;" src="./../../../assets/prism-logo-512x512.png"/>
+      </span>
     </a>
   </nav>
 
-  <div class="collapse navbar-collapse" [ngbCollapse]="!isExpanded"
+  <div class="collapse navbar-collapse sticky-top" [ngbCollapse]="!isExpanded"
        *ngIf="authService.isAuthenticated()">
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -27,12 +28,6 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/minutes']" style="padding: 10px;">
-          <i class="fa fa-icon fa-clock-o"></i>Minutes
-        </a>
-      </li>
-
-      <li class="nav-item">
         <a class="nav-link" [routerLink]="['/resources']" style="padding: 10px;">
           <i class="fa fa-icon fa-folder-open-o"></i>Resources
         </a>
@@ -40,7 +35,8 @@
 
       <li class="nav-item">
         <a class="nav-link" [routerLink]="['/group']" style="padding: 10px;">
-          <i class="fa fa-icon fa-users"></i>Committee
+          <i class="fa fa-icon fa-users"></i>
+          {{ currentUser.isRootOrAdmin() ? 'Group Manager' : 'Committee' }}
         </a>
       </li>
 
@@ -48,12 +44,6 @@
         <a *ngIf="sharedService.isAdmin()" class="nav-link"
            [routerLink]="['/college']" style="padding: 10px;">
           <i class="fa fa-icon fa-graduation-cap"></i>University Hierarchy
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/document']" style="padding: 10px;">
-          <i class="fa fa-icon fa-file-o"></i>Document
         </a>
       </li>
 
@@ -78,6 +68,12 @@
     </ul>
   </div>
 
+  <div class="main">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<div class="app-public-container" *ngIf="!authService.isAuthenticated()">
   <div class="main">
     <router-outlet></router-outlet>
   </div>
