@@ -20,6 +20,16 @@
     </ng-template>
   </ngb-tab>
 
+  <ngb-tab *ngIf="sharedService.isAdmin()">
+    <ng-template ngbTabTitle>
+      <i class="fa fa-trash"></i> Deleted Reviews
+    </ng-template>
+    <ng-template ngbTabContent>
+      <prism-review-list [reviewFilter]="'deleted'">
+      </prism-review-list>
+    </ng-template>
+  </ngb-tab>
+
   <ngb-tab>
     <ng-template ngbTabTitle><i class="fa fa-th-list"></i> Recent Actions</ng-template>
     <ng-template ngbTabContent>
