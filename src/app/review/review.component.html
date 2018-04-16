@@ -39,6 +39,8 @@
   </div>
 </ng-template>
 
+<button class="btn btn-dark" (click)="location.back()"><i class="fa fa-arrow-circle-left"></i> Back</button>
+
 <h1 class="display-4">{{review && review.program && review.program.name ? review.program.name : ''}} Review {{yearString}}</h1>
 <svg id="svg-canvas" width="1280" height="200"></svg>
 <hr />
