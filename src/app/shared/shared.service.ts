@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
+import { User } from '../models/user.model';
+
 
 @Injectable()
 export class SharedService {
@@ -8,6 +10,7 @@ export class SharedService {
   filteredUsers: string[];
   filteredGroups: string[];
 
+  usersList: User[];
   prsMembersList: string[];
   groupsList: string[];
 

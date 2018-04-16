@@ -40,6 +40,7 @@ export class UserSelectorComponent implements OnInit {
     } else if (this.configType === 'multiple') {
       this.groupManagerService.getUsers().subscribe( data => {
         this.suggestedUsers = data;
+        this.sharedService.usersList = this.suggestedUsers;
         this.filteredMembers = this.suggestedMembers;
       })
     } else if (this.configType === 'single') {
