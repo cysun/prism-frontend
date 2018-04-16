@@ -309,6 +309,7 @@ export class ReviewListComponent implements OnInit {
 
       this.reviewsList.splice(deleteReviewIndex, 1);
       this.closeModal();
+      this.ngOnInit();
     })
   }
 
