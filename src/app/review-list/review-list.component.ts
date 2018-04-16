@@ -88,6 +88,14 @@ export class ReviewListComponent implements OnInit {
     })
   }
 
+  restoreReview(reviewId: string) {
+    this.reviewService.restoreReview(reviewId).subscribe(() => {
+      this.programsList = [];
+      this.reviewsList = [];
+      this.ngOnInit();
+    });
+  }
+
   addLeadReviewers(reviewId: string, programId: string, leadReviewers: string[]) {
     const body = { program: programId, leadReviewers: leadReviewers };
     this.reviewService.patchReview(reviewId, body).subscribe( data => {
@@ -147,6 +155,17 @@ export class ReviewListComponent implements OnInit {
           }
           resolve();
         })
+      });
+    } else if (this.reviewFilter === 'deleted') {
+      return new Promise((resolve, reject) => {
+        this.reviewService.getReviews().subscribe(data => {
+          for (let i = 0; i < data.length; i++) {
+            if (data[i].deleted) {
+              this.reviewsList.push(data[i]);
+            }
+          }
+          resolve();
+        });
       });
     }
 
@@ -290,6 +309,7 @@ export class ReviewListComponent implements OnInit {
 
       this.reviewsList.splice(deleteReviewIndex, 1);
       this.closeModal();
+      this.ngOnInit();
     })
   }
 

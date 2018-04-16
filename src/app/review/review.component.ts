@@ -1,4 +1,5 @@
 import { Component, Directive, OnInit, NgZone, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -33,7 +34,8 @@ export class ReviewComponent implements OnInit {
       private zone: NgZone,
       private route: ActivatedRoute,
       private modalService: NgbModal,
-      private globals: Globals) {
+      private globals: Globals,
+      private location: Location) {
     this.newNode = new ReviewNode();
   }
 

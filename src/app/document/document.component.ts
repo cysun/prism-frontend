@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
@@ -56,7 +57,8 @@ export class DocumentComponent implements OnInit {
               private reviewService: ReviewService,
               private modalService: NgbModal,
               private route: ActivatedRoute,
-              private globals: Globals) { }
+              private globals: Globals,
+              private location: Location) { }
 
   public ngOnInit() {
     if (!this.documentId) {
@@ -354,6 +356,7 @@ export class DocumentComponent implements OnInit {
   /* Make the request to finalize the node of this document in the review */
   finalizeNode() {
     this.reviewService.finalizeNode(this.reviewId, this.nodeId).subscribe(() => {
+      this.document.locked = true;
       this.updateReviewComponent();
       this.closeModal();
     });

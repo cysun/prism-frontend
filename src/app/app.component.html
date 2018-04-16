@@ -1,4 +1,4 @@
-<div class="app-container" *ngIf="authService.isAuthenticated()">
+<div class="app-container" *ngIf="authService.isAuthenticated() && currentUser">
   <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: #1A1A1A;">
     <button type="button" class="navbar-toggler navbar-toggler-right"
             (click)="isExpanded = !isExpanded" data-toggle="collapse">

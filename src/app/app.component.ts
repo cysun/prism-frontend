@@ -37,6 +37,8 @@ export class AppComponent implements OnInit {
         const user = this.authService.getUser();
         this.username = user.user.username;
       }
+    } else {
+      setTimeout(this.ngOnInit.bind(this), 20);
     }
   }
 
