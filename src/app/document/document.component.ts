@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
@@ -56,7 +57,8 @@ export class DocumentComponent implements OnInit {
               private reviewService: ReviewService,
               private modalService: NgbModal,
               private route: ActivatedRoute,
-              private globals: Globals) { }
+              private globals: Globals,
+              private location: Location) { }
 
   public ngOnInit() {
     if (!this.documentId) {
