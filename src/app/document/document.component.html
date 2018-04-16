@@ -4,15 +4,18 @@
   <div class="header-label">
     <span class="label">{{ documentTitle }}</span>
 
-    <button *ngIf="documentTitle === 'External Review Report'" type="button" class="btn btn-dark" (click)=openModal(createExternalUploadModal)><i class="fa fa-icon fa-plus"></i>Create External Account</button>
-    <button *ngIf="documentTitle !== 'External Review Report'" type="button" class="btn btn-dark" (click)=openModal(editDocumentNameModal)><i class="fa fa-icon fa-pencil"></i>Edit</button>
-    <button *ngIf="reviewId" type="button" class="btn btn-success" (click)=openModal(finishDateModal)><i class="fa fa-icon fa-clock-o"></i>Change Estimated Completion</button>
-    <button *ngIf="reviewId && currentUser.isRootOrAdmin()" type="button" class="btn btn-danger" (click)=openModal(finalizeNodeModal)><i class="fa fa-icon fa-exclamation-triangle"></i>Finalize</button>
+    <button *ngIf="documentTitle === 'External Review Report' && !document.locked" type="button" class="btn btn-dark" (click)=openModal(createExternalUploadModal)><i class="fa fa-icon fa-plus"></i>Create External Account</button>
+    <button *ngIf="documentTitle !== 'External Review Report' && !document.locked" type="button" class="btn btn-dark" (click)=openModal(editDocumentNameModal)><i class="fa fa-icon fa-pencil"></i>Edit</button>
+    <button *ngIf="reviewId && !document.locked" type="button" class="btn btn-success" (click)=openModal(finishDateModal)><i class="fa fa-icon fa-clock-o"></i>Change Estimated Completion</button>
+    <button *ngIf="reviewId && currentUser.isRootOrAdmin() && !document.locked" type="button" class="btn btn-danger" (click)=openModal(finalizeNodeModal)><i class="fa fa-icon fa-exclamation-triangle"></i>Finalize</button>
     <span class ="document-btn-right">
-      <button type="button" class="btn btn-danger" (click)="isSubscribed() ? unsubscribeFromDocument() : subscribeToDocument()">
+      <button *ngIf="!document.locked" type="button" class="btn btn-danger" (click)="isSubscribed() ? unsubscribeFromDocument() : subscribeToDocument()">
         <span *ngIf="!isSubscribed(); else subscribable"><i class="fa fa-icon fa-eye"></i>Watch</span>
         <ng-template #subscribable><i class="fa fa-icon fa-eye-slash"></i>Un-watch</ng-template>
       </button>
+      <span *ngIf="document.locked">
+        <i class="fa fa-lock"></i> Finalized
+      </span>
     </span>
   </div>
 </div>
@@ -313,7 +316,7 @@
         </div>
 
       <div style="padding-top:20px">
-        <button class="btn btn-outline-secondary" (click)="openModal(uploadRevisionModal)"><i class="fa fa-upload"></i> Upload New Revision</button>
+        <button *ngIf="!document.locked" class="btn btn-outline-secondary" (click)="openModal(uploadRevisionModal)"><i class="fa fa-upload"></i> Upload New Revision</button>
       </div>
       </div>
     </ng-template>
@@ -351,13 +354,15 @@
                         <i class="fa fa-download"></i>
                 </button>
 
-                <button class="btn btn-outline-secondary"
+                <button *ngIf="!document.locked"
+                        class="btn btn-outline-secondary"
                         (click)="openModal(revisionModal, totalIndices - idx - 1, 'revert')"
                         placement="top" ngbTooltip="Revert as Main">
                         <i class="fa fa-exchange"></i>
                 </button>
 
-                <button class="btn btn-outline-secondary"
+                <button *ngIf="!document.locked"
+                        class="btn btn-outline-secondary"
                         (click)="openModal(revisionModal, totalIndices - idx - 1, 'delete')"
                         placement="top" ngbTooltip="Delete">
                         <i class="fa fa-trash"></i>

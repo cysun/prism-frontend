@@ -356,6 +356,7 @@ export class DocumentComponent implements OnInit {
   /* Make the request to finalize the node of this document in the review */
   finalizeNode() {
     this.reviewService.finalizeNode(this.reviewId, this.nodeId).subscribe(() => {
+      this.document.locked = true;
       this.updateReviewComponent();
       this.closeModal();
     });
