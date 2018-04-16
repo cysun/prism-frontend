@@ -88,6 +88,14 @@ export class ReviewListComponent implements OnInit {
     })
   }
 
+  restoreReview(reviewId: string) {
+    this.reviewService.restoreReview(reviewId).subscribe(() => {
+      this.programsList = [];
+      this.reviewsList = [];
+      this.ngOnInit();
+    });
+  }
+
   addLeadReviewers(reviewId: string, programId: string, leadReviewers: string[]) {
     const body = { program: programId, leadReviewers: leadReviewers };
     this.reviewService.patchReview(reviewId, body).subscribe( data => {

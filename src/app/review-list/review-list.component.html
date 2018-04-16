@@ -142,7 +142,7 @@
 
 <!-- Display review list content -->
 <div class="container-fluid container-fluid-content">
-  <div class="container-fluid" style="text-align: right; padding: 0;" *ngIf="reviewFilter !== 'archive'">
+  <div class="container-fluid" style="text-align: right; padding: 0;" *ngIf="reviewFilter !== 'archive' && reviewFilter !== 'deleted'">
     <button class="btn btn-primary" (click)="openModal(createReviewModal)">
       <i class="fa fa-icon fa-plus"></i>Create Review
     </button>
@@ -157,10 +157,13 @@
           <div class="card-body">
             <div class="card-header-title container-fluid">
               <div class="card-message">
-                <a routerLink="/review/{{review._id}}">
+                <a *ngIf="!review.deleted" routerLink="/review/{{review._id}}">
                   {{ review.program?.name}} {{ yearString(review.startDate)}}
                   <i class="fa fa-chevron-right"></i>
                 </a>
+                <p *ngIf="review.deleted">
+                  {{ review.program?.name}} {{ yearString(review.startDate)}}
+                </p>
                 <div class="card-info">
                   <i style="font-weight: lighter;">
                     {{review.program?.department?.name}}
@@ -178,12 +181,16 @@
                 </ng-container>
 
                 <div *ngIf="this.reviewFilter !== 'archive'">
-                  <div class="review-actions" (click)="openModal(editLeadReviewersModal, review._id)">
+                  <div *ngIf="!review.deleted" class="review-actions" (click)="openModal(editLeadReviewersModal, review._id)">
                     <i class="fa fa-icon fa-pencil"></i>Edit Lead Reviewers
                   </div>
 
-                  <div class="review-actions" (click)="openModal(deleteReviewModal, review._id)">
+                  <div *ngIf="!review.deleted" class="review-actions" (click)="openModal(deleteReviewModal, review._id)">
                     <i class="fa fa-icon fa-trash"></i>Delete Review
+                  </div>
+
+                  <div *ngIf="review.deleted" class="review-actions" (click)="restoreReview(review._id)">
+                    Restore Review
                   </div>
                 </div>
               </div>
