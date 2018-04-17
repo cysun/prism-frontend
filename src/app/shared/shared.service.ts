@@ -10,7 +10,6 @@ export class SharedService {
   filteredUsers: string[];
   filteredGroups: string[];
 
-  usersList: User[];
   prsMembersList: string[];
   groupsList: string[];
 

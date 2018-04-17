@@ -78,12 +78,13 @@ export class GroupManagerComponent implements OnInit {
           this.sharedService.filteredUsers = null;
 
           for ( let i = 0; i < this.group.members.length; i++) {
-            for (let j = 0; j < this.suggestedUsers.length; j++) {
-              if (this.group.members[i] === this.suggestedUsers[j]._id) {
-                this.suggestedUsers.splice(j, 1);
+            for (let j = 0; j < this.users.length; j++) {
+              if (this.group.members[i] === this.users[j]._id) {
+                this.users.splice(j, 1);
               }
             }
           }
+          this.suggestedUsers = this.users;
 
           if (this.group.members.length > 0) {
             this.member = this.group.members.find( item => item === memberId);

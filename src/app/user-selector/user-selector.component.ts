@@ -38,11 +38,14 @@ export class UserSelectorComponent implements OnInit {
         this.sharedService.prsMembersList = this.suggestedUsers;
       })
     } else if (this.configType === 'multiple') {
-      this.groupManagerService.getUsers().subscribe( data => {
-        this.suggestedUsers = data;
-        this.sharedService.usersList = this.suggestedUsers;
-        this.filteredMembers = this.suggestedMembers;
-      })
+      if (this.filterType === 'group') {
+        this.suggestedUsers = this.suggestedMembers;
+      } else {
+        this.groupManagerService.getUsers().subscribe( data => {
+          this.suggestedUsers = data;
+          this.filteredMembers = this.suggestedMembers;
+        })
+      }
     } else if (this.configType === 'single') {
       this.groupManagerService.getUsers().subscribe( data => {
         this.suggestedUsers = data;
