@@ -20,15 +20,17 @@
       "prefix": "prism",
       "styles": [
         "styles.css",
+        "../node_modules/angular-calendar/css/angular-calendar.css",
         "../node_modules/bootstrap/dist/css/bootstrap.min.css",
         "../node_modules/selectize/dist/css/selectize.css",
         "../node_modules/selectize/dist/css/selectize.bootstrap3.css",
-
         "../node_modules/font-awesome/css/font-awesome.min.css"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.min.js",
-        "../node_modules/ng-selectize/selectize/selectize.standalone.js"
+        "../node_modules/ng-selectize/selectize/selectize.standalone.js",
+        "../node_modules/d3/build/d3.min.js",
+        "../node_modules/dagre-d3/dist/dagre-d3.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

@@ -7,15 +7,11 @@
 }
 
 .header-panel {
-  color: #FFF;
+  color: #000;
   font-weight: bold;
   position: relative;
   text-align: center;
   text-transform: uppercase;
-}
-
-.grid-space {
-  padding-top: 20px;
 }
 
 .group-label {
@@ -52,16 +48,6 @@
   text-transform: uppercase;
 }
 
-::ng-deep .card-header {
-  background: #363636;
-  border-radius: 6px;
-  color: #FFF;
-}
-
-::ng-deep .card-body {
-  padding: 0;
-}
-
 .message {
   margin: 10px;
 }
@@ -74,8 +60,4 @@
 
 td, th {
   vertical-align: middle;
-}
-
-:host ::ng-deep .ui-autocomplete-token {
-  margin: 3px;
 }

@@ -1,17 +1,26 @@
-<ng-template *ngIf="configType === 'multiple'; else singleSelect">
+<div *ngIf="configType === 'single'">
+  <ng-selectize [options]="suggestedUsers"
+                [config]="globals.singleConfig"
+                placeholder="Search for..."
+                [(ngModel)]="filteredUser"
+                (ngModelChange)="submitUser($event)">
+  </ng-selectize>
+</div>
+
+<div *ngIf="configType === 'multiple'">
   <ng-selectize [options]="suggestedUsers"
                 [config]="globals.multipleConfig"
                 placeholder="Search for..."
                 [(ngModel)]="filteredMembers"
-                (ngModelChange)="submitUser($event)">
+                (ngModelChange)="submitUsersList($event)">
   </ng-selectize>
-</ng-template>
+</div>
 
-<ng-template #singleSelect>
-  <ng-selectize [options]="suggestedUsers"
-                [config]="globals.singleConfig"
+<div *ngIf="configType === 'groups'">
+  <ng-selectize [options]="suggestedGroups"
+                [config]="globals.multipleGroupConfig"
                 placeholder="Search for..."
-                [(ngModel)]="filteredMembers"
-                (ngModelChange)="submitUser($event)">
+                [(ngModel)]="filteredGroups"
+                (ngModelChange)="submitGroupsList($event)">
   </ng-selectize>
-</ng-template>
+</div>

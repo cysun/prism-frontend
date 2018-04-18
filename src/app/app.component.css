@@ -1,0 +1,22 @@
+.app-public-container {
+  background-attachment: fixed;
+  background-image: url("./../assets/calstatela-background-image.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100%;
+}
+
+.navbar-nav {
+  background-color: #1A1A1A;
+}
+
+.nav-link {
+  color: #FFF;
+}
+
+.nav-link:hover {
+  background: #FFCE00;
+  color: #000;
+  font-weight: bold;
+}

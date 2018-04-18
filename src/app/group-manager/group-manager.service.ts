@@ -12,49 +12,49 @@ export class GroupManagerService {
   constructor(private http: HttpClient) { }
 
   getGroups(): Observable<Group[]> {
-    return this.http.get<Group[]>('/api/groups');
+    return this.http.get<Group[]>(`/api/groups`);
   }
 
   getPrs(): Observable<Group> {
-    return this.http.get<Group>('/api/prs')
+    return this.http.get<Group>(`/api/prs`)
   }
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>('/api/users');
+    return this.http.get<User[]>(`/api/users`);
   }
 
   getGroup(id): Observable<Group> {
-    return this.http.get<Group>('/api/group/' + id);
+    return this.http.get<Group>(`/api/group/${id}`);
   }
 
   getUser(id): Observable<User> {
-    return this.http.get<User>('/api/user/' + id);
+    return this.http.get<User>(`/api/user/${id}`);
   }
 
   searchUser(username): Observable<User> {
     const params = new HttpParams().set('username', username);
-    return this.http.get<User>('/api/users', { params: params });
+    return this.http.get<User>(`/api/users`, { params: params });
   }
 
   addGroup(group: Group): Observable<Group> {
     const body = JSON.stringify({'_id': group._id, 'name': group.name, 'members': group.members});
-    return this.http.post<Group>('/api/group', body, this.HEADERS);
+    return this.http.post<Group>(`/api/group`, body, this.HEADERS);
   }
 
   updateGroup(group: Group): Observable<Group> {
     const body = JSON.stringify({'name': group.name});
-    return this.http.patch<Group>('/api/group/' + group._id, body, this.HEADERS);
+    return this.http.patch<Group>(`/api/group/${group._id}`, body, this.HEADERS);
   }
 
   deleteGroup(id): Observable<Group> {
-    return this.http.delete<Group>('/api/group/' + id, this.HEADERS);
+    return this.http.delete<Group>(`/api/group/${id}`, this.HEADERS);
   }
 
   addMember(userId, groupId): Observable<Group> {
-    return this.http.put<Group>('/api/group/' + groupId + '/member/' + userId, this.HEADERS);
+    return this.http.put<Group>(`/api/group/${groupId}/member/${userId}`, this.HEADERS);
   }
 
   deleteMember(groupId, memberId): Observable<Group> {
-      return this.http.delete<Group>('/api/group/' + groupId + '/member/' + memberId, this.HEADERS);
+      return this.http.delete<Group>(`/api/group/${groupId}/member/${memberId}`, this.HEADERS);
   }
 }

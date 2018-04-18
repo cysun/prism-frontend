@@ -8,6 +8,7 @@ import { User } from '../models/user.model';
 
 import { Globals } from '../shared/app.global';
 import { GroupManagerService } from './group-manager.service';
+import { SharedService } from '../shared/shared.service';
 
 @Component({
   selector: 'prism-group-manager',
@@ -19,30 +20,30 @@ export class GroupManagerComponent implements OnInit {
   modal: NgbModalRef;
 
   member: string;
-  currentUser: User = new User();
   group: Group = new Group();
 
   groups: Group[] = [];
   users: User[] = [];
-  memberList: User[] = [];
 
-  filteredMembers: any[] = [];
   suggestedUsers = [];
   alert: any;
 
-  constructor(private groupManagerService: GroupManagerService,
+  constructor(private globals: Globals,
+    private groupManagerService: GroupManagerService,
     private modalService: NgbModal,
     private router: Router,
-    private globals: Globals) { }
+    private sharedService: SharedService) { }
 
     ngOnInit() {
-      this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
-
-      this.groupManagerService.getUsers().subscribe( data => {
-        this.users = data;
-        this.suggestedUsers = data;
+      this.getUserList().then( () => {
+        this.getAllGroups().then( (data: Group[]) => {
+          for (let i = 0; i < data.length; i++) {
+            if (data[i].members.length > 0) {
+              this.groups[i].members = this.getMembersObject(data[i].members);
+            }
+          }
+        });
       })
-        this.getAllGroups();
     }
 
     /* Error messages when performing invalid actions */
@@ -69,21 +70,21 @@ export class GroupManagerComponent implements OnInit {
 
     /* Open a modal with purpose of manipulating data */
     editModal(content, groupId: string, memberId?: string) {
-      this.filteredMembers = [];
-
       if (this.modal) { this.modal.close(); }
 
       this.getUserList().then( () => {
         this.groupManagerService.getGroup(groupId).subscribe( data => {
           this.group = data;
+          this.sharedService.filteredUsers = null;
 
           for ( let i = 0; i < this.group.members.length; i++) {
-            for (let j = 0; j < this.suggestedUsers.length; j++) {
-              if (this.group.members[i] === this.suggestedUsers[j]._id) {
-                this.suggestedUsers.splice(j, 1);
+            for (let j = 0; j < this.users.length; j++) {
+              if (this.group.members[i] === this.users[j]._id) {
+                this.users.splice(j, 1);
               }
             }
           }
+          this.suggestedUsers = this.users;
 
           if (this.group.members.length > 0) {
             this.member = this.group.members.find( item => item === memberId);
@@ -103,17 +104,9 @@ export class GroupManagerComponent implements OnInit {
     /* Returns the list of groups */
     getAllGroups() {
       return new Promise((resolve, reject) => {
-        this.groupManagerService.getGroups().subscribe( data => {
+        this.groupManagerService.getGroups().subscribe( (data: Group[]) => {
           this.groups = data;
-          console.log('AHHHHHHHH')
-          console.log(data);
-
-          for (let i = 0; i < this.groups.length; i++) {
-            const members = this.groups[i].members;
-            this.groups[i].members = this.getMembersObject(members);
-          }
-          console.log(this.groups)
-          resolve();
+          resolve(data);
         }, err => {
           console.log(err);
           reject();
@@ -126,8 +119,8 @@ export class GroupManagerComponent implements OnInit {
       return new Promise((resolve, reject) => {
         this.groupManagerService.getUsers().subscribe( data => {
           this.users = data;
-          this.suggestedUsers = data;
-          this.suggestedUsers.sort(this.compareUsernames)
+          // this.suggestedUsers = data;
+          // this.suggestedUsers.sort(this.compareUsernames)
           resolve();
         })
       });
@@ -145,62 +138,62 @@ export class GroupManagerComponent implements OnInit {
             this.groupManagerService.addGroup(this.group).subscribe( data => {
               this.groups.push(data);
               this.groups = this.groups.slice(0);
-            }
-          );
-          this.closeModal();
+            });
+            this.closeModal();
+          } else {
+            this.invalidErrorMessage('existing group');
+          }
         } else {
-          this.invalidErrorMessage('existing group');
+          this.invalidErrorMessage('empty group');
         }
       } else {
         this.invalidErrorMessage('empty group');
       }
-    } else {
-      this.invalidErrorMessage('empty group');
     }
-  }
 
-  /* Function to delete an existing group */
-  deleteGroup(id: string) {
-    this.groupManagerService.deleteGroup(id).subscribe( () => {
-      for (let i = 0; i < this.groups.length; i++) {
-        if (this.groups[i]._id === id) {
-          this.groups.splice(i, 1);
-          break;
+    /* Function to delete an existing group */
+    deleteGroup(id: string) {
+      this.groupManagerService.deleteGroup(id).subscribe( () => {
+        for (let i = 0; i < this.groups.length; i++) {
+          if (this.groups[i]._id === id) {
+            this.groups.splice(i, 1);
+            break;
+          }
         }
-      }
-    });
-    this.closeModal();
-  }
+      });
+      this.closeModal();
+    }
 
-  /* Function to update a group's name and members */
-  updateGroup() {
-    /* Checks to see if there is a name change */
-    const findGroup = this.groups.find( item => item._id === this.group._id);
-    const nameChange = findGroup.name === this.group.name ? false : true;
+    /* Function to update a group's name and members */
+    updateGroup() {
+      /* Checks to see if there is a name change */
+      const findGroup = this.groups.find( item => item._id === this.group._id);
+      const nameChange = findGroup.name === this.group.name ? false : true;
 
-    /* Updating the group's name */
-    if (this.group.name.trim().length > 0 && nameChange) {
-      /* Checks if there is already a group with the given name */
-      if (this.groups.some(existingGroupName =>
-        existingGroupName.name.toLowerCase() === this.group.name.toLowerCase())) {
-          this.invalidErrorMessage('existing group');
+      /* Updating the group's name */
+      if (this.group.name.trim().length > 0 && nameChange) {
+        /* Checks if there is already a group with the given name */
+        if (this.groups.some(existingGroupName =>
+          existingGroupName.name.toLowerCase() === this.group.name.toLowerCase())) {
+            this.invalidErrorMessage('existing group');
+          } else {
+            this.groupManagerService.updateGroup(this.group).subscribe( updatedGroup => {
+              const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
+              updatedGroup.members = this.getMembersObject(updatedGroup.members);
+              this.groups[index] = updatedGroup;
+              this.modal.close();
+            });
+          }
         } else {
-          this.groupManagerService.updateGroup(this.group).subscribe( updatedGroup => {
-            const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
-            updatedGroup.members = this.getMembersObject(updatedGroup.members);
-            this.groups[index] = updatedGroup;
-            this.modal.close();
-          });
-        }
-      } else {
         if (!nameChange) { this.modal.close(); } else { this.invalidErrorMessage('empty group'); }
       }
 
       /* Adding members to the group */
-      if (this.filteredMembers.length > 0) {
-        for (let i = 0; i < this.filteredMembers.length; i++) {
-          this.groupManagerService.addMember(this.filteredMembers[i], this.group._id).subscribe( () => {
-            const newMember = this.getMembersObject([this.filteredMembers[i]]);
+      const filteredMembers = this.sharedService.filteredUsers;
+      if (filteredMembers.length > 0) {
+        for (let i = 0; i < filteredMembers.length; i++) {
+          this.groupManagerService.addMember(filteredMembers[i], this.group._id).subscribe( () => {
+            const newMember = this.getMembersObject([filteredMembers[i]]);
             const groupIndex = this.groups.findIndex(getGroup => getGroup._id === this.group._id);
             this.groups[groupIndex].members.push(newMember[0]);
           })
@@ -250,4 +243,4 @@ export class GroupManagerComponent implements OnInit {
       }
       return 0;
     }
-  }
+}

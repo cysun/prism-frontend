@@ -2,10 +2,14 @@
   padding-right: 5px;
 }
 
-.menu-grid {
-  /* background: #000; */
-  padding-left: 60px;
-  word-wrap: break-word;
+hr {
+  display:block;
+  height: 5px;
+  width: 100%;
+}
+
+.menu-list {
+  padding-top: 80px;
 }
 
 .menu-label {
@@ -15,23 +19,29 @@
   text-align: center;
 }
 
-.tab-grid{
-  /* background-color: #BEF9E9; */
-  padding-left: 30px;
-  padding-right: 20px;
+.nav-greeting {
+  padding: 15px;
 }
 
-.user-button {
-  padding: 4px;
-}
-
-.vertical-menu, a {
+.nav-side-menu {
   background-color: #EEE;
-  color: #000;
-  text-decoration: none;
-  width: 100%;
+  bottom: 0;
+  height: 100%;
+  overflow: auto;
+  position: fixed;
+  width: 275px;
 }
 
-.vertical-menu a:hover {
-    background-color: #CCC;
+.sidebar {
+  display: block;
+  position: fixed;
+  width: 250px;
+  z-index: 1;
+}
+
+@media (min-width: 990px) {
+  .main {
+    padding-left: 300px; /* 250 + 50 */
+    padding-right: 50px;
+  }
 }
