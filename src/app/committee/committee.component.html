@@ -1,8 +1,8 @@
-<div *ngIf="currentUser.isRootOrAdmin(); else nonAdmin">
+<div *ngIf="currentUser.isRootOrAdmin()">
   <prism-group-manager></prism-group-manager>
 </div>
 
-<ng-template #nonAdmin>
+<div *ngIf="!currentUser.isRootOrAdmin()">
   <div class="container-fluid">
     <div class="header-label">
       <div class="blockquote-header">
@@ -33,4 +33,4 @@
       </tbody>
     </table>
   </div>
-</ng-template>
+</div>

@@ -35,11 +35,15 @@ export class GroupManagerComponent implements OnInit {
     private sharedService: SharedService) { }
 
     ngOnInit() {
-      this.groupManagerService.getUsers().subscribe( data => {
-        this.users = data;
-        this.suggestedUsers = data;
+      this.getUserList().then( () => {
+        this.getAllGroups().then( (data: Group[]) => {
+          for (let i = 0; i < data.length; i++) {
+            if (data[i].members.length > 0) {
+              this.groups[i].members = this.getMembersObject(data[i].members);
+            }
+          }
+        });
       })
-        this.getAllGroups();
     }
 
     /* Error messages when performing invalid actions */
@@ -71,14 +75,16 @@ export class GroupManagerComponent implements OnInit {
       this.getUserList().then( () => {
         this.groupManagerService.getGroup(groupId).subscribe( data => {
           this.group = data;
+          this.sharedService.filteredUsers = null;
 
           for ( let i = 0; i < this.group.members.length; i++) {
-            for (let j = 0; j < this.suggestedUsers.length; j++) {
-              if (this.group.members[i] === this.suggestedUsers[j]._id) {
-                this.suggestedUsers.splice(j, 1);
+            for (let j = 0; j < this.users.length; j++) {
+              if (this.group.members[i] === this.users[j]._id) {
+                this.users.splice(j, 1);
               }
             }
           }
+          this.suggestedUsers = this.users;
 
           if (this.group.members.length > 0) {
             this.member = this.group.members.find( item => item === memberId);
@@ -98,14 +104,9 @@ export class GroupManagerComponent implements OnInit {
     /* Returns the list of groups */
     getAllGroups() {
       return new Promise((resolve, reject) => {
-        this.groupManagerService.getGroups().subscribe( data => {
+        this.groupManagerService.getGroups().subscribe( (data: Group[]) => {
           this.groups = data;
-
-          for (let i = 0; i < this.groups.length; i++) {
-            const members = this.groups[i].members;
-            this.groups[i].members = this.getMembersObject(members);
-          }
-          resolve();
+          resolve(data);
         }, err => {
           console.log(err);
           reject();
@@ -118,8 +119,8 @@ export class GroupManagerComponent implements OnInit {
       return new Promise((resolve, reject) => {
         this.groupManagerService.getUsers().subscribe( data => {
           this.users = data;
-          this.suggestedUsers = data;
-          this.suggestedUsers.sort(this.compareUsernames)
+          // this.suggestedUsers = data;
+          // this.suggestedUsers.sort(this.compareUsernames)
           resolve();
         })
       });
