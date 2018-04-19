@@ -4,6 +4,24 @@ import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 @Injectable()
 export class Globals {
 
+  maxFileSize = (2 ** 20) * 5;
+
+  /* Calendar colors for event dots */
+  calendarColors: any = {
+    red: {
+      primary: '#ad2121',
+      secondary: '#FAE3E3'
+    },
+    blue: {
+      primary: '#1e90ff',
+      secondary: '#D1E8FF'
+    },
+    yellow: {
+      primary: '#e3bc08',
+      secondary: '#FDF1BA'
+    }
+  };
+
   /* Config for bootstrap's modal */
   options: NgbModalOptions = {
     backdrop : 'static',

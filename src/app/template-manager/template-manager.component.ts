@@ -63,7 +63,7 @@ export class TemplateManagerComponent implements OnInit {
         this.file = event.target.files[0];
         this.fileName = event.target.files[0].name;
 
-        if ((this.file.size > (2 ** 20) * 5)) {
+        if (this.file.size > this.globals.maxFileSize) {
           this.alert = { message: 'File is too large.' };
         } else {
           this.alert = '';
@@ -73,7 +73,7 @@ export class TemplateManagerComponent implements OnInit {
 
     /* Post a template */
     postTemplate() {
-      if (this.file && (this.file.size <= (2 ** 20) * 5)) {
+      if (this.file && (this.file.size <= this.globals.maxFileSize)) {
         this.templateManagerService.createTemplate(this.currentTemplate.title,
           this.currentTemplate.completionEstimate).subscribe( data => {
             this.templates.push(data);
