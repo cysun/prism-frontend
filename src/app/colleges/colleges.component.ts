@@ -13,6 +13,7 @@ import { DepartmentService } from './departments/department.service';
 import { User } from '../models/user.model';
 import { College } from '../models/college.model';
 import { Department } from '../models/department.model';
+import { Group } from '../models/group.model';
 
 @Component({
   selector: 'prism-colleges',
@@ -51,7 +52,7 @@ export class CollegesComponent implements OnInit {
   // Fetch colleges and users
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.isAdmin = this.currentUser.groups.some( x => x.name === 'Administrators')
+    this.isAdmin = (<Group[]> this.currentUser.groups).some( x => x.name === 'Administrators')
     this.collegesService.getColleges().subscribe( data => {
       this.colleges = data;
     });
@@ -110,7 +111,7 @@ export class CollegesComponent implements OnInit {
       this.college = data;
       this.college.deans = this.getDeansObject(data.deans);
       if (this.college.deans.length > 0) {
-        this.deans = this.college.deans;
+        this.deans = <User[]> this.college.deans;
       }
     });
     this.modal = this.modalService.open(content, this.options);
@@ -121,7 +122,7 @@ export class CollegesComponent implements OnInit {
     this.collegesService.getCollege(collegeId).subscribe( data => {
       this.college = data;
       this.college.deans = this.getDeansObject(data.deans);
-      this.deans = this.college.deans;
+      this.deans = <User[]> this.college.deans;
     });
     this.modal = this.modalService.open(content, this.options);
   }

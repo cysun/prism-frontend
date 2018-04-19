@@ -56,30 +56,30 @@ export class ReviewListComponent implements OnInit {
           this.reviewsList[i].percentComplete = this.percentComplete(this.reviewsList[i]);
           this.getProgramData().then( (data: Program[]) => {
             const matchingProgramIndex = data.findIndex(x => x._id === this.reviewsList[i].program);
-            this.reviewsList[i].program = JSON.parse(JSON.stringify(data[matchingProgramIndex]));
+            this.reviewsList[i].program = data[matchingProgramIndex];
           })
           .then( () => {
-            const currentProgram: Program = JSON.parse(JSON.stringify(this.reviewsList[i].program));
+            const currentProgram: Program = <Program> this.reviewsList[i].program;
             this.getDepartmentData().then( (data: Department[]) => {
               const matchingDepartmentIndex = data.findIndex( x => x._id === currentProgram.department);
-              currentProgram.department = JSON.parse(JSON.stringify(data[matchingDepartmentIndex]));
+              currentProgram.department = data[matchingDepartmentIndex];
             })
             .then( () => {
               this.getCollegeData().then( (data: College[]) => {
-                const currentDepartment: Department = JSON.parse(JSON.stringify(currentProgram.department));
+                const currentDepartment: Department = <Department> currentProgram.department;
                 const matchingCollegeIndex = data.findIndex(x => x._id === currentDepartment.college);
-                currentDepartment.college = JSON.parse(JSON.stringify(data[matchingCollegeIndex]));
-                currentProgram.department = JSON.parse(JSON.stringify(currentDepartment));
-                this.reviewsList[i].program = JSON.parse(JSON.stringify(currentProgram));
+                currentDepartment.college = data[matchingCollegeIndex];
+                currentProgram.department = currentDepartment;
+                this.reviewsList[i].program = currentProgram;
               })
             })
           }).then(() => {
             const leadReviewers: User[] = [];
             for (let j = 0; j < this.reviewsList[i].leadReviewers.length; j++) {
-              this.getLeadReviewerData(this.reviewsList[i].leadReviewers[j])
+              this.getLeadReviewerData(<string> this.reviewsList[i].leadReviewers[j])
               .then( (data: User) => {
                 leadReviewers.push(data);
-                this.reviewsList[i].leadReviewers = JSON.parse(JSON.stringify(leadReviewers));
+                this.reviewsList[i].leadReviewers = leadReviewers;
               })
             }
           })
@@ -104,7 +104,7 @@ export class ReviewListComponent implements OnInit {
       const findReviewId = this.reviewsList.findIndex( x => x._id === reviewId);
 
       for (let i = 0; i < data.leadReviewers.length; i++) {
-        this.getLeadReviewerData(data.leadReviewers[i]).then( (user: User) => {
+        this.getLeadReviewerData(<string> data.leadReviewers[i]).then( (user: User) => {
           leadReviewersData.push(user);
           this.reviewsList[findReviewId].leadReviewers = JSON.parse(JSON.stringify(leadReviewersData));
         })
@@ -138,7 +138,7 @@ export class ReviewListComponent implements OnInit {
        this.reviewsList[editLeadReviewerId].leadReviewers = this.currentReview.leadReviewers;
 
        const ids = leadReviewers.map( user => user._id);
-       this.addLeadReviewers(this.currentReview._id, this.currentReview.program, ids);
+       this.addLeadReviewers(this.currentReview._id, <string> this.currentReview.program, ids);
      } else {
        this.alert = { message: 'Please allow at least one lead reviewer.' };
      }
@@ -241,15 +241,15 @@ export class ReviewListComponent implements OnInit {
 
   getReviewData(review: Review) {
     return new Promise((resolve, reject) => {
-      this.getProgramData(review.program).then ( (program: Program) =>
+      this.getProgramData(<string> review.program).then ( (program: Program) =>
       review.program = JSON.parse(JSON.stringify(program))).then( () => {
         const currentProgram: Program = JSON.parse(JSON.stringify(review.program));
 
-        this.getDepartmentData(currentProgram.department).then ( (department: Department) => {
+        this.getDepartmentData(<string> currentProgram.department).then ( (department: Department) => {
           currentProgram.department = JSON.parse(JSON.stringify(department));
         }).then ( () => {
           const currentDepartment: Department = JSON.parse(JSON.stringify(currentProgram.department));
-          this.getCollegeData(currentDepartment.college).then( (college: College) => {
+          this.getCollegeData(<string> currentDepartment.college).then( (college: College) => {
             currentDepartment.college = JSON.parse(JSON.stringify(college));
             currentProgram.department = JSON.parse(JSON.stringify(currentDepartment));
             review.program = JSON.parse(JSON.stringify(currentProgram));
@@ -280,7 +280,7 @@ export class ReviewListComponent implements OnInit {
     if (leadReviewers) {
       this.reviewService.createReview(this.selectedOption).subscribe( data => {
         this.getReviewData(data).then( () => {
-          this.addLeadReviewers(data._id, data.program, leadReviewers);
+          this.addLeadReviewers(data._id, <string> data.program, leadReviewers);
           this.sharedService.filteredUsers = null;
           this.alert = '';
           this.closeModal();
@@ -323,7 +323,7 @@ export class ReviewListComponent implements OnInit {
         const leadReviewers: User[] = [];
 
         for (let i = 0; i < this.currentReview.leadReviewers.length; i++) {
-          this.getLeadReviewerData(this.currentReview.leadReviewers[i])
+          this.getLeadReviewerData(<string> this.currentReview.leadReviewers[i])
           .then( (userData: User) => {
             leadReviewers.push(userData);
           }).then( () => {
