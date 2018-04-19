@@ -84,9 +84,11 @@ export class SettingsComponent implements OnInit {
           this.updateInfo = false;
         }
       }, (err) => {
-        console.log(err)
+        console.log(err);
         this.invalidErrorMessage('invalid email');
+        validInfo = false;
       })
+      return;
     } else {
       this.invalidErrorMessage('empty fields');
       validInfo = false;
