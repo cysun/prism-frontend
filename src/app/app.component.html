@@ -73,7 +73,7 @@
   </div>
 </div>
 
-<div class="app-public-container" *ngIf="!authService.isAuthenticated()">
+<div class="app-public-container" *ngIf="!authService.isAuthenticated() || externalUser">
   <div class="main">
     <router-outlet></router-outlet>
   </div>
