@@ -13,10 +13,9 @@ import { UserResponse } from './models/user-response.model';
 })
 
 export class AppComponent implements OnInit {
-  username: string;
-  isCollapsed = false;
   currentUser: UserResponse;
-  isAdmin: boolean;
+  externalUser: boolean;
+  username: string;
 
   constructor(private authService: AuthService,
     private sharedService: SharedService,
@@ -24,6 +23,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     if (this.authService.isAuthenticated()) {
+      this.externalUser = false;
       const castedUser: UserResponse = JSON.parse(localStorage.getItem('currentUser'));
       this.currentUser = new UserResponse(castedUser.user, castedUser.groups, castedUser.token);
 
@@ -37,6 +37,8 @@ export class AppComponent implements OnInit {
         const user = this.authService.getUser();
         this.username = user.user.username;
       }
+    } else if (this.router.url.includes('external-upload')) {
+      this.externalUser = true;
     } else {
       setTimeout(this.ngOnInit.bind(this), 20);
     }
