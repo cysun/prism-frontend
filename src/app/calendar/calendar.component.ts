@@ -289,6 +289,12 @@ export class CalendarComponent implements OnInit {
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
       this.fileName = event.target.files[0].name;
+
+      if ((this.file.size > (2 ** 20) * 5)) {
+        this.alert = { message: 'File is too large to upload.' };
+      } else {
+        this.alert = '';
+      }
     }
   }
 

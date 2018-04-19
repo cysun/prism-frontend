@@ -92,6 +92,12 @@ export class DocumentComponent implements OnInit {
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
       this.fileName = event.target.files[0].name;
+
+      if ((this.file.size > (2 ** 20) * 5)) {
+        this.alert = { message: 'File is too large.' };
+      } else {
+        this.alert = '';
+      }
     }
   }
 
@@ -203,7 +209,7 @@ export class DocumentComponent implements OnInit {
 
   /* Upload revision message and the file being sent */
   uploadRevision() {
-    if (this.file && this.message) {
+    if (this.file && this.message && (this.file.size <= (2 ** 20) * 5)) {
       this.documentService.postRevision(this.document._id, this.message).subscribe( data => {
         const numOfRevisions = this.getNumOfRevisions();
         this.retrieveDocument();
@@ -214,7 +220,7 @@ export class DocumentComponent implements OnInit {
         console.log(err)
       });
     } else if (!this.file) {
-      this.alert = { message: 'Please attach a file.' };
+      this.alert = { message: 'Please attach a file with size ~5 MB.' };
     }
   }
 

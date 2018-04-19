@@ -62,12 +62,18 @@ export class TemplateManagerComponent implements OnInit {
       if (event.target.files.length > 0) {
         this.file = event.target.files[0];
         this.fileName = event.target.files[0].name;
+
+        if ((this.file.size > (2 ** 20) * 5)) {
+          this.alert = { message: 'File is too large.' };
+        } else {
+          this.alert = '';
+        }
       }
     }
 
     /* Post a template */
     postTemplate() {
-      if (this.file) {
+      if (this.file && (this.file.size <= (2 ** 20) * 5)) {
         this.templateManagerService.createTemplate(this.currentTemplate.title,
           this.currentTemplate.completionEstimate).subscribe( data => {
             this.templates.push(data);
@@ -81,7 +87,7 @@ export class TemplateManagerComponent implements OnInit {
             console.log(err)
           });
         } else {
-          this.alert = { message: 'Please attach a file.' };
+          this.alert = { message: 'Please attach a file with size ~ 5 MB.' };
         }
       }
 
