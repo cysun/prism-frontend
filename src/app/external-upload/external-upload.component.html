@@ -20,7 +20,7 @@
     <strong>Message from Administrator: </strong> {{externalReport.message}}
   </div>
 
-  <div class="grid-space" *ngIf="!externalReport.completed">
+  <div class="grid-space" *ngIf="!externalReport.completed && !externalReport.disabled">
     <div class="custom-file">
       <input name="file" type="file" class="custom-file-input"
              accept="application/pdf, application/msword,
@@ -42,6 +42,13 @@
     <div class="grid-space">
       <i style="color: #008000;" class="fa fa-3x fa-check-circle"></i>
       <div><strong>{{ externalReport.document?.title }} has been submitted.</strong></div>
+    </div>
+  </div>
+
+  <div *ngIf="externalReport.disabled">
+    <div class="grid-space">
+      <i style="color: #CC0000;" class="fa fa-3x fa-times-circle"></i>
+      <div><strong>{{ externalReport.document?.title }} submission has been canceled.</strong></div>
     </div>
   </div>
 </div>
