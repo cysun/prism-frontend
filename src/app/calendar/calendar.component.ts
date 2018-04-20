@@ -10,6 +10,7 @@ import {
 import { Subject } from 'rxjs/Subject';
 
 import { CustomEventTitleFormatter } from './custom-event-title-formatter.provider';
+import { Document } from '../models/document.model';
 import { Event } from '../models/event.model';
 import { Globals } from '../shared/app.global';
 import { Group } from '../models/group.model';
@@ -163,7 +164,8 @@ export class CalendarComponent implements OnInit {
           this.inviteToEvent(this.newEvent._id);
 
           let docId = '';
-          if (this.newEvent.documents[0]) { docId = this.newEvent.documents[0]._id; }
+          const firstDocument: Document = <Document> this.newEvent.documents[0];
+          if (firstDocument) { docId = firstDocument._id; }
           this.uploadAttachment(this.newEvent._id, docId);
         })
       }
@@ -249,8 +251,8 @@ export class CalendarComponent implements OnInit {
           minute: convertedDate.getMinutes(),
           second: convertedDate.getSeconds()
         };
-        this.suggestedGroups = this.newEvent.groups;
-        this.suggestedUsers = this.newEvent.people;
+        this.suggestedGroups = <Group[]> this.newEvent.groups;
+        this.suggestedUsers = <User[]> this.newEvent.people;
       })
     } else {
       this.newEvent = new Event();
@@ -288,7 +290,8 @@ export class CalendarComponent implements OnInit {
     if (this.file && this.message && (this.file.size <= this.globals.maxFileSize)) {
       if (documentId && documentId.length > 0) {
         this.documentService.postRevision(documentId, this.message).subscribe( () => {
-          const numOfRevisions = Object.keys(this.newEvent.documents[0].revisions).length;
+          const firstDocument: Document = <Document> this.newEvent.documents[0];
+          const numOfRevisions = Object.keys(firstDocument.revisions).length;
           this.documentService.uploadFile(documentId, numOfRevisions, this.file).subscribe( () => {
             this.message = '';
             this.file = null;

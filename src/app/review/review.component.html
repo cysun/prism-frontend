@@ -42,7 +42,7 @@
 <button class="btn btn-dark" (click)="location.back()"><i class="fa fa-arrow-circle-left"></i> Back</button>
 
 <h1 class="display-4">{{review && review.program && review.program.name ? review.program.name : ''}} Review {{yearString}}</h1>
-<svg id="svg-canvas" width="1280" height="200"></svg>
+<svg id="svg-canvas" style="width: 100%;" height="200"></svg>
 <hr />
 <button class="btn btn-primary" (click)="openModal(addNodeModal)">Add Document</button>
 <br />

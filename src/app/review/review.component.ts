@@ -109,7 +109,8 @@ export class ReviewComponent implements OnInit {
     render(d3.select('svg g'), g);
 
     const initialScale = 0.75;
-    svg.call(zoom.transform, d3.zoomIdentity.translate((svg.attr('width') - g.graph().width * initialScale) / 2, 20).scale(initialScale));
+    svg.call(zoom.transform, d3.zoomIdentity.translate((svg.node().getBBox().width - g.graph().width * initialScale) / 2, 20)
+      .scale(initialScale));
 
     const componentScope = this;
     d3.select('svg g').selectAll('g.node')
@@ -119,7 +120,7 @@ export class ReviewComponent implements OnInit {
       })
       .each(function(nodeId) {
         this.addEventListener('click', function() {
-          componentScope.documentId = componentScope.review.nodes[nodeId].document;
+          componentScope.documentId = <string> componentScope.review.nodes[nodeId].document;
           componentScope.nodeId = nodeId;
           if (componentScope.documentComponent) {
             setTimeout(() => {componentScope.documentComponent.ngOnInit()}, 30);

@@ -347,14 +347,14 @@ export class DocumentComponent implements OnInit {
   /* Subscribe to a document */
   subscribeToDocument() {
     this.documentService.subscribeToDocument(this.document._id).subscribe( () => {
-      this.document.subscribers.push(this.currentUser.user._id);
+      (<string[]> this.document.subscribers).push(this.currentUser.user._id);
     })
   }
 
   /* Subscribe to a document */
   unsubscribeFromDocument() {
     this.documentService.unsubscribeFromDocument(this.document._id).subscribe( () => {
-      const findUserId = this.document.subscribers.findIndex(item => item._id === this.currentUser.user._id);
+      const findUserId = (<string[]> this.document.subscribers).indexOf(this.currentUser.user._id);
       this.document.subscribers.splice(findUserId, 1);
     })
   }
@@ -362,7 +362,7 @@ export class DocumentComponent implements OnInit {
   /* Check if current user is already subscribed to the document */
   isSubscribed() {
     if (this.document.subscribers) {
-      return this.document.subscribers.includes(this.currentUser.user._id);
+      return (<string[]> this.document.subscribers).includes(this.currentUser.user._id);
     }
     return false;
   }
