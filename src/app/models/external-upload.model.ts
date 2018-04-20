@@ -8,4 +8,5 @@ export class ExternalUpload {
   message: string;
   token: string;
   completed: boolean;
+  disabled: boolean;
 }

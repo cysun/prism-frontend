@@ -48,21 +48,6 @@ export class CalendarComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
   @ViewChild('addNewEventModal') addNewEventModal: TemplateRef<any>;
 
-  colors: any = {
-    red: {
-      primary: '#ad2121',
-      secondary: '#FAE3E3'
-    },
-    blue: {
-      primary: '#1e90ff',
-      secondary: '#D1E8FF'
-    },
-    yellow: {
-      primary: '#e3bc08',
-      secondary: '#FDF1BA'
-    }
-  };
-
   activeDayIsOpen = false;
   newEvent: Event = new Event();
   view = 'month';
@@ -199,7 +184,7 @@ export class CalendarComponent implements OnInit {
       id: newEvent._id,
       start: new Date(newEvent.date),
       title: newEvent.title + (newEvent.canceled ? ' (Canceled)' : ''),
-      color: (newEvent.canceled ? this.colors.red : this.colors.yellow),
+      color: (newEvent.canceled ? this.globals.calendarColors.red : this.globals.calendarColors.yellow),
       actions: this.currentUser.isRootOrAdmin() ? this.actions : null,
       meta: newEvent,
     });
@@ -234,7 +219,7 @@ export class CalendarComponent implements OnInit {
 
         this.events[findEventIndex].title += ' (Canceled)';
         this.events[findEventIndex].meta.canceled = true;
-        this.events[findEventIndex].color = this.colors.red;
+        this.events[findEventIndex].color = this.globals.calendarColors.red;
       })
       this.closeModal();
     }
@@ -292,7 +277,7 @@ export class CalendarComponent implements OnInit {
       this.file = event.target.files[0];
       this.fileName = event.target.files[0].name;
 
-      if ((this.file.size > (2 ** 20) * 5)) {
+      if (this.file.size > this.globals.maxFileSize) {
         this.alert = { message: 'File is too large to upload.' };
       } else {
         this.alert = '';
@@ -302,7 +287,7 @@ export class CalendarComponent implements OnInit {
 
   /* Upload revision message and the file being sent */
   uploadAttachment(eventId: string, documentId?: string) {
-    if (this.file && this.message) {
+    if (this.file && this.message && (this.file.size <= this.globals.maxFileSize)) {
       if (documentId && documentId.length > 0) {
         this.documentService.postRevision(documentId, this.message).subscribe( () => {
           const firstDocument: Document = <Document> this.newEvent.documents[0];

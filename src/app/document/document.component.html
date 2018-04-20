@@ -1,22 +1,58 @@
-<button class="btn btn-dark" *ngIf="document.template" (click)="location.back()"><i class="fa fa-arrow-circle-left"></i> Back</button>
+<button class="btn btn-dark" *ngIf="document.template" (click)="location.back()">
+  <i class="fa fa-arrow-circle-left"></i> Back
+</button>
 
 <div class="container-fluid document-header">
   <div class="header-label">
-    <span class="label">{{ documentTitle }}</span>
+    <span class="btn-toolbar" role="toolbar">
+      <span class="label">{{ documentTitle }}</span>
+      <span class="btn-group mr-2" role="group">
+        <button *ngIf="documentTitle === 'External Review Report' && !document.locked"
+                type="button" class="btn btn-outline-dark"
+                (click)=openModal(createExternalUploadModal)
+                placement="top" ngbTooltip="Create External Upload">
+          <i class="fa fa-plus"></i>
+        </button>
 
-    <button *ngIf="documentTitle === 'External Review Report' && !document.locked" type="button" class="btn btn-dark" (click)=openModal(createExternalUploadModal)><i class="fa fa-icon fa-plus"></i>Create External Account</button>
-    <button *ngIf="documentTitle !== 'External Review Report' && !document.locked" type="button" class="btn btn-dark" (click)=openModal(editDocumentNameModal)><i class="fa fa-icon fa-pencil"></i>Edit</button>
-    <button *ngIf="reviewId && !document.locked" type="button" class="btn btn-success" (click)=openModal(finishDateModal)><i class="fa fa-icon fa-clock-o"></i>Change Estimated Completion</button>
-    <button *ngIf="reviewId && currentUser.isRootOrAdmin() && !document.locked" type="button" class="btn btn-danger" (click)=openModal(finalizeNodeModal)><i class="fa fa-icon fa-exclamation-triangle"></i>Finalize</button>
+        <button *ngIf="documentTitle !== 'External Review Report' && !document.locked"
+                type="button" class="btn btn-outline-dark"
+                (click)=openModal(editDocumentNameModal)
+                placement="top" ngbTooltip="Edit Document Name">
+          <i class="fa fa-pencil"></i>
+        </button>
+
+        <button *ngIf="reviewId && !document.locked" type="button"
+                class="btn btn-outline-dark" (click)=openModal(finishDateModal)
+                placement="top" ngbTooltip="Change Estimated Completion">
+          <i class="fa fa-clock-o"></i>
+        </button>
+
+        <button *ngIf="reviewId && currentUser.isRootOrAdmin() && !document.locked"
+                type="button" class="btn btn-outline-dark"
+                (click)=openModal(finalizeNodeModal)
+                placement="top" ngbTooltip="Finalize Document">
+          <i class="fa fa-check-circle"></i>
+        </button>
+      </span>
+
+
+
+    </span>
+
+
     <span class ="document-btn-right">
       <button *ngIf="!document.locked" type="button" class="btn btn-danger" (click)="isSubscribed() ? unsubscribeFromDocument() : subscribeToDocument()">
         <span *ngIf="!isSubscribed(); else subscribable"><i class="fa fa-icon fa-eye"></i>Watch</span>
         <ng-template #subscribable><i class="fa fa-icon fa-eye-slash"></i>Un-watch</ng-template>
       </button>
-      <span *ngIf="document.locked">
+      <div *ngIf="document.locked" style="padding-top:10px;">
         <i class="fa fa-lock"></i> Finalized
-      </span>
+      </div>
     </span>
+
+
+
+
   </div>
 </div>
 
@@ -35,10 +71,10 @@
       </div>
       <div class="modal-message">
         <div class="text-hints">
-          <i class="fa fa-exclamation-circle"></i> This will create a
-          unique account for the external reviewer to upload their report for
-          the given review. Once the account is created, they shall receive an
-          email with a link to this document.
+          <i class="fa fa-exclamation-circle"></i> This will create a place for
+          the external reviewer to upload their report for the given review.
+          Once the account is created, they shall receive an email with a link
+          to this document.
         </div>
 
         <div class="form-row grid-space">
@@ -127,7 +163,7 @@
         <i class="fa fa-icon fa-edit"></i><strong>Revision Message:</strong> {{ currentRevision.message }}<br/>
         <i class="fa fa-icon fa-calendar"></i><strong>Date Uploaded:</strong> {{ currentRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss' }}<br/>
         <i class="fa fa-icon fa-user"></i><strong>Uploader:</strong> {{ currentRevision.uploader?.username }}<br/>
-        <i class="fa fa-icon fa-file-o"></i><strong>File Name:</strong> {{ currentRevision.originalFilename }}
+        <span *ngIf="currentRevision.originalFilename"><i class="fa fa-icon fa-file-o"></i><strong>File Name:</strong> {{ currentRevision.originalFilename }}</span>
       </div>
     </div>
   </div>
@@ -402,7 +438,9 @@
       <div class="container-fluid container-fluid-content">
 
         <div class="form-row">
-          <div class="col-md-7"><button type="button" class="btn btn-dark" (click)="openModal(newCommentModal)">New Comment</button></div>
+          <div class="col-md-7" style="padding-bottom: 20px;">
+            <button type="button" class="btn btn-dark" (click)="openModal(newCommentModal)">New Comment</button>
+          </div>
           <div class="form-group col-md-5" *ngIf="selectedFilter">
             <select class="custom-select rounded-0" [(ngModel)]="selectedFilter" name="document-files">
               <option *ngFor="let option of checkDeletedRevisions(document.revisions, 'Deleted revision') | reverse; let idx = index" [ngValue]="option._id">
@@ -474,4 +512,45 @@
       </div>
     </ng-template>
   </ngb-tab>
+
+  <div *ngIf="documentTitle === 'External Review Report'">
+    <ngb-tab [disabled]="!this.currentUser.isRootOrAdmin() || externalUploadsList.length <= 0">
+      <ng-template ngbTabTitle><i class="fa fa-icon fa-arrow-circle-up"></i>External Uploads</ng-template>
+      <ng-template ngbTabContent>
+        <div class="container-fluid container-fluid-content">
+          <div class="list-group grid-space" *ngFor="let externalUpload of externalUploadsList">
+            <a routerLink="/external-upload/{{externalUpload.token}}" class="list-group-item list-group-item-action flex-column align-items-start">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">
+                  {{externalUpload?.user?.name?.first}} {{externalUpload?.user?.name?.last}}
+                  ({{externalUpload?.user?.email}})
+                </h5>
+                <small class="text-muted">
+                  <strong>Status: </strong>
+                  <span *ngIf="externalUpload.disabled; else notCanceled">Canceled</span>
+                  <ng-template #notCanceled>
+                    {{externalUpload.completed ? 'Completed' : 'Not Completed'}}
+                  </ng-template>
+                </small>
+              </div>
+              <p class="mb-1">
+                <strong><i class="fa fa-icon fa-user"></i>Username: </strong> {{externalUpload?.user.username}} <br/>
+                <strong><i class="fa fa-icon fa-envelope"></i>Message: </strong> {{ externalUpload.message }}
+              </p>
+              <small class="text-muted">
+                <i class="fa fa-exclamation-circle"></i> Click to be taken to the
+                URL e-mailed to the external reviewer. You may copy the link and
+                send it to them personally in case they lose it.
+              </small>
+            </a>
+            <button class="btn btn-danger"
+                    (click)="cancelExternalUpload(externalUpload.token)"
+                    [disabled]="externalUpload.completed || externalUpload.disabled">
+              <i class="fa fa-icon fa-ban"></i>Cancel
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+  </div>
 </ngb-tabset>

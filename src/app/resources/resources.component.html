@@ -33,13 +33,20 @@
   <form #f="ngForm" (ngSubmit)="postNewResource()">
     <div class="modal-body">
       <div *ngIf="alert">
-        <ngb-alert type="danger" [dismissible]="false"><i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}</ngb-alert>
+        <ngb-alert type="danger" [dismissible]="false">
+          <i class="fa fa-icon fa-exclamation-circle"></i>
+          <strong>Error:</strong> {{ alert.message }}
+        </ngb-alert>
       </div>
       <div class="modal-message">
 
         <div class="custom-file" style="text-align: left;">
           <input name="file" type="file" class="custom-file-input"
-           accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" (change)="onFileChange($event)">
+                 accept="application/pdf, application/msword,
+                         application/vnd.openxmlformats-officedocument.wordprocessingml.document,
+                         application/vnd.ms-powerpoint,
+                         application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                 (change)="onFileChange($event)">
 
           <label class="custom-file-label">
             {{ fileName ? fileName : 'Choose a file'}}

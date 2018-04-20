@@ -5,12 +5,14 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Comment } from '../models/comment.model';
 import { Document } from '../models/document.model';
+import { ExternalUpload } from '../models/external-upload.model';
 import { Revision } from '../models/revision.model';
 import { User } from '../models/user.model';
 import { UserResponse } from '../models/user-response.model';
 import { Globals } from '../shared/app.global';
 
 import { DocumentService } from './document.service';
+import { GroupManagerService } from '../group-manager/group-manager.service';
 import { ReviewService } from '../review/review.service';
 
 import { saveAs } from 'file-saver';
@@ -31,6 +33,7 @@ export class DocumentComponent implements OnInit {
   currentRevision: Revision = new Revision();
   mainRevision: Revision = new Revision();
   selectedComment: Comment = new Comment();
+  externalUploadsList: ExternalUpload[] = [];
 
   validComment = true;
   performDelete = false;
@@ -54,6 +57,7 @@ export class DocumentComponent implements OnInit {
   newCompletionDate: Date;
 
   constructor(private documentService: DocumentService,
+              private groupManagerService: GroupManagerService,
               private reviewService: ReviewService,
               private modalService: NgbModal,
               private route: ActivatedRoute,
@@ -85,6 +89,10 @@ export class DocumentComponent implements OnInit {
       this.totalIndices = this.getNumOfRevisions();
       this.getLatestRevision();
     });
+
+    this.documentService.getAllExternalUploads(this.documentId).subscribe( data => {
+      this.externalUploadsList = data;
+    });
   }
 
   /* Set file variable to the file the user has chosen */
@@ -93,7 +101,7 @@ export class DocumentComponent implements OnInit {
       this.file = event.target.files[0];
       this.fileName = event.target.files[0].name;
 
-      if ((this.file.size > (2 ** 20) * 5)) {
+      if (this.file.size > this.globals.maxFileSize) {
         this.alert = { message: 'File is too large.' };
       } else {
         this.alert = '';
@@ -209,7 +217,7 @@ export class DocumentComponent implements OnInit {
 
   /* Upload revision message and the file being sent */
   uploadRevision() {
-    if (this.file && this.message && (this.file.size <= (2 ** 20) * 5)) {
+    if (this.file && this.message && (this.file.size <= this.globals.maxFileSize)) {
       this.documentService.postRevision(this.document._id, this.message).subscribe( data => {
         const numOfRevisions = this.getNumOfRevisions();
         this.retrieveDocument();
@@ -217,7 +225,7 @@ export class DocumentComponent implements OnInit {
 
         this.closeModal();
       }, (err) => {
-        console.log(err)
+        console.log(err);
       });
     } else if (!this.file) {
       this.alert = { message: 'Please attach a file with size ~5 MB.' };
@@ -376,14 +384,25 @@ export class DocumentComponent implements OnInit {
     });
   }
 
+  /* Create an external upload page for external submission */
   createExternalUpload() {
-    console.log(this.externalReviewer);
     this.documentService.createExternalUpload(this.document._id, this.externalReviewer, this.externalMessage).subscribe (
       data => {
-        this.closeModal();
+        this.groupManagerService.getUser(data.user).subscribe( userData => {
+          data.user = userData;
+          this.externalUploadsList.push(data);
+          this.closeModal();
+        })
       }, (err) => {
         this.alert = { 'message': 'Username already exists. Please use a unique username.' };
-      }
-    )
+      })
+  }
+
+  /* Cancel an external upload from being used */
+  cancelExternalUpload(token: string) {
+    this.documentService.cancelExternalUpload(token).subscribe( () => {
+      const matchingIndex = this.externalUploadsList.findIndex(x => x.token === token);
+      this.externalUploadsList[matchingIndex].disabled = true;
+    });
   }
 }

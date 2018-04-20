@@ -28,6 +28,7 @@
 
 .document-btn-right {
   float: right;
+  margin-top: -40px;
 }
 
 .document-header {
