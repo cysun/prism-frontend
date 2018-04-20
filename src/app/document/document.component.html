@@ -35,10 +35,10 @@
       </div>
       <div class="modal-message">
         <div class="text-hints">
-          <i class="fa fa-exclamation-circle"></i> This will create a
-          unique account for the external reviewer to upload their report for
-          the given review. Once the account is created, they shall receive an
-          email with a link to this document.
+          <i class="fa fa-exclamation-circle"></i> This will create a place for
+          the external reviewer to upload their report for the given review.
+          Once the account is created, they shall receive an email with a link
+          to this document.
         </div>
 
         <div class="form-row grid-space">
@@ -127,7 +127,7 @@
         <i class="fa fa-icon fa-edit"></i><strong>Revision Message:</strong> {{ currentRevision.message }}<br/>
         <i class="fa fa-icon fa-calendar"></i><strong>Date Uploaded:</strong> {{ currentRevision.dateUploaded | date: 'MM/dd/yyyy hh:mm:ss' }}<br/>
         <i class="fa fa-icon fa-user"></i><strong>Uploader:</strong> {{ currentRevision.uploader?.username }}<br/>
-        <i class="fa fa-icon fa-file-o"></i><strong>File Name:</strong> {{ currentRevision.originalFilename }}
+        <span *ngIf="currentRevision.originalFilename"><i class="fa fa-icon fa-file-o"></i><strong>File Name:</strong> {{ currentRevision.originalFilename }}</span>
       </div>
     </div>
   </div>
@@ -474,4 +474,45 @@
       </div>
     </ng-template>
   </ngb-tab>
+
+  <div *ngIf="documentTitle === 'External Review Report'">
+    <ngb-tab [disabled]="!this.currentUser.isRootOrAdmin() || externalUploadsList.length <= 0">
+      <ng-template ngbTabTitle><i class="fa fa-icon fa-arrow-circle-up"></i>External Uploads</ng-template>
+      <ng-template ngbTabContent>
+        <div class="container-fluid container-fluid-content">
+          <div class="list-group grid-space" *ngFor="let externalUpload of externalUploadsList">
+            <a routerLink="/external-upload/{{externalUpload.token}}" class="list-group-item list-group-item-action flex-column align-items-start">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">
+                  {{externalUpload?.user?.name?.first}} {{externalUpload?.user?.name?.last}}
+                  ({{externalUpload?.user?.email}})
+                </h5>
+                <small class="text-muted">
+                  <strong>Status: </strong>
+                  <span *ngIf="externalUpload.disabled; else notCanceled">Canceled</span>
+                  <ng-template #notCanceled>
+                    {{externalUpload.completed ? 'Completed' : 'Not Completed'}}
+                  </ng-template>
+                </small>
+              </div>
+              <p class="mb-1">
+                <strong><i class="fa fa-icon fa-user"></i>Username: </strong> {{externalUpload?.user.username}} <br/>
+                <strong><i class="fa fa-icon fa-envelope"></i>Message: </strong> {{ externalUpload.message }}
+              </p>
+              <small class="text-muted">
+                <i class="fa fa-exclamation-circle"></i> Click to be taken to the
+                URL e-mailed to the external reviewer. You may copy the link and
+                send it to them personally in case they lose it.
+              </small>
+            </a>
+            <button class="btn btn-danger"
+                    (click)="cancelExternalUpload(externalUpload.token)"
+                    [disabled]="externalUpload.completed || externalUpload.disabled">
+              <i class="fa fa-icon fa-ban"></i>Cancel
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+  </div>
 </ngb-tabset>
