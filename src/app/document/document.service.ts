@@ -114,4 +114,14 @@ export class DocumentService {
     return this.http.post<ExternalUpload>(`/api/document/${documentId}/external-upload`,
       { user: externalReviewer, message: externalMessage }, this.HEADERS);
   }
+
+  /* Get all external uploads created */
+  getAllExternalUploads(documentId: string): Observable<ExternalUpload[]> {
+    return this.http.get<ExternalUpload[]>(`/api/document/${documentId}/external-uploads`);
+  }
+
+  /* Cancel an external upload from being used */
+  cancelExternalUpload(token: string) {
+    return this.http.post(`/api/external-upload/${token}/cancel`, null);
+  }
 }
