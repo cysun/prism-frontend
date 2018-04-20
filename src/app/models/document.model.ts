@@ -1,14 +1,16 @@
 import { Comment } from './comment.model';
+import { Group } from './group.model';
 import { Revision } from './revision.model';
+import { User } from './user.model';
 
 export class Document {
   _id: string;
   title: string;
 
-  groups: any[];
+  groups: Group[] | string[];
   revisions: Revision[];
   comments: Comment[];
-  subscribers: any[];
+  subscribers: User[] | string[];
 
   template: boolean;
   coreTemplate: boolean;

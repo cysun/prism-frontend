@@ -9,7 +9,7 @@ export class Event {
   date: Date;
   canceled: boolean;
   sendNotifications: boolean;
-  documents: Document[];
-  groups: Group[];
-  people: User[];
+  documents: Document[] | string[];
+  groups: Group[] | string[];
+  people: User[] | string[];
 }

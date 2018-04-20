@@ -1,3 +1,5 @@
+import { Group } from './group.model';
+
 export class User {
   _id: string;
   username: string;
@@ -8,7 +10,7 @@ export class User {
     last: string;
   };
 
-  groups: any[];
+  groups: Group[] | string[];
 
   internal: boolean;
   root: boolean;

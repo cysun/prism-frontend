@@ -119,7 +119,7 @@ export class ReviewComponent implements OnInit {
       })
       .each(function(nodeId) {
         this.addEventListener('click', function() {
-          componentScope.documentId = componentScope.review.nodes[nodeId].document;
+          componentScope.documentId = <string> componentScope.review.nodes[nodeId].document;
           componentScope.nodeId = nodeId;
           if (componentScope.documentComponent) {
             setTimeout(() => {componentScope.documentComponent.ngOnInit()}, 30);

@@ -148,8 +148,8 @@
     </button>
   </div>
 
-  <div class="row" *ngIf="reviewsList.length > 0; else emptyReviews">
-    <ng-container *ngFor="let review of reviewsList">
+  <div class="row" *ngIf="reviews.length > 0; else emptyReviews">
+    <ng-container *ngFor="let review of reviews">
       <div class="col-sm-6">
         <div class="card card-container"
              [ngStyle]="(reviewFilter !== 'archive') && {'border-left': '#FFCE00',

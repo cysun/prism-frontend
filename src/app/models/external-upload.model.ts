@@ -3,8 +3,8 @@ import { User } from './user.model';
 
 export class ExternalUpload {
   _id: string;
-  document: Document;
-  user: User;
+  document: Document | string;
+  user: User | string;
   message: string;
   token: string;
   completed: boolean;

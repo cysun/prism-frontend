@@ -221,7 +221,7 @@ export class DepartmentComponent implements OnInit {
     this.departmentService.getDepartment(departmentId).subscribe( data => {
       this.department = data;
       this.department.chairs = this.getChairsObject(data.chairs);
-      this.chairs = this.department.chairs;
+      this.chairs = <User[]> this.department.chairs;
     });
     this.modal = this.modalService.open(content, this.options);
   }
@@ -292,7 +292,7 @@ export class DepartmentComponent implements OnInit {
     this.departmentService.getDepartment(department._id).subscribe( data => {
       this.department = data;
       this.department.chairs = this.getChairsObject(data.chairs);
-      this.chairs = this.department.chairs;
+      this.chairs = <User[]> this.department.chairs;
     });
     this.modal = this.modalService.open(content, this.options);
   }

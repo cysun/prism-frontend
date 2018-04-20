@@ -39,7 +39,7 @@ export class GroupManagerComponent implements OnInit {
         this.getAllGroups().then( (data: Group[]) => {
           for (let i = 0; i < data.length; i++) {
             if (data[i].members.length > 0) {
-              this.groups[i].members = this.getMembersObject(data[i].members);
+              this.groups[i].members = this.getMembersObject(<string[]> data[i].members);
             }
           }
         });
@@ -87,7 +87,7 @@ export class GroupManagerComponent implements OnInit {
           this.suggestedUsers = this.users;
 
           if (this.group.members.length > 0) {
-            this.member = this.group.members.find( item => item === memberId);
+            this.member = (<string[]> this.group.members).find( item => item === memberId);
           }
         });
         this.modal = this.modalService.open(content, this.globals.options);
@@ -179,7 +179,7 @@ export class GroupManagerComponent implements OnInit {
           } else {
             this.groupManagerService.updateGroup(this.group).subscribe( updatedGroup => {
               const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
-              updatedGroup.members = this.getMembersObject(updatedGroup.members);
+              updatedGroup.members = this.getMembersObject(<string[]> updatedGroup.members);
               this.groups[index] = updatedGroup;
               this.modal.close();
             });
@@ -195,7 +195,7 @@ export class GroupManagerComponent implements OnInit {
           this.groupManagerService.addMember(filteredMembers[i], this.group._id).subscribe( () => {
             const newMember = this.getMembersObject([filteredMembers[i]]);
             const groupIndex = this.groups.findIndex(getGroup => getGroup._id === this.group._id);
-            this.groups[groupIndex].members.push(newMember[0]);
+            (<User[]> this.groups[groupIndex].members).push(newMember[0]);
           })
         }
         this.modal.close();
@@ -208,7 +208,7 @@ export class GroupManagerComponent implements OnInit {
         const findGroupIndex = this.groups.findIndex( item => item._id === this.group._id);
 
         for (let i = 0; i < this.groups[findGroupIndex].members.length; i++) {
-          if (this.groups[findGroupIndex].members[i]._id === this.member) {
+          if ((<User> this.groups[findGroupIndex].members[i])._id === this.member) {
             this.groups[findGroupIndex].members.splice(i, 1);
             break;
           }
@@ -218,7 +218,7 @@ export class GroupManagerComponent implements OnInit {
     }
 
     /* Give a group's member list of IDs and return their corresponding member objects */
-    getMembersObject(memberList: any[]): any[] {
+    getMembersObject(memberList: string[]): User[] {
       const displayList = [];
 
       for (let i = 0; i < memberList.length; i++) {
