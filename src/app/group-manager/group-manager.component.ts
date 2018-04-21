@@ -5,6 +5,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Group } from '../models/group.model';
 import { User } from '../models/user.model';
+import { UserResponse } from '../models/user-response.model';
 
 import { Globals } from '../shared/app.global';
 import { GroupManagerService } from './group-manager.service';
@@ -18,6 +19,7 @@ import { SharedService } from '../shared/shared.service';
 
 export class GroupManagerComponent implements OnInit {
   modal: NgbModalRef;
+  currentUser: UserResponse;
 
   member: string;
   group: Group = new Group();
@@ -35,6 +37,8 @@ export class GroupManagerComponent implements OnInit {
     private sharedService: SharedService) { }
 
     ngOnInit() {
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
       this.getUserList().then( () => {
         this.getAllGroups().then( (data: Group[]) => {
           for (let i = 0; i < data.length; i++) {

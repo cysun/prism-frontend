@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 
@@ -15,9 +15,11 @@ import { UserResponse } from './models/user-response.model';
 export class AppComponent implements OnInit {
   currentUser: UserResponse;
   externalUser: boolean;
+  isExpanded: boolean;
   username: string;
 
-  constructor(private authService: AuthService,
+  constructor(@Inject('Window') private window: Window,
+    private authService: AuthService,
     private sharedService: SharedService,
     private router: Router) { }
 
@@ -41,6 +43,13 @@ export class AppComponent implements OnInit {
       this.externalUser = true;
     } else {
       setTimeout(this.ngOnInit.bind(this), 20);
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    if (event.target.innerWidth > 990) {
+      this.isExpanded = false;
     }
   }
 
