@@ -13,7 +13,7 @@
   </nav>
 
   <div class="collapse navbar-collapse sticky-top" [ngbCollapse]="!isExpanded"
-       *ngIf="authService.isAuthenticated()">
+       *ngIf="authService.isAuthenticated()" (window:resize)="onResize($event)">
     <ul class="navbar-nav">
       <li class="nav-item">
         <a class="nav-link" [routerLink]="['/dashboard']" style="padding: 10px;">
