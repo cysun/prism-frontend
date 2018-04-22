@@ -10,7 +10,7 @@ export class SharedService {
   filteredUsers: string[];
   filteredGroups: string[];
 
-  prsMembersList: string[];
+  prsMembersList: any[];
   groupsList: string[];
 
   isAdmin(): boolean {

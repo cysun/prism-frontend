@@ -37,9 +37,8 @@ export class ReviewListComponent implements OnInit {
   lookupProgram: (id: string) => Program;
 
   selectedOption: string;
-  suggestedUsers: string[];
-
   alert: any;
+  suggestionFilter: (user: User) => boolean;
 
   constructor(private collegeService: CollegesService,
               private departmentService: DepartmentService,
@@ -58,7 +57,6 @@ export class ReviewListComponent implements OnInit {
       this.departmentService.getDepartments(),
       this.programService.getPrograms()
     ).subscribe(data => {
-      console.log(data);
       this.colleges = data[1];
       this.departments = data[2];
       this.programs = data[3];
@@ -193,12 +191,9 @@ export class ReviewListComponent implements OnInit {
 
     if (leadReviewers) {
       this.reviewService.createReview(this.selectedOption).subscribe(data => {
-        this.reviewService.getReview(data._id).subscribe(newReview => {
-          newReview.program = this.lookupProgram((<Program> newReview.program)._id);
-          this.reviews.push(newReview);
-          this.calculatePercentages();
-          this.closeModal();
-        });
+        this.reviews.push(data);
+        this.addLeadReviewers(data._id, leadReviewers);
+        this.closeModal();
       });
     } else {
       this.alert = { message: 'Please select at least one lead reviewer.' };
@@ -215,6 +210,11 @@ export class ReviewListComponent implements OnInit {
 
   openModal(content, reviewId?: string) {
     this.currentReview = this.reviews.find(review => review._id === reviewId);
+    this.suggestionFilter = (prsMember) => {
+      return (<User[]> this.currentReview.leadReviewers).findIndex(reviewer => {
+        return reviewer._id === prsMember._id;
+      }) === -1;
+    };
     this.modal = this.modalService.open(content, this.globals.options);
   }
 
