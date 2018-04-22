@@ -113,7 +113,9 @@
         <span class="col-3 group-label">Deleting Group</span>
         <span class="col-8">
           <button type="button" class="btn btn-danger delete-btn"
-                  (click)="editModal(deleteGroupModal, group._id)">
+                  (click)="editModal(deleteGroupModal, group._id)"
+                  [disabled]="group.name === 'Administrators' ||
+                              group.name === 'Program Review Subcommittee'">
             Delete Group
           </button>
           <div class="text-hints">
@@ -168,7 +170,8 @@
                     <td>{{ member.email }}
                     <td>
                       <button type="button" class="btn btn-danger"
-                              (click)="editModal(deleteMemberModal, group._id, member._id)">
+                              (click)="editModal(deleteMemberModal, group._id, member._id)"
+                              [disabled]="member._id === currentUser.user?._id">
                         <i class="fa fa-trash"></i>
                       </button>
                     </td>
