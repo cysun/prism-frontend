@@ -58,6 +58,7 @@ export class ReviewListComponent implements OnInit {
       this.departmentService.getDepartments(),
       this.programService.getPrograms()
     ).subscribe(data => {
+      console.log(data);
       this.colleges = data[1];
       this.departments = data[2];
       this.programs = data[3];
@@ -154,7 +155,7 @@ export class ReviewListComponent implements OnInit {
 
   editLeadReviewers(reviewId: string, programId: string, leadReviewers: User[]) {
     let chosenReviewers = this.sharedService.filteredUsers;
-    const currentReviewers = leadReviewers.map( reviewer => reviewer._id);
+    const currentReviewers = leadReviewers.map(reviewer => reviewer._id);
 
     if (chosenReviewers && chosenReviewers.length > 0) {
       chosenReviewers = chosenReviewers.concat(currentReviewers);
@@ -191,11 +192,12 @@ export class ReviewListComponent implements OnInit {
     const leadReviewers = this.sharedService.filteredUsers;
 
     if (leadReviewers) {
-      this.reviewService.createReview(this.selectedOption).subscribe( data => {
+      this.reviewService.createReview(this.selectedOption).subscribe(data => {
         this.reviewService.getReview(data._id).subscribe(newReview => {
+          newReview.program = this.lookupProgram((<Program> newReview.program)._id);
           this.reviews.push(newReview);
           this.calculatePercentages();
-          this.populateReviews();
+          this.closeModal();
         });
       });
     } else {
@@ -204,7 +206,7 @@ export class ReviewListComponent implements OnInit {
   }
 
   deleteReview() {
-    this.reviewService.deleteReview(this.currentReview._id).subscribe( () => {
+    this.reviewService.deleteReview(this.currentReview._id).subscribe(() => {
       this.currentReview.deleted = true;
       this.reviews.splice(this.reviews.indexOf(this.currentReview), 1);
       this.closeModal();
