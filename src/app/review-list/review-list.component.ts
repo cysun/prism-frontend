@@ -166,16 +166,10 @@ export class ReviewListComponent implements OnInit {
      const leadReviewers: User[] = <User[]> this.currentReview.leadReviewers;
 
      if (leadReviewers.length > 1) {
-       const removeLeadReviewer = leadReviewers.findIndex( user => user._id === userId);
-       leadReviewers.splice(removeLeadReviewer, 1);
+       const indexToRemove = leadReviewers.findIndex(user => user._id === userId);
+       leadReviewers.splice(indexToRemove, 1);
 
-       this.currentReview.leadReviewers = leadReviewers;
-
-       const editLeadReviewerId = this.reviews.findIndex(review => review._id === this.currentReview._id);
-       this.reviews[editLeadReviewerId].leadReviewers = this.currentReview.leadReviewers;
-
-       const ids = leadReviewers.map( user => user._id);
-       this.addLeadReviewers(this.currentReview._id, ids);
+       this.addLeadReviewers(this.currentReview._id, leadReviewers.map(reviewer => reviewer._id));
      } else {
        this.alert = { message: 'Please allow at least one lead reviewer.' };
      }
