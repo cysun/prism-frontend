@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Globals } from '../shared/app.global';
 import { GroupManagerService } from '../group-manager/group-manager.service';
 import { SharedService } from '../shared/shared.service';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'prism-user-selector',
@@ -13,6 +14,7 @@ export class UserSelectorComponent implements OnInit {
   @Input() configType: string;
   @Input() filterType: string;
   @Input() suggestedMembers: any[];
+  @Input() suggestionFilter: (user: User) => boolean;
 
   filteredGroups: string[];
   filteredUser: string;
@@ -34,6 +36,9 @@ export class UserSelectorComponent implements OnInit {
       })
     } else if (this.filterType === 'prs') {
       this.groupManagerService.getPrs().subscribe( data => {
+        if (this.suggestionFilter) {
+          data.members = (<User[]> data.members).filter(this.suggestionFilter);
+        }
         this.suggestedUsers = data.members;
         this.sharedService.prsMembersList = this.suggestedUsers;
       })

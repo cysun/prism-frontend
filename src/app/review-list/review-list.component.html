@@ -15,7 +15,7 @@
         <span class="col-3 group-label">Program</span>
         <div class="form-group col-8">
           <select class="custom-select" [(ngModel)]="selectedOption" name="program-list">
-            <option *ngFor="let program of programsList" [ngValue]="program._id">
+            <option *ngFor="let program of programs" [ngValue]="program._id">
               {{program.name}}
             </option>
           </select>
@@ -94,7 +94,7 @@
       <span class="container-fluid" style="padding:30px;">
         <prism-user-selector [configType]="'multiple'"
                              [filterType]="'prs'"
-                             [suggestedMembers]="suggestedUsers">
+                             [suggestionFilter]="suggestionFilter">
         </prism-user-selector>
 
         <div class="text-hints">

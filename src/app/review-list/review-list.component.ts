@@ -37,9 +37,8 @@ export class ReviewListComponent implements OnInit {
   lookupProgram: (id: string) => Program;
 
   selectedOption: string;
-  suggestedUsers: string[];
-
   alert: any;
+  suggestionFilter: (user: User) => boolean;
 
   constructor(private collegeService: CollegesService,
               private departmentService: DepartmentService,
@@ -154,7 +153,7 @@ export class ReviewListComponent implements OnInit {
 
   editLeadReviewers(reviewId: string, programId: string, leadReviewers: User[]) {
     let chosenReviewers = this.sharedService.filteredUsers;
-    const currentReviewers = leadReviewers.map( reviewer => reviewer._id);
+    const currentReviewers = leadReviewers.map(reviewer => reviewer._id);
 
     if (chosenReviewers && chosenReviewers.length > 0) {
       chosenReviewers = chosenReviewers.concat(currentReviewers);
@@ -167,16 +166,10 @@ export class ReviewListComponent implements OnInit {
      const leadReviewers: User[] = <User[]> this.currentReview.leadReviewers;
 
      if (leadReviewers.length > 1) {
-       const removeLeadReviewer = leadReviewers.findIndex( user => user._id === userId);
-       leadReviewers.splice(removeLeadReviewer, 1);
+       const indexToRemove = leadReviewers.findIndex(user => user._id === userId);
+       leadReviewers.splice(indexToRemove, 1);
 
-       this.currentReview.leadReviewers = leadReviewers;
-
-       const editLeadReviewerId = this.reviews.findIndex(review => review._id === this.currentReview._id);
-       this.reviews[editLeadReviewerId].leadReviewers = this.currentReview.leadReviewers;
-
-       const ids = leadReviewers.map( user => user._id);
-       this.addLeadReviewers(this.currentReview._id, ids);
+       this.addLeadReviewers(this.currentReview._id, leadReviewers.map(reviewer => reviewer._id));
      } else {
        this.alert = { message: 'Please allow at least one lead reviewer.' };
      }
@@ -191,12 +184,10 @@ export class ReviewListComponent implements OnInit {
     const leadReviewers = this.sharedService.filteredUsers;
 
     if (leadReviewers) {
-      this.reviewService.createReview(this.selectedOption).subscribe( data => {
-        this.reviewService.getReview(data._id).subscribe(newReview => {
-          this.reviews.push(newReview);
-          this.calculatePercentages();
-          this.populateReviews();
-        });
+      this.reviewService.createReview(this.selectedOption).subscribe(data => {
+        this.reviews.push(data);
+        this.addLeadReviewers(data._id, leadReviewers);
+        this.closeModal();
       });
     } else {
       this.alert = { message: 'Please select at least one lead reviewer.' };
@@ -204,7 +195,7 @@ export class ReviewListComponent implements OnInit {
   }
 
   deleteReview() {
-    this.reviewService.deleteReview(this.currentReview._id).subscribe( () => {
+    this.reviewService.deleteReview(this.currentReview._id).subscribe(() => {
       this.currentReview.deleted = true;
       this.reviews.splice(this.reviews.indexOf(this.currentReview), 1);
       this.closeModal();
@@ -213,12 +204,18 @@ export class ReviewListComponent implements OnInit {
 
   openModal(content, reviewId?: string) {
     this.currentReview = this.reviews.find(review => review._id === reviewId);
+    this.suggestionFilter = (prsMember) => {
+      return (<User[]> this.currentReview.leadReviewers).findIndex(reviewer => {
+        return reviewer._id === prsMember._id;
+      }) === -1;
+    };
     this.modal = this.modalService.open(content, this.globals.options);
   }
 
   closeModal() {
     this.alert = '';
     this.currentReview = new Review();
+    this.sharedService.filteredUsers = [];
     this.modal.close();
   }
 
