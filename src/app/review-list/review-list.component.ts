@@ -215,6 +215,7 @@ export class ReviewListComponent implements OnInit {
   closeModal() {
     this.alert = '';
     this.currentReview = new Review();
+    this.sharedService.filteredUsers = [];
     this.modal.close();
   }
 
