@@ -30,3 +30,8 @@
 .review-actions:hover {
   text-decoration: underline;
 }
+
+.search-bar {
+  background: #EEE;
+  padding: 30px;
+}

@@ -148,8 +148,21 @@
     </button>
   </div>
 
+  <div class="search-bar" *ngIf="reviews.length > 0" style="margin-top:25px;">
+    <div class="form-row">
+      <div class="form-group col-md-12 grid-space">
+        <input type="text" class="form-control"
+        [(ngModel)]="searchText" name="search-review"
+        placeholder="Search for a review...">
+        <div class="text-hints">
+          Start typing a review title to filter reviews.
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="row" *ngIf="reviews.length > 0; else emptyReviews">
-    <ng-container *ngFor="let review of reviews">
+    <ng-container *ngFor="let review of reviews | filter: searchText | sort">
       <div class="col-sm-6">
         <div class="card card-container"
              [ngStyle]="(reviewFilter !== 'archive') && {'border-left': '#FFCE00',
