@@ -82,4 +82,22 @@ export class Globals {
     },
     maxItems: 15
   };
+
+  // For use in access group selection
+  multipleGroupNameConfig = {
+    labelField: 'name',
+    valueField: 'name',
+    highlight: true,
+    create: false,
+    openOnFocus: false,
+    searchField: ['name'],
+    plugins: ['dropdown_direction', 'remove_button'],
+    dropdownDirection: 'down',
+    selectOnTab: true,
+    sortField: {
+      field: 'name',
+      direction: 'asc'
+    },
+    maxItems: 15
+  };
 }
