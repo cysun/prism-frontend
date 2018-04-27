@@ -112,7 +112,6 @@
   </form>
 </ng-template>
 
-
 <ng-template #deleteReviewModal>
   <div class="modal-header">
     <h5 class="modal-title">Delete Review</h5>
@@ -142,14 +141,28 @@
 
 <!-- Display review list content -->
 <div class="container-fluid container-fluid-content">
-  <div class="container-fluid" style="text-align: right; padding: 0;" *ngIf="reviewFilter !== 'archive' && reviewFilter !== 'deleted'">
+  <div class="container-fluid" style="text-align: right; padding: 0;"
+       *ngIf="reviewFilter !== 'archive' && reviewFilter !== 'deleted' && sharedService.isAdmin()">
     <button class="btn btn-primary" (click)="openModal(createReviewModal)">
       <i class="fa fa-icon fa-plus"></i>Create Review
     </button>
   </div>
 
+  <div class="search-bar" *ngIf="reviews.length > 0" style="margin-top:25px; margin-bottom:15px;">
+    <div class="form-row">
+      <div class="form-group col-md-12 grid-space">
+        <input type="text" class="form-control"
+        [(ngModel)]="searchText" name="search-review"
+        placeholder="Search for a review...">
+        <div class="text-hints">
+          Type in a program name to filter to its reviews.
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="row" *ngIf="reviews.length > 0; else emptyReviews">
-    <ng-container *ngFor="let review of reviews">
+    <ng-container *ngFor="let review of reviews | filter: searchText | sort">
       <div class="col-sm-6">
         <div class="card card-container"
              [ngStyle]="(reviewFilter !== 'archive') && {'border-left': '#FFCE00',
@@ -161,9 +174,9 @@
                   {{ review.program?.name}} {{ yearString(review.startDate)}}
                   <i class="fa fa-chevron-right"></i>
                 </a>
-                <p *ngIf="review.deleted">
+                <span *ngIf="review.deleted">
                   {{ review.program?.name}} {{ yearString(review.startDate)}}
-                </p>
+                </span>
                 <div class="card-info">
                   <i style="font-weight: lighter;">
                     {{review.program?.department?.name}}
@@ -180,17 +193,19 @@
                   {{leadReviewer.name?.first}} {{leadReviewer.name?.last}}{{ idx + 1 < review.leadReviewers.length ? ',' : '' }}
                 </ng-container>
 
-                <div *ngIf="this.reviewFilter !== 'archive'">
-                  <div *ngIf="!review.deleted" class="review-actions" (click)="openModal(editLeadReviewersModal, review._id)">
+                <div *ngIf="this.reviewFilter !== 'archive' && sharedService.isAdmin()" style="margin-top:15px;">
+                  <div *ngIf="!review.deleted" class="review-actions"
+                       (click)="openModal(editLeadReviewersModal, review._id)">
                     <i class="fa fa-icon fa-pencil"></i>Edit Lead Reviewers
                   </div>
 
-                  <div *ngIf="!review.deleted" class="review-actions" (click)="openModal(deleteReviewModal, review._id)">
+                  <div *ngIf="!review.deleted" class="review-actions"
+                       (click)="openModal(deleteReviewModal, review._id)">
                     <i class="fa fa-icon fa-trash"></i>Delete Review
                   </div>
 
                   <div *ngIf="review.deleted" class="review-actions" (click)="restoreReview(review._id)">
-                    Restore Review
+                      <i class="fa fa-icon fa-window-restore"></i>Restore Review
                   </div>
                 </div>
               </div>

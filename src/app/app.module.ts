@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 import { FilterPipe } from './shared/filter.pipe';
 import { Globals } from './shared/app.global';
 import { ReversePipe } from './../pipe_manipulation';
+import { SortPipe } from './../pipe_manipulation';
 import { UserSelectorComponent } from './user-selector/user-selector.component';
 
 import { CollegesComponent } from './colleges/colleges.component';
@@ -79,6 +80,7 @@ import { TemplateManagerService } from './template-manager/template-manager.serv
     PublicComponent,
     FilterPipe,
     ReversePipe,
+    SortPipe,
   ],
   imports: [
     CalendarModule.forRoot(),
