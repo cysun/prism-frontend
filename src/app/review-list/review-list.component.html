@@ -141,7 +141,8 @@
 
 <!-- Display review list content -->
 <div class="container-fluid container-fluid-content">
-  <div class="container-fluid" style="text-align: right; padding: 0;" *ngIf="reviewFilter !== 'archive' && reviewFilter !== 'deleted'">
+  <div class="container-fluid" style="text-align: right; padding: 0;"
+       *ngIf="reviewFilter !== 'archive' && reviewFilter !== 'deleted' && sharedService.isAdmin()">
     <button class="btn btn-primary" (click)="openModal(createReviewModal)">
       <i class="fa fa-icon fa-plus"></i>Create Review
     </button>
@@ -179,7 +180,7 @@
                   {{leadReviewer.name?.first}} {{leadReviewer.name?.last}}{{ idx + 1 < review.leadReviewers.length ? ',' : '' }}
                 </ng-container>
 
-                <div *ngIf="this.reviewFilter !== 'archive'" style="margin-top:15px;">
+                <div *ngIf="this.reviewFilter !== 'archive' && sharedService.isAdmin()" style="margin-top:15px;">
                   <div *ngIf="!review.deleted" class="review-actions"
                        (click)="openModal(editLeadReviewersModal, review._id)">
                     <i class="fa fa-icon fa-pencil"></i>Edit Lead Reviewers
