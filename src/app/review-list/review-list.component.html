@@ -112,7 +112,6 @@
   </form>
 </ng-template>
 
-
 <ng-template #deleteReviewModal>
   <div class="modal-header">
     <h5 class="modal-title">Delete Review</h5>
@@ -161,9 +160,9 @@
                   {{ review.program?.name}} {{ yearString(review.startDate)}}
                   <i class="fa fa-chevron-right"></i>
                 </a>
-                <p *ngIf="review.deleted">
+                <span *ngIf="review.deleted">
                   {{ review.program?.name}} {{ yearString(review.startDate)}}
-                </p>
+                </span>
                 <div class="card-info">
                   <i style="font-weight: lighter;">
                     {{review.program?.department?.name}}
@@ -180,17 +179,19 @@
                   {{leadReviewer.name?.first}} {{leadReviewer.name?.last}}{{ idx + 1 < review.leadReviewers.length ? ',' : '' }}
                 </ng-container>
 
-                <div *ngIf="this.reviewFilter !== 'archive'">
-                  <div *ngIf="!review.deleted" class="review-actions" (click)="openModal(editLeadReviewersModal, review._id)">
+                <div *ngIf="this.reviewFilter !== 'archive'" style="margin-top:15px;">
+                  <div *ngIf="!review.deleted" class="review-actions"
+                       (click)="openModal(editLeadReviewersModal, review._id)">
                     <i class="fa fa-icon fa-pencil"></i>Edit Lead Reviewers
                   </div>
 
-                  <div *ngIf="!review.deleted" class="review-actions" (click)="openModal(deleteReviewModal, review._id)">
+                  <div *ngIf="!review.deleted" class="review-actions"
+                       (click)="openModal(deleteReviewModal, review._id)">
                     <i class="fa fa-icon fa-trash"></i>Delete Review
                   </div>
 
                   <div *ngIf="review.deleted" class="review-actions" (click)="restoreReview(review._id)">
-                    Restore Review
+                      <i class="fa fa-icon fa-window-restore"></i>Restore Review
                   </div>
                 </div>
               </div>
