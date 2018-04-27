@@ -30,6 +30,7 @@ export class ReviewComponent implements OnInit {
   newNode: ReviewNode;
   reviewId: string;
   modal: NgbModalRef;
+  addErrorMessage: string;
 
   suggestedGroups: string[];
 
@@ -164,10 +165,26 @@ ${completionLabel}: ${this.formatDate(node.finishDate)}`;
 
   openModal(modal: NgbModalRef): void {
     this.suggestedGroups = ['Administrators', 'Program Review Subcommittee'];
+    this.addErrorMessage = null;
+    this.newNode.completionEstimate = null;
+    this.newNode.title = null;
     this.modal = this.modalService.open(modal, this.globals.options);
   }
 
   addNode(node: ReviewNode): void {
+    if (this.sharedService.filteredGroups.length < 1) {
+      this.addErrorMessage = 'Please select at least 1 group';
+      return;
+    }
+
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const currentGroups = currentUser.groups.map(group => group.name);
+    const allowedSelf = this.sharedService.filteredGroups.some(filteredName => currentGroups.indexOf(filteredName) !== -1);
+    if (!allowedSelf) {
+      this.addErrorMessage = 'You must be allowed to access this document. Please add a group you are a member of.';
+      return;
+    }
+
     this.reviewService.createNode(this.reviewId, node.title,
         this.sharedService.filteredGroups, node.completionEstimate).subscribe(() => {
       this.newNode = new ReviewNode();
