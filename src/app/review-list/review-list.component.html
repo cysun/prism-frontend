@@ -148,14 +148,14 @@
     </button>
   </div>
 
-  <div class="search-bar" *ngIf="reviews.length > 0" style="margin-top:25px;">
+  <div class="search-bar" *ngIf="reviews.length > 0" style="margin-top:25px; margin-bottom:15px;">
     <div class="form-row">
       <div class="form-group col-md-12 grid-space">
         <input type="text" class="form-control"
         [(ngModel)]="searchText" name="search-review"
         placeholder="Search for a review...">
         <div class="text-hints">
-          Start typing a review title to filter reviews.
+          Type in a program name to filter to its reviews.
         </div>
       </div>
     </div>

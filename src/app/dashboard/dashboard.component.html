@@ -15,7 +15,7 @@
       <i class="fa fa-graduation-cap"></i> Review Archive
     </ng-template>
     <ng-template ngbTabContent>
-      <prism-review-list *ngIf="sharedService.isAdmin()" [reviewFilter]="'archive'">
+      <prism-review-list [reviewFilter]="'archive'">
       </prism-review-list>
     </ng-template>
   </ngb-tab>
@@ -34,7 +34,7 @@
     <ng-template ngbTabTitle><i class="fa fa-th-list"></i> Recent Actions</ng-template>
     <ng-template ngbTabContent>
       <div class="container-fluid container-fluid-content">
-        <div class="search-bar" *ngIf="sharedService.isAdmin()">
+        <div class="search-bar" *ngIf="sharedService.isAdmin()" style="margin-bottom:25px;">
           <div class="form-row">
             <div class="form-group col-md-7">
               <prism-user-selector [configType]="'single'"></prism-user-selector>
