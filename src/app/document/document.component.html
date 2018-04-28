@@ -302,7 +302,15 @@
       <div class="input-group-prepend">
         <span class="input-group-text">Estimated Completion Date</span>
       </div>
-      <input type="date" class="form-control" name="node-date" [(ngModel)]="newCompletionDate">
+
+      <div class="input-group-prepend">
+        <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
+          <i class="fa fa-calendar"></i>
+        </button>
+      </div>
+
+      <input class="form-control" placeholder="yyyy-mm-dd" name="d2" #c2="ngModel"
+             [(ngModel)]="newCompletionDate" ngbDatepicker #d2="ngbDatepicker">
     </div>
 
     <div class="text-hints">This date is an estimate of when the document will be completed.</div>

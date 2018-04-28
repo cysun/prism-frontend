@@ -54,7 +54,8 @@ export class DocumentComponent implements OnInit {
   textComment = '';
   externalMessage = '';
   modalMessage: any;
-  newCompletionDate: Date;
+  // Angular Bootstrap object with day, month, and year properties
+  newCompletionDate: any;
 
   constructor(private documentService: DocumentService,
               private groupManagerService: GroupManagerService,
@@ -377,8 +378,10 @@ export class DocumentComponent implements OnInit {
   }
 
   /* Change the completion date of the node of this document in the review */
-  changeCompletionDate(newDate: string) {
-    this.reviewService.setNodeFinishDate(this.reviewId, this.nodeId, newDate).subscribe(() => {
+  changeCompletionDate(newDate: any) {
+    const newDateString = `${newDate.year}-${newDate.month}-${newDate.day}`;
+
+    this.reviewService.setNodeFinishDate(this.reviewId, this.nodeId, newDateString).subscribe(() => {
       this.updateReviewComponent();
       this.closeModal();
     });
