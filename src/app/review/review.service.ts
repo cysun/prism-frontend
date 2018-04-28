@@ -26,8 +26,11 @@ export class ReviewService {
     return this.http.post<Review>(`/api/review/${id}/restore`, '');
   }
 
-  createReview(programId: string): Observable<Review> {
-    return this.http.post<Review>('/api/review', {'program': programId});
+  createReview(programId: string, startDate: string): Observable<Review> {
+    return this.http.post<Review>('/api/review', {
+      'program': programId,
+      'startDate': startDate
+    });
   }
 
   finalizeNode(reviewId: string, nodeId: string) {

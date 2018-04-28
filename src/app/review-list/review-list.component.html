@@ -39,6 +39,25 @@
         </div>
       </span>
     </div>
+
+    <div class="input-group grid-space">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Start Date</span>
+      </div>
+
+      <div class="input-group-prepend">
+        <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
+          <i class="fa fa-calendar"></i>
+        </button>
+      </div>
+
+      <input class="form-control" placeholder="yyyy-mm-dd" name="d2" #c2="ngModel"
+             [(ngModel)]="newDate" ngbDatepicker #d2="ngbDatepicker" [minDate]="minDate">
+
+       <div class="text-hints">
+         This should be the current date unless it is intended for storing archived documents from before PRISM was implemented.
+       </div>
+    </div>
   </div>
 
   <div class="modal-footer">
