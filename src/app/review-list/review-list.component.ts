@@ -192,7 +192,7 @@ export class ReviewListComponent implements OnInit {
     const leadReviewers = this.sharedService.filteredUsers;
 
     if (leadReviewers) {
-      const startDate = `${this.newDate.year}-${this.newDate.month}-${this.newDate.day}`;;
+      const startDate = `${this.newDate.year}-${this.newDate.month}-${this.newDate.day}`;
       this.reviewService.createReview(this.selectedOption, startDate).subscribe(data => {
         this.reviews.push(data);
         this.addLeadReviewers(data._id, leadReviewers);
