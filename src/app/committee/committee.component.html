@@ -23,7 +23,7 @@
       </thead>
 
       <tbody>
-        <ng-template ngFor let-member [ngForOf]="prs">
+        <ng-template ngFor let-member [ngForOf]="prs | sort">
           <tr>
             <td>{{ member.username }}</td>
             <td>{{ member.name.first }} {{ member.name.last }}</td>

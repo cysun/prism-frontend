@@ -15,8 +15,18 @@ export class SharedService {
 
   isAdmin(): boolean {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    const isAdmin = currentUser.groups.some( user => user.name === 'Administrators');
+    const isAdmin = currentUser.groups.some( group => group.name === 'Administrators');
 
     return isAdmin;
+  }
+
+  isAdminOrPrs(): boolean {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const isAdminOrPrs = currentUser.groups.some( group => group.name === 'Administrators'
+      || group.name === 'Program Review Subcommittee');
+
+      console.log('wut is this: ' + isAdminOrPrs);
+
+    return isAdminOrPrs;
   }
 }
