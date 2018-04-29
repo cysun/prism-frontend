@@ -9,6 +9,7 @@ import { Globals } from '../shared/app.global';
 import { Review } from '../models/review.model';
 import { ReviewNode } from '../models/review_node.model';
 import { ReviewService } from './review.service';
+import { SharedService } from '../shared/shared.service';
 
 declare var dagreD3: any;
 declare var d3: any;
@@ -35,7 +36,8 @@ export class ReviewComponent implements OnInit {
       private route: ActivatedRoute,
       private modalService: NgbModal,
       private globals: Globals,
-      private location: Location) {
+      private location: Location,
+      private sharedService: SharedService) {
     this.newNode = new ReviewNode();
   }
 
