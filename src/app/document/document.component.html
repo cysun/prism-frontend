@@ -7,7 +7,7 @@
     <span class="btn-toolbar" role="toolbar">
       <span class="label">{{ documentTitle }}</span>
       <span class="btn-group mr-2" role="group">
-        <button *ngIf="documentTitle === 'External Review Report' && !document.locked"
+        <button *ngIf="documentTitle === 'External Review Report' && !document.locked && currentUser.isRootOrAdmin()"
                 type="button" class="btn btn-outline-dark"
                 (click)=openModal(createExternalUploadModal)
                 placement="top" ngbTooltip="Create External Upload">

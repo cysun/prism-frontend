@@ -91,9 +91,11 @@ export class DocumentComponent implements OnInit {
       this.getLatestRevision();
     });
 
-    this.documentService.getAllExternalUploads(this.documentId).subscribe( data => {
-      this.externalUploadsList = data;
-    });
+    if (this.currentUser.isRootOrAdmin()) {
+      this.documentService.getAllExternalUploads(this.documentId).subscribe( data => {
+        this.externalUploadsList = data;
+      });
+    }
   }
 
   /* Set file variable to the file the user has chosen */
