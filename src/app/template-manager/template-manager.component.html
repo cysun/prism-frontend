@@ -33,6 +33,20 @@
           </div>
         </div>
 
+        <div class="form-row">
+          <div class="col-md-6 file-title">
+            <prism-user-selector [configType]="'groupNames'" [suggestedMembers]="suggestedGroups">
+            </prism-user-selector>
+            <div class="text-hints">Groups that can work on, comment on, and finalize this document</div>
+          </div>
+
+          <div class="col-md-6 file-title">
+            <prism-user-selector [configType]="'groupNames'" [suggestedMembers]="suggestedDownloadGroups">
+            </prism-user-selector>
+            <div class="text-hints">Groups that can download the final version of the document after it is finalized</div>
+          </div>
+        </div>
+
         <div class="modal-label" style="padding-top: 50px; padding-bottom: 20px;">
           FILE UPLOAD
         </div>
