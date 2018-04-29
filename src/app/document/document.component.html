@@ -366,13 +366,13 @@
     </ng-template>
   </ngb-tab>
 
-  <ngb-tab [disabled]="totalIndices <= 1 || document.locked">
+  <ngb-tab *ngIf="!document.downloadOnly" [disabled]="totalIndices <= 1 || document.locked">
     <ng-template ngbTabTitle><i class="fa fa-icon fa-list"></i>Previous Revisions</ng-template>
     <ng-template ngbTabContent>
       <div class="container-fluid container-fluid-content">
-        This tab holds previous revisions of the document for archiving purposes.
+        <span *ngIf="!document.downloadOnly">This tab holds previous revisions of the document for archiving purposes.
         Only the administrator and Program Review Subcommittee members can revert
-        to any previous revision without losing the current version.
+        to any previous revision without losing the current version.</span>
 
         <div class="header-container">
           Previous Revisions
@@ -442,7 +442,7 @@
     </ng-template>
     </ngb-tab>
 
-  <ngb-tab [disabled]="totalIndices < 1">
+  <ngb-tab *ngIf="!document.downloadOnly" [disabled]="totalIndices < 1">
     <ng-template ngbTabTitle><i class="fa fa-icon fa-comments-o"></i>Comments</ng-template>
     <ng-template ngbTabContent>
       <div class="container-fluid container-fluid-content">
