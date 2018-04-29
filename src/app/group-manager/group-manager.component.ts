@@ -93,8 +93,9 @@ export class GroupManagerComponent implements OnInit {
           if (this.group.members.length > 0) {
             this.member = (<string[]> this.group.members).find( item => item === memberId);
           }
+
+          this.modal = this.modalService.open(content, this.globals.options);
         });
-        this.modal = this.modalService.open(content, this.globals.options);
       })
     }
 
@@ -123,8 +124,6 @@ export class GroupManagerComponent implements OnInit {
       return new Promise((resolve, reject) => {
         this.groupManagerService.getUsers().subscribe( data => {
           this.users = data;
-          // this.suggestedUsers = data;
-          // this.suggestedUsers.sort(this.compareUsernames)
           resolve();
         })
       });
@@ -194,7 +193,8 @@ export class GroupManagerComponent implements OnInit {
 
       /* Adding members to the group */
       const filteredMembers = this.sharedService.filteredUsers;
-      if (filteredMembers.length > 0) {
+
+      if (filteredMembers && filteredMembers.length > 0) {
         for (let i = 0; i < filteredMembers.length; i++) {
           this.groupManagerService.addMember(filteredMembers[i], this.group._id).subscribe( () => {
             const newMember = this.getMembersObject([filteredMembers[i]]);
@@ -233,18 +233,5 @@ export class GroupManagerComponent implements OnInit {
         }
       }
       return displayList;
-    }
-
-    /* Function to sort the suggested user list in alphabetical order */
-    compareUsernames(user1: User, user2: User) {
-      const username1 = user1.username.toLowerCase();
-      const username2 = user2.username.toLowerCase();
-
-      if (username1 > username2) {
-        return 1;
-      } else if (username1 < username2) {
-        return -1;
-      }
-      return 0;
     }
 }

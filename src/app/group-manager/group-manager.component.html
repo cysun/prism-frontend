@@ -126,7 +126,7 @@
     </div>
 
     <div class="modal-footer">
-      <button class="btn btn-dark" type="button" (click)="updateGroup(value)">Save</button>
+      <button class="btn btn-dark" type="button" (click)="updateGroup()">Save</button>
       <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
     </div>
   </ng-template>
@@ -163,7 +163,7 @@
               </thead>
 
               <tbody>
-                <ng-template ngFor let-member [ngForOf]="group.members">
+                <ng-template ngFor let-member [ngForOf]="group.members | sort">
                   <tr>
                     <td>{{ member.username }}</td>
                     <td>{{ member.name.first }} {{ member.name.last }}</td>

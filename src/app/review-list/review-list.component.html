@@ -207,10 +207,13 @@
                 <strong>Start Date:</strong> {{review.startDate | date: 'MM/dd/yyyy'}} &#8212; <strong>{{review.percentComplete}}% complete</strong><br/>
                 <strong>Finish Date:</strong> {{review.finishDate | date: 'MM/dd/yyyy'}}
                 <br />
-                <strong>Lead Reviewer(s):</strong>
-                <ng-container *ngFor="let leadReviewer of review.leadReviewers; let idx = index;">
-                  {{leadReviewer.name?.first}} {{leadReviewer.name?.last}}{{ idx + 1 < review.leadReviewers.length ? ',' : '' }}
-                </ng-container>
+
+                <span *ngIf="review.leadReviewers.length > 0">
+                  <strong>Lead Reviewer(s):</strong>
+                  <ng-container *ngFor="let leadReviewer of review.leadReviewers; let idx = index;">
+                    {{leadReviewer.name?.first}} {{leadReviewer.name?.last}}{{ idx + 1 < review.leadReviewers.length ? ',' : '' }}
+                  </ng-container>
+                </span>
 
                 <div *ngIf="this.reviewFilter !== 'archive' && sharedService.isAdmin()" style="margin-top:15px;">
                   <div *ngIf="!review.deleted" class="review-actions"

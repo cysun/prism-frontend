@@ -366,7 +366,7 @@
     </ng-template>
   </ngb-tab>
 
-  <ngb-tab [disabled]="totalIndices <= 1">
+  <ngb-tab [disabled]="totalIndices <= 1 || document.locked">
     <ng-template ngbTabTitle><i class="fa fa-icon fa-list"></i>Previous Revisions</ng-template>
     <ng-template ngbTabContent>
       <div class="container-fluid container-fluid-content">
@@ -416,7 +416,7 @@
           </div>
 
           <ng-template #deletedRevisions>
-            <div class="card card-container deleted-revisions" *ngIf="idx > 0">
+            <div class="card card-container deleted-revisions" *ngIf="idx > 0 && currentUser.isRootOrAdmin()">
               <div class="card-body">
                 <div class="card-document-title">
                   <div class="document-message">{{revision.message}}</div>
@@ -426,14 +426,15 @@
                   </div>
                 </div>
 
-            <div class="card-action-buttons">
-              <button class="btn btn-dark"
-              (click)="restoreRevision(totalIndices - idx - 1)" placement="top" ngbTooltip="Restore">
-              <i class="fa fa-arrow-circle-up"></i>
-            </button>
-          </div>
-        </div>
-      </div>
+                <div class="card-action-buttons">
+                  <button class="btn btn-dark"
+                          (click)="restoreRevision(totalIndices - idx - 1)"
+                          placement="top" ngbTooltip="Restore">
+                    <i class="fa fa-arrow-circle-up"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
           </ng-template>
         </ng-container>
       </div>
