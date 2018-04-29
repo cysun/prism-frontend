@@ -8,7 +8,7 @@
           <a class="nav-link" [routerLink]="['/dashboard']">
             <i class="fa fa-home"></i> Dashboard
           </a>
-          <a class="nav-link" [routerLink]="['/calendar']">
+          <a class="nav-link" *ngIf="sharedService.isAdminOrPrs()" [routerLink]="['/calendar']">
             <i class="fa fa-calendar"></i> Calendar
           </a>
           <a *ngIf="sharedService.isAdmin()" class="nav-link" [routerLink]="['/college']">
@@ -21,7 +21,7 @@
             <i class="fa fa-users"></i>
             {{ sharedService.isAdmin() ? 'Group Manager' : 'Committee' }}
           </a>
-          <a *ngIf="sharedService.isAdmin()" class="nav-link" [routerLink]="['/templates']">
+          <a class="nav-link" *ngIf="sharedService.isAdmin()" [routerLink]="['/templates']">
             <i class="fa fa-folder"></i> Template Manager
           </a>
 
