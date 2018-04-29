@@ -20,6 +20,8 @@ export class TemplateManagerService {
     groups: string[],
     downloadGroups: string[]
   ): Observable<Document> {
+    console.log(groups);
+    console.log(downloadGroups);
     return this.http.post<Document>('/api/template', {
       'title': templateTitle,
       'completionEstimate': templateEstimate,

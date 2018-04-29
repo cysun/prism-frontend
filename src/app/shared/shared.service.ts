@@ -9,6 +9,7 @@ export class SharedService {
   searchUser: string;
   filteredUsers: string[];
   filteredGroups: string[];
+  filteredGroups2: string[];
 
   prsMembersList: any[];
   groupsList: string[];

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Globals } from '../shared/app.global';
 import { Document } from '../models/document.model';
 import { DocumentService } from '../document/document.service';
+import { SharedService } from '../shared/shared.service';
 import { TemplateManagerService } from './template-manager.service';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -28,7 +29,8 @@ export class TemplateManagerComponent implements OnInit {
   constructor(private modalService: NgbModal,
     private documentService: DocumentService,
     private templateManagerService: TemplateManagerService,
-    private globals: Globals) { }
+    private globals: Globals,
+    private sharedService: SharedService) { }
 
     ngOnInit() {
       this.listTemplates();
@@ -81,8 +83,8 @@ export class TemplateManagerComponent implements OnInit {
         this.templateManagerService.createTemplate(
           this.currentTemplate.title,
           this.currentTemplate.completionEstimate,
-          this.suggestedGroups,
-          this.suggestedDownloadGroups
+          this.sharedService.filteredGroups,
+          this.sharedService.filteredGroups2
         ).subscribe( data => {
             this.templates.push(data);
 
