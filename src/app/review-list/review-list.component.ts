@@ -39,6 +39,14 @@ export class ReviewListComponent implements OnInit {
   selectedOption: string;
   alert: any;
   suggestionFilter: (user: User) => boolean;
+  // Angular Bootstrap date output
+  newDate: any;
+  // Angular Bootstrap minimum allowed date
+  minDate = {
+    year: 1947,
+    month: 1,
+    day: 1
+  };
 
   constructor(private collegeService: CollegesService,
               private departmentService: DepartmentService,
@@ -184,7 +192,8 @@ export class ReviewListComponent implements OnInit {
     const leadReviewers = this.sharedService.filteredUsers;
 
     if (leadReviewers) {
-      this.reviewService.createReview(this.selectedOption).subscribe(data => {
+      const startDate = `${this.newDate.year}-${this.newDate.month}-${this.newDate.day}`;
+      this.reviewService.createReview(this.selectedOption, startDate).subscribe(data => {
         this.reviews.push(data);
         this.addLeadReviewers(data._id, leadReviewers);
         this.closeModal();
@@ -203,6 +212,12 @@ export class ReviewListComponent implements OnInit {
   }
 
   openModal(content, reviewId?: string) {
+    const now: Date = new Date();
+    this.newDate = {
+      year: now.getFullYear(),
+      month: now.getMonth() + 1,
+      day: now.getDate()
+    };
     this.currentReview = this.reviews.find(review => review._id === reviewId);
     this.suggestionFilter = (prsMember) => {
       return (<User[]> this.currentReview.leadReviewers).findIndex(reviewer => {

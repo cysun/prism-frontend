@@ -28,7 +28,7 @@ export class UserSelectorComponent implements OnInit {
               private sharedService: SharedService) { }
 
   ngOnInit() {
-    if (this.configType === 'groups') {
+    if (this.configType === 'groups' || this.configType === 'groupNames') {
       this.groupManagerService.getGroups().subscribe( data => {
         this.suggestedGroups = data;
         this.sharedService.groupsList = this.suggestedGroups;

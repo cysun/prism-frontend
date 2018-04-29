@@ -17,8 +17,10 @@
 
     <br />
 
-    <div class="input-group">
-      <label> Functionality for adding groups has not been completed.</label>
+    <div>
+      <h6>Groups</h6>
+      <prism-user-selector [configType]="'groupNames'" [suggestedMembers]="suggestedGroups">
+      </prism-user-selector>
     </div>
 
     <br />
@@ -31,6 +33,8 @@
     </div>
 
     <div class="text-hints">This is the number of days the document should take to be completed.</div>
+
+    <p *ngIf="addErrorMessage" class="text-danger">{{addErrorMessage}}</p>
   </div>
 
   <div class="modal-footer">

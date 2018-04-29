@@ -6,6 +6,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { DocumentComponent } from '../document/document.component';
 import { Globals } from '../shared/app.global';
+import { Group } from '../models/group.model';
 import { Review } from '../models/review.model';
 import { ReviewNode } from '../models/review_node.model';
 import { ReviewService } from './review.service';
@@ -29,6 +30,9 @@ export class ReviewComponent implements OnInit {
   newNode: ReviewNode;
   reviewId: string;
   modal: NgbModalRef;
+  addErrorMessage: string;
+
+  suggestedGroups: string[];
 
   constructor(private router: Router,
       private reviewService: ReviewService,
@@ -160,12 +164,29 @@ ${completionLabel}: ${this.formatDate(node.finishDate)}`;
   }
 
   openModal(modal: NgbModalRef): void {
+    this.suggestedGroups = ['Administrators', 'Program Review Subcommittee'];
+    this.addErrorMessage = null;
+    this.newNode.completionEstimate = null;
+    this.newNode.title = null;
     this.modal = this.modalService.open(modal, this.globals.options);
   }
 
   addNode(node: ReviewNode): void {
+    if (this.sharedService.filteredGroups.length < 1) {
+      this.addErrorMessage = 'Please select at least 1 group';
+      return;
+    }
+
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const currentGroups = currentUser.groups.map(group => group.name);
+    const allowedSelf = this.sharedService.filteredGroups.some(filteredName => currentGroups.indexOf(filteredName) !== -1);
+    if (!allowedSelf) {
+      this.addErrorMessage = 'You must be allowed to access this document. Please add a group you are a member of.';
+      return;
+    }
+
     this.reviewService.createNode(this.reviewId, node.title,
-        ['Administrators', 'Program Review Subcommittee'], node.completionEstimate).subscribe(() => {
+        this.sharedService.filteredGroups, node.completionEstimate).subscribe(() => {
       this.newNode = new ReviewNode();
       this.updateReview();
       this.modal.close();
