@@ -77,10 +77,11 @@
   <table class="table table-hover">
     <thead class="table-header">
       <tr>
-        <th class="align-middle" scope="col" style="width:5%"></th>
-        <th class="align-middle" scope="col" style="width:50%">Title</th>
-        <th class="align-middle" scope="col" style="width:30%">Uploaded By</th>
-        <th class="align-middle" scope="col" style="width:15%">Date Uploaded</th>
+        <th class="align-middle" scope="col" style="width: 5%"></th>
+        <th class="align-middle" scope="col" style="width: 45%">Title</th>
+        <th class="align-middle" scope="col" style="width: 25%">Uploaded By</th>
+        <th class="align-middle" scope="col" style="width: 15%">Date Uploaded</th>
+        <th class="align-middle" scope="col" style="width: 10%">Download</th>
       </tr>
     </thead>
     <tbody>
@@ -93,6 +94,9 @@
         <td class="align-middle">{{resource.title}}</td>
         <td class="align-middle">{{resource.files[0].uploader.username}}</td>
         <td class="align-middle">{{resource.files[0].dateUploaded | date: 'yyyy-MM-dd'}}</td>
+        <td>
+          <button class="btn btn-outline-secondary" (click)="downloadSpecific(resource)" placement="top" ngbTooltip="Download Revision"><i class="fa fa-download"></i></button>
+        </td>
       </tr>
     </tbody>
   </table>

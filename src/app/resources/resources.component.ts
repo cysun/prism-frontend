@@ -115,6 +115,10 @@ export class ResourcesComponent implements OnInit {
     }
   }
 
+  downloadSpecific(resource: Resource) {
+    this.download(resource._id).then(() => {}, () => {});
+  }
+
   download(resourceId: string): Promise<void> {
     return new Promise((resolve, reject) => {
       this.resourceService.downloadFile(resourceId).subscribe(fileData => {
