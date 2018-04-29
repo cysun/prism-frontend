@@ -4,6 +4,7 @@ import { NgbModal, NgbModalRef,  NgbModalOptions } from '@ng-bootstrap/ng-bootst
 
 import { Resource } from '../models/resource.model';
 import { ResourceService } from './resource.service'
+import { SharedService } from '../shared/shared.service';
 
 import { saveAs } from 'file-saver';
 
@@ -28,7 +29,10 @@ export class ResourcesComponent implements OnInit {
   fileName: string;
   file: File;
 
-  constructor(private resourceService: ResourceService, private modalService: NgbModal, private route: ActivatedRoute) { }
+  constructor(private resourceService: ResourceService,
+    private modalService: NgbModal,
+    private route: ActivatedRoute,
+    private sharedService: SharedService) { }
 
   ngOnInit() {
     this.getResources();
