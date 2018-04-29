@@ -96,6 +96,20 @@ export class ReviewListComponent implements OnInit {
           };
       }
       this.reviews = this.reviews.filter(filterFunction);
+      const storedUser = JSON.parse(localStorage.getItem('currentUser'));
+      const userId: string = storedUser.user._id;
+      let userFilter: (review: Review) => boolean;
+      if (storedUser.groups.find(group => group.name === 'Administrators' || group.name === 'Program Review Subcommittee')) {
+        userFilter = review => true;
+      } else if (storedUser.groups.find(group => group.name === 'University')) {
+        userFilter = review => {
+          const department: Department = <Department> (<Program> review.program).department;
+          const college: College = <College> department.college;
+          return (<User[]> department.chairs).findIndex(chair => chair._id === userId) !== -1
+                 || (<User[]> college.deans).findIndex(dean => dean._id === userId) !== -1
+        };
+      }
+      this.reviews = this.reviews.filter(userFilter);
       this.calculatePercentages();
     });
   }
