@@ -25,8 +25,6 @@ export class SharedService {
     const isAdminOrPrs = currentUser.groups.some( group => group.name === 'Administrators'
       || group.name === 'Program Review Subcommittee');
 
-      console.log('wut is this: ' + isAdminOrPrs);
-
     return isAdminOrPrs || currentUser.root;
   }
 }
