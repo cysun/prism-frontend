@@ -119,7 +119,7 @@
     <!-- <div><pre>{{ currentReview | json }}</pre></div> -->
 
     <div class="modal-footer">
-      <button class="btn btn-primary" type="submit">Save</button>
+      <button class="btn btn-warning" type="submit">Save</button>
       <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
     </div>
   </form>
@@ -156,7 +156,7 @@
 <div class="container-fluid container-fluid-content">
   <div class="container-fluid" style="text-align: right; padding: 0;"
        *ngIf="reviewFilter !== 'archive' && reviewFilter !== 'deleted' && sharedService.isAdmin()">
-    <button class="btn btn-primary" (click)="openModal(createReviewModal)">
+    <button class="btn btn-warning" (click)="openModal(createReviewModal)">
       <i class="fa fa-icon fa-plus"></i>Create Review
     </button>
   </div>

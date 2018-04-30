@@ -24,18 +24,6 @@ blockquote {
   margin-top: -3px;
 }
 
-.btn-primary {
-    background-color: #FFCE00 !important;
-    border-color: #C9A100 !important;
-    color: #000 !important;
-}
-
-.btn-primary:active,
-.btn-primary:hover,
-.btn-primary:focus {
-  background-color: #FFB940 !important;
-}
-
 .card-container {
   margin-top: 15px;
 }
@@ -101,6 +89,14 @@ blockquote {
 
 .header-logo {
   font-size: 1.9em;
+}
+
+.label {
+  font-size: 2em;
+  font-weight: bold;
+  padding-right: 10px;
+  text-transform: uppercase;
+  vertical-align: middle;
 }
 
 .main {

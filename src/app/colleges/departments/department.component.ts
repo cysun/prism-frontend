@@ -11,6 +11,9 @@ import { ProgramsComponent } from './programs/programs.component';
 
 import { DepartmentService } from './department.service';
 import { ProgramService } from './programs/program.service';
+import { SharedService } from '../../shared/shared.service';
+
+import { Globals } from '../../shared/app.global';
 
 import { User } from '../../models/user.model';
 import { Department } from '../../models/department.model'
@@ -28,11 +31,7 @@ export class DepartmentComponent implements OnInit {
   currentCollege: string;
   programsComponent: ProgramsComponent;
   modal: NgbModalRef;
-  options: NgbModalOptions = {
-    backdrop : 'static',
-    keyboard : false,
-    size: 'lg',
-  };
+
   suggestedUsers: User[] = [];
   filteredChairs: User[] = [];
   department: Department = new Department();
@@ -50,8 +49,10 @@ export class DepartmentComponent implements OnInit {
         : this.getSuggestedUsers(term, this.users));
 
   constructor(private departmentService: DepartmentService,
+              private globals: Globals,
               private programService: ProgramService,
-              private router: Router, private modalService: NgbModal) { }
+              private router: Router, private modalService: NgbModal,
+              private sharedService: SharedService) { }
 
   ngOnInit() {
     this.departmentService.getDepartmentsAt(this.collegeId).subscribe(data => {
@@ -97,6 +98,7 @@ export class DepartmentComponent implements OnInit {
   }
 
   closeModal() {
+    this.alerts = [];
     this.modal.close();
   }
 
@@ -128,7 +130,7 @@ export class DepartmentComponent implements OnInit {
       this.programs = data;
     })
     this.department = department;
-    this.modal = this.modalService.open(content, this.options);
+    this.modal = this.modalService.open(content, this.globals.options);
   }
 
   deleteChair(chair) {
@@ -223,11 +225,11 @@ export class DepartmentComponent implements OnInit {
       this.department.chairs = this.getChairsObject(data.chairs);
       this.chairs = <User[]> this.department.chairs;
     });
-    this.modal = this.modalService.open(content, this.options);
+    this.modal = this.modalService.open(content, this.globals.options);
   }
 
   openModal(content) {
-    this.modal = this.modalService.open(content, this.options);
+    this.modal = this.modalService.open(content, this.globals.options);
   }
 
   submitDepartment() {
@@ -294,7 +296,7 @@ export class DepartmentComponent implements OnInit {
       this.department.chairs = this.getChairsObject(data.chairs);
       this.chairs = <User[]> this.department.chairs;
     });
-    this.modal = this.modalService.open(content, this.options);
+    this.modal = this.modalService.open(content, this.globals.options);
   }
 
 }

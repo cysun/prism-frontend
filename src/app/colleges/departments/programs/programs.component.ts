@@ -65,6 +65,7 @@ export class ProgramsComponent implements OnInit {
   }
 
   closeModal() {
+    this.alerts = [];
     this.modal.close();
   }
 

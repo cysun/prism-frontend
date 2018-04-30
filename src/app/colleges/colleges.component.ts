@@ -91,6 +91,11 @@ export class CollegesComponent implements OnInit {
     this.alerts.splice(index, 1);
   }
 
+  closeModal() {
+    this.alerts = [];
+    this.modal.close();
+  }
+
   addCollegeDialog(content) {
     this.alerts = [];
     this.modal = this.modalService.open(content, this.options);

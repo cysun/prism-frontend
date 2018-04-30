@@ -24,14 +24,6 @@
   font-size: 1.4em;
 }
 
-.label {
-  font-size: 2em;
-  font-weight: bold;
-  padding-right: 10px;
-  text-transform: uppercase;
-  vertical-align: middle;
-}
-
 .modal {
   padding-top: 50px;
 }

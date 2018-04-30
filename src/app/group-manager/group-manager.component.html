@@ -114,8 +114,7 @@
         <span class="col-8">
           <button type="button" class="btn btn-danger delete-btn"
                   (click)="editModal(deleteGroupModal, group._id)"
-                  [disabled]="group.name === 'Administrators' ||
-                              group.name === 'Program Review Subcommittee'">
+                  [disabled]="group.access">
             Delete Group
           </button>
           <div class="text-hints">
