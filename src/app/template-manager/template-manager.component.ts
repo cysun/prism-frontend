@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Globals } from '../shared/app.global';
 import { Document } from '../models/document.model';
 import { DocumentService } from '../document/document.service';
+import { SharedService } from '../shared/shared.service';
 import { TemplateManagerService } from './template-manager.service';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -22,11 +23,14 @@ export class TemplateManagerComponent implements OnInit {
   fileName: string;
 
   currentTemplate: Document = new Document();
+  suggestedGroups: string[] = [];
+  suggestedDownloadGroups: string[] = [];
 
   constructor(private modalService: NgbModal,
     private documentService: DocumentService,
     private templateManagerService: TemplateManagerService,
-    private globals: Globals) { }
+    private globals: Globals,
+    private sharedService: SharedService) { }
 
     ngOnInit() {
       this.listTemplates();
@@ -35,6 +39,8 @@ export class TemplateManagerComponent implements OnInit {
     /* Open a basic modal passing the data of the specific template */
     openModal(content, templateId?: string) {
       this.currentTemplate = new Document();
+      this.suggestedGroups = ['Administrators', 'Program Review Subcommittee'];
+      this.suggestedDownloadGroups = [];
 
       if (templateId) {
         this.currentTemplate = this.templates.find( temp => temp._id === templateId);
@@ -62,14 +68,24 @@ export class TemplateManagerComponent implements OnInit {
       if (event.target.files.length > 0) {
         this.file = event.target.files[0];
         this.fileName = event.target.files[0].name;
+
+        if (this.file.size > this.globals.maxFileSize) {
+          this.alert = { message: 'File is too large.' };
+        } else {
+          this.alert = '';
+        }
       }
     }
 
     /* Post a template */
     postTemplate() {
-      if (this.file) {
-        this.templateManagerService.createTemplate(this.currentTemplate.title,
-          this.currentTemplate.completionEstimate).subscribe( data => {
+      if (this.file && (this.file.size <= this.globals.maxFileSize)) {
+        this.templateManagerService.createTemplate(
+          this.currentTemplate.title,
+          this.currentTemplate.completionEstimate,
+          this.sharedService.filteredGroups,
+          this.sharedService.filteredGroups2
+        ).subscribe( data => {
             this.templates.push(data);
 
             this.postRevision(data._id).then( () => {
@@ -81,7 +97,7 @@ export class TemplateManagerComponent implements OnInit {
             console.log(err)
           });
         } else {
-          this.alert = { message: 'Please attach a file.' };
+          this.alert = { message: 'Please attach a file with size ~ 5 MB.' };
         }
       }
 

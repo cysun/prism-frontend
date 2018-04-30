@@ -1,4 +1,4 @@
-<div class="app-container" *ngIf="authService.isAuthenticated()">
+<div class="app-container" *ngIf="authService.isAuthenticated() && currentUser">
   <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: #1A1A1A;">
     <button type="button" class="navbar-toggler navbar-toggler-right"
             (click)="isExpanded = !isExpanded" data-toggle="collapse">
@@ -12,8 +12,9 @@
     </a>
   </nav>
 
-  <div class="collapse navbar-collapse sticky-top" [ngbCollapse]="!isExpanded"
-       *ngIf="authService.isAuthenticated()">
+  <div class="collapse navbar-collapse" [ngbCollapse]="!isExpanded"
+       *ngIf="authService.isAuthenticated()" (window:resize)="onResize($event)"
+       style="position: fixed; z-index: 3; width:100%;">
     <ul class="navbar-nav">
       <li class="nav-item">
         <a class="nav-link" [routerLink]="['/dashboard']" style="padding: 10px;">
@@ -22,7 +23,8 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/calendar']" style="padding: 10px;">
+        <a class="nav-link" *ngIf="sharedService.isAdminOrPrs()"
+           [routerLink]="['/calendar']" style="padding: 10px;">
           <i class="fa fa-icon fa-calendar"></i>Calendar
         </a>
       </li>
@@ -73,7 +75,7 @@
   </div>
 </div>
 
-<div class="app-public-container" *ngIf="!authService.isAuthenticated()">
+<div class="app-public-container" *ngIf="!authService.isAuthenticated() || externalUser">
   <div class="main">
     <router-outlet></router-outlet>
   </div>

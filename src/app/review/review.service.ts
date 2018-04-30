@@ -26,8 +26,11 @@ export class ReviewService {
     return this.http.post<Review>(`/api/review/${id}/restore`, '');
   }
 
-  createReview(programId: string): Observable<Review> {
-    return this.http.post<Review>('/api/review', {'program': programId});
+  createReview(programId: string, startDate: string): Observable<Review> {
+    return this.http.post<Review>('/api/review', {
+      'program': programId,
+      'startDate': startDate
+    });
   }
 
   finalizeNode(reviewId: string, nodeId: string) {
@@ -45,6 +48,15 @@ export class ReviewService {
       'title': title,
       'groups': groups,
       'completionEstimate': completionEstimate
+    }, {
+      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      responseType: 'text'
+    });
+  }
+
+  createNodeFromTemplate(id: string, templateId: string) {
+    return this.http.post(`/api/review/${id}/node`, {
+      'template': templateId
     }, {
       headers: new HttpHeaders({'Content-Type': 'application/json'}),
       responseType: 'text'

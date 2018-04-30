@@ -2,7 +2,7 @@
 <div class="page-header">
   <div class="btn-toolbar pull-right">
     <!-- Delete all button -->
-    <div class="btn-group">
+    <div class="btn-group" *ngIf="sharedService.isAdmin()">
       <button type="button" (click)="deleteAll()" class="btn btn-md btn-danger vertical-space">Delete All</button>
     </div>
     <!-- Download all button -->
@@ -33,13 +33,20 @@
   <form #f="ngForm" (ngSubmit)="postNewResource()">
     <div class="modal-body">
       <div *ngIf="alert">
-        <ngb-alert type="danger" [dismissible]="false"><i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}</ngb-alert>
+        <ngb-alert type="danger" [dismissible]="false">
+          <i class="fa fa-icon fa-exclamation-circle"></i>
+          <strong>Error:</strong> {{ alert.message }}
+        </ngb-alert>
       </div>
       <div class="modal-message">
 
         <div class="custom-file" style="text-align: left;">
           <input name="file" type="file" class="custom-file-input"
-           accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" (change)="onFileChange($event)">
+                 accept="application/pdf, application/msword,
+                         application/vnd.openxmlformats-officedocument.wordprocessingml.document,
+                         application/vnd.ms-powerpoint,
+                         application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                 (change)="onFileChange($event)">
 
           <label class="custom-file-label">
             {{ fileName ? fileName : 'Choose a file'}}
@@ -70,10 +77,11 @@
   <table class="table table-hover">
     <thead class="table-header">
       <tr>
-        <th class="align-middle" scope="col" style="width:5%"></th>
-        <th class="align-middle" scope="col" style="width:50%">Title</th>
-        <th class="align-middle" scope="col" style="width:30%">Uploaded By</th>
-        <th class="align-middle" scope="col" style="width:15%">Date Uploaded</th>
+        <th class="align-middle" scope="col" style="width: 5%"></th>
+        <th class="align-middle" scope="col" style="width: 45%">Title</th>
+        <th class="align-middle" scope="col" style="width: 25%">Uploaded By</th>
+        <th class="align-middle" scope="col" style="width: 15%">Date Uploaded</th>
+        <th class="align-middle" scope="col" style="width: 10%">Download</th>
       </tr>
     </thead>
     <tbody>
@@ -86,6 +94,9 @@
         <td class="align-middle">{{resource.title}}</td>
         <td class="align-middle">{{resource.files[0].uploader.username}}</td>
         <td class="align-middle">{{resource.files[0].dateUploaded | date: 'yyyy-MM-dd'}}</td>
+        <td>
+          <button class="btn btn-outline-secondary" (click)="downloadSpecific(resource)" placement="top" ngbTooltip="Download Revision"><i class="fa fa-download"></i></button>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -97,7 +108,7 @@
       <button class="btn btn-outline-primary" [disabled]="selected.length === 0" id="dropdownBasic1" ngbDropdownToggle>Action on {{selected.length}} selected</button>
       <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
         <button class="dropdown-item" (click)="downloadSelected()">Download</button>
-        <button class="dropdown-item" (click)="deleteSelected()">Delete</button>
+        <button class="dropdown-item" (click)="deleteSelected()" *ngIf="sharedService.isAdmin()">Delete</button>
       </div>
     </div>
   </div>

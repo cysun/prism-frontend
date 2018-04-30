@@ -1,5 +1,5 @@
 <p class="card-text">
-  Please enter your CalStateLA credentials to log into the system.
+  Please enter your Cal State LA credentials to log into the system.
 </p>
 
 <form #f="ngForm" (ngSubmit)="login()">
@@ -19,9 +19,14 @@
            placeholder="Password" name="password" required>
   </div>
 
-  <div class="validation-error" *ngIf="wrongInfo === true">
+  <div class="validation-error" *ngIf="wrongInfo">
     The username and/or password are incorrect.<br>
     Please try again.
+  </div>
+
+  <div class="validation-error" *ngIf="timeout">
+    Unable to reach PRISM server.<br>
+    Please contact your system administrator.
   </div>
 
   <div class="col-12 footer-buttons">
