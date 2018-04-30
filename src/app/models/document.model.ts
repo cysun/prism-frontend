@@ -16,4 +16,5 @@ export class Document {
   coreTemplate: boolean;
   completionEstimate: number;
   locked: boolean;
+  downloadOnly: boolean;
 }

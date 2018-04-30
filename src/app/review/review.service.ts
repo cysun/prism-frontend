@@ -54,6 +54,15 @@ export class ReviewService {
     });
   }
 
+  createNodeFromTemplate(id: string, templateId: string) {
+    return this.http.post(`/api/review/${id}/node`, {
+      'template': templateId
+    }, {
+      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      responseType: 'text'
+    });
+  }
+
   getReviews(): Observable<Review[]> {
     return this.http.get<Review[]>('/api/reviews');
   }

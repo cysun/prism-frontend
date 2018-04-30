@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
+import { Document } from '../models/document.model';
 import { DocumentComponent } from '../document/document.component';
 import { Globals } from '../shared/app.global';
 import { Group } from '../models/group.model';
@@ -11,6 +12,7 @@ import { Review } from '../models/review.model';
 import { ReviewNode } from '../models/review_node.model';
 import { ReviewService } from './review.service';
 import { SharedService } from '../shared/shared.service';
+import { TemplateManagerService } from '../template-manager/template-manager.service';
 
 declare var dagreD3: any;
 declare var d3: any;
@@ -31,6 +33,9 @@ export class ReviewComponent implements OnInit {
   reviewId: string;
   modal: NgbModalRef;
   addErrorMessage: string;
+  createFromTemplate: boolean;
+  selectedTemplate: string;
+  templates: Document[] = [];
 
   suggestedGroups: string[];
 
@@ -41,7 +46,8 @@ export class ReviewComponent implements OnInit {
       private modalService: NgbModal,
       private globals: Globals,
       private location: Location,
-      private sharedService: SharedService) {
+      private sharedService: SharedService,
+      private templateManagerService: TemplateManagerService) {
     this.newNode = new ReviewNode();
   }
 
@@ -165,13 +171,29 @@ ${completionLabel}: ${this.formatDate(node.finishDate)}`;
 
   openModal(modal: NgbModalRef): void {
     this.suggestedGroups = ['Administrators', 'Program Review Subcommittee'];
+    this.selectedTemplate = null;
     this.addErrorMessage = null;
     this.newNode.completionEstimate = null;
     this.newNode.title = null;
+    this.createFromTemplate = false;
+    if (this.sharedService.isAdmin()) {
+      this.templateManagerService.listAllTemplates().subscribe(templates => {
+        this.templates = templates;
+      });
+    }
     this.modal = this.modalService.open(modal, this.globals.options);
   }
 
   addNode(node: ReviewNode): void {
+    if (this.createFromTemplate) {
+      this.reviewService.createNodeFromTemplate(this.reviewId, this.selectedTemplate).subscribe(() => {
+        this.newNode = new ReviewNode();
+        this.updateReview();
+        this.modal.close();
+      });
+      return;
+    }
+
     if (this.sharedService.filteredGroups.length < 1) {
       this.addErrorMessage = 'Please select at least 1 group';
       return;

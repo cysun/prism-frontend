@@ -15,6 +15,7 @@ export class UserSelectorComponent implements OnInit {
   @Input() filterType: string;
   @Input() suggestedMembers: any[];
   @Input() suggestionFilter: (user: User) => boolean;
+  @Input() secondary = false;
 
   filteredGroups: string[];
   filteredUser: string;
@@ -67,6 +68,10 @@ export class UserSelectorComponent implements OnInit {
   }
 
   submitGroupsList() {
+    if (this.secondary) {
+      this.sharedService.filteredGroups2 = this.filteredGroups;
+      return;
+    }
     this.sharedService.filteredGroups = this.filteredGroups;
   }
 }

@@ -11,10 +11,10 @@
           <a class="nav-link" *ngIf="sharedService.isAdminOrPrs()" [routerLink]="['/calendar']">
             <i class="fa fa-calendar"></i> Calendar
           </a>
-          <a *ngIf="sharedService.isAdmin()" class="nav-link" [routerLink]="['/college']">
+          <a class="nav-link" *ngIf="sharedService.isAdmin()" [routerLink]="['/college']">
             <i class="fa fa-graduation-cap"></i> University Hierarchy
           </a>
-          <a class="nav-link" [routerLink]="['/resources']">
+          <a class="nav-link" *ngIf="sharedService.isAdminOrPrs()" [routerLink]="['/resources']">
             <i class="fa fa-folder-open-o"></i> Resources
           </a>
           <a class="nav-link" [routerLink]="['/group']">

@@ -13,7 +13,8 @@ import { AuthService } from './auth.service';
 export class LoginComponent implements OnInit {
   username: string;
   password: string;
-  wrongInfo: Boolean = false;
+  wrongInfo = false;
+  timeout = false;
 
   constructor(private authService: AuthService, private router: Router) { }
 
@@ -37,7 +38,13 @@ export class LoginComponent implements OnInit {
 
       this.router.navigate(['dashboard']);
       this.wrongInfo = false;
+      this.timeout = false
     }, err => {
+      if (err.status === 504) {
+        this.timeout = true;
+        return;
+      }
+      this.timeout = false;
       this.password = '';
       this.wrongInfo = true;
     })
