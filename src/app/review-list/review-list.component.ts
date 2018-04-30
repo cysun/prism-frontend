@@ -191,16 +191,12 @@ export class ReviewListComponent implements OnInit {
   submitReview() {
     const leadReviewers = this.sharedService.filteredUsers;
 
-    if (leadReviewers) {
-      const startDate = `${this.newDate.year}-${this.newDate.month}-${this.newDate.day}`;
-      this.reviewService.createReview(this.selectedOption, startDate).subscribe(data => {
-        this.reviews.push(data);
-        this.addLeadReviewers(data._id, leadReviewers);
-        this.closeModal();
-      });
-    } else {
-      this.alert = { message: 'Please select at least one lead reviewer.' };
-    }
+    const startDate = `${this.newDate.year}-${this.newDate.month}-${this.newDate.day}`;
+    this.reviewService.createReview(this.selectedOption, startDate).subscribe(data => {
+      this.reviews.push(data);
+      this.addLeadReviewers(data._id, leadReviewers);
+      this.closeModal();
+    });
   }
 
   deleteReview() {
