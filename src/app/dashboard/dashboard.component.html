@@ -1,6 +1,15 @@
 <h1 class="display-4">Dashboard</h1>
 
 <ngb-tabset>
+  <ngb-tab *ngIf="sharedService.isPrs()">
+    <ng-template ngbTabTitle>
+      <i class="fa fa-bullseye"></i> My Reviews
+    </ng-template>
+    <ng-template ngbTabContent>
+      <prism-review-list [reviewFilter]="'my'"></prism-review-list>
+    </ng-template>
+  </ngb-tab>
+
   <ngb-tab>
     <ng-template ngbTabTitle>
       <i class="fa fa-university"></i> Active Reviews

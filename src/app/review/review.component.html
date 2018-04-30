@@ -4,41 +4,64 @@
   </div>
 
   <div class="modal-body">
-    <div *ngIf="alert">
-      <ngb-alert type="danger" [dismissible]="false"><i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}</ngb-alert>
-    </div>
-
-    <div class="input-group">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Title</span>
-      </div>
-      <input type="text" class="form-control" name="node-title" [(ngModel)]="newNode.title">
-    </div>
+    <ul class="nav nav-pills nav-fill" *ngIf="sharedService.isAdmin()">
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="!createFromTemplate" [routerLink]="" (click)='createFromTemplate = false'>From Scratch</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="createFromTemplate" [routerLink]="" (click)='createFromTemplate = true'>From Template</a>
+      </li>
+    </ul>
 
     <br />
 
-    <div>
-      <h6>Groups</h6>
-      <prism-user-selector [configType]="'groupNames'" [suggestedMembers]="suggestedGroups">
-      </prism-user-selector>
-    </div>
-
-    <br />
-
-    <div class="input-group">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Completion Estimate</span>
+    <div *ngIf="!createFromTemplate">
+      <div *ngIf="alert">
+        <ngb-alert type="danger" [dismissible]="false"><i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}</ngb-alert>
       </div>
-      <input type="number" class="form-control" name="node-completion-estimate" [(ngModel)]="newNode.completionEstimate">
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Title</span>
+        </div>
+        <input type="text" class="form-control" name="node-title" [(ngModel)]="newNode.title">
+      </div>
+
+      <br />
+
+      <div>
+        <h6>Groups</h6>
+        <prism-user-selector [configType]="'groupNames'" [suggestedMembers]="suggestedGroups">
+        </prism-user-selector>
+      </div>
+
+      <br />
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Completion Estimate</span>
+        </div>
+        <input type="number" class="form-control" name="node-completion-estimate" [(ngModel)]="newNode.completionEstimate">
+      </div>
+
+      <div class="text-hints">This is the number of days the document should take to be completed.</div>
+
+      <p *ngIf="addErrorMessage" class="text-danger">{{addErrorMessage}}</p>
     </div>
 
-    <div class="text-hints">This is the number of days the document should take to be completed.</div>
+    <div *ngIf="createFromTemplate">
+      <p>Template to Use<p>
 
-    <p *ngIf="addErrorMessage" class="text-danger">{{addErrorMessage}}</p>
+      <select class="custom-select" [(ngModel)]="selectedTemplate" name="template-list">
+        <option *ngFor="let template of templates" [ngValue]="template._id">
+          {{template.title}}
+        </option>
+      </select>
+    </div>
   </div>
 
   <div class="modal-footer">
-    <button class="btn btn-dark" type="button" (click)="addNode(newNode)">Save</button>
+    <button class="btn btn-dark" type="button" (click)="addNode(newNode)" [disabled]="createFromTemplate && !selectedTemplate">Save</button>
     <button class="btn btn-dark" type="button" (click)="modal.close()">Cancel</button>
   </div>
 </ng-template>

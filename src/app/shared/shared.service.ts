@@ -9,6 +9,7 @@ export class SharedService {
   searchUser: string;
   filteredUsers: string[];
   filteredGroups: string[];
+  filteredGroups2: string[];
 
   prsMembersList: any[];
   groupsList: string[];
@@ -17,7 +18,12 @@ export class SharedService {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const isAdmin = currentUser.groups.some( group => group.name === 'Administrators');
 
-    return isAdmin;
+    return isAdmin || currentUser.user.root;
+  }
+
+  isPrs(): boolean {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    return currentUser.groups.some(group => group.name === 'Program Review Subcommittee');
   }
 
   isAdminOrPrs(): boolean {
@@ -25,8 +31,6 @@ export class SharedService {
     const isAdminOrPrs = currentUser.groups.some( group => group.name === 'Administrators'
       || group.name === 'Program Review Subcommittee');
 
-      console.log('wut is this: ' + isAdminOrPrs);
-
-    return isAdminOrPrs;
+    return isAdminOrPrs || currentUser.user.root;
   }
 }

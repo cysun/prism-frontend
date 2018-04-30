@@ -75,25 +75,30 @@ export class DocumentComponent implements OnInit {
     const castedUser: UserResponse = JSON.parse(localStorage.getItem('currentUser'));
     this.currentUser = new UserResponse(castedUser.user, castedUser.groups, castedUser.token);
 
-    this.documentService.retrieveDocument(this.documentId).subscribe( data => {
+    this.documentService.retrieveDocument(this.documentId).subscribe(data => {
       this.document = data;
 
       if (this.document.revisions && this.document.revisions.length !== 0) {
-        this.selectedOption = this.document.revisions.slice(0).reverse().find( item =>
+        this.selectedOption = this.document.revisions.slice(0).reverse().find(item =>
           item.message !== 'Deleted revision')._id;
 
-        this.selectedFilter = this.document.revisions.slice(0).reverse().find( item =>
+        this.selectedFilter = this.document.revisions.slice(0).reverse().find(item =>
             item.message !== 'Deleted revision')._id;
       }
 
       this.documentTitle = this.document.title;
       this.totalIndices = this.getNumOfRevisions();
       this.getLatestRevision();
+    }, err => {
+      this.documentId = null;
+      this.document = null;
     });
 
-    this.documentService.getAllExternalUploads(this.documentId).subscribe( data => {
-      this.externalUploadsList = data;
-    });
+    if (this.currentUser.isRootOrAdmin()) {
+      this.documentService.getAllExternalUploads(this.documentId).subscribe( data => {
+        this.externalUploadsList = data;
+      });
+    }
   }
 
   /* Set file variable to the file the user has chosen */
