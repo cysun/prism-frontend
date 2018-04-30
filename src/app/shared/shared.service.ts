@@ -18,7 +18,7 @@ export class SharedService {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const isAdmin = currentUser.groups.some( group => group.name === 'Administrators');
 
-    return isAdmin || currentUser.root;
+    return isAdmin || currentUser.user.root;
   }
 
   isPrs(): boolean {
@@ -31,6 +31,6 @@ export class SharedService {
     const isAdminOrPrs = currentUser.groups.some( group => group.name === 'Administrators'
       || group.name === 'Program Review Subcommittee');
 
-    return isAdminOrPrs || currentUser.root;
+    return isAdminOrPrs || currentUser.user.root;
   }
 }
