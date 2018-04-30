@@ -74,7 +74,7 @@
 <button class="btn btn-warning" *ngIf="sharedService.isAdminOrPrs()" (click)="openModal(addNodeModal)">Add Document</button>
 <br />
 <br />
-<prism-document #documentComponent [documentId]="documentId" [nodeId]="nodeId" [reviewId]="review._id" [updateReviewComponent]="handleDocumentUpdate.bind(this)" *ngIf="documentId"></prism-document>
+<prism-document #documentComponent [documentId]="documentId" [nodeId]="nodeId" [reviewId]="review._id" [updateReviewComponent]="handleDocumentUpdate.bind(this)" [externalUploadTitle]="(review && review.program && review.program.name ? review.program.name : '') + ' Review ' + yearString" *ngIf="documentId"></prism-document>
 <div class="jumbotron" *ngIf="!documentId">
   <h1 class="display-4">No document selected</h1>
   <p class="lead">Click on a document from the review to get started</p>
