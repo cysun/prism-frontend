@@ -5,7 +5,7 @@
       <div class="container-fluid">
         <div *ngIf="!updateInfo" class="notification-label">
           <span>{{currentUser.name?.first}}'s Profile</span>
-          <button class="btn btn-outline-primary" (click)="toggleEditButton()"><i class="fa fa-icon fa-pencil"></i>Edit</button>
+          <button class="btn btn-outline-warning" (click)="toggleEditButton()"><i class="fa fa-icon fa-pencil"></i>Edit</button>
         </div>
 
         <div class="alert-messages" *ngIf="alert">
@@ -76,8 +76,8 @@
           </div>
 
           <div class="update-buttons col-9">
-            <button class="btn btn-outline-primary" (click)="updateBasicInfo()">Save</button>
-            <button class="btn btn-outline-primary" (click)="toggleEditButton()">Cancel</button>
+            <button class="btn btn-outline-warning" (click)="updateBasicInfo()">Save</button>
+            <button class="btn btn-outline-warning" (click)="toggleEditButton()">Cancel</button>
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@ export class Comment {
   _id: string;
   text: string;
   creationDate: Date;
-  author: User;
+  author: User | string;
   revision: number;
   originalFilename: string;
 }

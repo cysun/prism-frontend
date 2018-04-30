@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 
@@ -13,17 +13,19 @@ import { UserResponse } from './models/user-response.model';
 })
 
 export class AppComponent implements OnInit {
-  username: string;
-  isCollapsed = false;
   currentUser: UserResponse;
-  isAdmin: boolean;
+  externalUser: boolean;
+  isExpanded: boolean;
+  username: string;
 
-  constructor(private authService: AuthService,
+  constructor(@Inject('Window') private window: Window,
+    private authService: AuthService,
     private sharedService: SharedService,
     private router: Router) { }
 
   ngOnInit() {
     if (this.authService.isAuthenticated()) {
+      this.externalUser = false;
       const castedUser: UserResponse = JSON.parse(localStorage.getItem('currentUser'));
       this.currentUser = new UserResponse(castedUser.user, castedUser.groups, castedUser.token);
 
@@ -37,6 +39,17 @@ export class AppComponent implements OnInit {
         const user = this.authService.getUser();
         this.username = user.user.username;
       }
+    } else if (this.router.url.includes('external-upload')) {
+      this.externalUser = true;
+    } else {
+      setTimeout(this.ngOnInit.bind(this), 20);
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    if (event.target.innerWidth > 990) {
+      this.isExpanded = false;
     }
   }
 

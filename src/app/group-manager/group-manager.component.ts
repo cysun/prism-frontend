@@ -5,6 +5,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Group } from '../models/group.model';
 import { User } from '../models/user.model';
+import { UserResponse } from '../models/user-response.model';
 
 import { Globals } from '../shared/app.global';
 import { GroupManagerService } from './group-manager.service';
@@ -18,6 +19,7 @@ import { SharedService } from '../shared/shared.service';
 
 export class GroupManagerComponent implements OnInit {
   modal: NgbModalRef;
+  currentUser: UserResponse;
 
   member: string;
   group: Group = new Group();
@@ -35,11 +37,17 @@ export class GroupManagerComponent implements OnInit {
     private sharedService: SharedService) { }
 
     ngOnInit() {
-      this.groupManagerService.getUsers().subscribe( data => {
-        this.users = data;
-        this.suggestedUsers = data;
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+      this.getUserList().then( () => {
+        this.getAllGroups().then( (data: Group[]) => {
+          for (let i = 0; i < data.length; i++) {
+            if (data[i].members.length > 0) {
+              this.groups[i].members = this.getMembersObject(<string[]> data[i].members);
+            }
+          }
+        });
       })
-        this.getAllGroups();
     }
 
     /* Error messages when performing invalid actions */
@@ -71,20 +79,23 @@ export class GroupManagerComponent implements OnInit {
       this.getUserList().then( () => {
         this.groupManagerService.getGroup(groupId).subscribe( data => {
           this.group = data;
+          this.sharedService.filteredUsers = null;
 
           for ( let i = 0; i < this.group.members.length; i++) {
-            for (let j = 0; j < this.suggestedUsers.length; j++) {
-              if (this.group.members[i] === this.suggestedUsers[j]._id) {
-                this.suggestedUsers.splice(j, 1);
+            for (let j = 0; j < this.users.length; j++) {
+              if (this.group.members[i] === this.users[j]._id) {
+                this.users.splice(j, 1);
               }
             }
           }
+          this.suggestedUsers = this.users;
 
           if (this.group.members.length > 0) {
-            this.member = this.group.members.find( item => item === memberId);
+            this.member = (<string[]> this.group.members).find( item => item === memberId);
           }
+
+          this.modal = this.modalService.open(content, this.globals.options);
         });
-        this.modal = this.modalService.open(content, this.globals.options);
       })
     }
 
@@ -98,14 +109,9 @@ export class GroupManagerComponent implements OnInit {
     /* Returns the list of groups */
     getAllGroups() {
       return new Promise((resolve, reject) => {
-        this.groupManagerService.getGroups().subscribe( data => {
+        this.groupManagerService.getGroups().subscribe( (data: Group[]) => {
           this.groups = data;
-
-          for (let i = 0; i < this.groups.length; i++) {
-            const members = this.groups[i].members;
-            this.groups[i].members = this.getMembersObject(members);
-          }
-          resolve();
+          resolve(data);
         }, err => {
           console.log(err);
           reject();
@@ -118,8 +124,6 @@ export class GroupManagerComponent implements OnInit {
       return new Promise((resolve, reject) => {
         this.groupManagerService.getUsers().subscribe( data => {
           this.users = data;
-          this.suggestedUsers = data;
-          this.suggestedUsers.sort(this.compareUsernames)
           resolve();
         })
       });
@@ -178,7 +182,7 @@ export class GroupManagerComponent implements OnInit {
           } else {
             this.groupManagerService.updateGroup(this.group).subscribe( updatedGroup => {
               const index = this.groups.findIndex(oldGroup => oldGroup._id === updatedGroup._id);
-              updatedGroup.members = this.getMembersObject(updatedGroup.members);
+              updatedGroup.members = this.getMembersObject(<string[]> updatedGroup.members);
               this.groups[index] = updatedGroup;
               this.modal.close();
             });
@@ -189,12 +193,13 @@ export class GroupManagerComponent implements OnInit {
 
       /* Adding members to the group */
       const filteredMembers = this.sharedService.filteredUsers;
-      if (filteredMembers.length > 0) {
+
+      if (filteredMembers && filteredMembers.length > 0) {
         for (let i = 0; i < filteredMembers.length; i++) {
           this.groupManagerService.addMember(filteredMembers[i], this.group._id).subscribe( () => {
             const newMember = this.getMembersObject([filteredMembers[i]]);
             const groupIndex = this.groups.findIndex(getGroup => getGroup._id === this.group._id);
-            this.groups[groupIndex].members.push(newMember[0]);
+            (<User[]> this.groups[groupIndex].members).push(newMember[0]);
           })
         }
         this.modal.close();
@@ -207,7 +212,7 @@ export class GroupManagerComponent implements OnInit {
         const findGroupIndex = this.groups.findIndex( item => item._id === this.group._id);
 
         for (let i = 0; i < this.groups[findGroupIndex].members.length; i++) {
-          if (this.groups[findGroupIndex].members[i]._id === this.member) {
+          if ((<User> this.groups[findGroupIndex].members[i])._id === this.member) {
             this.groups[findGroupIndex].members.splice(i, 1);
             break;
           }
@@ -217,7 +222,7 @@ export class GroupManagerComponent implements OnInit {
     }
 
     /* Give a group's member list of IDs and return their corresponding member objects */
-    getMembersObject(memberList: any[]): any[] {
+    getMembersObject(memberList: string[]): User[] {
       const displayList = [];
 
       for (let i = 0; i < memberList.length; i++) {
@@ -228,18 +233,5 @@ export class GroupManagerComponent implements OnInit {
         }
       }
       return displayList;
-    }
-
-    /* Function to sort the suggested user list in alphabetical order */
-    compareUsernames(user1: User, user2: User) {
-      const username1 = user1.username.toLowerCase();
-      const username2 = user2.username.toLowerCase();
-
-      if (username1 > username2) {
-        return 1;
-      } else if (username1 < username2) {
-        return -1;
-      }
-      return 0;
     }
 }

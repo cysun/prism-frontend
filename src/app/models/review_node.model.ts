@@ -1,3 +1,5 @@
+import { Document } from './document.model';
+
 export class ReviewNode {
   startDate: string;
   finishDate: string;
@@ -7,7 +9,7 @@ export class ReviewNode {
   email: {
     [key: string]: string;
   };
-  document: string;
+  document: string | Document;
   prerequisites: string[];
   title: string;
 }

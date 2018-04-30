@@ -15,7 +15,7 @@
         <span class="col-3 group-label">Program</span>
         <div class="form-group col-8">
           <select class="custom-select" [(ngModel)]="selectedOption" name="program-list">
-            <option *ngFor="let program of programsList" [ngValue]="program._id">
+            <option *ngFor="let program of programs" [ngValue]="program._id">
               {{program.name}}
             </option>
           </select>
@@ -38,6 +38,25 @@
           Type in a username to get a list of possible users to add as a lead reviewer.
         </div>
       </span>
+    </div>
+
+    <div class="input-group grid-space">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Start Date</span>
+      </div>
+
+      <div class="input-group-prepend">
+        <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
+          <i class="fa fa-calendar"></i>
+        </button>
+      </div>
+
+      <input class="form-control" placeholder="yyyy-mm-dd" name="d2" #c2="ngModel"
+             [(ngModel)]="newDate" ngbDatepicker #d2="ngbDatepicker" [minDate]="minDate">
+
+       <div class="text-hints">
+         This should be the current date unless it is intended for storing archived documents from before PRISM was implemented.
+       </div>
     </div>
   </div>
 
@@ -94,7 +113,7 @@
       <span class="container-fluid" style="padding:30px;">
         <prism-user-selector [configType]="'multiple'"
                              [filterType]="'prs'"
-                             [suggestedMembers]="suggestedUsers">
+                             [suggestionFilter]="suggestionFilter">
         </prism-user-selector>
 
         <div class="text-hints">
@@ -111,7 +130,6 @@
     </div>
   </form>
 </ng-template>
-
 
 <ng-template #deleteReviewModal>
   <div class="modal-header">
@@ -142,14 +160,28 @@
 
 <!-- Display review list content -->
 <div class="container-fluid container-fluid-content">
-  <div class="container-fluid" style="text-align: right; padding: 0;" *ngIf="reviewFilter !== 'archive'">
+  <div class="container-fluid" style="text-align: right; padding: 0;"
+       *ngIf="reviewFilter !== 'archive' && reviewFilter !== 'deleted' && sharedService.isAdmin()">
     <button class="btn btn-primary" (click)="openModal(createReviewModal)">
       <i class="fa fa-icon fa-plus"></i>Create Review
     </button>
   </div>
 
-  <div class="row" *ngIf="reviewsList.length > 0; else emptyReviews">
-    <ng-container *ngFor="let review of reviewsList">
+  <div class="search-bar" *ngIf="reviews.length > 0" style="margin-top:25px; margin-bottom:15px;">
+    <div class="form-row">
+      <div class="form-group col-md-12 grid-space">
+        <input type="text" class="form-control"
+        [(ngModel)]="searchText" name="search-review"
+        placeholder="Search for a review...">
+        <div class="text-hints">
+          Type in a program name to filter to its reviews.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="reviews.length > 0; else emptyReviews">
+    <ng-container *ngFor="let review of reviews | filter: searchText | sort">
       <div class="col-sm-6">
         <div class="card card-container"
              [ngStyle]="(reviewFilter !== 'archive') && {'border-left': '#FFCE00',
@@ -157,10 +189,13 @@
           <div class="card-body">
             <div class="card-header-title container-fluid">
               <div class="card-message">
-                <a routerLink="/review/{{review._id}}">
+                <a *ngIf="!review.deleted" routerLink="/review/{{review._id}}">
                   {{ review.program?.name}} {{ yearString(review.startDate)}}
                   <i class="fa fa-chevron-right"></i>
                 </a>
+                <span *ngIf="review.deleted">
+                  {{ review.program?.name}} {{ yearString(review.startDate)}}
+                </span>
                 <div class="card-info">
                   <i style="font-weight: lighter;">
                     {{review.program?.department?.name}}
@@ -172,18 +207,27 @@
                 <strong>Start Date:</strong> {{review.startDate | date: 'MM/dd/yyyy'}} &#8212; <strong>{{review.percentComplete}}% complete</strong><br/>
                 <strong>Finish Date:</strong> {{review.finishDate | date: 'MM/dd/yyyy'}}
                 <br />
-                <strong>Lead Reviewer(s):</strong>
-                <ng-container *ngFor="let leadReviewer of review.leadReviewers; let idx = index;">
-                  {{leadReviewer.name?.first}} {{leadReviewer.name?.last}}{{ idx + 1 < review.leadReviewers.length ? ',' : '' }}
-                </ng-container>
 
-                <div *ngIf="this.reviewFilter !== 'archive'">
-                  <div class="review-actions" (click)="openModal(editLeadReviewersModal, review._id)">
+                <span *ngIf="review.leadReviewers.length > 0">
+                  <strong>Lead Reviewer(s):</strong>
+                  <ng-container *ngFor="let leadReviewer of review.leadReviewers; let idx = index;">
+                    {{leadReviewer.name?.first}} {{leadReviewer.name?.last}}{{ idx + 1 < review.leadReviewers.length ? ',' : '' }}
+                  </ng-container>
+                </span>
+
+                <div *ngIf="this.reviewFilter !== 'archive' && sharedService.isAdmin()" style="margin-top:15px;">
+                  <div *ngIf="!review.deleted" class="review-actions"
+                       (click)="openModal(editLeadReviewersModal, review._id)">
                     <i class="fa fa-icon fa-pencil"></i>Edit Lead Reviewers
                   </div>
 
-                  <div class="review-actions" (click)="openModal(deleteReviewModal, review._id)">
+                  <div *ngIf="!review.deleted" class="review-actions"
+                       (click)="openModal(deleteReviewModal, review._id)">
                     <i class="fa fa-icon fa-trash"></i>Delete Review
+                  </div>
+
+                  <div *ngIf="review.deleted" class="review-actions" (click)="restoreReview(review._id)">
+                      <i class="fa fa-icon fa-window-restore"></i>Restore Review
                   </div>
                 </div>
               </div>

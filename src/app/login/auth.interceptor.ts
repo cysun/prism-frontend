@@ -11,7 +11,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private router: Router) {}
 
   handleAuthError(err: HttpErrorResponse): Observable<any> {
-    if (err.status === 401 || err.status === 403) {
+    if (this.router.url === '/login' && (err.status === 401 || err.status === 504)) {
       localStorage.removeItem('jwt_token');
       localStorage.removeItem('currentUser');
       this.router.navigate(['login']);

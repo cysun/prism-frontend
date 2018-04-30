@@ -1,15 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Comment } from '../models/comment.model';
 import { Document } from '../models/document.model';
+import { ExternalUpload } from '../models/external-upload.model';
 import { Revision } from '../models/revision.model';
 import { User } from '../models/user.model';
 import { UserResponse } from '../models/user-response.model';
 import { Globals } from '../shared/app.global';
 
 import { DocumentService } from './document.service';
+import { GroupManagerService } from '../group-manager/group-manager.service';
 import { ReviewService } from '../review/review.service';
 
 import { saveAs } from 'file-saver';
@@ -30,6 +33,7 @@ export class DocumentComponent implements OnInit {
   currentRevision: Revision = new Revision();
   mainRevision: Revision = new Revision();
   selectedComment: Comment = new Comment();
+  externalUploadsList: ExternalUpload[] = [];
 
   validComment = true;
   performDelete = false;
@@ -50,13 +54,16 @@ export class DocumentComponent implements OnInit {
   textComment = '';
   externalMessage = '';
   modalMessage: any;
-  newCompletionDate: Date;
+  // Angular Bootstrap object with day, month, and year properties
+  newCompletionDate: any;
 
   constructor(private documentService: DocumentService,
+              private groupManagerService: GroupManagerService,
               private reviewService: ReviewService,
               private modalService: NgbModal,
               private route: ActivatedRoute,
-              private globals: Globals) { }
+              private globals: Globals,
+              private location: Location) { }
 
   public ngOnInit() {
     if (!this.documentId) {
@@ -68,21 +75,30 @@ export class DocumentComponent implements OnInit {
     const castedUser: UserResponse = JSON.parse(localStorage.getItem('currentUser'));
     this.currentUser = new UserResponse(castedUser.user, castedUser.groups, castedUser.token);
 
-    this.documentService.retrieveDocument(this.documentId).subscribe( data => {
+    this.documentService.retrieveDocument(this.documentId).subscribe(data => {
       this.document = data;
 
       if (this.document.revisions && this.document.revisions.length !== 0) {
-        this.selectedOption = this.document.revisions.slice(0).reverse().find( item =>
+        this.selectedOption = this.document.revisions.slice(0).reverse().find(item =>
           item.message !== 'Deleted revision')._id;
 
-        this.selectedFilter = this.document.revisions.slice(0).reverse().find( item =>
+        this.selectedFilter = this.document.revisions.slice(0).reverse().find(item =>
             item.message !== 'Deleted revision')._id;
       }
 
       this.documentTitle = this.document.title;
       this.totalIndices = this.getNumOfRevisions();
       this.getLatestRevision();
+    }, err => {
+      this.documentId = null;
+      this.document = null;
     });
+
+    if (this.currentUser.isRootOrAdmin()) {
+      this.documentService.getAllExternalUploads(this.documentId).subscribe( data => {
+        this.externalUploadsList = data;
+      });
+    }
   }
 
   /* Set file variable to the file the user has chosen */
@@ -90,6 +106,12 @@ export class DocumentComponent implements OnInit {
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
       this.fileName = event.target.files[0].name;
+
+      if (this.file.size > this.globals.maxFileSize) {
+        this.alert = { message: 'File is too large.' };
+      } else {
+        this.alert = '';
+      }
     }
   }
 
@@ -201,7 +223,7 @@ export class DocumentComponent implements OnInit {
 
   /* Upload revision message and the file being sent */
   uploadRevision() {
-    if (this.file && this.message) {
+    if (this.file && this.message && (this.file.size <= this.globals.maxFileSize)) {
       this.documentService.postRevision(this.document._id, this.message).subscribe( data => {
         const numOfRevisions = this.getNumOfRevisions();
         this.retrieveDocument();
@@ -209,10 +231,10 @@ export class DocumentComponent implements OnInit {
 
         this.closeModal();
       }, (err) => {
-        console.log(err)
+        console.log(err);
       });
     } else if (!this.file) {
-      this.alert = { message: 'Please attach a file.' };
+      this.alert = { message: 'Please attach a file with size ~5 MB.' };
     }
   }
 
@@ -331,14 +353,14 @@ export class DocumentComponent implements OnInit {
   /* Subscribe to a document */
   subscribeToDocument() {
     this.documentService.subscribeToDocument(this.document._id).subscribe( () => {
-      this.document.subscribers.push(this.currentUser.user._id);
+      (<string[]> this.document.subscribers).push(this.currentUser.user._id);
     })
   }
 
   /* Subscribe to a document */
   unsubscribeFromDocument() {
     this.documentService.unsubscribeFromDocument(this.document._id).subscribe( () => {
-      const findUserId = this.document.subscribers.findIndex(item => item._id === this.currentUser.user._id);
+      const findUserId = (<string[]> this.document.subscribers).indexOf(this.currentUser.user._id);
       this.document.subscribers.splice(findUserId, 1);
     })
   }
@@ -346,7 +368,7 @@ export class DocumentComponent implements OnInit {
   /* Check if current user is already subscribed to the document */
   isSubscribed() {
     if (this.document.subscribers) {
-      return this.document.subscribers.includes(this.currentUser.user._id);
+      return (<string[]> this.document.subscribers).includes(this.currentUser.user._id);
     }
     return false;
   }
@@ -354,27 +376,41 @@ export class DocumentComponent implements OnInit {
   /* Make the request to finalize the node of this document in the review */
   finalizeNode() {
     this.reviewService.finalizeNode(this.reviewId, this.nodeId).subscribe(() => {
+      this.document.locked = true;
       this.updateReviewComponent();
       this.closeModal();
     });
   }
 
   /* Change the completion date of the node of this document in the review */
-  changeCompletionDate(newDate: string) {
-    this.reviewService.setNodeFinishDate(this.reviewId, this.nodeId, newDate).subscribe(() => {
+  changeCompletionDate(newDate: any) {
+    const newDateString = `${newDate.year}-${newDate.month}-${newDate.day}`;
+
+    this.reviewService.setNodeFinishDate(this.reviewId, this.nodeId, newDateString).subscribe(() => {
       this.updateReviewComponent();
       this.closeModal();
     });
   }
 
+  /* Create an external upload page for external submission */
   createExternalUpload() {
-    console.log(this.externalReviewer);
     this.documentService.createExternalUpload(this.document._id, this.externalReviewer, this.externalMessage).subscribe (
       data => {
-        this.closeModal();
+        this.groupManagerService.getUser(data.user).subscribe( userData => {
+          data.user = userData;
+          this.externalUploadsList.push(data);
+          this.closeModal();
+        })
       }, (err) => {
         this.alert = { 'message': 'Username already exists. Please use a unique username.' };
-      }
-    )
+      })
+  }
+
+  /* Cancel an external upload from being used */
+  cancelExternalUpload(token: string) {
+    this.documentService.cancelExternalUpload(token).subscribe( () => {
+      const matchingIndex = this.externalUploadsList.findIndex(x => x.token === token);
+      this.externalUploadsList[matchingIndex].disabled = true;
+    });
   }
 }

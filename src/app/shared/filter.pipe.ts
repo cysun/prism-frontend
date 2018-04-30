@@ -8,7 +8,11 @@ export class FilterPipe implements PipeTransform {
     if (!searchText) { return items; }
     searchText = searchText.toLowerCase();
     return items.filter( it => {
-      return it.title.toLowerCase().includes(searchText);
+      if (it.title) {
+        return it.title.toLowerCase().includes(searchText);
+      } else if (it.program) {
+        return it.program.name.toLowerCase().includes(searchText);
+      }
     });
    }
 }

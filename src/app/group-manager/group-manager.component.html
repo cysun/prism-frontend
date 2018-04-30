@@ -100,6 +100,7 @@
         <span class="col-3 group-label">Add Members</span>
         <span class="col-8 ui-fluid">
           <prism-user-selector [configType]="'multiple'"
+                               [filterType]="'group'"
                                [suggestedMembers]="suggestedUsers">
           </prism-user-selector>
           <div class="text-hints">
@@ -112,7 +113,9 @@
         <span class="col-3 group-label">Deleting Group</span>
         <span class="col-8">
           <button type="button" class="btn btn-danger delete-btn"
-                  (click)="editModal(deleteGroupModal, group._id)">
+                  (click)="editModal(deleteGroupModal, group._id)"
+                  [disabled]="group.name === 'Administrators' ||
+                              group.name === 'Program Review Subcommittee'">
             Delete Group
           </button>
           <div class="text-hints">
@@ -123,7 +126,7 @@
     </div>
 
     <div class="modal-footer">
-      <button class="btn btn-dark" type="button" (click)="updateGroup(value)">Save</button>
+      <button class="btn btn-dark" type="button" (click)="updateGroup()">Save</button>
       <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
     </div>
   </ng-template>
@@ -160,14 +163,15 @@
               </thead>
 
               <tbody>
-                <ng-template ngFor let-member [ngForOf]="group.members">
+                <ng-template ngFor let-member [ngForOf]="group.members | sort">
                   <tr>
                     <td>{{ member.username }}</td>
                     <td>{{ member.name.first }} {{ member.name.last }}</td>
                     <td>{{ member.email }}
                     <td>
                       <button type="button" class="btn btn-danger"
-                              (click)="editModal(deleteMemberModal, group._id, member._id)">
+                              (click)="editModal(deleteMemberModal, group._id, member._id)"
+                              [disabled]="member._id === currentUser.user?._id">
                         <i class="fa fa-trash"></i>
                       </button>
                     </td>

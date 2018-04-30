@@ -19,7 +19,16 @@
 <div *ngIf="configType === 'groups'">
   <ng-selectize [options]="suggestedGroups"
                 [config]="globals.multipleGroupConfig"
-                placeholder="Search for..."
+                placeholder="Search for groups..."
+                [(ngModel)]="filteredGroups"
+                (ngModelChange)="submitGroupsList($event)">
+  </ng-selectize>
+</div>
+
+<div *ngIf="configType === 'groupNames'">
+  <ng-selectize [options]="suggestedGroups"
+                [config]="globals.multipleGroupNameConfig"
+                placeholder="Search for groups..."
                 [(ngModel)]="filteredGroups"
                 (ngModelChange)="submitGroupsList($event)">
   </ng-selectize>

@@ -4,6 +4,7 @@ import { NgbModal, NgbModalRef,  NgbModalOptions } from '@ng-bootstrap/ng-bootst
 
 import { Resource } from '../models/resource.model';
 import { ResourceService } from './resource.service'
+import { SharedService } from '../shared/shared.service';
 
 import { saveAs } from 'file-saver';
 
@@ -28,13 +29,17 @@ export class ResourcesComponent implements OnInit {
   fileName: string;
   file: File;
 
-  constructor(private resourceService: ResourceService, private modalService: NgbModal, private route: ActivatedRoute) { }
+  constructor(private resourceService: ResourceService,
+    private modalService: NgbModal,
+    private route: ActivatedRoute,
+    private sharedService: SharedService) { }
 
   ngOnInit() {
     this.getResources();
   }
 
   closeModal(): void {
+    this.alert = '';
     this.modal.close();
   }
 
@@ -114,6 +119,10 @@ export class ResourcesComponent implements OnInit {
     }
   }
 
+  downloadSpecific(resource: Resource) {
+    this.download(resource._id).then(() => {}, () => {});
+  }
+
   download(resourceId: string): Promise<void> {
     return new Promise((resolve, reject) => {
       this.resourceService.downloadFile(resourceId).subscribe(fileData => {
@@ -149,6 +158,12 @@ export class ResourcesComponent implements OnInit {
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
       this.fileName = event.target.files[0].name;
+
+      if ((this.file.size > (2 ** 20) * 5)) {
+        this.alert = { message: 'File is too large to upload.' };
+      } else {
+        this.alert = '';
+      }
     }
   }
 
@@ -157,7 +172,7 @@ export class ResourcesComponent implements OnInit {
   }
 
   postNewResource(): void {
-    if (this.file) {
+    if (this.file && (this.file.size <= (2 ** 20) * 5)) {
       this.resourceService.createResource(this.resource.title).subscribe(resourceData => {
         this.createFile(resourceData._id).then(() => {
           this.resourceService.uploadFile(resourceData._id, this.file).subscribe(empty => {
