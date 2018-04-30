@@ -115,6 +115,8 @@ export class ReviewListComponent implements OnInit {
           return (<User[]> department.chairs).findIndex(chair => chair._id === userId) !== -1
                  || (<User[]> college.deans).findIndex(dean => dean._id === userId) !== -1
         };
+      } else {
+        userFilter = review => true;
       }
       this.reviews = this.reviews.filter(userFilter);
 
