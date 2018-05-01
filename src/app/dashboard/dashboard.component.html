@@ -3,7 +3,7 @@
 <ngb-tabset>
   <ngb-tab *ngIf="sharedService.isPrs()">
     <ng-template ngbTabTitle>
-      <i class="fa fa-bullseye"></i> My Reviews
+      <i class="fa fa-icon-group fa-bullseye"></i>My Reviews
     </ng-template>
     <ng-template ngbTabContent>
       <prism-review-list [reviewFilter]="'my'"></prism-review-list>
@@ -12,7 +12,7 @@
 
   <ngb-tab>
     <ng-template ngbTabTitle>
-      <i class="fa fa-university"></i> Active Reviews
+      <i class="fa fa-icon fa-university"></i>Active Reviews
     </ng-template>
     <ng-template ngbTabContent>
       <prism-review-list></prism-review-list>
@@ -21,7 +21,7 @@
 
   <ngb-tab>
     <ng-template ngbTabTitle>
-      <i class="fa fa-graduation-cap"></i> Archived Reviews
+      <i class="fa fa-icon fa-graduation-cap"></i>Archived Reviews
     </ng-template>
     <ng-template ngbTabContent>
       <prism-review-list [reviewFilter]="'archive'">
@@ -31,7 +31,7 @@
 
   <ngb-tab *ngIf="sharedService.isAdmin()">
     <ng-template ngbTabTitle>
-      <i class="fa fa-trash"></i> Deleted Reviews
+      <i class="fa fa-icon fa-trash"></i>Deleted Reviews
     </ng-template>
     <ng-template ngbTabContent>
       <prism-review-list [reviewFilter]="'deleted'">
@@ -40,7 +40,7 @@
   </ngb-tab>
 
   <ngb-tab>
-    <ng-template ngbTabTitle><i class="fa fa-th-list"></i> Recent Actions</ng-template>
+    <ng-template ngbTabTitle><i class="fa fa-icon fa-th-list"></i>Recent Actions</ng-template>
     <ng-template ngbTabContent>
       <div class="container-fluid container-fluid-content">
         <div class="search-bar" *ngIf="sharedService.isAdmin()" style="margin-bottom:25px;">

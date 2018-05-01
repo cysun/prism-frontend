@@ -56,6 +56,11 @@ blockquote {
   padding-right: 7px;
 }
 
+.fa-icon-group {
+  text-align: center;
+  width: 40px;
+}
+
 .footer {
   background-color: #1A1A1A;
   border-top-color: #FFCE00;
