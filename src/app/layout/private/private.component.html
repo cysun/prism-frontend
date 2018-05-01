@@ -6,32 +6,31 @@
           <div class="nav-greeting">Welcome, <strong>{{ username }}</strong>!</div>
           <hr/>
           <a class="nav-link" [routerLink]="['/dashboard']">
-            <i class="fa fa-home"></i> Dashboard
+            <i class="fa fa-icon-group fa-home"></i>Dashboard
           </a>
           <a class="nav-link" *ngIf="sharedService.isAdminOrPrs()" [routerLink]="['/calendar']">
-            <i class="fa fa-calendar"></i> Calendar
+            <i class="fa fa-icon-group fa-calendar"></i>Calendar
           </a>
           <a class="nav-link" *ngIf="sharedService.isAdmin()" [routerLink]="['/college']">
-            <i class="fa fa-graduation-cap"></i> University Hierarchy
+            <i class="fa fa-icon-group fa-graduation-cap"></i>University Hierarchy
           </a>
           <a class="nav-link" *ngIf="sharedService.isAdminOrPrs()" [routerLink]="['/resources']">
-            <i class="fa fa-folder-open-o"></i> Resources
+            <i class="fa fa-icon-group fa-folder-open-o"></i>Resources
           </a>
           <a class="nav-link" [routerLink]="['/group']">
-            <i class="fa fa-users"></i>
-            {{ sharedService.isAdmin() ? 'Group Manager' : 'Committee' }}
+            <i class="fa fa-icon-group fa-users"></i>{{ sharedService.isAdmin() ? 'Group Manager' : 'Committee' }}
           </a>
           <a class="nav-link" *ngIf="sharedService.isAdmin()" [routerLink]="['/templates']">
-            <i class="fa fa-folder"></i> Template Manager
+            <i class="fa fa-icon-group fa-folder"></i>Template Manager
           </a>
 
           <hr/>
 
           <a class="nav-link" [routerLink]="['/settings']">
-            <i class="fa fa-icon fa-gear"></i>Settings
+            <i class="fa fa-icon-group fa-gear"></i>Settings
           </a>
           <a class="nav-link" [routerLink]="" (click)="logout()">
-            <i class="fa fa-icon fa-sign-out"></i>Sign Out
+            <i class="fa fa-icon-group fa-sign-out"></i>Sign Out
           </a>
         </div>
       </div>
