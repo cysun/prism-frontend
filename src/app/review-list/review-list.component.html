@@ -76,7 +76,13 @@
       </ngb-alert>
     </div>
 
-    <div class="form-row" *ngIf="currentReview.leadReviewers">
+    <div *ngIf="currentReview.leadReviewers.length === 0">
+      <ngb-alert class="info-message" type="info" [dismissible]="false">
+        <strong> Information: </strong> There are currently no lead reviewers for this review.
+      </ngb-alert>
+    </div>
+
+    <div class="form-row" *ngIf="currentReview.leadReviewers.length > 0">
       <table class="table table-hover">
         <thead class="bg-info">
           <tr>
@@ -103,7 +109,7 @@
   </div>
 
   <form #f="ngForm" (ngSubmit)="editLeadReviewers(currentReview._id, currentReview.program._id, currentReview.leadReviewers)">
-    <div class ="row grid-space">
+    <div class ="row">
       <span class="container-fluid" style="padding:30px;">
         <prism-user-selector [configType]="'multiple'"
                              [filterType]="'prs'"
