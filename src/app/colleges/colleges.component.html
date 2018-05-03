@@ -95,13 +95,13 @@
     <!-- DEANS -->
     <div class="row grid-space" style="padding-bottom: 30px;">
       <span class="col-3">Add a Dean</span>
-      <div class="input-group col-9">
+      <span class="input-group col-9">
         <input type="text" class="form-control" [(ngModel)]="dean.username" [ngbTypeahead]="search" placeholder="Enter a username"/>
-        <span class="input-group-btn">
+        <!-- <span class="input-group-btn">
           <button class="btn btn-success" (click)="addDean()"><i class="fa fa-icon fa-plus"></i>Add</button>
-        </span>
+        </span> -->
         <div class="text-hints">Type in a username to get a list of possible users to add in the dean list.</div>
-      </div>
+      </span>
     </div>
 
     <div class="card card-container">
