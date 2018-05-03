@@ -62,20 +62,28 @@
       <span class="col-3">Department Abbreviation</span>
       <span class="col-9">
         <div>
-          <input type="text" class="form-control" placeholder="Enter a new abbreviation" [(ngModel)]="department.abbreviation" name="department-abbreviation">
+          <input type="text" class="form-control" placeholder="Enter a new abbreviation"
+                 [(ngModel)]="department.abbreviation" name="department-abbreviation">
         </div>
         <div class="text-hints">Enter a new abbreviation for the department.</div>
       </span>
     </div>
     <!-- CHAIR -->
     <div class="row grid-space" style="padding-bottom: 30px;">
-      <span class="col-3">Add a Department Chair</span>
-      <div class="input-group col-9">
-        <input type="text" class="form-control" [(ngModel)]="chair.username" [ngbTypeahead]="search" placeholder="Enter a username"/>
-        <span class="input-group-btn">
-          <button class="btn btn-success" (click)="addChair()"><i class="fa fa-icon fa-plus"></i> Add</button>
-        </span>
-        <div class="text-hints">Type in a username to get a list of possible users to add in the chair list.</div>
+      <span class="col-3 group-label">Add a Department Chair</span>
+      <div class="form-group col-9">
+        <div class="input-group">
+          <input type="text" class="form-control" [(ngModel)]="chair.username"
+                 [ngbTypeahead]="search" placeholder="Enter a username"/>
+          <div class="input-group-append">
+            <button class="btn btn-success" (click)="addChair()">
+              <i class="fa fa-icon fa-plus"></i> Add
+            </button>
+          </div>
+        </div>
+        <div class="text-hints">
+          Type in a username to get a list of possible users to add in the Department Chair list.
+        </div>
       </div>
     </div>
 
