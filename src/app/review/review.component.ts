@@ -122,7 +122,7 @@ export class ReviewComponent implements OnInit {
 
     const initialScale =  (svg.node().getBoundingClientRect().width / svg.node().getBBox().width) * 0.98;
     svg.call(zoom.transform, d3.zoomIdentity
-       .translate(2, 70)
+       .translate(2, 50)
        .scale(initialScale));
 
     const componentScope = this;
