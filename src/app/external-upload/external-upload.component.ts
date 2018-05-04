@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { Globals } from '../shared/app.global';
+
 import { ExternalUpload } from '../models/external-upload.model';
 import { ExternalUploadService } from './external-upload.service';
 
@@ -13,10 +15,12 @@ export class ExternalUploadComponent implements OnInit {
   token: string;
   externalReport: ExternalUpload;
 
+  alert: any;
   file: File;
   fileName: string;
 
-  constructor(private externalUploadService: ExternalUploadService,
+  constructor(private globals: Globals,
+              private externalUploadService: ExternalUploadService,
               private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -34,6 +38,12 @@ export class ExternalUploadComponent implements OnInit {
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
       this.fileName = event.target.files[0].name;
+
+      if (this.file.size > this.globals.maxFileSize) {
+        this.alert = { message: 'File is too large to upload.' };
+      } else {
+        this.alert = '';
+      }
     }
   }
 

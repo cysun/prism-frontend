@@ -4,7 +4,26 @@ import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 @Injectable()
 export class Globals {
 
-  maxFileSize = (2 ** 20) * 5;
+  actionsPerPage = 150;
+  maxFileSize = (2 ** 20) * 50;
+  maxProgramNameLength = 60;
+  minUsernameLength = 4;
+  maxUsernameLength = 20;
+
+  mimeTypes = [
+    'application/msword',
+    'application/pdf',
+    'application/vnd.ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/x-photoshop',
+    'application/vnd.ms-excel',
+    'audio/*',
+    'image/*',
+    'text/plain',
+    'video/*'
+  ]
 
   /* Calendar colors for event dots */
   calendarColors: any = {

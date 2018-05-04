@@ -81,7 +81,7 @@
     <div class="text-hints">Enter a name for the new event.</div>
 
     <div class="row">
-      <div class="col-8">
+      <div class="col-7">
         <div class="input-group grid-space">
           <div class="input-group-prepend">
             <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
@@ -96,7 +96,7 @@
         <div class="text-hints">Click on the calendar icon to select a date.</div>
       </div>
 
-      <div class="col-4" style="margin-top:-18px;">
+      <div class="col-5" style="margin-top:-18px;">
         <ngb-timepicker [(ngModel)]="time" [meridian]="true" [minuteStep]="15" name="time-picker"></ngb-timepicker>
       </div>
 
@@ -124,10 +124,7 @@
         <h5 class="grid-space">Attach File (Optional)</h5>
         <div class="custom-file">
           <input name="file" type="file" class="custom-file-input"
-                 accept="application/pdf, application/msword,
-                         application/vnd.openxmlformats-officedocument.wordprocessingml.document,
-                         application/vnd.ms-powerpoint,
-                         application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                 accept="{{globals.mimeTypes.join(',')}}"
                  (change)="onFileChange($event)">
 
           <label class="custom-file-label">
@@ -146,7 +143,7 @@
   </div>
 
   <div class="modal-footer">
-    <button class="btn btn-primary" [disabled]="!f.form.valid" type="submit">Confirm</button>
+    <button class="btn btn-warning" [disabled]="!f.form.valid" type="submit">Confirm</button>
     <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
   </div>
 </form>
@@ -156,7 +153,7 @@
   <div class="col-md-4">
     <div class="btn-group">
       <div
-        class="btn btn-primary"
+        class="btn btn-warning"
         mwlCalendarPreviousView
         [view]="view"
         [(viewDate)]="viewDate"
@@ -170,7 +167,7 @@
         Today
       </div>
       <div
-        class="btn btn-primary"
+        class="btn btn-warning"
         mwlCalendarNextView
         [view]="view"
         [(viewDate)]="viewDate"
@@ -185,19 +182,19 @@
   <div class="col-md-4">
     <div class="btn-group">
       <div
-        class="btn btn-primary"
+        class="btn btn-warning"
         (click)="view = 'month'"
         [class.active]="view === 'month'">
         Month
       </div>
       <div
-        class="btn btn-primary"
+        class="btn btn-warning"
         (click)="view = 'week'"
         [class.active]="view === 'week'">
         Week
       </div>
       <div
-        class="btn btn-primary"
+        class="btn btn-warning"
         (click)="view = 'day'"
         [class.active]="view === 'day'">
         Day
@@ -235,7 +232,7 @@
 </div>
 
 <div style="padding-top: 20px;">
-  <button class="btn btn-primary" (click)="openModal(addNewEventModal)">
+  <button class="btn btn-warning" (click)="openModal(addNewEventModal)">
     <i class="fa fa-icon fa-calendar"></i>New Event
   </button>
 </div>

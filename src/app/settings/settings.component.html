@@ -4,7 +4,7 @@
     <ng-template ngbTabContent>
       <div class="container-fluid">
         <div *ngIf="!updateInfo" class="notification-label">
-          <span>{{currentUser.name?.first}}'s Profile</span>
+          <span style="margin-right: 10px;">{{currentUser.name?.first}}'s Profile</span>
           <button class="btn btn-outline-warning" (click)="toggleEditButton()"><i class="fa fa-icon fa-pencil"></i>Edit</button>
         </div>
 
@@ -12,7 +12,7 @@
           <ngb-alert type="danger" [dismissible]="false">
             <i class="fa fa-icon fa-times-circle"></i><strong>Error:</strong> {{ alert.message }}
             <span *ngIf="reasons">
-              <ng-container *ngFor="let reason of reasons ">
+              <ng-container *ngFor="let reason of reasons">
                   <li>{{ reason }}</li>
               </ng-container>
             </span>
@@ -21,15 +21,15 @@
 
         <table *ngIf="!updateInfo" class="table table-hover">
           <tr>
-            <td>Username</td>
+            <td><strong>Username</strong></td>
             <td>{{currentUser.username}}</td>
           </tr>
           <tr>
-            <td>Name</td>
+            <td><strong>Name</strong></td>
             <td>{{currentUser.name?.first}} {{currentUser.name?.last}}</td>
           </tr>
           <tr>
-            <td>E-mail</td>
+            <td><strong>E-mail</strong></td>
             <td>{{currentUser.email}}</td>
           </tr>
         </table>

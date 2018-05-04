@@ -66,17 +66,16 @@ export class SettingsComponent implements OnInit {
     let validPassword = true;
 
     /* Changing name and/or email */
-    const emptyFields = (this.currentUser.name.first.trim().length > 0) &&
+    const notEmptyFields = (this.currentUser.name.first.trim().length > 0) &&
     (this.currentUser.name.last.trim().length > 0) &&
     (this.currentUser.email.trim().length > 0);
 
     /* Changing password */
     const passwordFields = this.newPassword && this.confirmPassword;
 
-    if (emptyFields) {
+    if (notEmptyFields) {
       this.settingsService.updateBasicInfo(this.currentUser).subscribe( data => {
         this.currentUser = data;
-
         this.updateSettings = true;
 
         if (!passwordFields) {
@@ -86,9 +85,9 @@ export class SettingsComponent implements OnInit {
       }, (err) => {
         console.log(err);
         this.invalidErrorMessage('invalid email');
-        validInfo = false;
+        this.updateInfo = true;
       })
-      return;
+
     } else {
       this.invalidErrorMessage('empty fields');
       validInfo = false;
