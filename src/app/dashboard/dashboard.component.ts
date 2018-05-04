@@ -27,7 +27,7 @@ export class DashboardComponent implements OnInit {
   selectedOption = 'All';
 
   public filterOptions = [
-    'All', 'Calendar', 'College', 'Department', 'Document', 'Group', 'Program', 'Review'
+    'All', 'Calendar', 'College', 'Department', 'Document', 'Event', 'Group', 'Program', 'Review'
   ];
 
   constructor(private globals: Globals,
@@ -44,8 +44,10 @@ export class DashboardComponent implements OnInit {
   goToLink(actionType: string, actionId: string) {
     if (actionType === 'document' || actionType === 'review') {
       this.router.navigate ([`${ actionType }/${actionId}`]);
-    } else if (actionType === 'department' || actionType === 'college') {
+    } else if (actionType === 'college' || actionType === 'department') {
       this.router.navigate (['university-hierarchy']);
+    } else if (actionType === 'event') {
+      this.router.navigate (['calendar']);
     } else if (actionType === 'group') {
       this.router.navigate (['groups']);
     } else {
