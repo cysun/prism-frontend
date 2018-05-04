@@ -1,9 +1,3 @@
-  <div *ngIf="alerts">
-    <p *ngFor="let alert of alerts">
-      <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
-    </p>
-  <div>
-
   <table *ngIf="programs.length > 0; else emptyPrograms" class="table table-inverse">
     <thead>
       <tr>
