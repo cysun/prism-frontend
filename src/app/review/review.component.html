@@ -70,11 +70,25 @@
 
 <h1 class="display-4">{{review && review.program && review.program.name ? review.program.name : ''}} Review {{yearString}}</h1>
 <svg id="svg-canvas" style="width: 100%;" height="200"></svg>
+
+<div style="height: 20px; display: flex; align-items: center; justify-content: center; margin-top: 10px;">
+  <div style="height: inherit; width: 20px; background-color: #28A745; margin-right: 10px;"></div>
+  <div style="margin-right: 25px;">Document Completed</div>
+
+  <div style="height: inherit; width: 20px; background-color: #33A1C9; margin-right: 10px;"></div>
+  <div style=" margin-right: 25px;">Document In-Progress</div>
+
+  <div style="height: inherit; width: 20px; background-color: #6C757D; margin-right: 10px;"></div>
+  <div style="margin-right: 25px;">Prerequisites Pending</div>
+</div>
+
 <hr />
-<button class="btn btn-primary" *ngIf="sharedService.isAdminOrPrs()" (click)="openModal(addNodeModal)">Add Document</button>
+
+<button class="btn btn-warning" *ngIf="sharedService.isAdminOrPrs()" (click)="openModal(addNodeModal)">Add Document</button>
+
 <br />
 <br />
-<prism-document #documentComponent [documentId]="documentId" [nodeId]="nodeId" [reviewId]="review._id" [updateReviewComponent]="handleDocumentUpdate.bind(this)" *ngIf="documentId"></prism-document>
+<prism-document #documentComponent [documentId]="documentId" [nodeId]="nodeId" [reviewId]="review._id" [updateReviewComponent]="handleDocumentUpdate.bind(this)" [externalUploadTitle]="(review && review.program && review.program.name ? review.program.name : '') + ' Review ' + yearString" *ngIf="documentId"></prism-document>
 <div class="jumbotron" *ngIf="!documentId">
   <h1 class="display-4">No document selected</h1>
   <p class="lead">Click on a document from the review to get started</p>

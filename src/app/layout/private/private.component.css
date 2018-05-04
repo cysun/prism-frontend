@@ -41,7 +41,6 @@ hr {
 
 @media (min-width: 990px) {
   .main {
-    padding-left: 300px; /* 250 + 50 */
-    padding-right: 50px;
+    padding-left: 290px; /* 250 + extra padding */
   }
 }

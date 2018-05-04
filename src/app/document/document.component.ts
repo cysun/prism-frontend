@@ -46,6 +46,7 @@ export class DocumentComponent implements OnInit {
   @Input() reviewId: string;
   @Input() nodeId: string;
   @Input() updateReviewComponent: () => void;
+  @Input() externalUploadTitle: string;
   message: string;
   file: File;
   fileName: string;
@@ -140,6 +141,9 @@ export class DocumentComponent implements OnInit {
 
   /* Open a basic modal passing the data of the specific revision or comment */
   openModal(content, revisionIndex?: number, modalType?: string, commentId?: string) {
+    if (this.reviewId) {
+      this.externalMessage = `Please upload your report for the ${this.externalUploadTitle}`;
+    }
     /* If user wants to revert or delete a revision */
     if (revisionIndex >= 0) {
       this.currentRevision = this.document.revisions[revisionIndex];

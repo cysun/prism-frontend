@@ -16,6 +16,15 @@
     <i class="fa fa-icon fa-envelope"></i>{{externalReport.user?.email}}
   </div>
 
+  <div class="row grid-space">
+    <div *ngIf="alert" class="col-12">
+      <ngb-alert type="danger" [dismissible]="false">
+        <i class="fa fa-icon fa-exclamation-circle"></i>
+        <strong>Error:</strong> {{ alert.message }}
+      </ngb-alert>
+    </div>
+  </div>
+
   <div class="grid-space" style="text-align:left;">
     <strong>Message from Administrator: </strong> {{externalReport.message}}
   </div>
@@ -23,8 +32,7 @@
   <div class="grid-space" *ngIf="!externalReport.completed && !externalReport.disabled">
     <div class="custom-file">
       <input name="file" type="file" class="custom-file-input"
-             accept="application/pdf, application/msword,
-                     application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+             accept="{{globals.mimeTypes.join(',')}}"
              (change)="onFileChange($event)">
 
       <label class="custom-file-label">
@@ -34,7 +42,7 @@
     </div>
 
     <div class="grid-space">
-      <button class="btn btn-primary" (click)="submitExternalUpload()">Submit</button>
+      <button class="btn btn-warning" (click)="submitExternalUpload()">Submit</button>
     </div>
   </div>
 

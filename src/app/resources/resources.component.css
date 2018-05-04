@@ -12,6 +12,17 @@
   max-height: 36px;
 }
 
+.download-file {
+  color: #568ba5;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration:none;
+}
+
+.download-file:hover {
+  text-decoration: underline;
+}
+
 .search-container {
   display: inline-flex;
   float: left;
