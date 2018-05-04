@@ -169,32 +169,28 @@ export class DepartmentComponent implements OnInit {
   /* Function that returns a list of suggested users based on user's current field input */
   getSuggestedUsers(username: string, users: any[]): any[] {
     const filtered = [];
-    const currentChairs = this.getChairsObject(this.department.chairs);
+    const used = new Array(users.length);
 
+    console.log('the chairs size is: ' + this.chairs.length);
+    used.fill(false);
+    for (let i = 0; i < users.length; i++) {
+      for (let j = 0; j < this.chairs.length; j++) {
+        if (users[i].username.toLowerCase() === this.chairs[j].username.toLowerCase()) {
+          used[i] = true;
+        }
+      }
+    }
     /* Push matching usernames to filtered list */
-    for (let i = 0; i < users.length; i ++) {
-      if ((users[i].username).toLowerCase().indexOf(username.toLowerCase()) === 0) {
-        filtered.push(users[i].username);
-      }
-    }
-
-    /* Filter out members that are already part of the deans */
-    for (let i = 0; i < currentChairs.length; i++) {
-      for (let j = 0; j < filtered.length; j++) {
-        if (filtered[j] === currentChairs[i].username) {
-          filtered.splice(j, 1);
+    for (let pos = 0; pos < users.length; pos ++) {
+      if (used[pos]) {
+        continue;
+      } else {
+        if ((users[pos].username).toLowerCase().indexOf(username.toLowerCase()) === 0) {
+          filtered.push(users[pos].username);
+          used[pos] = true;
         }
       }
     }
-    /* Filter out usernames that were previously selected (but not added to the group) */
-    for (let i = 0; i < this.suggestedUsers.length; i++) {
-      for (let j = 0; j < filtered.length; j++) {
-        if (filtered[j] === this.suggestedUsers[i].name) {
-          filtered.splice(j, 1);
-        }
-      }
-    }
-
     filtered.sort(this.compareUsernames);
 
     return filtered;
