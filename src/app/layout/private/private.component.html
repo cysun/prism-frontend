@@ -11,13 +11,13 @@
           <a class="nav-link" *ngIf="sharedService.isAdminOrPrs()" [routerLink]="['/calendar']">
             <i class="fa fa-icon-group fa-calendar"></i>Calendar
           </a>
-          <a class="nav-link" *ngIf="sharedService.isAdmin()" [routerLink]="['/college']">
+          <a class="nav-link" *ngIf="sharedService.isAdmin()" [routerLink]="['/university-hierarchy']">
             <i class="fa fa-icon-group fa-graduation-cap"></i>University Hierarchy
           </a>
           <a class="nav-link" *ngIf="sharedService.isAdminOrPrs()" [routerLink]="['/resources']">
             <i class="fa fa-icon-group fa-folder-open-o"></i>Resources
           </a>
-          <a class="nav-link" [routerLink]="['/group']">
+          <a class="nav-link" [routerLink]="['/groups']">
             <i class="fa fa-icon-group fa-users"></i>{{ sharedService.isAdmin() ? 'Group Manager' : 'Committee' }}
           </a>
           <a class="nav-link" *ngIf="sharedService.isAdmin()" [routerLink]="['/templates']">

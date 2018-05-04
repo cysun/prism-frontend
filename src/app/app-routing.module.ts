@@ -36,8 +36,8 @@ const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'calendar', component: CalendarComponent },
-      { path: 'college', component: CollegesComponent },
-      { path: 'group', component: CommitteeComponent },
+      { path: 'university-hierarchy', component: CollegesComponent },
+      { path: 'groups', component: CommitteeComponent },
       { path: 'document/:id', component: DocumentComponent },
       { path: 'resources', component: ResourcesComponent },
       { path: 'review/:id', component: ReviewComponent },

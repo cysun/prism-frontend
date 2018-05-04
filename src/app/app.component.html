@@ -36,14 +36,14 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/group']" style="padding: 10px;">
+        <a class="nav-link" [routerLink]="['/groups']" style="padding: 10px;">
           <i class="fa fa-icon-group fa-users"></i>{{ currentUser.isRootOrAdmin() ? 'Group Manager' : 'Committee' }}
         </a>
       </li>
 
       <li class="nav-item">
         <a *ngIf="sharedService.isAdmin()" class="nav-link"
-           [routerLink]="['/college']" style="padding: 10px;">
+           [routerLink]="['/university-hierarchy']" style="padding: 10px;">
           <i class="fa fa-icon-group fa-graduation-cap"></i>University Hierarchy
         </a>
       </li>

@@ -6,16 +6,18 @@
   <form #f="ngForm" (ngSubmit)="submitReview()">
     <div class="modal-body">
       <div class="row grid-space">
-        <span class="col-3 group-label">Program</span>
+        <span class="col-3">
+          <span class="group-label">Program</span>
+        </span>
         <div class="form-group col-9">
           <select class="custom-select" [(ngModel)]="selectedOption" name="program-list">
-            <option *ngFor="let program of programs" [ngValue]="program._id">
+            <option *ngFor="let program of (filterPrograms ? programs.filter(programReviewPendingFilter) : programs)" [ngValue]="program._id">
               {{program.name}}
             </option>
           </select>
 
           <div class="text-hints">
-            Select a program to initiate a review.
+            Select a program to initiate a review. <small class="form-text text-muted">Programs up for review only <input type="checkbox" [value]="filterPrograms" (click)="updateSelected()" name="filterPrograms" /></small>
           </div>
         </div>
       </div>
@@ -160,13 +162,6 @@
 
 <!-- Display review list content -->
 <div class="container-fluid container-fluid-content">
-  <div class="container-fluid" style="text-align: right; padding: 0;"
-       *ngIf="reviewFilter !== 'archive' && reviewFilter !== 'deleted' && sharedService.isAdmin()">
-    <button class="btn btn-warning" (click)="openModal(createReviewModal)">
-      <i class="fa fa-icon fa-plus"></i>Create Review
-    </button>
-  </div>
-
   <div class="search-bar" *ngIf="reviews.length > 0" style="margin-top:25px; margin-bottom:15px;">
     <div class="form-row">
       <div class="form-group col-md-12 grid-space">
@@ -178,6 +173,13 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="container-fluid" style="text-align: right; padding: 0;"
+       *ngIf="reviewFilter !== 'archive' && reviewFilter !== 'deleted' && sharedService.isAdmin()">
+    <button class="btn btn-warning" (click)="openModal(createReviewModal)">
+      <i class="fa fa-icon fa-plus"></i>Create Review
+    </button>
   </div>
 
   <div class="row" *ngIf="reviews.length > 0; else emptyReviews">

@@ -12,7 +12,7 @@
         </ngb-alert>
       </div>
 
-      <div class="modal-message">
+      <div class="modal-message" style="text-align:left;">
         <div class="modal-label">
           TEMPLATE INFO
         </div>
@@ -54,7 +54,7 @@
 
         <div class="custom-file">
           <input name="file" type="file" class="custom-file-input"
-          accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                 accept="{{globals.mimeTypes.join(',')}}"
           (change)="onFileChange($event)">
 
           <label class="custom-file-label">
@@ -121,11 +121,9 @@
       <tr>
         <th class="align-middle">Template Title</th>
         <th class="align-middle">Estimated Completion</th>
-        <th class="align-middle">File Message</th>
         <th class="align-middle">Uploader</th>
         <th class="align-middle">Date Uploaded</th>
-        <th class="align-middle">Groups</th>
-        <th class="align-middle">Delete</th>
+        <th class="align-middle" style="width:65px"></th>
       </tr>
     </thead>
 
@@ -142,15 +140,9 @@
 
         <ng-template #emptyDetails>
           <td class="align-middle">N/A</td>
-          <td class="align-middle">N/A</td>
           <td class="align-middle">Unknown</td>
         </ng-template>
 
-        <td class="align-middle">
-          <span *ngFor="let group of template.groups; let idx = index">
-            {{ group }}{{ idx + 1 < template.groups.length ? ',' : '' }}
-          </span>
-        </td>
         <td class="align-middle">
           <button type="button" class="btn btn-danger" (click)="openModal(deleteTemplateModal, template._id)" [disabled]=template.coreTemplate><i class="fa fa-trash"></i></button>
         </td>
