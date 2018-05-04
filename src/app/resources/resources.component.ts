@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbModalRef,  NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
+import { Globals } from '../shared/app.global';
 import { Resource } from '../models/resource.model';
 import { ResourceService } from './resource.service'
 import { SharedService } from '../shared/shared.service';
@@ -15,11 +16,6 @@ import { saveAs } from 'file-saver';
 })
 export class ResourcesComponent implements OnInit {
   modal: NgbModalRef;
-  options: NgbModalOptions = {
-    backdrop: 'static',
-    keyboard: false,
-    size: 'lg',
-  };
 
   alert: any;
   resource: Resource = new Resource();
@@ -29,7 +25,8 @@ export class ResourcesComponent implements OnInit {
   fileName: string;
   file: File;
 
-  constructor(private resourceService: ResourceService,
+  constructor(private globals: Globals,
+    private resourceService: ResourceService,
     private modalService: NgbModal,
     private route: ActivatedRoute,
     private sharedService: SharedService) { }
@@ -40,6 +37,7 @@ export class ResourcesComponent implements OnInit {
 
   closeModal(): void {
     this.alert = '';
+    this.resource = new Resource();
     this.modal.close();
   }
 
@@ -159,7 +157,7 @@ export class ResourcesComponent implements OnInit {
       this.file = event.target.files[0];
       this.fileName = event.target.files[0].name;
 
-      if ((this.file.size > (2 ** 20) * 5)) {
+      if (this.file.size > this.globals.maxFileSize) {
         this.alert = { message: 'File is too large to upload.' };
       } else {
         this.alert = '';
@@ -168,11 +166,11 @@ export class ResourcesComponent implements OnInit {
   }
 
   open(content): void {
-    this.modal = this.modalService.open(content, this.options);
+    this.modal = this.modalService.open(content, this.globals.options);
   }
 
   postNewResource(): void {
-    if (this.file && (this.file.size <= (2 ** 20) * 5)) {
+    if (this.file && (this.file.size <= this.globals.maxFileSize)) {
       this.resourceService.createResource(this.resource.title).subscribe(resourceData => {
         this.createFile(resourceData._id).then(() => {
           this.resourceService.uploadFile(resourceData._id, this.file).subscribe(empty => {
@@ -188,6 +186,8 @@ export class ResourcesComponent implements OnInit {
           console.log(err);
         });
       })
+    } else {
+      this.alert = { message: 'Please attach a file with size ~ 5 MB.' };
     }
   }
 

@@ -1,23 +1,26 @@
-<!-- Add college button-->
-<div class="page-header content-bar">
-  <div class="btn-toolbar pull-right">
-    <div class="btn-group">
-      <button type="button" (click)="addCollegeDialog(addition)" class="btn btn-success btn-college">+ Add College</button>
-    </div>
-  </div>
 <!-- Colleges Header-->
-  <h2 class="bar-text">Colleges</h2>
+<div class="header-label">
+  <div class="colleges-header">
+    <span class="label"><i class="fa fa-icon fa-university"></i> University Hierarchy
+      <span class ="blockquote-btn">
+        <button type="button" (click)="addCollegeDialog(addition)" class="btn btn-dark"><i class="fa fa-icon fa-plus"></i>Add New College</button>
+      </span>
+    </span>
+  </div>
 </div>
 
 <!-- Dialog module for adding a new college -->
-<ng-template #addition let-cancel="close" let-esc="dismiss">
+<ng-template #addition>
   <div class="modal-header">
     <h4 class="modal-title">Add New College</h4>
-    <button type="button" class="close" aria-label="Close" (click)="esc()">
-      <span aria-hidden="true">&times;</span>
-    </button>
   </div>
   <div class="modal-body">
+    <div *ngIf="alerts">
+      <p *ngFor="let alert of alerts">
+        <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
+      </p>
+    </div>
+
     <form #f="ngForm" (ngSubmit)="submitCollege()">
       <div class="form-group">
         <label for="college-name">College: </label>
@@ -29,53 +32,50 @@
         <input type="text" class="form-control" [(ngModel)]="college.abbreviation" name="college-abbreviation" placeholder="Enter The College's Abbreviation">
         <small class="form-text text-muted">Enter an abbreviation for the new college.</small>
       </div>
-      <div>
-        <button type="submit" class="btn btn-primary" data-dismiss="modal" label="Add">Add</button>
-        <button type="button" class="btn btn-outline-dark" (click)="cancel()">Cancel</button>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-warning" data-dismiss="modal" label="Add">Add</button>
+        <button type="button" class="btn btn-outline-dark" (click)="closeModal()">Cancel</button>
       </div>
     </form>
-  </div>
-  <div *ngIf="alerts" class="modal-footer">
-    <p *ngFor="let alert of alerts">
-      <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
-    </p>
   </div>
 </ng-template>
 
 <!-- Dialog module for deleting a College -->
-<ng-template #deletion let-close="close" let-esc="dismiss">
+<ng-template #deletion>
   <div class="modal-header">
     <h4 class="modal-title">Deleting {{college.abbreviation}}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="esc()">
-      <span aria-hidden="true">&times;</span>
-    </button>
   </div>
   <div class="modal-body">
     <p>
-      <ngb-alert [hidden]="departments.length === 0" type="warning" [dismissible]="false">ALL {{college.abbreviation}} departments must be DELETED first!</ngb-alert>
-      <ngb-alert [hidden]="departments.length !== 0" type="danger" [dismissible]="false">Are you sure you want to delete {{college.abbreviation}}?</ngb-alert>
+      <ngb-alert [hidden]="departments.length === 0" type="warning" [dismissible]="false">ALL <strong>{{college.name}} ({{college.abbreviation}})</strong> departments must be DELETED first!</ngb-alert>
+      <ngb-alert [hidden]="departments.length !== 0" type="danger" [dismissible]="false">Are you sure you want to delete <strong>{{college.name}} ({{college.abbreviation}})</strong>?</ngb-alert>
     </p>
   </div>
   <div class="modal-footer">
     <button [hidden]="departments.length !== 0" type="button" class="btn btn-outline-dark" (click)="deleteCollege()" lable="Delete">Delete</button>
-    <button type="button" class="btn btn-outline-dark" (click)="close()" lable="Cancel">Cancel</button>
+    <button type="button" class="btn btn-outline-dark" (click)="closeModal()" label="Cancel">Cancel</button>
   </div>
 </ng-template>
 
 <!-- Dialog module for updating a College -->
 <!--  ==================== MANAGER ==================== -->
-<ng-template #manager let-cancel="close" let-esc="dismiss">
+<ng-template #manager>
   <div class="modal-header">
     <h4 class="modal-title">College Manager</h4>
-    <button type="button" class="close" aria-label="Close" (click)="esc()">
-      <span aria-hidden="true">&times;</span>
-    </button>
   </div>
   <div class="modal-body">
+    <!-- ========== ALERTS IN MANAGER ============== --->
+    <div *ngIf="alerts">
+      <p *ngFor="let alert of alerts">
+        <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
+      </p>
+    </div>
+
     <!-- NAME --->
-    <div class="row">
+    <div class="row grid-space">
       <span class="col-3">College Name</span>
-      <span class="col-8">
+      <span class="col-9">
         <div>
           <input type="text" class="form-control" placeholder="Enter a new college name" [(ngModel)]="college.name" name="college-name">
         </div>
@@ -83,9 +83,9 @@
       </span>
     </div>
     <!-- ABBV --->
-    <div class="row">
+    <div class="row grid-space">
       <span class="col-3">College Abbreviation</span>
-      <span class="col-8">
+      <span class="col-9">
         <div>
           <input type="text" class="form-control" placeholder="Enter a new abbreviation" [(ngModel)]="college.abbreviation" name="college-abbreviation">
         </div>
@@ -93,59 +93,63 @@
       </span>
     </div>
     <!-- DEANS -->
-    <div class="row grid-space">
-      <span class="col-3">Add a Dean</span>
-      <div class="input-group col-8 ui-fluid">
-        <input type="text" class="form-control" [(ngModel)]="dean.username" [ngbTypeahead]="search" placeholder="Enter a username"/>
-        <span class="input-group-btn">
-          <button class="btn btn-success" (click)="addDean()">+ Add</button>
-        </span>
-        <div class="text-hints">Type in a username to get a list of possible users to add in the dean list.</div>
+    <div class="row grid-space" style="padding-bottom: 30px;">
+      <span class="col-3 group-label">Add a College Dean</span>
+      <div class="form-group col-9">
+        <div class="input-group">
+          <input type="text" class="form-control" [(ngModel)]="dean.username"
+                 [ngbTypeahead]="search" [editable]="false" placeholder="Enter a username"/>
+          <div class="input-group-append">
+            <button class="btn btn-success" (click)="addDean()">
+              <i class="fa fa-icon fa-plus"></i>Add
+            </button>
+          </div>
+        </div>
+        <div class="text-hints">
+          Type in a username to get a list of possible users to add in the College Dean list.
+        </div>
       </div>
     </div>
-    <div class="card-header">
-      <h4><span class="header-container">Manage College Deans</span></h4>
-    </div>
-    <div *ngFor="let dean of deans" class="card">
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-          {{dean.name?.first}} {{dean.name?.last}} ({{dean.username}})
-          <button type="button" class="btn btn-danger pull-right" (click)="deleteDean(dean)">
-            Remove
-          </button>
-        </li>
-      </ul>
-    </div>
-    <div *ngIf="deans.length == 0">
-      <ngb-alert type="info" [dismissible]="false">No deans exist for this college.</ngb-alert>
+
+    <div class="card card-container">
+      <div class="card-header">
+        <h4><span class="header-container">Manage College Deans</span></h4>
+      </div>
+      <div *ngFor="let dean of deans" class="card">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            {{dean.name?.first}} {{dean.name?.last}} ({{dean.username}})
+            <button type="button" class="btn btn-danger pull-right" (click)="deleteDean(dean)">
+              Remove
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div *ngIf="deans.length === 0" style="padding:15px;">
+        No deans exist for this college.
+      </div>
     </div>
   </div>
-  <!-- ========== ALERTS IN MANAGER ============== --->
-  <div *ngIf="alerts" class="modal-footer">
-    <p *ngFor="let alert of alerts">
-      <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
-    </p>
+
+  <div class="modal-footer">
     <button class="btn btn-dark" type="button" (click)="updateCollege()">Save</button>
-    <button class="btn btn-dark" type="button" (click)="cancel()">Cancel</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
   </div>
 </ng-template>
 
 <!-- Display Deans -->
-<ng-template #displayDeans let-close="close" let-esc="dismiss">
+<ng-template #displayDeans let-close="close">
   <div class="modal-header">
     <h4 class="modal-title">{{college.abbreviation}} College Deans</h4>
-    <button type="button" class="close" aria-label="Close" (click)="esc()">
-      <span aria-hidden="true">&times;</span>
-    </button>
   </div>
   <div class="modal-body">
     <table *ngIf="deans.length > 0; else emptyDeans" class="table table-inverse">
       <thead>
         <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Username</th>
-          <th>Email</th>
+          <th class="table-header">First Name</th>
+          <th class="table-header">Last Name</th>
+          <th class="table-header">Username</th>
+          <th class="table-header">Email</th>
         </tr>
       </thead>
       <tbody>
@@ -158,7 +162,7 @@
       </tbody>
     </table>
     <ng-template #emptyDeans>
-      <ngb-alert type="info" [dismissible]="false">No deans exist for this college.</ngb-alert>
+      No deans exist for this college.
     </ng-template>
   </div>
   <div class="modal-footer">
@@ -172,10 +176,12 @@
     <div *ngFor="let college of colleges">
       <ngb-panel>
         <ng-template ngbPanelTitle>
-          {{college.name}} ({{college.abbreviation}})
-          <button type="button" class="close" placement="bottom" ngbTooltip="Delete"aria-label="Close" (click)="deleteCollegeDialog(deletion, college)">X</button>
-          <button type="button" class="close" placement="bottom" ngbTooltip="View Deans"(click)="viewDeansDialog(displayDeans, college)"><i class="fa fa-icon fa-users"></i>&nbsp;&nbsp;</button>
-          <span *ngIf="isAdmin"><button type="button" class="close" placement="bottom" ngbTooltip="Manage College"(click)="manageCollegeDialog(manager, college._id)"><i class="fa fa-icon fa-cog"></i>&nbsp;&nbsp;</button></span>
+          <div class="college-header-panel">
+            {{college.name}} ({{college.abbreviation}})
+            <button type="button" class="close" placement="bottom" ngbTooltip="Delete"aria-label="Close" (click)="deleteCollegeDialog(deletion, college)"><i class="fa fa-icon-group fa-times"></i></button>
+            <button type="button" class="close" placement="bottom" ngbTooltip="View Deans"(click)="viewDeansDialog(displayDeans, college)"><i class="fa fa-icon-group fa-users"></i></button>
+            <button type="button" class="close" placement="bottom" ngbTooltip="Manage College"(click)="manageCollegeDialog(manager, college._id)"><i class="fa fa-icon-group fa-cog"></i></button>
+          </div>
         </ng-template>
         <ng-template ngbPanelContent>
           <prism-departments *ngIf="college" [collegeId]="college._id"></prism-departments>

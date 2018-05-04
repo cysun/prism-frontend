@@ -1,29 +1,29 @@
 <!-- Page Header -->
 <div class="page-header">
   <div class="btn-toolbar pull-right">
-    <!-- Delete all button -->
-    <div class="btn-group" *ngIf="sharedService.isAdmin()">
-      <button type="button" (click)="deleteAll()" class="btn btn-md btn-danger vertical-space">Delete All</button>
+    <!-- Add resource button -->
+    <div class="btn-group">
+      <button type="button" (click)="open(newResourceModal)" class="btn btn-md btn-outline-success vertical-space"><i class="fa fa-icon fa-plus"></i>New</button>
     </div>
     <!-- Download all button -->
     <div class="btn-group">
-      <button type="button" (click)="downloadAll()" class="btn btn-md btn-primary vertical-space">Download All</button>
+      <button type="button" (click)="downloadAll()" class="btn btn-md btn-outline-dark vertical-space"><i class="fa fa-icon fa-download"></i>Download All</button>
     </div>
-    <!-- Add resource button -->
-    <div class="btn-group">
-      <button type="button" (click)="open(newResourceModal)" class="btn btn-md btn-success vertical-space">New</button>
+    <!-- Delete all button -->
+    <div class="btn-group" *ngIf="sharedService.isAdmin()">
+      <button type="button" (click)="deleteAll()" class="btn btn-md btn-outline-danger vertical-space"><i class="fa fa-icon fa-trash"></i>Delete All</button>
     </div>
   </div>
-  <h1 class="header-text">PRS Resources</h1>
+  <h1 class="header-text"><i class="fa fa-icon fa-folder-open-o"></i> Resources</h1>
 </div>
-<div class="container">
-  <div class="row">
-    <span class="search-container col-6">
-      <input [(ngModel)]="searchText" class="form-control" type="text" placeholder="Search Your Resources">
-    </span>
-    <span class="counter"><p>{{resources.length}} item(s)</p></span>
-  </div>
+
+<div class="row">
+  <span class="search-container col-6">
+    <input [(ngModel)]="searchText" class="form-control" type="text" placeholder="Search for resources">
+  </span>
+  <span class="counter"><p>{{resources.length}} item(s)</p></span>
 </div>
+
 
 <!-- Modal for adding new resource -->
 <ng-template #newResourceModal>
@@ -60,9 +60,7 @@
           placeholder="Enter the title of this resource" required>
           <div class="text-hints">Type a title for the new resource.</div>
         </div>
-
       </div>
-
     </div>
 
     <div class="modal-footer">
@@ -78,10 +76,9 @@
     <thead class="table-header">
       <tr>
         <th class="align-middle" scope="col" style="width: 5%"></th>
-        <th class="align-middle" scope="col" style="width: 45%">Title</th>
+        <th class="align-middle" scope="col" style="width: 55%">Title</th>
         <th class="align-middle" scope="col" style="width: 25%">Uploaded By</th>
         <th class="align-middle" scope="col" style="width: 15%">Date Uploaded</th>
-        <th class="align-middle" scope="col" style="width: 10%">Download</th>
       </tr>
     </thead>
     <tbody>
@@ -91,12 +88,9 @@
                  [checked]="isSelected(resource._id)"
                  (click)="updateSelection($event, resource._id)">
         </td>
-        <td class="align-middle">{{resource.title}}</td>
+        <td class="align-middle"><span (click)="downloadSpecific(resource)" class="download-file">{{resource.title}}</span></td>
         <td class="align-middle">{{resource.files[0].uploader.username}}</td>
         <td class="align-middle">{{resource.files[0].dateUploaded | date: 'yyyy-MM-dd'}}</td>
-        <td>
-          <button class="btn btn-outline-secondary" (click)="downloadSpecific(resource)" placement="top" ngbTooltip="Download Revision"><i class="fa fa-download"></i></button>
-        </td>
       </tr>
     </tbody>
   </table>
@@ -105,10 +99,10 @@
 <div class="row">
   <div class="col">
     <div ngbDropdown placement="top-right" class="d-inline-block">
-      <button class="btn btn-outline-primary" [disabled]="selected.length === 0" id="dropdownBasic1" ngbDropdownToggle>Action on {{selected.length}} selected</button>
-      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-        <button class="dropdown-item" (click)="downloadSelected()">Download</button>
-        <button class="dropdown-item" (click)="deleteSelected()" *ngIf="sharedService.isAdmin()">Delete</button>
+      <button class="btn btn-outline-warning" [disabled]="selected.length === 0" ngbDropdownToggle>Action on {{selected.length}} selected</button>
+      <div ngbDropdownMenu>
+        <button class="dropdown-item" (click)="downloadSelected()"><i class="fa fa-icon fa-download"></i>Download</button>
+        <button class="dropdown-item" (click)="deleteSelected()" *ngIf="sharedService.isAdmin()"><i class="fa fa-icon fa-trash"></i> Delete</button>
       </div>
     </div>
   </div>

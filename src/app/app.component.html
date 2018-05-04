@@ -18,53 +18,52 @@
     <ul class="navbar-nav">
       <li class="nav-item">
         <a class="nav-link" [routerLink]="['/dashboard']" style="padding: 10px;">
-          <i class="fa fa-icon fa-home"></i>Dashboard
+          <i class="fa fa-icon-group fa-home"></i>Dashboard
         </a>
       </li>
 
       <li class="nav-item">
         <a class="nav-link" *ngIf="sharedService.isAdminOrPrs()"
            [routerLink]="['/calendar']" style="padding: 10px;">
-          <i class="fa fa-icon fa-calendar"></i>Calendar
+          <i class="fa fa-icon-group fa-calendar"></i>Calendar
         </a>
       </li>
 
       <li class="nav-item">
         <a class="nav-link" [routerLink]="['/resources']" style="padding: 10px;">
-          <i class="fa fa-icon fa-folder-open-o"></i>Resources
+          <i class="fa fa-icon-group fa-folder-open-o"></i>Resources
         </a>
       </li>
 
       <li class="nav-item">
         <a class="nav-link" [routerLink]="['/group']" style="padding: 10px;">
-          <i class="fa fa-icon fa-users"></i>
-          {{ currentUser.isRootOrAdmin() ? 'Group Manager' : 'Committee' }}
+          <i class="fa fa-icon-group fa-users"></i>{{ currentUser.isRootOrAdmin() ? 'Group Manager' : 'Committee' }}
         </a>
       </li>
 
       <li class="nav-item">
         <a *ngIf="sharedService.isAdmin()" class="nav-link"
            [routerLink]="['/college']" style="padding: 10px;">
-          <i class="fa fa-icon fa-graduation-cap"></i>University Hierarchy
+          <i class="fa fa-icon-group fa-graduation-cap"></i>University Hierarchy
         </a>
       </li>
 
       <li class="nav-item">
         <a *ngIf="sharedService.isAdmin()" class="nav-link"
            [routerLink]="['/templates']" style="padding: 10px;">
-          <i class="fa fa-icon fa-folder"></i>Template Manager
+          <i class="fa fa-icon-group fa-folder"></i>Template Manager
         </a>
       </li>
 
       <li class="nav-item">
         <a class="nav-link" [routerLink]="['/settings']" style="padding: 10px;">
-          <i class="fa fa-icon fa-gear"></i>Settings
+          <i class="fa fa-icon-group fa-gear"></i>Settings
         </a>
       </li>
 
       <li class="nav-item">
         <a class="nav-link" [routerLink]="" (click)="logout()" style="padding: 10px;">
-          <i class="fa fa-icon fa-sign-out"></i>Sign Out
+          <i class="fa fa-icon-group fa-sign-out"></i>Sign Out
         </a>
       </li>
     </ul>

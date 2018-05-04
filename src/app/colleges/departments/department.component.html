@@ -4,7 +4,7 @@
     <div class="btn-toolbar pull-right">
       <div clas="btn-group">
         <!-- Add Department button -->
-        <button class="btn btn-success btn-department pull-right" (click)="openModal(addDepartmentModal)">+ Add Department</button>
+        <button class="btn btn-warning btn-department pull-right" (click)="openModal(addDepartmentModal)"><i class="fa fa-icon fa-plus"></i>New Department</button>
       </div>
     </div>
     <h3 class="bar-text">Departments</h3>
@@ -12,12 +12,9 @@
   <div *ngIf="departments.length > 0; else emptyDepartments">
     <ul class="list-group list-group-flush" *ngFor="let department of departments">
       <!-- View/Edit Programs -->
-      <ng-template #displayDeptPrograms let-close="close" let-esc="dismiss">
+      <ng-template #displayDeptPrograms>
         <div class=" modal-header">
           <h4 class="modal-title">{{department.abbreviation}} Department Programs</h4>
-          <button type="button" class="close" aria-label="Close" (click)="esc()">
-            <span aria-hidden="true">&times;</span>
-          </button>
         </div>
         <div class="modal-body">
           <!-- PRISM-PROGRAMS -->
@@ -26,10 +23,11 @@
         </div>
       </ng-template>
       <li class="list-group-item">
-        <button type="button" class="btn btn-link" (click)="openModal(displayDeptPrograms)">{{department.name}} ({{department.abbreviation}})</button>
-        <button type="button" class="close" class="close" placement="bottom" ngbTooltip="Delete" aria-label="Close" (click)="deleteDepartmentDialog(deletion, department)">X</button>
-        <button type="button" class="close" class="close" placement="bottom" ngbTooltip="View Chairs" (click)="viewChairsDialog(displayChairs, department)"><i class="fa fa-icon fa-users"></i>&nbsp;&nbsp;</button>
-        <span><button type="button" class="close" class="close" placement="bottom" ngbTooltip="Manage Department" (click)="manageDepartmentDialog(manager, department._id)"><i class="fa fa-icon fa-cog"></i>&nbsp;&nbsp;</button></span>
+        <button type="button" class="btn btn-link department-header-panel" (click)="openModal(displayDeptPrograms)">{{department.name}} ({{department.abbreviation}})</button>
+
+        <button type="button" style="margin-top:10px;" class="close" placement="bottom" ngbTooltip="Delete" (click)="deleteDepartmentDialog(deletion, department)"><i class="fa fa-icon-group fa-times"></i></button>
+        <button type="button" style="margin-top:10px;" class="close" placement="bottom" ngbTooltip="View Chairs" (click)="viewChairsDialog(displayChairs, department)"><i class="fa fa-icon-group fa-users"></i></button>
+        <button type="button" style="margin-top:10px;" class="close" placement="bottom" ngbTooltip="Manage Department" (click)="manageDepartmentDialog(manager, department._id)"><i class="fa fa-icon-group fa-cog"></i></button>
       </li>
     </ul>
   </div>
@@ -37,18 +35,22 @@
 
 <!-- Dialog module for updating a College -->
 <!--  ==================== MANAGER ==================== -->
-<ng-template #manager let-cancel="close" let-esc="dismiss">
+<ng-template #manager>
   <div class="modal-header">
     <h4 class="modal-title">Department Manager</h4>
-    <button type="button" class="close" aria-label="Close" (click)="esc()">
-      <span aria-hidden="true">&times;</span>
-    </button>
   </div>
   <div class="modal-body">
+    <!-- ========== ALERTS IN MANAGER ============== --->
+    <div *ngIf="alerts">
+      <p *ngFor="let alert of alerts">
+        <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
+      </p>
+    </div>
+
     <!-- NAME --->
-    <div class="row">
+    <div class="row grid-space">
       <span class="col-3">Department Name</span>
-      <span class="col-8">
+      <span class="col-9">
         <div>
           <input type="text" class="form-control" placeholder="Enter a new department name" [(ngModel)]="department.name" name="department-name">
         </div>
@@ -56,122 +58,123 @@
       </span>
     </div>
     <!-- ABBV --->
-    <div class="row">
+    <div class="row grid-space">
       <span class="col-3">Department Abbreviation</span>
-      <span class="col-8">
+      <span class="col-9">
         <div>
-          <input type="text" class="form-control" placeholder="Enter a new abbreviation" [(ngModel)]="department.abbreviation" name="department-abbreviation">
+          <input type="text" class="form-control" placeholder="Enter a new abbreviation"
+                 [(ngModel)]="department.abbreviation" name="department-abbreviation">
         </div>
         <div class="text-hints">Enter a new abbreviation for the department.</div>
       </span>
     </div>
     <!-- CHAIR -->
-    <div class="row grid-space">
-      <span class="col-3">Add a Department Chair</span>
-      <div class="input-group col-8 ui-fluid">
-        <input type="text" class="form-control" [(ngModel)]="chair.username" [ngbTypeahead]="search" placeholder="Enter a username"/>
-        <span class="input-group-btn">
-          <button class="btn btn-success" (click)="addChair()">+ Add</button>
-        </span>
-        <div class="text-hints">Type in a username to get a list of possible users to add in the chair list.</div>
+    <div class="row grid-space" style="padding-bottom: 30px;">
+      <span class="col-3 group-label">Add a Department Chair</span>
+      <div class="form-group col-9">
+        <div class="input-group">
+          <input type="text" class="form-control" [(ngModel)]="chair.username"
+                 [ngbTypeahead]="search" placeholder="Enter a username"/>
+          <div class="input-group-append">
+            <button class="btn btn-success" (click)="addChair()">
+              <i class="fa fa-icon fa-plus"></i> Add
+            </button>
+          </div>
+        </div>
+        <div class="text-hints">
+          Type in a username to get a list of possible users to add in the Department Chair list.
+        </div>
       </div>
     </div>
-    <div class="card-header">
-      <h4><span class="header-container">Manage Department Chairs</span></h4>
-    </div>
-    <div *ngFor="let chair of chairs" class="card">
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-          {{chair.name?.first}} {{chair.name?.last}} ({{chair.username}})
-          <button type="button" class="btn btn-danger pull-right" (click)="deleteChair(chair)">
-            Remove
-          </button>
-        </li>
-      </ul>
-    </div>
-    <div *ngIf="chairs.length == 0">
-      <ngb-alert type="info" [dismissible]="false">No chairs exist for this department.</ngb-alert>
+
+    <div class="card card-container">
+      <div class="card-header">
+        <h4><span class="header-container">Manage Department Chairs</span></h4>
+      </div>
+      <div *ngFor="let chair of chairs" class="card">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            {{chair.name?.first}} {{chair.name?.last}} ({{chair.username}})
+            <button type="button" class="btn btn-danger pull-right" (click)="deleteChair(chair)">
+              Remove
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div *ngIf="chairs.length == 0" style="padding: 15px;">
+        No chairs exist for this department.
+      </div>
     </div>
   </div>
-  <!-- ========== ALERTS IN MANAGER ============== --->
-  <div *ngIf="alerts" class="modal-footer">
-    <p *ngFor="let alert of alerts">
-      <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
-    </p>
+
+  <div class="modal-footer">
     <button class="btn btn-dark" type="button" (click)="updateDepartment()">Save</button>
-    <button class="btn btn-dark" type="button" (click)="cancel()">Cancel</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
   </div>
 </ng-template>
 
 <!-- Dialog module for deleting a department -->
-<ng-template #deletion let-close="close" let-esc="dismiss">
+<ng-template #deletion>
   <div class="modal-header">
     <h4 class="modal-title">Deleting {{department.abbreviation}}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="esc()">
-      <span aria-hidden="true">&times;</span>
-    </button>
   </div>
   <div class="modal-body">
     <p>
-      <ngb-alert [hidden]="programs.length === 0" type="warning" [dismissible]="false">ALL {{department.abbreviation}} programs must be DELETED first!</ngb-alert>
-      <ngb-alert [hidden]="programs.length !== 0" type="danger" [dismissible]="false">Are you sure you want to delete {{department.abbreviation}}?</ngb-alert>
+      <ngb-alert [hidden]="programs.length === 0" type="warning" [dismissible]="false">ALL <strong>{{department.name}} ({{department.abbreviation}})</strong> programs must be DELETED first!</ngb-alert>
+      <ngb-alert [hidden]="programs.length !== 0" type="danger" [dismissible]="false">Are you sure you want to delete <strong>{{department.name}} ({{department.abbreviation}})</strong>?</ngb-alert>
     </p>
   </div>
   <div class="modal-footer">
     <button [hidden]="programs.length !== 0" type="button" class="btn btn-outline-dark" (click)="deleteDepartment()" lable="Delete">Delete</button>
-    <button type="button" class="btn btn-outline-dark" (click)="close()" lable="Cancel">Cancel</button>
+    <button type="button" class="btn btn-outline-dark" (click)="closeModal()" label="Cancel">Cancel</button>
   </div>
 </ng-template>
 
 <!-- Dialog module for adding a new department -->
-<ng-template #addDepartmentModal let-cancel="close" let-esc="dismiss">
+<ng-template #addDepartmentModal>
   <div class="modal-header">
     <h4 class="modal-title">Add New Department</h4>
-    <button type="button" class="close" aria-label="Close" (click)="esc()">
-      <span aria-hidden="true">&times;</span>
-    </button>
   </div>
   <div class="modal-body">
+    <div *ngIf="alerts">
+      <p *ngFor="let alert of alerts">
+        <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
+      </p>
+    </div>
+
     <form #f="ngForm" (ngSubmit)="submitDepartment()">
       <div class="form-group">
         <label for="department-name">Department: </label>
-        <input type="text" class="form-control"[(ngModel)]="department.name" name="department-name" placeholder="Enter New Department Title">
+        <input type="text" class="form-control"[(ngModel)]="department.name" name="department-name" placeholder="Enter new department title">
         <small class="form-text text-muted">Enter a name for the new department.</small>
       </div>
       <div class="form-group">
         <label for="department-abbreviation">Abbreviation: </label>
-        <input type="text" class="form-control" [(ngModel)]="department.abbreviation" name="department-abbreviation" placeholder="Enter The Department's Abbreviation">
+        <input type="text" class="form-control" [(ngModel)]="department.abbreviation" name="department-abbreviation" placeholder="Enter the department's abbreviation">
         <small class="form-text text-muted">Enter an abbreviation for the new department.</small>
       </div>
-      <div>
-        <button type="submit" class="btn btn-primary" data-dismiss="modal" label="Add">Add</button>
-        <button type="button" class="btn btn-outline-dark" (click)="cancel()">Cancel</button>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-warning" data-dismiss="modal" label="Add">Add</button>
+        <button type="button" class="btn btn-outline-dark" (click)="closeModal()">Cancel</button>
       </div>
     </form>
-  </div>
-  <div *ngIf="alerts" class="modal-footer">
-    <p *ngFor="let alert of alerts">
-      <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
-    </p>
   </div>
 </ng-template>
 
 <!-- Display Chairs -->
-<ng-template #displayChairs let-close="close" let-esc="dismiss">
+<ng-template #displayChairs>
   <div class="modal-header">
     <h4 class="modal-title">{{department.abbreviation}} Department Chairs</h4>
-    <button type="button" class="close" aria-label="Close" (click)="esc()">
-      <span aria-hidden="true">&times;</span>
-    </button>
   </div>
   <div class="modal-body">
     <table *ngIf="chairs.length > 0; else emptyChairs" class="table table-inverse">
       <thead>
         <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Username</th>
-          <th>Email</th>
+          <th class="table-header">First Name</th>
+          <th class="table-header">Last Name</th>
+          <th class="table-header">Username</th>
+          <th class="table-header">Email</th>
         </tr>
       </thead>
       <tbody>
@@ -184,15 +187,17 @@
       </tbody>
     </table>
     <ng-template #emptyChairs>
-      <ngb-alert type="info" [dismissible]="false">No chairs exist for this department.</ngb-alert>
+      No chairs exist for this department.
     </ng-template>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-dark" type="button" (click)="close()">Close</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Close</button>
   </div>
 </ng-template>
 
 <!-- Info message when there are no departments -->
 <ng-template #emptyDepartments>
-  <ngb-alert type="info" [dismissible]="false">There are currently no departments.</ngb-alert>
+  <div style="padding:20px;">
+    There are currently no departments.
+  </div>
 </ng-template>

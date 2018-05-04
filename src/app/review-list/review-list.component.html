@@ -5,15 +5,9 @@
   </div>
   <form #f="ngForm" (ngSubmit)="submitReview()">
     <div class="modal-body">
-      <div *ngIf="alert">
-        <ngb-alert type="danger" [dismissible]="false">
-          <strong>Invalid Review:</strong> {{ alert.message }}
-        </ngb-alert>
-      </div>
-
-      <div class="form-row">
+      <div class="row grid-space">
         <span class="col-3 group-label">Program</span>
-        <div class="form-group col-8">
+        <div class="form-group col-9">
           <select class="custom-select" [(ngModel)]="selectedOption" name="program-list">
             <option *ngFor="let program of programs" [ngValue]="program._id">
               {{program.name}}
@@ -24,48 +18,48 @@
             Select a program to initiate a review.
           </div>
         </div>
-
       </div>
 
       <div class ="row grid-space">
         <span class="col-3 group-label">Add Lead Reviewers</span>
-        <span class="col-8 ui-fluid">
+        <div class="form-group col-9">
           <prism-user-selector [configType]="'multiple'"
                                [filterType]="'prs'"
                                [suggestedMembers]="suggestedUsers">
-        </prism-user-selector>
-        <div class="text-hints">
-          Type in a username to get a list of possible users to add as a lead reviewer.
+          </prism-user-selector>
+          <div class="text-hints">
+            Type in a username to get a list of possible users to add as a lead reviewer.
+          </div>
         </div>
-      </span>
-    </div>
-
-    <div class="input-group grid-space">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Start Date</span>
       </div>
 
-      <div class="input-group-prepend">
-        <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
-          <i class="fa fa-calendar"></i>
-        </button>
+      <div class="row grid-space">
+        <span class="col-3 group-label">Start Date</span>
+        <div class="form-group col-9">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
+                <i class="fa fa-calendar"></i>
+              </button>
+            </div>
+
+            <input class="form-control" placeholder="yyyy-mm-dd" name="d2" #c2="ngModel"
+                   [(ngModel)]="newDate" ngbDatepicker #d2="ngbDatepicker" [minDate]="minDate">
+          </div>
+
+          <div class="text-hints">
+            This should be the current date unless it is intended for storing
+            archived documents from before PRISM was implemented.
+          </div>
+        </div>
       </div>
-
-      <input class="form-control" placeholder="yyyy-mm-dd" name="d2" #c2="ngModel"
-             [(ngModel)]="newDate" ngbDatepicker #d2="ngbDatepicker" [minDate]="minDate">
-
-       <div class="text-hints">
-         This should be the current date unless it is intended for storing archived documents from before PRISM was implemented.
-       </div>
     </div>
-  </div>
 
-  <div class="modal-footer">
-    <button class="btn btn-success" type="submit">Submit</button>
-    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
-  </div>
-
-</form>
+    <div class="modal-footer">
+      <button class="btn btn-success" type="submit">Submit</button>
+      <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+    </div>
+  </form>
 </ng-template>
 
 <!-- Modal for editing lead reviewers -->
@@ -82,7 +76,13 @@
       </ngb-alert>
     </div>
 
-    <div class="form-row" *ngIf="currentReview.leadReviewers">
+    <div *ngIf="currentReview.leadReviewers.length === 0">
+      <ngb-alert class="info-message" type="info" [dismissible]="false">
+        <strong> Information: </strong> There are currently no lead reviewers for this review.
+      </ngb-alert>
+    </div>
+
+    <div class="form-row" *ngIf="currentReview.leadReviewers.length > 0">
       <table class="table table-hover">
         <thead class="bg-info">
           <tr>
@@ -109,7 +109,7 @@
   </div>
 
   <form #f="ngForm" (ngSubmit)="editLeadReviewers(currentReview._id, currentReview.program._id, currentReview.leadReviewers)">
-    <div class ="row grid-space">
+    <div class ="row">
       <span class="container-fluid" style="padding:30px;">
         <prism-user-selector [configType]="'multiple'"
                              [filterType]="'prs'"
@@ -125,7 +125,7 @@
     <!-- <div><pre>{{ currentReview | json }}</pre></div> -->
 
     <div class="modal-footer">
-      <button class="btn btn-primary" type="submit">Save</button>
+      <button class="btn btn-warning" type="submit">Save</button>
       <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
     </div>
   </form>
@@ -162,7 +162,7 @@
 <div class="container-fluid container-fluid-content">
   <div class="container-fluid" style="text-align: right; padding: 0;"
        *ngIf="reviewFilter !== 'archive' && reviewFilter !== 'deleted' && sharedService.isAdmin()">
-    <button class="btn btn-primary" (click)="openModal(createReviewModal)">
+    <button class="btn btn-warning" (click)="openModal(createReviewModal)">
       <i class="fa fa-icon fa-plus"></i>Create Review
     </button>
   </div>

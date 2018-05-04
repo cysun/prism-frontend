@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { User } from '../models/user.model';
 import { ActionLogger } from '../models/action-logger.model';
+import { Globals } from '../shared/app.global';
+import { User } from '../models/user.model';
 
 import { DashboardService } from './dashboard.service';
 import { SharedService } from '../shared/shared.service';
@@ -20,7 +21,6 @@ export class DashboardComponent implements OnInit {
 
   page = 1;
   resultPage = 0;
-  itemsPerPage = 20;
   totalLogs: number;
   totalNumOfPages: number;
 
@@ -30,7 +30,8 @@ export class DashboardComponent implements OnInit {
     'All', 'College', 'Department', 'Document', 'Group', 'Program', 'Review'
   ];
 
-  constructor(private router: Router,
+  constructor(private globals: Globals,
+              private router: Router,
               private dashboardService: DashboardService,
               private sharedService: SharedService) { }
 
@@ -105,8 +106,8 @@ export class DashboardComponent implements OnInit {
     } else {
       this.resultPage = page - 1;
 
-      const beginningItem = (this.page) * this.itemsPerPage;
-      const endingItem = this.page * this.itemsPerPage;
+      const beginningItem = (this.page) * this.globals.actionsPerPage;
+      const endingItem = this.page * this.globals.actionsPerPage;
     }
     this.displayHistory = this.allLogs[this.resultPage];
   }
@@ -116,7 +117,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getNumberOfUserLogs(username, type).subscribe( data => {
       this.totalLogs = data.count;
 
-      this.totalNumOfPages = Math.ceil(this.totalLogs / this.itemsPerPage);
+      this.totalNumOfPages = Math.ceil(this.totalLogs / this.globals.actionsPerPage);
       this.allLogs = new Array(this.totalNumOfPages).fill(null);
     })
   }
