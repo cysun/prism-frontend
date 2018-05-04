@@ -47,6 +47,7 @@ export class ReviewListComponent implements OnInit {
     month: 1,
     day: 1
   };
+  filterPrograms = true;
 
   constructor(private collegeService: CollegesService,
               private departmentService: DepartmentService,
@@ -67,7 +68,15 @@ export class ReviewListComponent implements OnInit {
     ).subscribe(data => {
       this.colleges = data[1];
       this.departments = data[2];
-      this.programs = data[3];
+      this.programs = data[3].sort((program1, program2) => {
+        if (program1.name < program2.name) {
+          return -1;
+        }
+        if (program2.name < program1.name) {
+          return 1;
+        }
+        return 0;
+      });
 
       if (this.programs.length > 0) {
         this.selectedOption = this.programs[0]._id;
@@ -122,6 +131,11 @@ export class ReviewListComponent implements OnInit {
 
       this.calculatePercentages();
     });
+  }
+
+  programReviewPendingFilter(program: Program): boolean {
+    // If we are within 6 months of the review date, keep this program
+    return 15552000000 > Math.abs((new Date(program.nextReviewDate)).getTime() - (new Date()).getTime());
   }
 
   calculatePercentages(): void {
