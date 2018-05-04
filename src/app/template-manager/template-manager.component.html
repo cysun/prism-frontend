@@ -54,7 +54,7 @@
 
         <div class="custom-file">
           <input name="file" type="file" class="custom-file-input"
-          accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                 accept="{{globals.mimeTypes.join(',')}}"
           (change)="onFileChange($event)">
 
           <label class="custom-file-label">

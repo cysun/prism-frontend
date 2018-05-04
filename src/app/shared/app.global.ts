@@ -10,6 +10,21 @@ export class Globals {
   minUsernameLength = 4;
   maxUsernameLength = 20;
 
+  mimeTypes = [
+    'application/msword',
+    'application/pdf',
+    'application/vnd.ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/x-photoshop',
+    'application/vnd.ms-excel',
+    'audio/*',
+    'image/*',
+    'text/plain',
+    'video/*'
+  ]
+
   /* Calendar colors for event dots */
   calendarColors: any = {
     red: {

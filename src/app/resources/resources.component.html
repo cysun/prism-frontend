@@ -42,10 +42,7 @@
 
         <div class="custom-file" style="text-align: left;">
           <input name="file" type="file" class="custom-file-input"
-                 accept="application/pdf, application/msword,
-                         application/vnd.openxmlformats-officedocument.wordprocessingml.document,
-                         application/vnd.ms-powerpoint,
-                         application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                 accept="{{globals.mimeTypes.join(',')}}"
                  (change)="onFileChange($event)">
 
           <label class="custom-file-label">
