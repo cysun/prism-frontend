@@ -270,6 +270,8 @@ export class ReviewListComponent implements OnInit {
     this.alert = '';
     this.currentReview = new Review();
     this.sharedService.filteredUsers = [];
+    this.updateSelected();
+    this.filterPrograms = true;
     this.modal.close();
   }
 
