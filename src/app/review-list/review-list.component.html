@@ -17,7 +17,7 @@
           </select>
 
           <div class="text-hints">
-            Select a program to initiate a review. <small class="form-text text-muted">Programs up for review only <input type="checkbox" [(ngModel)]="filterPrograms" name="filterPrograms" /></small>
+            Select a program to initiate a review. <small class="form-text text-muted">Programs up for review only <input type="checkbox" [value]="filterPrograms" (click)="updateSelected()" name="filterPrograms" /></small>
           </div>
         </div>
       </div>

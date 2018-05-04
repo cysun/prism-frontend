@@ -78,10 +78,6 @@ export class ReviewListComponent implements OnInit {
         return 0;
       });
 
-      if (this.programs.length > 0) {
-        this.selectedOption = this.programs[0]._id;
-      }
-
       this.setUpHierarchyLookups();
 
       this.reviews = data[0];
@@ -131,6 +127,14 @@ export class ReviewListComponent implements OnInit {
 
       this.calculatePercentages();
     });
+  }
+
+  updateSelected(): void {
+    this.filterPrograms = !this.filterPrograms;
+    if (this.programs.length === 0) {
+      return;
+    }
+    this.selectedOption = this.programs[0]._id;
   }
 
   programReviewPendingFilter(program: Program): boolean {
@@ -259,12 +263,15 @@ export class ReviewListComponent implements OnInit {
       }) === -1;
     };
     this.modal = this.modalService.open(content, this.globals.options);
+    this.updateSelected();
   }
 
   closeModal() {
     this.alert = '';
     this.currentReview = new Review();
     this.sharedService.filteredUsers = [];
+    this.updateSelected();
+    this.filterPrograms = true;
     this.modal.close();
   }
 
