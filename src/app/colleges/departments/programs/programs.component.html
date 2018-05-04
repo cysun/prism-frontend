@@ -1,3 +1,9 @@
+  <div *ngIf="alerts">
+    <p *ngFor="let alert of alerts">
+      <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
+    </p>
+  <div>
+
   <table *ngIf="programs.length > 0; else emptyPrograms" class="table table-inverse">
     <thead>
       <tr>
@@ -72,12 +78,6 @@
     <div class="text-hints">Enter the next review date for this program.</div>
   </div>
 </div>
-
-<div *ngIf="alerts">
-  <p *ngFor="let alert of alerts">
-    <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{alert.message}}</ngb-alert>
-  </p>
-<div>
 
 <!-- MODAL BUTTONS -->
 <span class="input-group-btn pull-right grid-space">
