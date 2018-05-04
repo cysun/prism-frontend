@@ -38,11 +38,9 @@ export class CollegesComponent implements OnInit {
   dean: User = new User();
   deans: User[] = [];
   isAdmin: boolean;
-  suggestedUsers: any[] = [];
   search = (text$: Observable<string>) =>
     text$
       .debounceTime(200)
-      .distinctUntilChanged()
       .map(term => term.length < 2 ? []
         : this.getSuggestedUsers(term, this.users));
 
@@ -201,14 +199,17 @@ export class CollegesComponent implements OnInit {
   addDean() {
     if (typeof(this.dean.username) !== 'undefined' && this.dean.username.trim().length > 0) {
       const userObj = this.users.find(item => item.username === this.dean.username);
-      this.deans.push(userObj);
-      const deanIds = this.deans.map(dean => dean._id);
-      this.college.deans = deanIds;
-      this.collegesService.updateCollege(this.college).subscribe( updatedCollege => {
-        const index = this.colleges.findIndex(oldCollege => oldCollege._id === updatedCollege._id);
-        this.colleges[index] = updatedCollege;
-      });
-      this.dean = new User();
+
+      if (userObj) {
+        this.deans.push(userObj);
+        const deanIds = this.deans.map(dean => dean._id);
+        this.college.deans = deanIds;
+        this.collegesService.updateCollege(this.college).subscribe( updatedCollege => {
+          const index = this.colleges.findIndex(oldCollege => oldCollege._id === updatedCollege._id);
+          this.colleges[index] = updatedCollege;
+        });
+        this.dean = new User();
+      }
     }
   }
 
@@ -256,28 +257,24 @@ export class CollegesComponent implements OnInit {
   /* Function that returns a list of suggested users based on user's current field input */
   getSuggestedUsers(username: string, users: any[]): any[] {
     const filtered = [];
-    const currentDeans = this.getDeansObject(this.college.deans);
+    const used = new Array(users.length);
 
-    /* Push matching usernames to filtered list */
-    for (let i = 0; i < users.length; i ++) {
-      if ((users[i].username).toLowerCase().indexOf(username.toLowerCase()) === 0) {
-        filtered.push(users[i].username);
-      }
-    }
-
-    /* Filter out members that are already part of the deans */
-    for (let i = 0; i < currentDeans.length; i++) {
-      for (let j = 0; j < filtered.length; j++) {
-        if (filtered[j] === currentDeans[i].username) {
-          filtered.splice(j, 1);
+    used.fill(false);
+    for (let i = 0; i < users.length; i++) {
+      for (let j = 0; j < this.deans.length; j++) {
+        if (users[i].username.toLowerCase() === this.deans[j].username.toLowerCase()) {
+          used[i] = true;
         }
       }
     }
-    /* Filter out usernames that were previously selected (but not added to the deans) */
-    for (let i = 0; i < this.suggestedUsers.length; i++) {
-      for (let j = 0; j < filtered.length; j++) {
-        if (filtered[j] === this.suggestedUsers[i].name) {
-          filtered.splice(j, 1);
+    /* Push matching usernames to filtered list */
+    for (let pos = 0; pos < users.length; pos ++) {
+      if (used[pos]) {
+        continue;
+      } else {
+        if ((users[pos].username).toLowerCase().indexOf(username.toLowerCase()) === 0) {
+          filtered.push(users[pos].username);
+          used[pos] = true;
         }
       }
     }
