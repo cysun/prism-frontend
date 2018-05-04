@@ -6,16 +6,18 @@
   <form #f="ngForm" (ngSubmit)="submitReview()">
     <div class="modal-body">
       <div class="row grid-space">
-        <span class="col-3 group-label">Program</span>
+        <span class="col-3">
+          <span class="group-label">Program</span>
+        </span>
         <div class="form-group col-9">
           <select class="custom-select" [(ngModel)]="selectedOption" name="program-list">
-            <option *ngFor="let program of programs | sort" [ngValue]="program._id">
+            <option *ngFor="let program of (filterPrograms ? programs.filter(programReviewPendingFilter) : programs)" [ngValue]="program._id">
               {{program.name}}
             </option>
           </select>
 
           <div class="text-hints">
-            Select a program to initiate a review.
+            Select a program to initiate a review. <small class="form-text text-muted">Programs up for review only <input type="checkbox" [(ngModel)]="filterPrograms" name="filterPrograms" /></small>
           </div>
         </div>
       </div>
