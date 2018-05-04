@@ -199,14 +199,17 @@ export class CollegesComponent implements OnInit {
   addDean() {
     if (typeof(this.dean.username) !== 'undefined' && this.dean.username.trim().length > 0) {
       const userObj = this.users.find(item => item.username === this.dean.username);
-      this.deans.push(userObj);
-      const deanIds = this.deans.map(dean => dean._id);
-      this.college.deans = deanIds;
-      this.collegesService.updateCollege(this.college).subscribe( updatedCollege => {
-        const index = this.colleges.findIndex(oldCollege => oldCollege._id === updatedCollege._id);
-        this.colleges[index] = updatedCollege;
-      });
-      this.dean = new User();
+
+      if (userObj) {
+        this.deans.push(userObj);
+        const deanIds = this.deans.map(dean => dean._id);
+        this.college.deans = deanIds;
+        this.collegesService.updateCollege(this.college).subscribe( updatedCollege => {
+          const index = this.colleges.findIndex(oldCollege => oldCollege._id === updatedCollege._id);
+          this.colleges[index] = updatedCollege;
+        });
+        this.dean = new User();
+      }
     }
   }
 
@@ -256,7 +259,6 @@ export class CollegesComponent implements OnInit {
     const filtered = [];
     const used = new Array(users.length);
 
-    console.log('the deans size is: ' + this.deans.length);
     used.fill(false);
     for (let i = 0; i < users.length; i++) {
       for (let j = 0; j < this.deans.length; j++) {

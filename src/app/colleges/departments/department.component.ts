@@ -67,14 +67,17 @@ export class DepartmentComponent implements OnInit {
   addChair() {
     if (typeof(this.chair.username) !== 'undefined' && this.chair.username.trim().length > 0) {
       const userObj = this.users.find(item => item.username === this.chair.username);
-      this.chairs.push(userObj);
-      const chairIds = this.chairs.map(chair => chair._id);
-      this.department.chairs = chairIds;
-      this.departmentService.updateDepartment(this.department).subscribe( updatedDepartment => {
-        const index = this.departments.findIndex(oldDepartment => oldDepartment._id === updatedDepartment._id);
-        this.departments[index] = updatedDepartment;
-      });
-      this.chair = new User();
+
+      if (userObj) {
+        this.chairs.push(userObj);
+        const chairIds = this.chairs.map(chair => chair._id);
+        this.department.chairs = chairIds;
+        this.departmentService.updateDepartment(this.department).subscribe( updatedDepartment => {
+          const index = this.departments.findIndex(oldDepartment => oldDepartment._id === updatedDepartment._id);
+          this.departments[index] = updatedDepartment;
+        });
+        this.chair = new User();
+      }
     }
   }
 

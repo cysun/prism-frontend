@@ -25,9 +25,9 @@
       <li class="list-group-item">
         <button type="button" class="btn btn-link department-header-panel" (click)="openModal(displayDeptPrograms)">{{department.name}} ({{department.abbreviation}})</button>
 
-        <button type="button" style="padding-top:10px;" class="close" placement="bottom" ngbTooltip="Delete" (click)="deleteDepartmentDialog(deletion, department)"><i class="fa fa-icon fa-times"></i></button>
-        <button type="button" style="padding-top:10px;" class="close" placement="bottom" ngbTooltip="View Chairs" (click)="viewChairsDialog(displayChairs, department)"><i class="fa fa-icon fa-users"></i>&nbsp;&nbsp;</button>
-        <button type="button" style="padding-top:10px;" class="close" placement="bottom" ngbTooltip="Manage Department" (click)="manageDepartmentDialog(manager, department._id)"><i class="fa fa-icon fa-cog"></i>&nbsp;&nbsp;</button>
+        <button type="button" style="margin-top:10px;" class="close" placement="bottom" ngbTooltip="Delete" (click)="deleteDepartmentDialog(deletion, department)"><i class="fa fa-icon-group fa-times"></i></button>
+        <button type="button" style="margin-top:10px;" class="close" placement="bottom" ngbTooltip="View Chairs" (click)="viewChairsDialog(displayChairs, department)"><i class="fa fa-icon-group fa-users"></i></button>
+        <button type="button" style="margin-top:10px;" class="close" placement="bottom" ngbTooltip="Manage Department" (click)="manageDepartmentDialog(manager, department._id)"><i class="fa fa-icon-group fa-cog"></i></button>
       </li>
     </ul>
   </div>
@@ -120,8 +120,8 @@
   </div>
   <div class="modal-body">
     <p>
-      <ngb-alert [hidden]="programs.length === 0" type="warning" [dismissible]="false">ALL {{department.abbreviation}} programs must be DELETED first!</ngb-alert>
-      <ngb-alert [hidden]="programs.length !== 0" type="danger" [dismissible]="false">Are you sure you want to delete {{department.abbreviation}}?</ngb-alert>
+      <ngb-alert [hidden]="programs.length === 0" type="warning" [dismissible]="false">ALL <strong>{{department.name}} ({{department.abbreviation}})</strong> programs must be DELETED first!</ngb-alert>
+      <ngb-alert [hidden]="programs.length !== 0" type="danger" [dismissible]="false">Are you sure you want to delete <strong>{{department.name}} ({{department.abbreviation}})</strong>?</ngb-alert>
     </p>
   </div>
   <div class="modal-footer">
@@ -197,5 +197,7 @@
 
 <!-- Info message when there are no departments -->
 <ng-template #emptyDepartments>
-  <ngb-alert type="info" [dismissible]="false">There are currently no departments.</ngb-alert>
+  <div style="padding:20px;">
+    There are currently no departments.
+  </div>
 </ng-template>
