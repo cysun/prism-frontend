@@ -140,7 +140,6 @@ export class CollegesComponent implements OnInit {
           this.collegesService.addCollege(this.college).subscribe(
             data => {
               this.colleges.push(data);
-              this.colleges = this.colleges.slice(0);
             }
           );
           this.college = new College();
@@ -158,7 +157,6 @@ export class CollegesComponent implements OnInit {
     this.collegesService.deleteCollege(this.college._id).subscribe(() => {
       const index = this.colleges.indexOf(this.college);
       this.colleges.splice(index, 1);
-      this.colleges = this.colleges.slice(0);
     });
     this.college = new College();
     this.modal.close();
