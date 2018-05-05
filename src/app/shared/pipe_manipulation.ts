@@ -42,6 +42,9 @@ export class SortPipe implements PipeTransform {
           }
         }
       } else if (a.program) {
+        const year = new Date(a.startDate).getFullYear();
+        const reviewTitle = (`${a.program.name.toLowerCase()} ${year}-${year + 1}`);
+
         if (a.program.name.toLowerCase() < b.program.name.toLowerCase()) {
           return -1;
         } else if (a.program.name.toLowerCase() > b.program.name.toLowerCase()) {
