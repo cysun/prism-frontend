@@ -122,7 +122,6 @@ export class DepartmentComponent implements OnInit {
     this.departmentService.deleteDepartment(this.department._id).subscribe(() => {
       const index = this.departments.indexOf(this.department);
       this.departments.splice(index, 1);
-      this.departments = this.departments.slice(0);
     });
     this.department = new Department();
     this.closeModal();
@@ -242,7 +241,6 @@ export class DepartmentComponent implements OnInit {
           this.departmentService.addDepartment(this.department).subscribe(
             data => {
               this.departments.push(data);
-              this.departments = this.departments.slice(0);
             }
           );
           this.department = new Department();

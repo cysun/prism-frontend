@@ -69,10 +69,10 @@ export class ReviewListComponent implements OnInit {
       this.colleges = data[1];
       this.departments = data[2];
       this.programs = data[3].sort((program1, program2) => {
-        if (program1.name < program2.name) {
+        if (program1.name.toLowerCase() < program2.name.toLowerCase()) {
           return -1;
         }
-        if (program2.name < program1.name) {
+        if (program2.name.toLowerCase() < program1.name.toLowerCase()) {
           return 1;
         }
         return 0;

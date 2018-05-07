@@ -11,8 +11,10 @@ export class FilterPipe implements PipeTransform {
       if (it.title) {
         return it.title.toLowerCase().includes(searchText);
       } else if (it.program) {
-        return it.program.name.toLowerCase().includes(searchText);
+        const year = new Date(it.startDate).getFullYear();
+        const reviewTitle = (`${it.program.name.toLowerCase()} ${year}-${year + 1}`);
+        return reviewTitle.includes(searchText);
       }
     });
-   }
+  }
 }

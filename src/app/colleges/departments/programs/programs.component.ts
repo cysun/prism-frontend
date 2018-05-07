@@ -52,7 +52,6 @@ export class ProgramsComponent implements OnInit {
         } else {
           this.programService.addProgram(this.newProgram, this.nextReviewDate).subscribe( data => {
             this.programs.push(data);
-          //  this.programs = this.programs.slice(0);
           });
           this.newProgram = new Program();
         }
@@ -78,7 +77,9 @@ export class ProgramsComponent implements OnInit {
     this.programService.deleteProgram(program._id).subscribe(() => {
       const index = this.programs.indexOf(program);
       this.programs.splice(index, 1);
-      this.programs = this.programs.slice(0);
+    }, (err) => {
+      console.log(err);
+      this.invalidErrorMessage('pending review');
     });
     this.program = new Program();
   }
@@ -132,6 +133,8 @@ export class ProgramsComponent implements OnInit {
       case 'empty date':
         detailMsg = 'Please input the next date the program must be reviewed.';
         break;
+      case 'pending review':
+        detailMsg = 'The deletion of a program under review cannot be done.'
     }
     this.alerts.push({type: 'warning', message: detailMsg });
   }

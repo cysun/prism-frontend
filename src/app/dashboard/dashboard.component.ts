@@ -44,7 +44,7 @@ export class DashboardComponent implements OnInit {
   goToLink(actionType: string, actionId: string) {
     if (actionType === 'document' || actionType === 'review') {
       this.router.navigate ([`${ actionType }/${actionId}`]);
-    } else if (actionType === 'college' || actionType === 'department') {
+    } else if (actionType === 'college' || actionType === 'department' || actionType === 'program') {
       this.router.navigate (['university-hierarchy']);
     } else if (actionType === 'event') {
       this.router.navigate (['calendar']);
