@@ -86,6 +86,9 @@ export class ReviewListComponent implements OnInit {
       const storedUser = JSON.parse(localStorage.getItem('currentUser'));
       const userId: string = storedUser.user._id;
 
+      const standardFilter: (review: Review) => boolean = review => {
+        return !review.deleted && !this.compareDate(review.finishDate);
+      };
       let filterFunction: (review: Review) => boolean;
       switch (this.reviewFilter) {
         case 'archive':
@@ -100,13 +103,11 @@ export class ReviewListComponent implements OnInit {
           break;
         case 'my':
           filterFunction = review => {
-            return (<User[]> review.leadReviewers).findIndex(user => user._id === userId) !== -1;
+            return standardFilter(review) && (<User[]> review.leadReviewers).findIndex(user => user._id === userId) !== -1;
           };
           break;
         default:
-          filterFunction = review => {
-            return !review.deleted && !this.compareDate(review.finishDate);
-          };
+          filterFunction = standardFilter;
       }
       this.reviews = this.reviews.filter(filterFunction);
 
