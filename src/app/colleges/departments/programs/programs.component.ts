@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { ProgramService } from './program.service';
 
+import { Review } from '../../../models/review.model';
 import { Department } from '../../../models/department.model';
 import { Globals } from '../../../shared/app.global';
 import { Program } from '../../../models/program.model';
@@ -17,6 +18,7 @@ import { Program } from '../../../models/program.model';
 export class ProgramsComponent implements OnInit {
   @Input() departmentId: any;
   @Input() modal: NgbModalRef;
+  reviews: string[] = [];
   dateModel: any = { year: '', month: '', day: ''};
   currentDepartment: string;
   editedProgramName: string;
@@ -35,6 +37,11 @@ export class ProgramsComponent implements OnInit {
     this.currentDepartment = this.departmentId;
     this.programService.getProgramsAt(this.currentDepartment).subscribe(data => {
       this.programs = data;
+    });
+    this.programService.getReviews().subscribe(data => {
+      data.forEach(review => {
+        this.reviews.push(<string>review.program);
+      });
     });
   }
 
@@ -92,6 +99,10 @@ export class ProgramsComponent implements OnInit {
     this.dateModel.month = dateObj.getMonth() + 1;
     this.dateModel.day = dateObj.getDate();
     this.program = program;
+  }
+
+  isReviewed(programId: string) {
+    return this.reviews.indexOf(programId) >= 0;
   }
 
   updateProgram() {

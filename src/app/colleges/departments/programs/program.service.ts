@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 
+import { Review } from '../../../models/review.model';
 import { Program } from '../../../models/program.model';
 
 @Injectable()
@@ -45,6 +46,11 @@ export class ProgramService {
   getPrograms(): Observable<Program[]> {
     const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
     return this.http.get<Program[]>('/api/programs', header);
+  }
+
+  getReviews(): Observable<Review[]> {
+    const header = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
+    return this.http.get<Review[]>('/api/reviews');
   }
 
 }
