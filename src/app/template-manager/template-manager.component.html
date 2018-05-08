@@ -133,14 +133,13 @@
         <td class="align-middle">{{ template.completionEstimate }} days</td>
 
         <ng-container *ngIf="template.revisions.length > 0; else emptyDetails">
-          <td class="align-middle">{{ template.revisions[template.revisions.length - 1].message }}</td>
           <td class="align-middle">{{ template.revisions[template.revisions.length - 1].uploader.username }}</td>
           <td class="align-middle">{{ template.revisions[template.revisions.length - 1].dateUploaded | date: 'MM/dd/yyyy' }}</td>
         </ng-container>
 
         <ng-template #emptyDetails>
           <td class="align-middle">N/A</td>
-          <td class="align-middle">Unknown</td>
+          <td class="align-middle">N/A</td>
         </ng-template>
 
         <td class="align-middle">

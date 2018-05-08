@@ -30,7 +30,10 @@
           <button *ngIf="program._id !== editedProgram" (click)="editProgram(program)" class="btn btn-outline-warning mb-1 btn-sm">
             EDIT
           </button>
-          <button (click)="deleteProgram(program)" class="btn btn-outline-danger mb-1 btn-sm">
+          <button *ngIf="!isReviewed(program._id)" (click)="deleteProgram(program)" class="btn btn-outline-danger mb-1 btn-sm">
+            DELETE
+          </button>
+          <button *ngIf="isReviewed(program._id)" (click)="deleteProgram(program)" class="btn btn-outline-danger mb-1 btn-sm invisible">
             DELETE
           </button>
           <button *ngIf="program._id === editedProgram" (click)="cancelUpdate()" class="btn btn-outline-dark mb-1 btn-sm">
