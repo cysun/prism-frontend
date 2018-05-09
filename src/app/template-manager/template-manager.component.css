@@ -1,6 +1,10 @@
 a {
-  color: #568ba5;
+  color: #198FC2;
   font-weight: bold;
+}
+
+a:hover {
+  color: #126183;
 }
 
 .bg-info {
