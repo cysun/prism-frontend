@@ -38,6 +38,9 @@ export class SortPipe implements PipeTransform {
 
         compareA = (`${a.program.name.toLowerCase()} ${yearA}-${yearA + 1}`);
         compareB = (`${b.program.name.toLowerCase()} ${yearB}-${yearB + 1}`);
+      } else if (a.title) {
+        compareA = a.title.toLowerCase();
+        compareB = b.title.toLowerCase();
       }
 
       /* Does the actual comparisons to sort */
