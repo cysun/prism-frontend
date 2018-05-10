@@ -383,7 +383,7 @@
 
               <ul>
                 <span *ngIf="document.groups?.length; else noGroups">
-                  <li *ngFor="let group of document.groups">{{group}}</li>
+                  <li *ngFor="let group of document.groups | sort">{{group}}</li>
                 </span>
                 <ng-template #noGroups><li>None</li></ng-template>
               </ul>
@@ -396,7 +396,7 @@
 
               <ul>
                 <span *ngIf="document.downloadGroups?.length; else noGroups">
-                  <li *ngFor="let group of document.downloadGroups">{{group}}</li>
+                  <li *ngFor="let group of document.downloadGroups | sort">{{group}}</li>
                 </span>
                 <ng-template #noGroups><li>None</li></ng-template>
               </ul>
