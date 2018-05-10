@@ -56,7 +56,7 @@ export class DepartmentComponent implements OnInit {
 
   ngOnInit() {
     this.departmentService.getDepartmentsAt(this.collegeId).subscribe(data => {
-      this.departments = data;
+      this.departments = data.sort(this.compareDepartments);
     });
     this.currentCollege = this.collegeId;
     this.departmentService.getUsers().subscribe( data => {
@@ -103,6 +103,18 @@ export class DepartmentComponent implements OnInit {
   closeModal() {
     this.alerts = [];
     this.modal.close();
+  }
+
+  compareDepartments(d1, d2) {
+    const dept1 = d1.name.toLowerCase();
+    const dept2 = d2.name.toLowerCase();
+
+    if (dept1 > dept2) {
+      return 1;
+    } else if (dept1 < dept2) {
+      return -1;
+    }
+    return 0;
   }
 
   /* Function to sort the suggested user list in alphabetical order */
@@ -160,12 +172,6 @@ export class DepartmentComponent implements OnInit {
       }
     }
     return displayList;
-  }
-
-  getDepartmentsAt(collegeId) {
-    this.departmentService.getDepartmentsAt(collegeId).subscribe( data => {
-      this.departments = data;
-    });
   }
 
   /* Function that returns a list of suggested users based on user's current field input */
@@ -233,9 +239,14 @@ export class DepartmentComponent implements OnInit {
   submitDepartment() {
     this.alerts = [];
     this.department.college = this.currentCollege;
-    if (typeof(this.department.name) !== 'undefined' && this.department.name.trim().length > 0) {
-      if (typeof(this.department.abbreviation) !== 'undefined' && this.department.abbreviation.trim().length > 0) {
-        if (this.departments.find(item => item.name === this.department.name)) {
+
+    // Sanitize data input
+    this.department.name = this.department.name.trim();
+    this.department.abbreviation = this.department.abbreviation.trim().toUpperCase();
+
+    if (typeof(this.department.name) !== 'undefined' && this.department.name.length > 0) {
+      if (typeof(this.department.abbreviation) !== 'undefined' && this.department.abbreviation.length > 0) {
+        if (this.departments.find(item => item.name.toLowerCase() === this.department.name.toLowerCase())) {
           this.invalidErrorMessage('existing department');
         } else {
           this.departmentService.addDepartment(this.department).subscribe(
@@ -256,18 +267,23 @@ export class DepartmentComponent implements OnInit {
 
   updateDepartment() {
     this.alerts = [];
+
+    // Sanitize data input
+    this.department.name = this.department.name.trim();
+    this.department.abbreviation = this.department.abbreviation.trim();
+
     const departmentTarget = this.departments.find(item => item._id === this.department._id);
-    const changed = departmentTarget.name !== this.department.name ||
-      departmentTarget.abbreviation !== this.department.abbreviation ||
+    const changed = departmentTarget.name.toLowerCase() !== this.department.name.toLowerCase() ||
+      departmentTarget.abbreviation !== this.department.abbreviation.toUpperCase() ||
       !this.arraysEqual(departmentTarget.chairs, this.department.chairs) ? true : false;
 
     if (changed) {
-      if (this.department.name.trim().length > 0) {
+      if (this.department.name.length > 0) {
         if (this.departments.some(existingDepartment =>
           existingDepartment.name.toLowerCase() === this.department.name.toLowerCase() && existingDepartment._id !== this.department._id)) {
             this.invalidErrorMessage('existing department');
           } else {
-            if (this.department.abbreviation.trim().length > 0) {
+            if (this.department.abbreviation.length > 0) {
               this.departmentService.updateDepartment(this.department).subscribe( updatedDepartment => {
                 const index = this.departments.findIndex(oldDepartment => oldDepartment._id === updatedDepartment._id);
                 this.departments[index] = updatedDepartment;
