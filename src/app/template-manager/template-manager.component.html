@@ -43,7 +43,7 @@
           <div class="col-md-6 file-title">
             <prism-user-selector [configType]="'groupNames'" [suggestedMembers]="suggestedDownloadGroups" [secondary]="true">
             </prism-user-selector>
-            <div class="text-hints">Groups that can download the final version of the document after it is finalized</div>
+            <div class="text-hints">Groups that can <u>only</u> download the final version of the document after it is finalized</div>
           </div>
         </div>
 
@@ -54,7 +54,7 @@
 
         <div class="custom-file">
           <input name="file" type="file" class="custom-file-input"
-                 accept="{{globals.mimeTypes.join(',')}}"
+          accept="{{globals.mimeTypes.join(',')}}"
           (change)="onFileChange($event)">
 
           <label class="custom-file-label">
@@ -102,59 +102,70 @@
 </ng-template>
 
 <!-- Title header of the page -->
-<div class="container-fluid container-fluid-content">
-  <div class="header-label">
-    <div class="blockquote-header">
-      <span class="label"><i class="fa fa-icon fa-folder"></i> Template Manager
-        <span class ="blockquote-btn" placement="top" ngbTooltip="Upload Template">
-          <button type="button" class="btn btn-dark" (click)=openModal(uploadTemplateModal)>
-            <i class="fa fa-plus"></i>
-          </button>
-        </span>
+<div class="header-label">
+  <div class="blockquote-header">
+    <span class="label"><i class="fa fa-icon fa-folder"></i> Template Manager
+      <span class ="blockquote-btn" placement="top" ngbTooltip="Upload Template">
+        <button type="button" class="btn btn-dark" (click)=openModal(uploadTemplateModal)>
+          <i class="fa fa-icon fa-plus"></i>Add Template
+        </button>
       </span>
-    </div>
+    </span>
   </div>
-
-  <!-- Display all the templates in a table -->
-  <table class="table table-hover" *ngIf="templates && templates.length > 0; else emptyTemplates">
-    <thead style="background-color: #ffcc5c;">
-      <tr>
-        <th class="align-middle">Template Title</th>
-        <th class="align-middle">Estimated Completion</th>
-        <th class="align-middle">Uploader</th>
-        <th class="align-middle">Date Uploaded</th>
-        <th class="align-middle" style="width:65px"></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let template of templates; let idx = index">
-        <td class="align-middle"><a routerLink="/document/{{template._id}}">{{template.title}}</a></td>
-        <td class="align-middle">{{ template.completionEstimate }} days</td>
-
-        <ng-container *ngIf="template.revisions.length > 0; else emptyDetails">
-          <td class="align-middle">{{ template.revisions[template.revisions.length - 1].uploader.username }}</td>
-          <td class="align-middle">{{ template.revisions[template.revisions.length - 1].dateUploaded | date: 'MM/dd/yyyy' }}</td>
-        </ng-container>
-
-        <ng-template #emptyDetails>
-          <td class="align-middle">N/A</td>
-          <td class="align-middle">N/A</td>
-        </ng-template>
-
-        <td class="align-middle">
-          <button type="button" class="btn btn-danger" (click)="openModal(deleteTemplateModal, template._id)" [disabled]=template.coreTemplate><i class="fa fa-trash"></i></button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Info message when there are no groups -->
-  <ng-template #emptyTemplates>
-    <p>
-      <ngb-alert class="info-message" type="info" [dismissible]="false">
-        <strong> Information: </strong> There are currently no templates.
-      </ngb-alert>
-    </p>
-  </ng-template>
 </div>
+
+<p style="margin-bottom:30px;">
+  All templates used in Documents are listed in the table. Core templates for
+  the review process cannot be deleted but may be updated like other templates
+  by clicking on them and uploading the file there.
+
+  Comments made in the templates are for administrator discussions and will not
+  be shown elsewhere.<br/><br/>
+
+  When creating miscellaneous templates, be aware setting collaboration or
+  read-only groups are set and cannot be edited. Estimated completion may
+  only be edited when the template is used in a review.
+</p>
+
+<!-- Display all the templates in a table -->
+<table class="table table-hover" *ngIf="templates && templates.length > 0; else emptyTemplates">
+  <thead style="background-color: #ffcc5c;">
+    <tr>
+      <th class="align-middle">Template Title</th>
+      <th class="align-middle">Estimated Completion</th>
+      <th class="align-middle">Uploader</th>
+      <th class="align-middle">Date Uploaded</th>
+      <th class="align-middle" style="width:65px"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let template of templates | sort">
+      <td class="align-middle"><a routerLink="/document/{{template._id}}">{{template.title}}</a></td>
+      <td class="align-middle">{{ template.completionEstimate }} days</td>
+
+      <ng-container *ngIf="template.revisions.length > 0; else emptyDetails">
+        <td class="align-middle">{{ template.revisions[template.revisions.length - 1].uploader.username }}</td>
+        <td class="align-middle">{{ template.revisions[template.revisions.length - 1].dateUploaded | date: 'MM/dd/yyyy' }}</td>
+      </ng-container>
+
+      <ng-template #emptyDetails>
+        <td class="align-middle">N/A</td>
+        <td class="align-middle">N/A</td>
+      </ng-template>
+
+      <td class="align-middle">
+        <button type="button" class="btn btn-danger" (click)="openModal(deleteTemplateModal, template._id)" [disabled]=template.coreTemplate><i class="fa fa-trash"></i></button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Info message when there are no groups -->
+<ng-template #emptyTemplates>
+  <p>
+    <ngb-alert class="info-message" type="info" [dismissible]="false">
+      <strong> Information: </strong> There are currently no templates.
+    </ngb-alert>
+  </p>
+</ng-template>

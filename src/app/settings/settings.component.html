@@ -8,17 +8,6 @@
           <button class="btn btn-outline-warning" (click)="toggleEditButton()"><i class="fa fa-icon fa-pencil"></i>Edit</button>
         </div>
 
-        <div class="alert-messages" *ngIf="alert">
-          <ngb-alert type="danger" [dismissible]="false">
-            <i class="fa fa-icon fa-times-circle"></i><strong>Error:</strong> {{ alert.message }}
-            <span *ngIf="reasons">
-              <ng-container *ngFor="let reason of reasons">
-                  <li>{{ reason }}</li>
-              </ng-container>
-            </span>
-          </ngb-alert>
-        </div>
-
         <table *ngIf="!updateInfo" class="table table-hover">
           <tr>
             <td><strong>Username</strong></td>
@@ -36,6 +25,25 @@
 
         <!-- Update current user's basic info and/or password -->
         <div *ngIf="updateInfo">
+          <div style="margin-top:30px;">
+            <ngb-alert type="warning" [dismissible]="false">
+              <strong>Warning:</strong> Any changes made will log you out once
+              when accessing another page in order to make the appropriate
+              changes. Simply log in again afterward.
+            </ngb-alert>
+          </div>
+
+          <div class="alert-messages" *ngIf="alert" style="margin-top:-10px;">
+            <ngb-alert type="danger" [dismissible]="false">
+              <i class="fa fa-icon fa-times-circle"></i><strong>Error:</strong> {{ alert.message }}
+              <span *ngIf="reasons">
+                <ng-container *ngFor="let reason of reasons">
+                    <li>{{ reason }}</li>
+                </ng-container>
+              </span>
+            </ngb-alert>
+          </div>
+
           <div class="text-hint">Basic Information</div>
 
           <div class="row">

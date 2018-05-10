@@ -54,7 +54,6 @@ export class CalendarComponent implements OnInit {
   viewDate: Date = new Date();
 
   alert: any;
-  currentUser: UserResponse;
   date: NgbDateStruct;
   events: CalendarEvent[] = [];
   modal: NgbModalRef;
@@ -96,9 +95,6 @@ export class CalendarComponent implements OnInit {
               private sharedService: SharedService) {}
 
   ngOnInit() {
-    const castedUser: UserResponse = JSON.parse(localStorage.getItem('currentUser'));
-    this.currentUser = new UserResponse(castedUser.user, castedUser.groups, castedUser.token);
-
     this.time = { hour: 9, minute: 0, second: 0 };
     this.calendarService.getAllEvents().subscribe( data => {
       for (let i = 0; i < data.length; i++) {
@@ -185,7 +181,7 @@ export class CalendarComponent implements OnInit {
       start: new Date(newEvent.date),
       title: newEvent.title + (newEvent.canceled ? ' (Canceled)' : ''),
       color: (newEvent.canceled ? this.globals.calendarColors.red : this.globals.calendarColors.yellow),
-      actions: this.currentUser.isRootOrAdmin() ? this.actions : null,
+      actions: this.actions,
       meta: newEvent,
     });
     this.refresh.next();

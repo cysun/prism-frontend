@@ -1,3 +1,12 @@
+a {
+  color: #198FC2;
+  font-weight: bold;
+}
+
+a:hover {
+  color: #126183;
+}
+
 .bg-info {
   color: #FFFFFF;
 }
@@ -29,6 +38,12 @@
 
 .review-actions:hover {
   text-decoration: underline;
+}
+
+.review-info {
+  display: inline-block;
+  text-align: right;
+  width: 100%;
 }
 
 .search-bar {

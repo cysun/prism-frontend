@@ -7,7 +7,7 @@
     <div class="modal-body">
       <div class="row grid-space">
         <span class="col-3">
-          <span class="group-label">Program</span>
+          <span class="group-label">Program<span class="required-asterisk">*</span></span>
         </span>
         <div class="form-group col-9">
           <select class="custom-select" [(ngModel)]="selectedOption" name="program-list">
@@ -36,7 +36,7 @@
       </div>
 
       <div class="row grid-space">
-        <span class="col-3 group-label">Start Date</span>
+        <span class="col-3 group-label">Start Date<span class="required-asterisk">*</span></span>
         <div class="form-group col-9">
           <div class="input-group">
             <div class="input-group-prepend">
@@ -70,7 +70,6 @@
     <h5 class="modal-title">Edit Lead Reviewers</h5>
   </div>
 
-
   <div class="modal-body" *ngIf="currentReview">
     <div *ngIf="alert">
       <ngb-alert type="danger" [dismissible]="false">
@@ -95,7 +94,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let leadReviewer of currentReview.leadReviewers">
+          <tr *ngFor="let leadReviewer of currentReview.leadReviewers | sort">
             <td>{{leadReviewer.username}}</td>
             <td>{{leadReviewer.name?.first}} {{leadReviewer.name?.last}}</td>
             <td style="word-wrap: break-word;">{{leadReviewer.email}}</td>
@@ -175,14 +174,25 @@
     </div>
   </div>
 
-  <div class="container-fluid" style="text-align: right; padding: 0;"
-       *ngIf="reviewFilter !== 'archive' && reviewFilter !== 'deleted' && sharedService.isAdmin()">
-    <button class="btn btn-warning" (click)="openModal(createReviewModal)">
-      <i class="fa fa-icon fa-plus"></i>Create Review
-    </button>
+  <div class="container-fluid container-fluid-content" style="padding: 0;">
+    <div class="review-info">
+      <div class="text-hints pull-left">
+        <b><i class="fa fa-icon fa-exclamation-circle"></i>
+          All {{(reviewFilter && reviewFilter !== 'my')  ? reviewFilter : 'current active'}}
+          reviews {{reviewFilter === 'my' ? 'you are a lead reviewer of' :  ''}} are displayed below.
+        </b>
+      </div>
+
+      <button class="btn btn-warning" (click)="openModal(createReviewModal)"
+              *ngIf="reviewFilter !== 'archive' && reviewFilter !== 'deleted' &&
+                     sharedService.isAdmin()" style="margin-bottom: 10px;">
+          <i class="fa fa-icon fa-plus"></i>Create Review
+      </button>
+    </div>
   </div>
 
   <div class="row" *ngIf="reviews.length > 0; else emptyReviews">
+
     <ng-container *ngFor="let review of reviews | filter: searchText | sort">
       <div class="col-sm-6">
         <div class="card card-container"

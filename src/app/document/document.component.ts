@@ -142,7 +142,7 @@ export class DocumentComponent implements OnInit {
   /* Open a basic modal passing the data of the specific revision or comment */
   openModal(content, revisionIndex?: number, modalType?: string, commentId?: string) {
     if (this.reviewId) {
-      this.externalMessage = `Please upload your report for the ${this.externalUploadTitle}`;
+      this.externalMessage = `Please upload your report for the ${this.externalUploadTitle}.`;
     }
     /* If user wants to revert or delete a revision */
     if (revisionIndex >= 0) {
@@ -187,6 +187,7 @@ export class DocumentComponent implements OnInit {
     this.message = '';
     this.file = null;
     this.fileName = '';
+    this.document.title = this.documentTitle;
     this.modal.close();
   }
 
@@ -398,16 +399,22 @@ export class DocumentComponent implements OnInit {
 
   /* Create an external upload page for external submission */
   createExternalUpload() {
-    this.documentService.createExternalUpload(this.document._id, this.externalReviewer, this.externalMessage).subscribe (
-      data => {
-        this.groupManagerService.getUser(data.user).subscribe( userData => {
-          data.user = userData;
-          this.externalUploadsList.push(data);
-          this.closeModal();
+
+    if (this.externalReviewer.username.length < this.globals.minUsernameLength ||
+        this.externalReviewer.username.length > this.globals.maxUsernameLength) {
+      this.alert = { 'message': 'Please enter a username between 4 and 20 characters.'};
+    } else {
+      this.documentService.createExternalUpload(this.document._id, this.externalReviewer, this.externalMessage).subscribe (
+        data => {
+          this.groupManagerService.getUser(data.user).subscribe( userData => {
+            data.user = userData;
+            this.externalUploadsList.push(data);
+            this.closeModal();
+          })
+        }, (err) => {
+          this.alert = { 'message': 'Username already exists or fails validation. Please use another username.' };
         })
-      }, (err) => {
-        this.alert = { 'message': 'Username already exists. Please use a unique username.' };
-      })
+    }
   }
 
   /* Cancel an external upload from being used */

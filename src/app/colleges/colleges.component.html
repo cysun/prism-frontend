@@ -1,6 +1,6 @@
 <!-- Colleges Header-->
 <div class="header-label">
-  <div class="colleges-header">
+  <div class="csula-header">
     <span class="label"><i class="fa fa-icon fa-university"></i> University Hierarchy
       <span class ="blockquote-btn">
         <button type="button" (click)="addCollegeDialog(addition)" class="btn btn-dark"><i class="fa fa-icon fa-plus"></i>Add New College</button>
@@ -8,6 +8,18 @@
     </span>
   </div>
 </div>
+
+<p style="margin-bottom:30px;">
+  University Hierarchy models all current colleges, departments and programs. A
+  table listing college deans or department chairs can be viewed by clicking on
+  their<i class="fa fa-icon-group fa-users"></i>icon respectively. An administrator
+  may add or remove them via the<i class="fa fa-icon-group fa-cog"></i>icon.<br/><br/>
+
+  Each department consists of programs and their upcoming review date. This
+  shall be used to easily create reviews for programs whose review date is less than
+  six months away from the current date.
+</p>
+
 
 <!-- Dialog module for adding a new college -->
 <ng-template #addition>

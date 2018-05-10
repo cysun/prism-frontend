@@ -13,3 +13,7 @@ ul {
 .grid-space {
   padding-top: 20px;
 }
+
+.invisible {
+  visibility: hidden;
+}
