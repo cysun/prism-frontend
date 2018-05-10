@@ -20,8 +20,8 @@ export class ReversePipe implements PipeTransform {
 export class SortPipe implements PipeTransform {
   transform(arr: Array<string>, args: string): Array<string> {
     arr.sort((a: any, b: any) => {
-      let compareA = a.toLowerCase();
-      let compareB = b.toLowerCase();
+      let compareA = a;
+      let compareB = b;
 
       /* Determine how to sort by given keys */
       if (a.name) {
@@ -41,6 +41,9 @@ export class SortPipe implements PipeTransform {
       } else if (a.title) {
         compareA = a.title.toLowerCase();
         compareB = b.title.toLowerCase();
+      } else if (a.toLowerCase()) {
+        compareA = a.toLowerCase();
+        compareB = b.toLowerCase();
       }
 
       /* Does the actual comparisons to sort */
