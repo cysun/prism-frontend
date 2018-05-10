@@ -110,6 +110,7 @@ export class ReviewComponent implements OnInit {
 
     const render = new dagreD3.render();
 
+    d3.select('svg').select('g').remove();
     const svg = d3.select('svg'),
         svgGroup = svg.append('g');
 
