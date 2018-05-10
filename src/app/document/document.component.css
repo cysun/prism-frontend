@@ -68,6 +68,10 @@
   margin: 0 10px;
 }
 
+hr {
+  height: 1.5px;
+}
+
 .label {
   font-size: 1.6em;
   font-weight: bold;
