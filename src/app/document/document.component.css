@@ -63,7 +63,7 @@
 }
 
 .header-divider {
-  border-top: 1px solid #989898;
+  border-top: 1.5px solid #989898;
   flex-grow: 1;
   margin: 0 10px;
 }

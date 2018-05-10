@@ -8,6 +8,7 @@ export class Document {
   title: string;
 
   groups: Group[] | string[];
+  downloadGroups: Group[];
   revisions: Revision[];
   comments: Comment[];
   subscribers: User[] | string[];

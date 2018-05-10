@@ -361,9 +361,47 @@
             </div>
           </div>
 
-        <div style="padding-top:20px">
-          <button *ngIf="!document.locked" class="btn btn-outline-secondary" (click)="openModal(uploadRevisionModal)"><i class="fa fa-upload"></i> Upload New Revision</button>
-        </div>
+          <div style="padding-top:20px">
+            <button *ngIf="!document.locked" class="btn btn-outline-secondary"
+                    (click)="openModal(uploadRevisionModal)">
+              <i class="fa fa-upload"></i> Upload New Revision
+            </button>
+          </div>
+
+          <div *ngIf="currentUser.isRootOrAdmin()">
+            <div class="header-container grid-space">
+              Groups
+              <div class="header-divider"></div>
+            </div>
+
+            <div class="grid-space">
+              <h6><i class="fa fa-icon fa-odnoklassniki"></i>Access Group:</h6>
+              <i>These groups are able to do full collaboration on revisions (upload,
+              download, delete, and revert to main). They are also able to edit
+              the document's name, change estimated completion, and comment on any
+              revisions:</i><br/>
+
+              <ul>
+                <span *ngIf="document.groups?.length; else noGroups">
+                  <li *ngFor="let group of document.groups">{{group}}</li>
+                </span>
+                <ng-template #noGroups><li>None</li></ng-template>
+              </ul>
+            </div>
+
+            <div class="grid-space">
+              <h6><i class="fa fa-icon fa-info-circle"></i>Download Group:</h6>
+              <i>These groups can download the document's latest revision <u>after</u> it is
+              finalized, but cannot do anything else:</i><br/>
+
+              <ul>
+                <span *ngIf="document.downloadGroups?.length; else noGroups">
+                  <li *ngFor="let group of document.downloadGroups">{{group}}</li>
+                </span>
+                <ng-template #noGroups><li>None</li></ng-template>
+              </ul>
+            </div>
+          </div>
         </div>
       </ng-template>
     </ngb-tab>
