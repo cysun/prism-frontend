@@ -11,7 +11,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private router: Router) {}
 
   handleAuthError(err: HttpErrorResponse): Observable<any> {
-    console.log(this.router.url);
+    // console.log(this.router.url);
     if (this.router.url.indexOf('review') !== -1) {
       return Observable.throw(err);
     }

@@ -3,7 +3,7 @@
 <ngb-tabset>
   <ngb-tab *ngIf="sharedService.isPrs()">
     <ng-template ngbTabTitle>
-      <i class="fa fa-icon-group fa-bullseye"></i>My Reviews
+      <i class="fa fa-icon fa-bullseye"></i>My Reviews
     </ng-template>
     <ng-template ngbTabContent>
       <prism-review-list [reviewFilter]="'my'"></prism-review-list>
@@ -31,7 +31,7 @@
 
   <ngb-tab *ngIf="sharedService.isAdmin()">
     <ng-template ngbTabTitle>
-      <i class="fa fa-icon fa-trash"></i>Deleted Reviews
+      <i class="fa fa-icon fa-times-circle"></i>Deleted Reviews
     </ng-template>
     <ng-template ngbTabContent>
       <prism-review-list [reviewFilter]="'deleted'">
@@ -62,6 +62,11 @@
              </button>
            </div>
          </div>
+       </div>
+
+       <div class="text-hints grid-space">
+         <b><i class="fa fa-icon fa-exclamation-circle"></i>Below are logs of your
+         recent actions. Click on them to navigate directly to the place of action.</b>
        </div>
 
         <ng-container *ngFor="let action of displayHistory">

@@ -20,7 +20,9 @@ hr {
 }
 
 .nav-greeting {
-  padding: 15px;
+  margin-bottom: 30px;
+  margin-top: -40px;
+  text-align: center;
 }
 
 .nav-side-menu {
@@ -29,6 +31,7 @@ hr {
   height: 100%;
   overflow: auto;
   position: fixed;
+  top: 70px;
   width: 275px;
 }
 

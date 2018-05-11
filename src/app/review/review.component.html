@@ -3,67 +3,76 @@
     <h5 class="modal-title">Add a New Document</h5>
   </div>
 
-  <div class="modal-body">
-    <ul class="nav nav-pills nav-fill" *ngIf="sharedService.isAdmin()">
-      <li class="nav-item">
-        <a class="nav-link" [class.active]="!createFromTemplate" [routerLink]="" (click)='createFromTemplate = false'>From Scratch</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" [class.active]="createFromTemplate" [routerLink]="" (click)='createFromTemplate = true'>From Template</a>
-      </li>
-    </ul>
+  <form #f="ngForm" (ngSubmit)="addNode(newNode)">
+    <div class="modal-body">
+      <ul class="nav nav-pills nav-fill" *ngIf="sharedService.isAdmin()">
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="!createFromTemplate" [routerLink]="" (click)='createFromTemplate = false'>From Scratch</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="createFromTemplate" [routerLink]="" (click)='createFromTemplate = true'>From Template</a>
+        </li>
+      </ul>
 
-    <br />
-
-    <div *ngIf="!createFromTemplate">
-      <div *ngIf="alert">
-        <ngb-alert type="danger" [dismissible]="false"><i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ alert.message }}</ngb-alert>
-      </div>
-
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text">Title</span>
+      <div *ngIf="!createFromTemplate">
+        <div *ngIf="addErrorMessage" class="grid-space">
+          <ngb-alert type="danger" [dismissible]="false"><i class="fa fa-icon fa-exclamation-circle"></i><strong>Error:</strong> {{ addErrorMessage }}</ngb-alert>
         </div>
-        <input type="text" class="form-control" name="node-title" [(ngModel)]="newNode.title">
-      </div>
 
-      <br />
+        <p class="grid-space">
+          Complete form to create a miscellaneous document that is not part of the core review process but is necessary for the overall completion of this review.<br/><br/>
+          <strong>Warning: </strong>These miscellaneous documents cannot be deleted from the graph.
+        </p>
 
-      <div>
-        <h6>Groups</h6>
-        <prism-user-selector [configType]="'groupNames'" [suggestedMembers]="suggestedGroups">
-        </prism-user-selector>
-      </div>
-
-      <br />
-
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text">Completion Estimate</span>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Title</span>
+          </div>
+          <input type="text" class="form-control" name="node-title" [(ngModel)]="newNode.title" placeholder="Enter a document title" required>
         </div>
-        <input type="number" class="form-control" name="node-completion-estimate" [(ngModel)]="newNode.completionEstimate">
+
+        <div class="text-hints">
+          Input a title for the new document.
+        </div>
+
+        <div class="grid-space">
+          <h5>Groups</h5>
+          <prism-user-selector [configType]="'groupNames'" [suggestedMembers]="suggestedGroups">
+          </prism-user-selector>
+        </div>
+
+        <div class="text-hints">
+          Type in a group name to get a list of possible groups to allow access to the document.<br/>
+          <strong>Warning: </strong>Groups are final. Any user who wish to access this document <u>must</u>
+          be added to the chosen groups.
+        </div>
+
+        <div class="input-group grid-space">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Completion Estimate</span>
+          </div>
+          <input type="number" min="1" class="form-control" name="node-completion-estimate" [(ngModel)]="newNode.completionEstimate" placeholder="Enter # of days" required>
+        </div>
+
+        <div class="text-hints">This is the number of days the document should take to be completed.</div>
       </div>
 
-      <div class="text-hints">This is the number of days the document should take to be completed.</div>
-
-      <p *ngIf="addErrorMessage" class="text-danger">{{addErrorMessage}}</p>
+      <div *ngIf="createFromTemplate" class="grid-space">
+        <h5>Template to Use</h5>
+        <select class="custom-select" [(ngModel)]="selectedTemplate" name="template-list">
+          <option *ngFor="let template of templates | sort" [ngValue]="template._id">
+            {{template.title}}
+          </option>
+        </select>
+        <div class="text-hints">Select a template from the list which are taken from <strong>Template Manager</strong>.</div>
+      </div>
     </div>
 
-    <div *ngIf="createFromTemplate">
-      <p>Template to Use<p>
-
-      <select class="custom-select" [(ngModel)]="selectedTemplate" name="template-list">
-        <option *ngFor="let template of templates" [ngValue]="template._id">
-          {{template.title}}
-        </option>
-      </select>
+    <div class="modal-footer">
+      <button class="btn btn-dark" type="submit" [disabled]="(createFromTemplate && !selectedTemplate) || !f.form.valid">Save</button>
+      <button class="btn btn-dark" type="button" (click)="modal.close()">Cancel</button>
     </div>
-  </div>
-
-  <div class="modal-footer">
-    <button class="btn btn-dark" type="button" (click)="addNode(newNode)" [disabled]="createFromTemplate && !selectedTemplate">Save</button>
-    <button class="btn btn-dark" type="button" (click)="modal.close()">Cancel</button>
-  </div>
+  </form>
 </ng-template>
 
 <button class="btn btn-dark" (click)="location.back()"><i class="fa fa-arrow-circle-left"></i> Back</button>
@@ -86,10 +95,16 @@
 
 <button class="btn btn-warning" *ngIf="sharedService.isAdminOrPrs()" (click)="openModal(addNodeModal)">Add Document</button>
 
-<br />
-<br />
-<prism-document #documentComponent [documentId]="documentId" [nodeId]="nodeId" [reviewId]="review._id" [updateReviewComponent]="handleDocumentUpdate.bind(this)" [externalUploadTitle]="(review && review.program && review.program.name ? review.program.name : '') + ' Review ' + yearString" *ngIf="documentId"></prism-document>
-<div class="jumbotron" *ngIf="!documentId">
-  <h1 class="display-4">No document selected</h1>
-  <p class="lead">Click on a document from the review to get started</p>
+
+<div class="grid-space">
+  <prism-document #documentComponent [documentId]="documentId" [nodeId]="nodeId"
+                  [reviewId]="review._id" [updateReviewComponent]="handleDocumentUpdate.bind(this)"
+                  [externalUploadTitle]="(review && review.program && review.program.name ? review.program.name : '') + ' Review ' + yearString"
+                  *ngIf="documentId">
+  </prism-document>
+
+  <div class="jumbotron" *ngIf="!documentId">
+    <h1 class="display-4">No document selected</h1>
+    <p class="lead">Click on a document from the review to get started</p>
+  </div>
 </div>

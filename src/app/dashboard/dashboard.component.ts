@@ -43,15 +43,17 @@ export class DashboardComponent implements OnInit {
 
   goToLink(actionType: string, actionId: string) {
     if (actionType === 'document' || actionType === 'review') {
-      this.router.navigate ([`${ actionType }/${actionId}`]);
+      this.router.navigate([`${ actionType }/${actionId}`]);
     } else if (actionType === 'college' || actionType === 'department' || actionType === 'program') {
-      this.router.navigate (['university-hierarchy']);
+      this.router.navigate(['university-hierarchy']);
     } else if (actionType === 'event') {
-      this.router.navigate (['calendar']);
+      this.router.navigate(['calendar']);
     } else if (actionType === 'group') {
-      this.router.navigate (['groups']);
+      this.router.navigate(['groups']);
+    } else if (actionType === 'resource') {
+      this.router.navigate(['resources']);
     } else {
-      this.router.navigate ([`${ actionType }`]);
+      this.router.navigate([`${ actionType }`]);
     }
   }
 

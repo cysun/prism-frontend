@@ -20,38 +20,36 @@ export class ReversePipe implements PipeTransform {
 export class SortPipe implements PipeTransform {
   transform(arr: Array<string>, args: string): Array<string> {
     arr.sort((a: any, b: any) => {
+      let compareA = a;
+      let compareB = b;
+
+      /* Determine how to sort by given keys */
       if (a.name) {
         if (a.name.first) {
-          const aFullName = a.name.first.toLowerCase() + ' ' + a.name.last.toLowerCase();
-          const bFullName = b.name.first.toLowerCase() + ' ' + b.name.last.toLowerCase();
-
-          if (aFullName < bFullName) {
-            return -1;
-          } else if (aFullName > bFullName) {
-            return 1;
-          } else {
-            return 0;
-          }
+          compareA = `${a.name.first.toLowerCase()} ${a.name.last.toLowerCase()}`;
+          compareB = `${b.name.first.toLowerCase()} ${b.name.last.toLowerCase()}`;
         } else {
-          if (a.name < b.name) {
-            return -1;
-          } else if (a.name > b.name) {
-            return 1;
-          } else {
-            return 0;
-          }
+          compareA = a.name;
+          compareB = b.name;
         }
       } else if (a.program) {
-        const year = new Date(a.startDate).getFullYear();
-        const reviewTitle = (`${a.program.name.toLowerCase()} ${year}-${year + 1}`);
+        const yearA = new Date(a.startDate).getFullYear();
+        const yearB = new Date(b.startDate).getFullYear();
 
-        if (a.program.name.toLowerCase() < b.program.name.toLowerCase()) {
-          return -1;
-        } else if (a.program.name.toLowerCase() > b.program.name.toLowerCase()) {
-          return 1;
-        } else {
-          return 0;
-        }
+        compareA = (`${a.program.name.toLowerCase()} ${yearA}-${yearA + 1}`);
+        compareB = (`${b.program.name.toLowerCase()} ${yearB}-${yearB + 1}`);
+      } else if (a.title) {
+        compareA = a.title.toLowerCase();
+        compareB = b.title.toLowerCase();
+      }
+
+      /* Does the actual comparisons to sort */
+      if (compareA < compareB) {
+        return -1;
+      } else if (compareA > compareB) {
+        return 1;
+      } else {
+        return 0;
       }
     });
     return arr;

@@ -50,7 +50,7 @@ export class ProgramsComponent implements OnInit {
     this.newProgram.department = this.currentDepartment;
     if (typeof(this.newProgram.name) === 'undefined' || this.newProgram.name.trim().length === 0) {
       this.invalidErrorMessage('empty program')
-    } else if (this.newProgram.name.length < 4 || this.newProgram.name.length > 20) {
+    } else if (this.newProgram.name.length > this.globals.maxProgramNameLength) {
       this.invalidErrorMessage('invalid program');
     } else if (this.programs.find(item => item.name.toLowerCase() === this.newProgram.name.trim().toLowerCase())) {
         this.invalidErrorMessage('existing program');
@@ -109,7 +109,7 @@ export class ProgramsComponent implements OnInit {
     this.alerts = [];
     if (this.program.name.trim().length === 0) {
       this.invalidErrorMessage('empty program');
-    } else if (this.program.name.length < 4 || this.program.name.length > 20) {
+    } else if (this.program.name.length > this.globals.maxProgramNameLength) {
       this.invalidErrorMessage('invalid program');
     } else if (this.programs.some(existingProgram =>
         existingProgram.name.toLowerCase() === this.program.name.toLowerCase() && existingProgram._id !== this.program._id)) {
@@ -133,7 +133,7 @@ export class ProgramsComponent implements OnInit {
 
     switch (message) {
       case 'invalid program':
-        detailMsg = 'Length of program\'s name must be between 4 to 20 characters.';
+        detailMsg = `Length of program\'s name must be ${this.globals.maxProgramNameLength} or less characters.`;
         break;
       case 'empty program':
         detailMsg = 'Please input a program name.';

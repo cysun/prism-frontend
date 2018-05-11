@@ -17,8 +17,8 @@
   <h1 class="header-text"><i class="fa fa-icon fa-folder-open-o"></i> Resources</h1>
 </div>
 
-<div class="row">
-  <span class="search-container col-6">
+<div class="row grid-space">
+  <span class="search-container col-9">
     <input [(ngModel)]="searchText" class="form-control" type="text" placeholder="Search for resources">
   </span>
   <span class="counter"><p>{{resources.length}} item(s)</p></span>
@@ -79,16 +79,23 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let resource of resources | filter: searchText">
-        <td class="align-middle">
-          <input type="checkbox" name="selected" class="checkbox-size"
-                 [checked]="isSelected(resource._id)"
-                 (click)="updateSelection($event, resource._id)">
-        </td>
-        <td class="align-middle"><span (click)="downloadSpecific(resource)" class="download-file">{{resource.title}}</span></td>
-        <td class="align-middle">{{resource.files[0].uploader.username}}</td>
-        <td class="align-middle">{{resource.files[0].dateUploaded | date: 'yyyy-MM-dd'}}</td>
-      </tr>
+      <ng-container *ngIf="resources.length > 0; else noResources">
+        <tr *ngFor="let resource of resources | filter: searchText">
+          <td class="align-middle">
+            <input type="checkbox" name="selected" class="checkbox-size"
+            [checked]="isSelected(resource._id)"
+            (click)="updateSelection($event, resource._id)">
+          </td>
+          <td class="align-middle"><span (click)="downloadSpecific(resource)" class="download-file">{{resource.title}}</span></td>
+          <td class="align-middle">{{resource.files[0].uploader.username}}</td>
+          <td class="align-middle">{{resource.files[0].dateUploaded | date: 'yyyy-MM-dd'}}</td>
+        </tr>
+      </ng-container>
+      <ng-template #noResources>
+        <tr>
+          <td colspan="4"><i>There are currently no resources to display.</i></td>
+        </tr>
+      </ng-template>
     </tbody>
   </table>
 </div>
