@@ -38,7 +38,7 @@
           <button *ngIf="reviewId && currentUser.isRootOrAdmin() && !document.locked"
                   type="button" class="btn btn-outline-dark"
                   (click)=openModal(finalizeNodeModal)
-                  placement="top" ngbTooltip="Finalize Document">
+                  placement="top" ngbTooltip="Finalize Document" [disabled]="document.revisions?.length <= 0">
             <i class="fa fa-check-circle"></i>
           </button>
         </span>
