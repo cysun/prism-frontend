@@ -25,11 +25,13 @@ export class ResourcesComponent implements OnInit {
   fileName: string;
   file: File;
 
+  searchText = '';
+
   constructor(private globals: Globals,
     private resourceService: ResourceService,
     private modalService: NgbModal,
     private route: ActivatedRoute,
-    private sharedService: SharedService) { }
+    public sharedService: SharedService) { }
 
   ngOnInit() {
     this.getResources();

@@ -56,7 +56,7 @@ export class ReviewListComponent implements OnInit {
               private modalService: NgbModal,
               private programService: ProgramService,
               private reviewService: ReviewService,
-              private sharedService: SharedService) { }
+              public sharedService: SharedService) { }
 
   ngOnInit() {
     // Remember to set selectedOption

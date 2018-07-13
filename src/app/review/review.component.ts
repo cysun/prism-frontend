@@ -45,8 +45,8 @@ export class ReviewComponent implements OnInit {
       private route: ActivatedRoute,
       private modalService: NgbModal,
       private globals: Globals,
-      private location: Location,
-      private sharedService: SharedService,
+      public location: Location,
+      public sharedService: SharedService,
       private templateManagerService: TemplateManagerService) {
     this.newNode = new ReviewNode();
   }

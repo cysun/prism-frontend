@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit {
   constructor(private globals: Globals,
               private router: Router,
               private dashboardService: DashboardService,
-              private sharedService: SharedService) { }
+              public sharedService: SharedService) { }
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));

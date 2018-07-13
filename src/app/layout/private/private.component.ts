@@ -16,7 +16,7 @@ export class PrivateComponent implements OnInit {
   constructor(@Inject('Window') private window: Window,
     private authService: AuthService,
     private router: Router,
-    private sharedService: SharedService) { }
+    public sharedService: SharedService) { }
 
   ngOnInit() {
     const user = this.authService.getUser();

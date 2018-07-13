@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   username: string;
 
   constructor(@Inject('Window') private window: Window,
-    private authService: AuthService,
+    public authService: AuthService,
     private sharedService: SharedService,
     private router: Router) { }
 
