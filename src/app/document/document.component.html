@@ -186,15 +186,10 @@
         </div>
         <div class="modal-message">
 
-          <div class="custom-file">
-            <input name="file" type="file" class="custom-file-input"
+          <div>
+            <input name="file" type="file" class="form-control-file"
                    accept="{{globals.mimeTypes.join(',')}}"
             (change)="onFileChange($event)">
-
-            <label class="custom-file-label">
-              <div style="text-align:left;">{{ fileName ? fileName : 'Choose a file'}}</div>
-            </label>
-            <div class="text-hints">Click on browse to attach a file.</div>
           </div>
 
           <div class="file-message">
