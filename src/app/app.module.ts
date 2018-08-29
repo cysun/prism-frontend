@@ -57,6 +57,7 @@ import { SettingsService } from './services/settings.service';
 import { SharedService } from './shared/shared.service';
 import { TemplateManagerService } from './services/template-manager.service';
 import { UserService } from './services/user.service';
+import { UserComponent } from './components/user/user.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +79,7 @@ import { UserService } from './services/user.service';
     SettingsComponent,
     TemplateManagerComponent,
     UsersComponent,
+    UserComponent,
     UserSelectorComponent,
     PrivateComponent,
     PublicComponent,

@@ -20,7 +20,7 @@
   <tbody>
     <tr *ngFor="let user of users">
       <td [ngClass]="{'bg-light': user.internal}">
-        <a [routerLink]="[user._id]">{{user.fullName}}</a>
+        <a [routerLink]="[user._id]">{{user.name.first}} {{user.name.last}}</a>
       </td>
       <td class="d-none d-md-table-cell">{{user.username}}</td>
       <td>{{user.email}}</td>

@@ -19,6 +19,7 @@ import { PublicComponent } from './layout/public/public.component';
 
 import { AuthGuard } from './services/auth.guard';
 import { UsersComponent } from './components/users/users.component';
+import { UserComponent } from './components/user/user.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -45,6 +46,7 @@ const routes: Routes = [
       { path: 'settings', component: SettingsComponent },
       { path: 'templates', component: TemplateManagerComponent },
       { path: 'users', component: UsersComponent },
+      { path: 'users/:id', component: UserComponent },
       { path: '**', component: PageNotFoundComponent }
     ]
   }

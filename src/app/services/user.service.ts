@@ -10,4 +10,12 @@ export class UserService {
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>('/api/users');
   }
+
+  getUser(id): Observable<User> {
+    return this.http.get<User>('/api/user/' + id);
+  }
+
+  updateUser(user: User): Observable<User> {
+    return this.http.patch<User>('/api/user/' + user._id, user);
+  }
 }
