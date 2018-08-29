@@ -1,8 +1,7 @@
 import { Component, HostListener, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginComponent } from './login/login.component';
 
-import { AuthService } from './login/auth.service';
+import { AuthService } from './services/auth.service';
 import { SharedService } from './shared/shared.service';
 import { UserResponse } from './models/user-response.model';
 
@@ -32,7 +31,7 @@ export class AppComponent implements OnInit {
       /* Initially get the username upon login into the system */
       this.authService.currentUsername.subscribe( data => {
         this.username = data;
-      })
+      });
 
       /* After any browser refresh, retrieve the current username */
       if (this.username.length <= 0) {
@@ -56,6 +55,6 @@ export class AppComponent implements OnInit {
   logout() {
     this.authService.logout();
     this.username = '';
-    this.router.navigate(['login'])
+    this.router.navigate(['login']);
   }
 }

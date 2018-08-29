@@ -17,6 +17,9 @@
           <a class="nav-link" *ngIf="sharedService.isAdminOrPrs()" [routerLink]="['/resources']">
             <i class="fa fa-icon-group fa-folder-open-o"></i>Resources
           </a>
+          <a class="nav-link" *ngIf="sharedService.isAdmin()" [routerLink]="['/users']">
+            <i class="fa fa-icon-group fa-users"></i>User Manager
+          </a>
           <a class="nav-link" [routerLink]="['/groups']">
             <i class="fa fa-icon-group fa-users"></i>{{ sharedService.isAdmin() ? 'Group Manager' : 'Committee' }}
           </a>

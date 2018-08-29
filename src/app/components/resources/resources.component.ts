@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbModalRef,  NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
-import { Globals } from '../shared/app.global';
-import { Resource } from '../models/resource.model';
-import { ResourceService } from '../services/resource.service'
-import { SharedService } from '../shared/shared.service';
+import { Globals } from '../../shared/app.global';
+import { Resource } from '../../models/resource.model';
+import { ResourceService } from '../../services/resource.service';
+import { SharedService } from '../../shared/shared.service';
 
 import { saveAs } from 'file-saver';
 

@@ -1,0 +1,29 @@
+<div class="header-label">
+  <div class="csula-header">
+    <span class="label"><i class="fa fa-icon fa-users"></i> User Manager
+      <span class="blockquote-btn">
+        <a class="btn btn-dark" routerLink="new"><i class="fa fa-icon fa-plus"></i>Add
+          User</a>
+      </span>
+    </span>
+  </div>
+</div>
+
+<table class="table table-bordered table-hover mt-3">
+  <thead class="thead-light">
+    <tr>
+      <th>Name</th>
+      <th class="d-none d-md-table-cell">Username</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td [ngClass]="{'bg-light': user.internal}">
+        <a [routerLink]="[user._id]">{{user.fullName}}</a>
+      </td>
+      <td class="d-none d-md-table-cell">{{user.username}}</td>
+      <td>{{user.email}}</td>
+    </tr>
+  </tbody>
+</table>

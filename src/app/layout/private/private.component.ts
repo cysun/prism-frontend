@@ -1,7 +1,7 @@
 import { Component, HostListener, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthService } from '../../login/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { SharedService } from '../../shared/shared.service';
 
 @Component({
