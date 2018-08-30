@@ -38,12 +38,7 @@ export class ExternalUploadComponent implements OnInit {
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
       this.fileName = event.target.files[0].name;
-
-      if (this.file.size > this.globals.maxFileSize) {
-        this.alert = { message: 'File is too large to upload.' };
-      } else {
-        this.alert = '';
-      }
+      this.alert = '';
     }
   }
 

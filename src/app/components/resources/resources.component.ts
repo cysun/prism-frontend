@@ -158,12 +158,7 @@ export class ResourcesComponent implements OnInit {
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
       this.fileName = event.target.files[0].name;
-
-      if (this.file.size > this.globals.maxFileSize) {
-        this.alert = { message: 'File is too large to upload.' };
-      } else {
-        this.alert = '';
-      }
+      this.alert = '';
     }
   }
 
@@ -172,7 +167,7 @@ export class ResourcesComponent implements OnInit {
   }
 
   postNewResource(): void {
-    if (this.file && (this.file.size <= this.globals.maxFileSize)) {
+    if (this.file) {
       this.resourceService.createResource(this.resource.title).subscribe(resourceData => {
         this.createFile(resourceData._id).then(() => {
           this.resourceService.uploadFile(resourceData._id, this.file).subscribe(empty => {

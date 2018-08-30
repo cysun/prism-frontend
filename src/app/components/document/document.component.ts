@@ -106,13 +106,7 @@ export class DocumentComponent implements OnInit {
   onFileChange(event) {
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
-      this.fileName = event.target.files[0].name;
-
-      if (this.file.size > this.globals.maxFileSize) {
-        this.alert = { message: 'File is too large.' };
-      } else {
-        this.alert = '';
-      }
+      this.alert = '';
     }
   }
 
@@ -195,7 +189,7 @@ export class DocumentComponent implements OnInit {
   createNewDocument(documentTitle: string) {
     this.documentService.createDocument(documentTitle).subscribe( data => {
       this.document = data;
-    })
+    });
   }
 
   /* Edit document's title */
@@ -208,7 +202,7 @@ export class DocumentComponent implements OnInit {
     }, (err) => {
       console.log(err);
       this.alert = { message: 'Field is blank. Please enter a new document title.' };
-    })
+    });
   }
 
   /* Retrieve document data */
@@ -223,12 +217,12 @@ export class DocumentComponent implements OnInit {
 
       this.selectedFilter = this.document.revisions.slice(0).reverse().find( item =>
         item.message !== 'Deleted revision')._id;
-    })
+    });
   }
 
   /* Upload revision message and the file being sent */
   uploadRevision() {
-    if (this.file && this.message && (this.file.size <= this.globals.maxFileSize)) {
+    if (this.file && this.message) {
       this.documentService.postRevision(this.document._id, this.message).subscribe( data => {
         const numOfRevisions = this.getNumOfRevisions();
         this.retrieveDocument();
@@ -282,7 +276,7 @@ export class DocumentComponent implements OnInit {
       this.closeModal();
     }, (err) => {
       console.log(err);
-    })
+    });
   }
 
   /* Restore a revision */
@@ -291,7 +285,7 @@ export class DocumentComponent implements OnInit {
       this.retrieveDocument();
     }, (err) => {
       console.log(err);
-    })
+    });
   }
 
   /* Post a comment */
@@ -327,7 +321,7 @@ export class DocumentComponent implements OnInit {
       this.documentService.editComment(this.document._id, findCommentIndex, text).subscribe( data => {
         this.document.comments[findCommentIndex].text = text;
         this.toggleEditButton();
-      })
+      });
     } else {
       this.validComment = false;
     }
@@ -341,7 +335,7 @@ export class DocumentComponent implements OnInit {
       this.document.comments.splice(findCommentIndex, 1);
       this.selectedComment = new Comment();
       this.closeModal();
-    })
+    });
   }
 
   /* Filter comments based on user's choice in the dropdown list */
@@ -359,7 +353,7 @@ export class DocumentComponent implements OnInit {
   subscribeToDocument() {
     this.documentService.subscribeToDocument(this.document._id).subscribe( () => {
       (<string[]> this.document.subscribers).push(this.currentUser.user._id);
-    })
+    });
   }
 
   /* Subscribe to a document */
@@ -367,7 +361,7 @@ export class DocumentComponent implements OnInit {
     this.documentService.unsubscribeFromDocument(this.document._id).subscribe( () => {
       const findUserId = (<string[]> this.document.subscribers).indexOf(this.currentUser.user._id);
       this.document.subscribers.splice(findUserId, 1);
-    })
+    });
   }
 
   /* Check if current user is already subscribed to the document */
@@ -410,10 +404,10 @@ export class DocumentComponent implements OnInit {
             data.user = userData;
             this.externalUploadsList.push(data);
             this.closeModal();
-          })
+          });
         }, (err) => {
           this.alert = { 'message': 'Username already exists or fails validation. Please use another username.' };
-        })
+        });
     }
   }
 

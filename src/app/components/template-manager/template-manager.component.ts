@@ -68,18 +68,13 @@ export class TemplateManagerComponent implements OnInit {
       if (event.target.files.length > 0) {
         this.file = event.target.files[0];
         this.fileName = event.target.files[0].name;
-
-        if (this.file.size > this.globals.maxFileSize) {
-          this.alert = { message: 'File is too large.' };
-        } else {
-          this.alert = '';
-        }
+        this.alert = '';
       }
     }
 
     /* Post a template */
     postTemplate() {
-      if (this.file && (this.file.size <= this.globals.maxFileSize)) {
+      if (this.file) {
         this.templateManagerService.createTemplate(
           this.currentTemplate.title,
           this.currentTemplate.completionEstimate,
@@ -92,9 +87,9 @@ export class TemplateManagerComponent implements OnInit {
               const temp = this.templates.find(item => item._id === data._id);
               this.uploadFile(data._id, temp.revisions.length);
               this.closeModal();
-            })
+            });
           }, (err) => {
-            console.log(err)
+            console.log(err);
           });
         } else {
           this.alert = { message: 'Please attach a file with size ~ 5 MB.' };
@@ -107,7 +102,7 @@ export class TemplateManagerComponent implements OnInit {
           this.documentService.postRevision(templateId, this.message).subscribe( () => {
             resolve();
           }, (err) => {
-            console.log(err)
+            console.log(err);
             reject();
           });
         });
@@ -139,7 +134,7 @@ export class TemplateManagerComponent implements OnInit {
       listTemplates() {
         this.templateManagerService.listAllTemplates().subscribe( data => {
           this.templates = data;
-        })
+        });
       }
 
       /* Delete template from the list */
@@ -148,7 +143,7 @@ export class TemplateManagerComponent implements OnInit {
           const findTemplateIndex = this.templates.findIndex( temp => temp._id === this.currentTemplate._id);
           this.templates.splice(findTemplateIndex, 1);
           this.modal.close();
-        })
+        });
       }
 
     }

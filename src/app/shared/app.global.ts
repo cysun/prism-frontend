@@ -5,7 +5,6 @@ import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 export class Globals {
 
   actionsPerPage = 150;
-  maxFileSize = (2 ** 20) * 50;
   maxProgramNameLength = 60;
   minUsernameLength = 4;
   maxUsernameLength = 20;
@@ -23,7 +22,7 @@ export class Globals {
     'image/*',
     'text/plain',
     'video/*'
-  ]
+  ];
 
   /* Calendar colors for event dots */
   calendarColors: any = {

@@ -99,7 +99,7 @@ export class CalendarComponent implements OnInit {
       for (let i = 0; i < data.length; i++) {
         this.addEventToCalendar(data[i]);
       }
-    })
+    });
   }
 
   /* Shows a drop down of a particular eventful day */
@@ -147,7 +147,7 @@ export class CalendarComponent implements OnInit {
           this.addEventToCalendar(data);
           this.inviteToEvent(data._id);
           this.uploadAttachment(data._id);
-        })
+        });
       } else if ( action === 'Edit') {
         const body = { title: this.newEvent.title, date: this.newEvent.date };
         this.calendarService.updateEvent(this.newEvent._id, body).subscribe( data => {
@@ -162,7 +162,7 @@ export class CalendarComponent implements OnInit {
           const firstDocument: Document = <Document> this.newEvent.documents[0];
           if (firstDocument) { docId = firstDocument._id; }
           this.uploadAttachment(this.newEvent._id, docId);
-        })
+        });
       }
       this.activeDayIsOpen = false;
       this.closeModal();
@@ -202,7 +202,7 @@ export class CalendarComponent implements OnInit {
       this.events[updateEventIndex].meta = data;
       this.sharedService.filteredGroups = null;
       this.sharedService.filteredUsers = null;
-    })
+    });
   }
 
   /* Mark an event as canceled */
@@ -215,7 +215,7 @@ export class CalendarComponent implements OnInit {
         this.events[findEventIndex].title += ' (Canceled)';
         this.events[findEventIndex].meta.canceled = true;
         this.events[findEventIndex].color = this.globals.calendarColors.red;
-      })
+      });
       this.closeModal();
     }
 
@@ -239,7 +239,7 @@ export class CalendarComponent implements OnInit {
           year: convertedDate.getFullYear(),
           month: convertedDate.getMonth() + 1,
           day: convertedDate.getDate()
-        }
+        };
 
         this.time = {
           hour: convertedDate.getHours(),
@@ -248,7 +248,7 @@ export class CalendarComponent implements OnInit {
         };
         this.suggestedGroups = <Group[]> this.newEvent.groups;
         this.suggestedUsers = <User[]> this.newEvent.people;
-      })
+      });
     } else {
       this.newEvent = new Event();
       this.suggestedGroups = [];
@@ -271,18 +271,13 @@ export class CalendarComponent implements OnInit {
     if (event.target.files.length > 0) {
       this.file = event.target.files[0];
       this.fileName = event.target.files[0].name;
-
-      if (this.file.size > this.globals.maxFileSize) {
-        this.alert = { message: 'File is too large to upload.' };
-      } else {
-        this.alert = '';
-      }
+      this.alert = '';
     }
   }
 
   /* Upload revision message and the file being sent */
   uploadAttachment(eventId: string, documentId?: string) {
-    if (this.file && this.message && (this.file.size <= this.globals.maxFileSize)) {
+    if (this.file && this.message) {
       if (documentId && documentId.length > 0) {
         this.documentService.postRevision(documentId, this.message).subscribe( () => {
           const firstDocument: Document = <Document> this.newEvent.documents[0];
@@ -292,7 +287,7 @@ export class CalendarComponent implements OnInit {
             this.file = null;
             this.fileName = '';
           });
-        })
+        });
       } else {
         this.calendarService.attachDocumentToEvent(eventId, this.message).subscribe( data => {
           const updateEventIndex = this.events.findIndex( currEvent => currEvent.id === eventId);
@@ -304,7 +299,7 @@ export class CalendarComponent implements OnInit {
               this.file = null;
               this.fileName = '';
             });
-          })
+          });
         });
       }
     }
