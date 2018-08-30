@@ -58,6 +58,7 @@ import { SharedService } from './shared/shared.service';
 import { TemplateManagerService } from './services/template-manager.service';
 import { UserService } from './services/user.service';
 import { UserComponent } from './components/user/user.component';
+import { UserFormComponent } from './components/user-form/user-form.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { UserComponent } from './components/user/user.component';
     TemplateManagerComponent,
     UsersComponent,
     UserComponent,
+    UserFormComponent,
     UserSelectorComponent,
     PrivateComponent,
     PublicComponent,

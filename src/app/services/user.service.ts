@@ -18,4 +18,8 @@ export class UserService {
   updateUser(user: User): Observable<User> {
     return this.http.patch<User>('/api/user/' + user._id, user);
   }
+
+  createUser(user: User): Observable<User> {
+    return this.http.post<User>('/api/user/', user);
+  }
 }

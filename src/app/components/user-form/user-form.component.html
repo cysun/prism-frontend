@@ -1,0 +1,52 @@
+<h5 class="m-3">New User</h5>
+<form #userForm="ngForm" (ngSubmit)="onSubmit()">
+  <div class="form-row m-3">
+    <div class="form-group col-md-6">
+      <label>First Name</label>
+      <input [(ngModel)]="user.name.first" name="firstName" type="text" class="form-control"
+        required>
+    </div>
+    <div class="form-group col-md-6">
+      <label>Last Name</label>
+      <input [(ngModel)]="user.name.last" name="lastName" type="text" class="form-control"
+        required>
+    </div>
+    <div class="form-group col-md-6">
+      <label>Username</label>
+      <input [(ngModel)]="user.username" name="username" type="text" class="form-control"
+        required>
+    </div>
+    <div class="form-group col-md-6">
+      <label>Email</label>
+      <input [(ngModel)]="user.email" name="email" type="email" class="form-control"
+        required>
+    </div>
+    <div class="form-group col-md-12">
+      <label>Options</label>
+      <div>
+        <div class="form-check form-check-inline">
+          <input [(ngModel)]="user.internal" name="internal" type="checkbox">
+          <label class="form-check-label">Internal</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input [(ngModel)]="user.disabled" name="disabled" type="checkbox">
+          <label class="form-check-label">Disabled</label>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="user.internal" class="form-group col-md-6">
+      <label>Password</label>
+      <input [(ngModel)]="user.password" name="password" type="password" class="form-control"
+        required>
+    </div>
+    <div *ngIf="user.internal" class="form-group col-md-6">
+      <label>Confirm Password</label>
+      <input [(ngModel)]="user.password2" name="password2" type="password" class="form-control"
+        required>
+    </div>
+  </div>
+  <div class="form-row m-3">
+    <a routerLink="/users" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn btn-primary mx-3" [disabled]="!userForm.form.valid">Save</button>
+  </div>
+</form>

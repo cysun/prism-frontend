@@ -135,7 +135,7 @@ export class ResourcesComponent implements OnInit {
         console.log(err);
         reject();
       });
-    })
+    });
   }
 
   /* Get all resources */
@@ -144,7 +144,7 @@ export class ResourcesComponent implements OnInit {
         this.resources = data;
         this.resources.sort(this.compareTitles);
     }, (err) => {
-      console.log(err)
+      console.log(err);
     });
   }
 
@@ -187,7 +187,7 @@ export class ResourcesComponent implements OnInit {
         }).catch((err) => {
           console.log(err);
         });
-      })
+      });
     } else {
       this.alert = { message: 'Please attach a file with size ~ 5 MB.' };
     }
@@ -205,7 +205,7 @@ export class ResourcesComponent implements OnInit {
   updateSelection(event: any, id: string): void {
    const checkbox = event.target;
    const action = (checkbox.checked ? 'add' : 'remove');
-   this.updateSelected(action, id)
+   this.updateSelected(action, id);
   }
 
 }
