@@ -36,7 +36,8 @@ export class ReviewListComponent implements OnInit {
   lookupDepartment: (id: string) => Department;
   lookupProgram: (id: string) => Program;
 
-  selectedOption: string;
+  selectedProgram: Program;
+
   alert: any;
   suggestionFilter: (user: User) => boolean;
   // Angular Bootstrap date output
@@ -59,7 +60,6 @@ export class ReviewListComponent implements OnInit {
               public sharedService: SharedService) { }
 
   ngOnInit() {
-    // Remember to set selectedOption
     Observable.forkJoin(
       this.reviewService.getReviews(),
       this.collegeService.getColleges(),
@@ -119,7 +119,7 @@ export class ReviewListComponent implements OnInit {
           const department: Department = <Department> (<Program> review.program).department;
           const college: College = <College> department.college;
           return (<User[]> department.chairs).findIndex(chair => chair._id === userId) !== -1
-                 || (<User[]> college.deans).findIndex(dean => dean._id === userId) !== -1
+                 || (<User[]> college.deans).findIndex(dean => dean._id === userId) !== -1;
         };
       } else {
         userFilter = review => true;
@@ -135,7 +135,7 @@ export class ReviewListComponent implements OnInit {
     if (this.programs.length === 0) {
       return;
     }
-    this.selectedOption = this.programs[0]._id;
+    this.selectedProgram = this.programs[0];
   }
 
   programReviewPendingFilter(program: Program): boolean {
@@ -147,7 +147,7 @@ export class ReviewListComponent implements OnInit {
     this.reviews.forEach(review => {
       review.percentComplete = this.percentComplete(review);
     });
-  };
+  }
 
   setUpHierarchyLookups(): void {
     const collegeLookupTable: { [key: string]: College; } = {};
@@ -199,7 +199,7 @@ export class ReviewListComponent implements OnInit {
       });
     }, (err) => {
       console.log(err);
-    })
+    });
   }
 
   editLeadReviewers(reviewId: string, programId: string, leadReviewers: User[]) {
@@ -231,11 +231,16 @@ export class ReviewListComponent implements OnInit {
     return startYear + '-' + (startYear + 1);
   }
 
+  renameReview() {
+    this.reviewService.patchReview(this.currentReview._id, {title: this.currentReview.title})
+    .subscribe(() => this.closeModal());
+  }
+
   submitReview() {
     const leadReviewers = this.sharedService.filteredUsers;
 
-    const startDate = `${this.newDate.year}-${this.newDate.month}-${this.newDate.day}`;
-    this.reviewService.createReview(this.selectedOption, startDate).subscribe(data => {
+  //  const startDate = `${this.newDate.year}-${this.newDate.month}-${this.newDate.day}`;
+    this.reviewService.createReview(this.selectedProgram, new Date()).subscribe(data => {
       this.reviews.push(data);
       this.addLeadReviewers(data._id, leadReviewers);
       this.closeModal();

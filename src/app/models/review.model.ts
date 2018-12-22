@@ -5,6 +5,7 @@ import { User } from './user.model';
 export class Review {
   _id: string;
   program: string | Program;
+  title: string;
   startDate: string;
   finishDate: string;
   leadReviewers: string[] | User[];

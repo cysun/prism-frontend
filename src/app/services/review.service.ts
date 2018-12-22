@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 
 import { Review } from '../models/review.model';
+import { Program } from '../models/program.model';
 
 @Injectable()
 export class ReviewService {
@@ -26,9 +27,10 @@ export class ReviewService {
     return this.http.post<Review>(`/api/review/${id}/restore`, '');
   }
 
-  createReview(programId: string, startDate: string): Observable<Review> {
+  createReview(program: Program, startDate: Date): Observable<Review> {
     return this.http.post<Review>('/api/review', {
-      'program': programId,
+      'program': program._id,
+      'title': program.name + ' ' + startDate.getFullYear(),
       'startDate': startDate
     });
   }

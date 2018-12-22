@@ -10,8 +10,8 @@
           <span class="group-label">Program<span class="required-asterisk">*</span></span>
         </span>
         <div class="form-group col-9">
-          <select class="custom-select" [(ngModel)]="selectedOption" name="program-list">
-            <option *ngFor="let program of (filterPrograms ? programs.filter(programReviewPendingFilter) : programs)" [ngValue]="program._id">
+          <select class="custom-select" [(ngModel)]="selectedProgram" name="program-list">
+            <option *ngFor="let program of (filterPrograms ? programs.filter(programReviewPendingFilter) : programs)" [ngValue]="program">
               {{program.name}}
             </option>
           </select>
@@ -132,6 +132,24 @@
   </form>
 </ng-template>
 
+<!-- Modal for renaming review -->
+<ng-template #renameReviewModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Rename Review</h5>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <span class="container-fluid" style="padding:30px;">
+          <input type="text" class="form-control" required [(ngModel)]="currentReview.title">
+      </span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-warning" type="button" (click)="renameReview()">Save</button>
+    <button class="btn btn-dark" type="button" (click)="closeModal()">Cancel</button>
+  </div>
+</ng-template>
+
 <ng-template #deleteReviewModal>
   <div class="modal-header">
     <h5 class="modal-title">Delete Review</h5>
@@ -202,11 +220,11 @@
             <div class="card-header-title container-fluid">
               <div class="card-message">
                 <a *ngIf="!review.deleted" routerLink="/review/{{review._id}}">
-                  {{ review.program?.name}} {{ yearString(review.startDate)}}
+                  {{ review.title }}
                   <i class="fa fa-chevron-right"></i>
                 </a>
                 <span *ngIf="review.deleted">
-                  {{ review.program?.name}} {{ yearString(review.startDate)}}
+                  {{ review.title }}
                 </span>
                 <div class="card-info">
                   <i style="font-weight: lighter;">
@@ -227,12 +245,15 @@
                   </ng-container>
                 </span>
 
-                <div *ngIf="this.reviewFilter !== 'archive' && sharedService.isAdmin()" style="margin-top:15px;">
-                  <div *ngIf="!review.deleted" class="review-actions"
+                <div *ngIf="sharedService.isAdmin()" style="margin-top:15px;">
+                  <div *ngIf="this.reviewFilter !== 'archive' && !review.deleted" class="review-actions"
                        (click)="openModal(editLeadReviewersModal, review._id)">
-                    <i class="fa fa-icon fa-pencil"></i>Edit Lead Reviewers
+                    <i class="fa fa-icon fa-user"></i>Edit Lead Reviewers
                   </div>
-
+                  <div *ngIf="!review.deleted" class="review-actions"
+                       (click)="openModal(renameReviewModal, review._id)">
+                    <i class="fa fa-icon fa-pencil"></i>Rename Review
+                  </div>
                   <div *ngIf="!review.deleted" class="review-actions"
                        (click)="openModal(deleteReviewModal, review._id)">
                     <i class="fa fa-icon fa-trash"></i>Delete Review
